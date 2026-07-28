@@ -194,11 +194,12 @@ elif vista == "Mantenimiento del Sistema":
     # Sistema de seguridad para proteger el borrado de archivos
     password = st.text_input("Código de Autorización:", type="password")
     
-    if password == "magallanes2026":
+    if password == "martinybort":
         st.success("Autorización confirmada. Protocolos de purga desbloqueados.")
-        st.markdown("Usa esta herramienta para borrar archivos antiguos (gráficos y circulares) y evitar que el disco duro se llene.")
+        st.markdown("Usa esta herramienta para borrar archivos antiguos o hacer un reseteo de fábrica (0 días).")
         
-        dias_limite = st.slider("Borrar archivos más antiguos de (Días):", 1, 90, 30)
+        # MODIFICACIÓN: Permitir 0 días para borrar TODO de inmediato
+        dias_limite = st.slider("Borrar archivos más antiguos de (Días) [0 = Reset de Fábrica]:", 0, 90, 0)
         
         if st.button("🚨 EJECUTAR PURGA AHORA", type="primary"):
             tiempo_actual = time.time()
@@ -212,14 +213,22 @@ elif vista == "Mantenimiento del Sistema":
                 if os.path.exists(carpeta):
                     for archivo in os.listdir(carpeta):
                         ruta_completa = os.path.join(carpeta, archivo)
-                        if os.path.isfile(ruta_completa) and os.path.getmtime(ruta_completa) < tiempo_limite:
+                        # Se cambió a <= para que cuando sea 0 días, borre todo
+                        if os.path.isfile(ruta_completa) and os.path.getmtime(ruta_completa) <= tiempo_limite:
                             os.remove(ruta_completa)
                             archivos_borrados += 1
+                            
+            # Si el límite es 0, borramos también las bitácoras (logs)
+            if dias_limite == 0:
+                for log_file in ["bitacora_ZTF.log", "bitacora_LSST.log"]:
+                    if os.path.exists(log_file):
+                        os.remove(log_file)
+                        archivos_borrados += 1
                             
             if archivos_borrados > 0:
                 st.success(f"¡Purga completada exitosamente! Se han eliminado {archivos_borrados} archivos.")
             else:
-                st.info("No se encontraron archivos tan antiguos. El disco está limpio.")
+                st.info("No se encontraron archivos para borrar. El sistema está limpio.")
                 
     elif password != "":
         st.error("Código de autorización incorrecto. Intento bloqueado.")
@@ -246,7 +255,8 @@ elif vista == "Acerca del Observatorio / Contacto":
         Este es un proyecto independiente impulsado por la curiosidad científica. Si representas a una institución, eres astrónomo aficionado o deseas colaborar con nuestra iniciativa de ciencia ciudadana, no dudes en ponerte en contacto.
         """)
         
-        st.info("📧 **Correo del Director / Administrador del Sistema:** edgardo.casanova@gmail.com")
+        # MODIFICACIÓN: Cambio de correo al corporativo oficial
+        st.info("📧 **Correo Institucional / Administración:** contacto@estacionmagallanes.org")
         
     with col_imagen:
         st.image("logo.jpeg", use_container_width=True, caption="Estación Magallanes, Punta Arenas, Chile.")
