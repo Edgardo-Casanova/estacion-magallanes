@@ -1,0 +1,27 @@
+======================================================================
+ASTRONOMER'S TELEGRAM (ATel) DRAFT - ESTACIÓN MAGALLANES
+======================================================================
+SUBJECT: Magallanes Station automated discovery/recovery of SUPERNOVA candidate Manual_SUPERNOVA
+OBSERVERS: Pipeline Automatizado (Estación Magallanes, Punta Arenas, Chile)
+
+We report the automated algorithmic detection of a highly probable supernova candidate 
+located in the host galaxy Desconocida (Intergaláctica / Muy lejana) (z = 0.00000). 
+
+[1] TARGET INFORMATION
+* Transient ID          : Manual_SUPERNOVA
+* Coordinates (ICRS)    : RA 201.36500 | Dec -43.01900
+* Host Entity           : Desconocida (Intergaláctica / Muy lejana)
+* Redshift (z)          : 0.00000
+
+[2] OBSERVATIONAL REQUEST
+* Requested Action      : URGENT SPECTROSCOPIC FOLLOW-UP
+* Target Facilities     : 4m to 8m class telescopes (e.g., SOAR, Gemini, VLT)
+* Required Instrument   : Low to medium resolution optical spectrograph
+* Scientific Goal       : Confirm exact transient sub-type (Ia, II, Ibc, or Nova) 
+                          and measure absolute expansion velocity.
+
+This transient was identified utilizing the ALeRCE / TNS algorithmic broker pipelines. 
+Photometric light curve data indicates a significant deviation from the historical baseline.
+
+Estación Magallanes Automated Alert System
+======================================================================
