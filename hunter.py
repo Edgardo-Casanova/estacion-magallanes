@@ -21,7 +21,7 @@ warnings.filterwarnings('ignore')
 
 # --- 1. DICCIONARIO TAXONÓMICO BILINGÜE ---
 diccionario_categorias = {
-    "ZTF": ["SNIa", "SNIbc", "SNII", "SLSN", "CV/Nova", "QSO", "Blazar"], # Se amplía a supernovas y núcleos activos
+    "ZTF": ["SNIa", "SNIbc", "SNII", "SLSN", "CV/Nova", "QSO", "Blazar"],
     "LSST": ["SNIa", "SNIbc", "SNII", "SLSN", "Nova", "Mdwarf-flare"]
 }
 
@@ -33,7 +33,7 @@ def determinar_tipo_evento(clase_ia):
     elif "NOVA" in clase_upper or "CV" in clase_upper:
         return "nova"
     elif "QSO" in clase_upper or "BLAZAR" in clase_upper or "AGN" in clase_upper:
-        return "supernova" # Lo enrutamos como supernova para que use la Ruta Extragaláctica (Redshift y Galaxias)
+        return "supernova" 
     else:
         return "flare"
 
@@ -87,30 +87,54 @@ def obtener_datos_astronomicos(coordenadas):
 
 def consultar_tns_sur(mjd_reciente):
     """
-    Simula la consulta a la base de datos oficial de la Unión Astronómica Internacional (TNS)
-    buscando Supernovas frescas en el hemisferio sur (Declinación < 0).
+    Consulta a la base de datos oficial del TNS para buscar supernovas.
     """
     registrar_log("="*50, "TNS_GLOBAL")
     registrar_log("APUNTANDO TELESCOPIO A RED: TNS_GLOBAL", "TNS_GLOBAL")
     registrar_log("Hemisferio: Sur (ASAS-SN / ATLAS) | Radar de Supernovas de la IAU", "TNS_GLOBAL")
     registrar_log("="*50, "TNS_GLOBAL")
     registrar_log("1. Contactando servidor central del Transient Name Server...", "TNS_GLOBAL")
-    
-    # Credenciales de Bot de la IAU (Reemplazar cuando se obtengan)
-    TNS_BOT_ID = "00000"
-    TNS_API_KEY = "dummy_key"
-    
-    headers = {'User-Agent': f'tns_marker{{"tns_id":{TNS_BOT_ID}, "type":"bot"}}'}
-    
+
+    # --- TUS CREDENCIALES OFICIALES DEL TNS ---
+    TNS_BOT_ID = "197977" 
+    TNS_API_KEY = "17852507636a68c3cbb263d5.03111132" 
+
+    # Firma oficial requerida por la IAU
+    tns_marker = f'tns_marker{{"tns_id":{TNS_BOT_ID}, "type":"bot", "name":"Magallanes_Bot"}}'
+    headers = {'User-Agent': tns_marker}
+
+    # Parámetros de búsqueda oficial: Supernovas clasificadas en el hemisferio sur en los últimos 2 días
+    search_data = {
+        "dec_range": "-90,0", 
+        "discovered_period_value": "2", 
+        "discovered_period_units": "days",
+        "unclassified_at": "0", 
+        "classified_sne": "1" 
+    }
+
+    payload = {
+        "api_key": TNS_API_KEY,
+        "data": json.dumps(search_data)
+    }
+
     try:
-        # Aquí iría el payload real: requests.post('https://www.wis-tns.org/api/get/search', headers=headers...)
-        time.sleep(1)
-        # Forzamos un error controlado por falta de credenciales
-        raise PermissionError("Acceso denegado (403). Se requiere un Bot ID y API Key válidos de la IAU.")
+        url = 'https://www.wis-tns.org/api/get/search'
+        response = requests.post(url, headers=headers, data=payload)
+
+        if response.status_code == 200:
+            datos = response.json()
+            cantidad = len(datos.get('data', {}).get('reply', []))
+            registrar_log(f"¡Conexión exitosa! El TNS reporta {cantidad} supernovas recientes en el hemisferio sur.", "TNS_GLOBAL")
+            
+        elif response.status_code == 403:
+            registrar_log("Error 403: Las llaves del Bot ID o API Key son incorrectas. Verifica en la web de TNS.", "TNS_GLOBAL")
+        else:
+            registrar_log(f"El servidor TNS respondió con código: {response.status_code}", "TNS_GLOBAL")
+
     except Exception as e:
         registrar_log(f"Error procesando la red TNS_GLOBAL: {e}", "TNS_GLOBAL")
         registrar_log("Modo de Respaldo: El cazador continuará operando con las redes ALeRCE.", "TNS_GLOBAL")
-    
+
     return None
 
 def main():

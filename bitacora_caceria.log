@@ -250,3 +250,25 @@ Hemisferio: Sur (ASAS-SN / ATLAS) | Radar de Supernovas de la IAU
 1. Contactando servidor central del Transient Name Server...
 Error procesando la red TNS_GLOBAL: Acceso denegado (403). Se requiere un Bot ID y API Key válidos de la IAU.
 Modo de Respaldo: El cazador continuará operando con las redes ALeRCE.
+=== INICIANDO CAZADOR MULTIPROPÓSITO v10 (Fase 2) ===
+
+==================================================
+APUNTANDO TELESCOPIO A RED: ZTF
+Hemisferio: Norte | 1500 Alertas (Filtro Taxonómico Abierto)
+==================================================
+1. Descargando alertas de ZTF...
+Error procesando la red ZTF: {'Error code': 504, 'Message': 'Unknown API error.', 'Data': 'Unknown API error.'}
+
+==================================================
+APUNTANDO TELESCOPIO A RED: LSST
+Hemisferio: Sur (LSST) | 1500 Alertas (Filtro Taxonómico Abierto)
+==================================================
+1. Descargando alertas de LSST...
+Sin alertas que coincidan con los filtros. (Red en silencio)
+==================================================
+APUNTANDO TELESCOPIO A RED: TNS_GLOBAL
+Hemisferio: Sur (ASAS-SN / ATLAS) | Radar de Supernovas de la IAU
+==================================================
+1. Contactando servidor central del Transient Name Server...
+Error procesando la red TNS_GLOBAL: Acceso denegado (403). Se requiere un Bot ID y API Key válidos de la IAU.
+Modo de Respaldo: El cazador continuará operando con las redes ALeRCE.
