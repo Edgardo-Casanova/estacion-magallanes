@@ -272,3 +272,7 @@ Hemisferio: Sur (ASAS-SN / ATLAS) | Radar de Supernovas de la IAU
 1. Contactando servidor central del Transient Name Server...
 Error procesando la red TNS_GLOBAL: Acceso denegado (403). Se requiere un Bot ID y API Key válidos de la IAU.
 Modo de Respaldo: El cazador continuará operando con las redes ALeRCE.
+Traceback (most recent call last):
+  File "/home/edgardo/Escritorio/rubin_flare_hunter/hunter.py", line 16, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
