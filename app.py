@@ -194,7 +194,8 @@ elif vista == "Mantenimiento del Sistema":
     # Sistema de seguridad para proteger el borrado de archivos
     password = st.text_input("Código de Autorización:", type="password")
     
-    if password == "martinybort":
+    # Protegemos la clave usando variables de entorno
+    if password == os.getenv("ADMIN_PASSWORD") and password != "":
         st.success("Autorización confirmada. Protocolos de purga desbloqueados.")
         st.markdown("Usa esta herramienta para borrar archivos antiguos o hacer un reseteo de fábrica (0 días).")
         
