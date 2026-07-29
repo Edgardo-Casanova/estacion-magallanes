@@ -32,7 +32,8 @@ def extraer_valor(dato):
 # =====================================================================
 # RUTA A: HERRAMIENTAS ESTELARES (FLARES Y ENANAS ROJAS)
 # =====================================================================
-def buscar_exoplanetas(coordenadas, radio_arcsec=60):
+# SE ACTUALIZÓ EL RADIO A 5 ARCSEC PARA MAYOR PRECISIÓN
+def buscar_exoplanetas(coordenadas, radio_arcsec=5):
     print(f"\n[1/4] 📡 Consultando NASA Exoplanet Archive...")
     tiene_planetas = False
     planetas_info = []
@@ -187,7 +188,7 @@ def buscar_galaxia_anfitriona(coordenadas):
     try:
         custom_simbad = Simbad()
         custom_simbad.add_votable_fields('z_value', 'otype')
-        # Buscamos en un radio de 2 arcmin para atrapar la galaxia entera y eventos vecinos
+        # Buscamos en un radio de 120 arcmin para atrapar la galaxia entera (Mantenido intacto)
         resultado = custom_simbad.query_region(coordenadas, radius=120*u.arcsec)
         
         if resultado is not None and len(resultado) > 0:
@@ -291,7 +292,8 @@ def buscar_espectro_y_fotometria(coordenadas):
     try:
         custom_simbad = Simbad()
         custom_simbad.add_votable_fields('flux(V)', 'flux(R)', 'flux(J)', 'flux(H)', 'flux(K)')
-        resultado = custom_simbad.query_region(coordenadas, radius=60*u.arcsec)
+        # SE ACTUALIZÓ EL RADIO DE BÚSQUEDA TÉRMICA A 5 ARCSEC
+        resultado = custom_simbad.query_region(coordenadas, radius=5*u.arcsec)
 
         if resultado is not None and len(resultado) > 0:
             col_id = next((c for c in resultado.colnames if 'MAIN_ID' in c.upper()), None)

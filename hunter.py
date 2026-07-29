@@ -13,6 +13,8 @@ from astropy.coordinates import SkyCoord, get_constellation
 import astropy.units as u
 from astroquery.simbad import Simbad
 import warnings
+from dotenv import load_dotenv
+load_dotenv()
 
 # --- INTEGRACIÓN CON ESTACIÓN MAGALLANES ---
 from laboratorio import ejecutar_pipeline_magallanes
@@ -96,8 +98,8 @@ def consultar_tns_sur(mjd_reciente):
     registrar_log("1. Contactando servidor central del Transient Name Server...", "TNS_GLOBAL")
 
     # --- TUS CREDENCIALES OFICIALES DEL TNS ---
-    TNS_BOT_ID = "197977" 
-    TNS_API_KEY = "17852507636a68c3cbb263d5.03111132" 
+    TNS_BOT_ID = os.getenv("TNS_BOT_ID")
+    TNS_API_KEY = os.getenv("TNS_API_KEY")
 
     # Firma oficial requerida por la IAU
     tns_marker = f'tns_marker{{"tns_id":{TNS_BOT_ID}, "type":"bot", "name":"Magallanes_Bot"}}'
