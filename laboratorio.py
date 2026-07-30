@@ -30,18 +30,15 @@ def extraer_valor(dato):
         return "Desconocido"
 
 # =====================================================================
-# RUTA A: HERRAMIENTAS ESTELARES (FLARES Y ENANAS ROJAS)
+# VÍA 1: ENTORNO GALÁCTICO LOCAL (Flares y Novas de la Vía Láctea)
 # =====================================================================
-# SE ACTUALIZÓ EL RADIO A 5 ARCSEC PARA MAYOR PRECISIÓN
 def buscar_exoplanetas(coordenadas, radio_arcsec=5):
     print(f"\n[1/4] 📡 Consultando NASA Exoplanet Archive...")
     tiene_planetas = False
     planetas_info = []
     
     try:
-        resultado = NasaExoplanetArchive.query_region(
-            table="ps", coordinates=coordenadas, radius=radio_arcsec*u.arcsec
-        )
+        resultado = NasaExoplanetArchive.query_region(table="ps", coordinates=coordenadas, radius=radio_arcsec*u.arcsec)
         if resultado and len(resultado) > 0:
             if 'default_flag' in resultado.colnames:
                 resultado = resultado[resultado['default_flag'] == 1]
@@ -67,8 +64,8 @@ def buscar_exoplanetas(coordenadas, radio_arcsec=5):
     
     return tiene_planetas, planetas_info
 
-def analizar_quimica_halfa(coordenadas, nombre_estrella):
-    print(f"\n[3/4] 🔬 Iniciando espectroscopía de alta resolución (H-alfa) para {nombre_estrella}...")
+def analizar_quimica_halfa(coordenadas, id_evento):
+    print(f"\n[3/4] 🔬 Iniciando espectroscopía de alta resolución (H-alfa) para {id_evento}...")
     try:
         xid = SDSS.query_region(coordenadas, radius=5*u.arcsec, spectro=True)
         if xid is not None and len(xid) > 0:
@@ -98,7 +95,7 @@ def analizar_quimica_halfa(coordenadas, nombre_estrella):
             if hay_emision:
                 print(f"   [!!!] CONFIRMACIÓN QUÍMICA: Fuerte emisión H-alfa detectada (EW: {ew_halfa:.2f} Å)")
             else:
-                print(f"   [-] Sin emisión H-alfa significativa (EW: {ew_halfa:.2f} Å). Cromósfera inactiva.")
+                print(f"   [-] Sin emisión H-alfa significativa (EW: {ew_halfa:.2f} Å).")
 
             plt.style.use('dark_background')
             plt.figure(figsize=(10, 5))
@@ -106,15 +103,14 @@ def analizar_quimica_halfa(coordenadas, nombre_estrella):
             plt.axhline(flujo_continuo, color='gray', linestyle='--', alpha=0.7, label='Continuo Base')
             plt.axvline(6562.8, color='cyan', linestyle=':', label='Línea Teórica H-alfa')
             
-            plt.title(f"Firma Química del Flare (H-alfa) - {nombre_estrella}", color='white', pad=15)
+            plt.title(f"Firma Química (H-alfa) - {id_evento}", color='white', pad=15)
             plt.xlabel(r"Longitud de Onda ($\AA$)")
             plt.ylabel(r"Flujo ($10^{-17} erg / s / cm^2 / \AA$)")
             plt.legend(facecolor='#0f0f0f', edgecolor='gray')
             plt.grid(True, alpha=0.2, linestyle='--')
             
             os.makedirs('data', exist_ok=True)
-            nombre_archivo = nombre_estrella.replace(' ', '_').replace('/', '-')
-            archivo_plot = f"data/quimica_HAlpha_{nombre_archivo}.png"
+            archivo_plot = f"data/quimica_halfa_{id_evento}.png"
             plt.savefig(archivo_plot, dpi=150, bbox_inches='tight')
             plt.close()
             print(f"   [+] Espectro H-alfa guardado en: {archivo_plot}")
@@ -126,20 +122,20 @@ def analizar_quimica_halfa(coordenadas, nombre_estrella):
         print(f"   [-] Error procesando módulo espectroscópico: {e}")
         return False, 0.0
 
-def generar_circular_flare(ra, dec, nombre_estrella, tiene_planetas, es_enana_roja, planetas_info, emision_activa, valor_ew):
+def generar_circular_estelar_local(ra, dec, id_evento, tiene_planetas, es_enana_roja, planetas_info, emision_activa, valor_ew, tipo_evento):
     os.makedirs('alertas', exist_ok=True)
     fecha_emision = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
-    nombre_archivo = nombre_estrella.replace(' ', '_').replace('/', '-')
-    ruta_archivo = f"alertas/CIRCULAR_{nombre_archivo}.txt"
+    ruta_archivo = f"alertas/CIRCULAR_{id_evento}.txt"
     
     with open(ruta_archivo, 'w', encoding='utf-8') as f:
         f.write("=================================================================\n")
-        f.write(" CIRCULAR DE OBSERVACIÓN ESTELAR - ESTACIÓN MAGALLANES\n")
+        f.write(" CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES\n")
         f.write("=================================================================\n")
         f.write(f"FECHA DE EMISIÓN : {fecha_emision}\n")
-        f.write(f"OBJETO DETECTADO : {nombre_estrella} (FLARE)\n")
+        f.write(f"OBJETO DETECTADO : {id_evento} ({tipo_evento.upper()})\n")
         f.write(f"COORDENADAS ICRS : RA {ra:.5f} | Dec {dec:.5f}\n")
         f.write("-----------------------------------------------------------------\n\n")
+        
         f.write("[1] ESTADO DEL SISTEMA PLANETARIO\n")
         if tiene_planetas and planetas_info:
             f.write(f"    SISTEMA CONFIRMADO: {len(planetas_info)} exoplaneta(s) en órbita.\n")
@@ -148,39 +144,38 @@ def generar_circular_flare(ra, dec, nombre_estrella, tiene_planetas, es_enana_ro
             
         f.write("\n[2] EVALUACIÓN TERMODINÁMICA (SED)\n")
         if es_enana_roja:
-            f.write("    FIRMA TÉRMICA: Enana Ultrafría / Activa (Emisión Infrarroja Dominante).\n")
+            f.write("    FIRMA TÉRMICA: Sistema Frío / Activo (Emisión Infrarroja Dominante).\n")
         else:
-            f.write("    FIRMA TÉRMICA: Emisión Visible Dominante.\n")
+            f.write("    FIRMA TÉRMICA: Emisión Visible/Óptica Dominante.\n")
             
-        f.write("\n[3] ACTIVIDAD CROMOSFÉRICA (H-alfa)\n")
+        f.write("\n[3] ACTIVIDAD CROMOSFÉRICA / ACRECIÓN (H-alfa)\n")
         if emision_activa:
-            f.write(f"    ESTADO QUÍMICO: Fuerte emisión de plasma detectada (EW = {valor_ew:.2f} Å).\n")
-            f.write("    ALERTA        : Radiación UV severa. Alto riesgo de erosión atmosférica.\n")
+            f.write(f"    ESTADO QUÍMICO: Fuerte emisión de plasma/acreción (EW = {valor_ew:.2f} Å).\n")
         else:
-            f.write(f"    ESTADO QUÍMICO: Sin emisión significativa (EW = {valor_ew:.2f} Å).\n")
+            f.write(f"    ESTADO QUÍMICO: Sin línea de emisión significativa en H-alfa.\n")
 
         f.write("\n[4] RESOLUCIÓN DE SEGUIMIENTO\n")
-        if es_enana_roja and tiene_planetas:
+        if tipo_evento == "flare" and tiene_planetas:
             f.write("    DICTAMEN    : MÁXIMA PRIORIDAD ESPACIAL\n")
             f.write("    INSTRUMENTO : Telescopio Espacial James Webb (NIRSpec / MIRI).\n")
         else:
-            f.write("    DICTAMEN    : PRIORIDAD ESTÁNDAR\n")
-            f.write("    INSTRUMENTO : Telescopios de sondeo terrestre.\n")
+            f.write("    DICTAMEN    : PRIORIDAD ESTÁNDAR DE MONITOREO\n")
+            f.write("    INSTRUMENTO : Telescopios terrestres y fotometría continua.\n")
             
         f.write("\n=================================================================\n")
     return ruta_archivo
 
-def evaluar_jwst(tiene_planetas, es_enana_roja, nombre_estrella, ra, dec, planetas_info, emision_activa, valor_ew):
-    print(f"\n[4/4] 🔭 Evaluación de Viabilidad Observacional para {nombre_estrella}...")
-    ruta = generar_circular_flare(ra, dec, nombre_estrella, tiene_planetas, es_enana_roja, planetas_info, emision_activa, valor_ew)
+def evaluar_estelar_local(tiene_planetas, es_enana_roja, id_evento, ra, dec, planetas_info, emision_activa, valor_ew, tipo_evento):
+    print(f"\n[4/4] 🔭 Evaluación de Viabilidad Observacional para {id_evento}...")
+    ruta = generar_circular_estelar_local(ra, dec, id_evento, tiene_planetas, es_enana_roja, planetas_info, emision_activa, valor_ew, tipo_evento)
     print(f"\n   [📝] DOCUMENTO GENERADO: Circular guardada en '{ruta}'")
 
 
 # =====================================================================
-# RUTA B: HERRAMIENTAS EXTRAGALÁCTICAS Y TRANSITORIOS HISTÓRICOS
+# VÍA 2 y 3: TRANSITORIOS EXTRAGALÁCTICOS (Supernovas) Y AGN
 # =====================================================================
 def buscar_galaxia_anfitriona(coordenadas):
-    print(f"\n[1/3] 🌌 Buscando Galaxia Anfitriona y Analizando Entorno (SIMBAD otypes.htx)...")
+    print(f"\n[1/3] 🌌 Buscando Galaxia Anfitriona / Entorno Extragaláctico (SIMBAD otypes.htx)...")
     galaxia = "Desconocida (Intergaláctica / Muy lejana)"
     redshift = 0.0
     evento_historico = None
@@ -188,7 +183,6 @@ def buscar_galaxia_anfitriona(coordenadas):
     try:
         custom_simbad = Simbad()
         custom_simbad.add_votable_fields('z_value', 'otype')
-        # Buscamos en un radio de 120 arcmin para atrapar la galaxia entera (Mantenido intacto)
         resultado = custom_simbad.query_region(coordenadas, radius=120*u.arcsec)
         
         if resultado is not None and len(resultado) > 0:
@@ -208,13 +202,9 @@ def buscar_galaxia_anfitriona(coordenadas):
                 tipo_upper = otype.strip().upper()
                 nombre_upper = nombre_obj.upper()
                 
-                # TAXONOMÍA OFICIAL SIMBAD (otypes.htx)
-                # 1. Códigos Extragalácticos (Galaxias y AGN)
                 codigos_extragalacticos = ['G', 'GLC', 'GIG', 'IG', 'LSB', 'SBG', 'AGN', 'SY1', 'SY2', 'SY*', 'QSO', 'BLL', 'RG']
-                # 2. Códigos de Transitorios Históricos (Supernovas, Restos y Variables Cataclísmicas)
-                codigos_transitorios = ['SN', 'SNR', 'NOVA', 'DNE', 'CV*', 'NL*']
+                codigos_transitorios = ['SN', 'SNR', 'DNE']
                 
-                # --- A. Búsqueda de Galaxia Anfitriona ---
                 if galaxia == "Desconocida (Intergaláctica / Muy lejana)":
                     es_galaxia = (
                         tipo_upper in codigos_extragalacticos or 
@@ -226,81 +216,70 @@ def buscar_galaxia_anfitriona(coordenadas):
                         galaxia = nombre_obj
                         if col_z and not np.ma.is_masked(fila[col_z]):
                             redshift = float(fila[col_z])
-                        print(f"   [+] Galaxia Anfitriona identificada: {galaxia} (Tipo SIMBAD: {otype}) | Redshift: {redshift:.5f}")
+                        print(f"   [+] Entidad Extragaláctica identificada: {galaxia} (Tipo SIMBAD: {otype}) | Redshift: {redshift:.5f}")
                 
-                # --- B. Detección de Transitorios Históricos ---
                 if tipo_upper in codigos_transitorios and evento_historico is None:
                     evento_historico = f"{nombre_obj} ({otype})"
-                    print(f"   [!] ATENCIÓN: El entorno coincide con un evento cataclísmico histórico: {evento_historico}")
+                    print(f"   [!] ATENCIÓN: El entorno coincide con un evento histórico: {evento_historico}")
 
     except Exception as e:
         print(f"   [-] Error escaneando entorno extragaláctico: {e}")
 
     if galaxia == "Desconocida (Intergaláctica / Muy lejana)":
-        print("   [-] No se identificó una galaxia principal en las cercanías del evento.")
+        print("   [-] No se identificó una entidad principal en las cercanías del evento.")
 
     return galaxia, redshift
 
-def generar_circular_supernova(ra, dec, nombre_evento, galaxia, redshift, tipo_evento):
+def generar_circular_extragalactica(ra, dec, id_evento, galaxia, redshift, tipo_evento):
     os.makedirs('alertas', exist_ok=True)
     fecha_emision = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
-    nombre_archivo = nombre_evento.replace(' ', '_').replace('/', '-')
-    ruta_archivo = f"alertas/CIRCULAR_{nombre_archivo}.txt"
+    ruta_archivo = f"alertas/CIRCULAR_{id_evento}.txt"
     
     with open(ruta_archivo, 'w', encoding='utf-8') as f:
         f.write("=================================================================\n")
         f.write(" CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES\n")
         f.write("=================================================================\n")
         f.write(f"FECHA DE EMISIÓN : {fecha_emision}\n")
-        f.write(f"EVENTO DETECTADO : {nombre_evento} ({tipo_evento.upper()})\n")
+        f.write(f"EVENTO DETECTADO : {id_evento} ({tipo_evento.upper()})\n")
         f.write(f"COORDENADAS ICRS : RA {ra:.5f} | Dec {dec:.5f}\n")
         f.write("-----------------------------------------------------------------\n\n")
         f.write("[1] ENTORNO COSMOLÓGICO\n")
-        f.write(f"    GALAXIA ANFITRIONA : {galaxia}\n")
+        if tipo_evento == "agn":
+            f.write(f"    OBJETO CENTRAL     : {galaxia} (Núcleo Activo)\n")
+        else:
+            f.write(f"    GALAXIA ANFITRIONA : {galaxia}\n")
         f.write(f"    REDSHIFT (z)       : {redshift:.5f}\n")
         f.write("\n[2] RESOLUCIÓN DE SEGUIMIENTO\n")
         f.write("    DICTAMEN    : ALTA PRIORIDAD ESPECTROSCÓPICA\n")
         f.write("    INSTRUMENTO : Observatorios masivos terrestres (VLT / Gemini).\n")
-        f.write("    ACCIÓN      : Obtener espectro óptico para confirmar tipo exacto de\n")
-        f.write("                  supernova y calcular la energía absoluta de la explosión.\n")
+        f.write("    ACCIÓN      : Obtener espectro óptico profundo para confirmación física.\n")
         f.write("\n=================================================================\n")
     return ruta_archivo
 
-def evaluar_supernova(ra, dec, nombre_evento, galaxia, redshift, tipo_evento):
+def evaluar_extragalactico(ra, dec, id_evento, galaxia, redshift, tipo_evento):
     print(f"\n[3/3] 🔭 Evaluación de Seguimiento para {tipo_evento.upper()}...")
-    print(f"   [+] Evento catastrófico detectado en coordenadas RA {ra:.5f}, Dec {dec:.5f}.")
-    print("   [!] RECOMENDACIÓN: Activar protocolo de seguimiento espectroscópico urgente.")
-    ruta = generar_circular_supernova(ra, dec, nombre_evento, galaxia, redshift, tipo_evento)
+    print(f"   [+] Evento extragaláctico detectado en coordenadas RA {ra:.5f}, Dec {dec:.5f}.")
+    ruta = generar_circular_extragalactica(ra, dec, id_evento, galaxia, redshift, tipo_evento)
     print(f"\n   [📝] DOCUMENTO GENERADO: Circular guardada en '{ruta}'")
 
 
 # =====================================================================
-# HERRAMIENTA COMÚN (FOTOMETRÍA)
+# HERRAMIENTA COMÚN (FOTOMETRÍA SED)
 # =====================================================================
-def buscar_espectro_y_fotometria(coordenadas):
-    dec = coordenadas.dec.deg
-    ra = coordenadas.ra.deg
-    es_enana_roja = False
-    nombre_estrella = f"Sistema_RA{ra:.2f}"
-    
+def buscar_espectro_y_fotometria(coordenadas, id_evento):
     print(f"\n[2/X] 🌈 Iniciando análisis térmico / fotométrico global...")
     magnitudes_finales = []
     l_validas = []
     e_validas = []
+    es_enana_roja = False
 
     print("   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...")
     try:
         custom_simbad = Simbad()
         custom_simbad.add_votable_fields('flux(V)', 'flux(R)', 'flux(J)', 'flux(H)', 'flux(K)')
-        # SE ACTUALIZÓ EL RADIO DE BÚSQUEDA TÉRMICA A 5 ARCSEC
         resultado = custom_simbad.query_region(coordenadas, radius=5*u.arcsec)
 
         if resultado is not None and len(resultado) > 0:
-            col_id = next((c for c in resultado.colnames if 'MAIN_ID' in c.upper()), None)
-            if col_id:
-                raw_name = resultado[0][col_id]
-                nombre_estrella = raw_name.decode('utf-8') if hasattr(raw_name, 'decode') else str(raw_name)
-
             bandas_simbad = ['V (Verde)', 'J (IR)', 'H (IR Prof)', 'K (IR Ext)']
             long_onda_simbad = [5500, 12200, 16300, 21900] 
             cols_esperadas = ['FLUX_V', 'FLUX_J', 'FLUX_H', 'FLUX_K']
@@ -349,66 +328,79 @@ def buscar_espectro_y_fotometria(coordenadas):
     for i, txt in enumerate(e_validas):
         plt.annotate(txt, (l_validas[i], flujo_relativo[i]), textcoords="offset points", xytext=(0,10), ha='center', color='cyan', fontsize=9)
 
-    plt.title(f"Distribución de Energía (SED) - {nombre_estrella}", color='white', pad=20)
+    plt.title(f"Distribución de Energía (SED) - {id_evento}", color='white', pad=20)
     plt.xlabel(r"Longitud de Onda ($\AA$)", color='lightgray')
     plt.ylabel("Flujo Relativo (Brillo normalizado)", color='lightgray')
     plt.legend(facecolor='#0f0f0f', edgecolor='gray')
     plt.grid(True, alpha=0.2, linestyle='--')
 
     os.makedirs('data', exist_ok=True)
-    nombre_archivo = nombre_estrella.replace(' ', '_').replace('/', '-')
-    archivo = f"data/espectro_Universal_{nombre_archivo}.png"
+    archivo = f"data/espectro_sed_{id_evento}.png"
     plt.savefig(archivo, dpi=150, bbox_inches='tight')
     plt.close()
 
-    return es_enana_roja, nombre_estrella
+    return es_enana_roja
 
 
 # =====================================================================
 # EL ENRUTADOR PRINCIPAL (CEREBRO DEL LABORATORIO)
 # =====================================================================
-def ejecutar_pipeline_magallanes(ra_deg, dec_deg, nombre_externo="Desconocido", tipo_evento="flare"):
+def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_evento="flare"):
     """
-    Recibe el evento desde hunter.py y bifurca el análisis dependiendo de su naturaleza.
+    Recibe el identificador oficial (OID) desde hunter.py y asegura la trazabilidad.
     """
-    print(f"\n[ESTACIÓN MAGALLANES] Recibida alerta automática para: {nombre_externo}")
+    print(f"\n[ESTACIÓN MAGALLANES] Recibida alerta automática para: {id_evento}")
     print(f"➤ Coordenadas ICRS : RA {ra_deg:.5f} | Dec {dec_deg:.5f}")
     
     try:
         coordenadas = SkyCoord(ra=ra_deg*u.degree, dec=dec_deg*u.degree, frame='icrs')
-        nombre_objetivo = nombre_externo if nombre_externo not in ["Desconocida", "No catalogada"] else f"RA{ra_deg:.2f}"
+        id_limpio = id_evento.replace(' ', '_').replace('/', '-')
 
         # ---------------------------------------------------------
-        # CAMINO A: ESTRELLAS ACTIVAS (Flares)
+        # VÍA 1: ENTORNO GALÁCTICO LOCAL (Flares y Novas de Vía Láctea)
         # ---------------------------------------------------------
-        if tipo_evento == "flare":
-            print("\n➤ INICIANDO PROTOCOLO ESTELAR (Búsqueda de sistemas planetarios)")
+        if tipo_evento in ["flare", "nova"]:
+            print(f"\n➤ INICIANDO PROTOCOLO ESTELAR LOCAL ({tipo_evento.upper()})")
             tiene_planetas, planetas_info = buscar_exoplanetas(coordenadas)
-            es_enana_roja, _ = buscar_espectro_y_fotometria(coordenadas)
-            emision_activa, valor_ew = analizar_quimica_halfa(coordenadas, nombre_objetivo)
-            evaluar_jwst(tiene_planetas, es_enana_roja, nombre_objetivo, ra_deg, dec_deg, planetas_info, emision_activa, valor_ew)
+            es_enana_roja = buscar_espectro_y_fotometria(coordenadas, id_limpio)
+            emision_activa, valor_ew = analizar_quimica_halfa(coordenadas, id_limpio)
             
-            # Disparar alerta externa
+            evaluar_estelar_local(tiene_planetas, es_enana_roja, id_limpio, ra_deg, dec_deg, planetas_info, emision_activa, valor_ew, tipo_evento)
+            
             try:
-                generar_alerta_comunidad(nombre_objetivo, ra_deg, dec_deg, tipo_evento=tipo_evento, extra_data={"ew_halfa": valor_ew, "tiene_planetas": tiene_planetas})
+                generar_alerta_comunidad(id_limpio, ra_deg, dec_deg, tipo_evento=tipo_evento, extra_data={"ew_halfa": valor_ew, "tiene_planetas": tiene_planetas})
             except TypeError:
-                print("\n   [!] El megáfono (operaciones_too.py) requiere actualización para aceptar la nueva taxonomía.")
+                pass
                 
         # ---------------------------------------------------------
-        # CAMINO B: DESTRUCCIÓN ESTELAR (Supernovas / Novas)
+        # VÍA 2: TRANSITORIOS EXTRAGALÁCTICOS (Supernovas)
         # ---------------------------------------------------------
-        elif tipo_evento in ["supernova", "nova"]:
-            print("\n➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO (Búsqueda de galaxias y redshift)")
+        elif tipo_evento == "supernova":
+            print("\n➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO (Búsqueda de Galaxia Anfitriona)")
             galaxia, redshift = buscar_galaxia_anfitriona(coordenadas)
-            # Fotometría básica de la explosión
-            _, _ = buscar_espectro_y_fotometria(coordenadas)
-            evaluar_supernova(ra_deg, dec_deg, nombre_objetivo, galaxia, redshift, tipo_evento)
+            _ = buscar_espectro_y_fotometria(coordenadas, id_limpio)
             
-            # Disparar alerta externa
+            evaluar_extragalactico(ra_deg, dec_deg, id_limpio, galaxia, redshift, tipo_evento)
+            
             try:
-                generar_alerta_comunidad(nombre_objetivo, ra_deg, dec_deg, tipo_evento=tipo_evento, extra_data={"galaxia": galaxia, "redshift": redshift})
+                generar_alerta_comunidad(id_limpio, ra_deg, dec_deg, tipo_evento=tipo_evento, extra_data={"galaxia": galaxia, "redshift": redshift})
             except TypeError:
-                print("\n   [!] El megáfono (operaciones_too.py) requiere actualización para aceptar la nueva taxonomía.")
+                pass
+                
+        # ---------------------------------------------------------
+        # VÍA 3: NÚCLEOS GALÁCTICOS ACTIVOS (Cuásares / AGN)
+        # ---------------------------------------------------------
+        elif tipo_evento == "agn":
+            print("\n➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO (Núcleo Galáctico Activo)")
+            objeto_agn, redshift = buscar_galaxia_anfitriona(coordenadas)
+            _ = buscar_espectro_y_fotometria(coordenadas, id_limpio)
+            
+            evaluar_extragalactico(ra_deg, dec_deg, id_limpio, objeto_agn, redshift, tipo_evento)
+            
+            try:
+                generar_alerta_comunidad(id_limpio, ra_deg, dec_deg, tipo_evento=tipo_evento, extra_data={"galaxia": objeto_agn, "redshift": redshift})
+            except TypeError:
+                pass
         
         print("\n=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===")
         return True
@@ -423,8 +415,8 @@ if __name__ == "__main__":
     try:
         ra_input = float(input("\n➤ Ascensión Recta (RA) : "))
         dec_input = float(input("➤ Declinación (Dec)    : "))
-        tipo_input = input("➤ Tipo (flare/supernova/nova): ").strip().lower()
-        if tipo_input not in ["flare", "supernova", "nova"]: tipo_input = "flare"
+        tipo_input = input("➤ Tipo (flare/nova/supernova/agn): ").strip().lower()
+        if tipo_input not in ["flare", "nova", "supernova", "agn"]: tipo_input = "flare"
         ejecutar_pipeline_magallanes(ra_input, dec_input, f"Manual_{tipo_input.upper()}", tipo_evento=tipo_input)
     except ValueError:
         print("\n[!] Error: Formato inválido.")

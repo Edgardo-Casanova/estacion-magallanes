@@ -21,21 +21,43 @@ from laboratorio import ejecutar_pipeline_magallanes
 
 warnings.filterwarnings('ignore')
 
-# --- 1. DICCIONARIO TAXONÓMICO BILINGÜE ---
+ARCHIVO_MJD = "tracker_mjd.txt"
+
+# --- DICCIONARIO TAXONÓMICO BILINGÜE ---
 diccionario_categorias = {
     "ZTF": ["SNIa", "SNIbc", "SNII", "SLSN", "CV/Nova", "QSO", "Blazar"],
     "LSST": ["SNIa", "SNIbc", "SNII", "SLSN", "Nova", "Mdwarf-flare"]
 }
 
+def obtener_mjd_rastreo():
+    """Lee el MJD de la última corrida para no repetir análisis."""
+    try:
+        if os.path.exists(ARCHIVO_MJD):
+            with open(ARCHIVO_MJD, "r") as f:
+                mjd_guardado = float(f.read().strip())
+                return mjd_guardado
+    except Exception as e:
+        print(f"No se pudo leer el tracker MJD ({e}). Usando ventana por defecto.")
+    
+    return Time(datetime.utcnow() - timedelta(days=2)).mjd
+
+def guardar_mjd_rastreo(mjd):
+    """Guarda el MJD actual al finalizar la corrida para el próximo ciclo."""
+    try:
+        with open(ARCHIVO_MJD, "w") as f:
+            f.write(str(mjd))
+    except Exception as e:
+        print(f"Error guardando el marcador de tiempo MJD: {e}")
+
 def determinar_tipo_evento(clase_ia):
-    """Traduce la etiqueta de la IA en una ruta de acción para el laboratorio."""
+    """Traduce la etiqueta de la IA en una de las 3 rutas físicas del laboratorio."""
     clase_upper = str(clase_ia).upper()
     if "SN" in clase_upper or "SLSN" in clase_upper:
         return "supernova"
     elif "NOVA" in clase_upper or "CV" in clase_upper:
         return "nova"
     elif "QSO" in clase_upper or "BLAZAR" in clase_upper or "AGN" in clase_upper:
-        return "supernova" 
+        return "agn" 
     else:
         return "flare"
 
@@ -88,24 +110,17 @@ def obtener_datos_astronomicos(coordenadas):
     return nombre, distancia, tipo, metalicidad
 
 def consultar_tns_sur(mjd_reciente):
-    """
-    Consulta a la base de datos oficial del TNS para buscar supernovas.
-    """
     registrar_log("="*50, "TNS_GLOBAL")
     registrar_log("APUNTANDO TELESCOPIO A RED: TNS_GLOBAL", "TNS_GLOBAL")
     registrar_log("Hemisferio: Sur (ASAS-SN / ATLAS) | Radar de Supernovas de la IAU", "TNS_GLOBAL")
     registrar_log("="*50, "TNS_GLOBAL")
     registrar_log("1. Contactando servidor central del Transient Name Server...", "TNS_GLOBAL")
 
-    # --- TUS CREDENCIALES OFICIALES DEL TNS ---
     TNS_BOT_ID = os.getenv("TNS_BOT_ID")
     TNS_API_KEY = os.getenv("TNS_API_KEY")
-
-    # Firma oficial requerida por la IAU
     tns_marker = f'tns_marker{{"tns_id":{TNS_BOT_ID}, "type":"bot", "name":"Magallanes_Bot"}}'
     headers = {'User-Agent': tns_marker}
 
-    # Parámetros de búsqueda oficial: Supernovas clasificadas en el hemisferio sur en los últimos 2 días
     search_data = {
         "dec_range": "-90,0", 
         "discovered_period_value": "2", 
@@ -113,11 +128,7 @@ def consultar_tns_sur(mjd_reciente):
         "unclassified_at": "0", 
         "classified_sne": "1" 
     }
-
-    payload = {
-        "api_key": TNS_API_KEY,
-        "data": json.dumps(search_data)
-    }
+    payload = {"api_key": TNS_API_KEY, "data": json.dumps(search_data)}
 
     try:
         url = 'https://www.wis-tns.org/api/get/search'
@@ -125,7 +136,18 @@ def consultar_tns_sur(mjd_reciente):
 
         if response.status_code == 200:
             datos = response.json()
-            cantidad = len(datos.get('data', {}).get('reply', []))
+            if isinstance(datos, list):
+                cantidad = len(datos)
+            elif isinstance(datos, dict):
+                data_obj = datos.get('data', {})
+                if isinstance(data_obj, dict):
+                    cantidad = len(data_obj.get('reply', []))
+                elif isinstance(data_obj, list):
+                    cantidad = len(data_obj)
+                else:
+                    cantidad = 1
+            else:
+                cantidad = 0
             registrar_log(f"¡Conexión exitosa! El TNS reporta {cantidad} supernovas recientes en el hemisferio sur.", "TNS_GLOBAL")
             
         elif response.status_code == 403:
@@ -140,13 +162,13 @@ def consultar_tns_sur(mjd_reciente):
     return None
 
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO v10 (Fase 2) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO v11 (Radar Continuo) ===")
     client = Alerce()
     
-    hace_dos_dias = datetime.now() - timedelta(days=2)
-    mjd_reciente = Time(hace_dos_dias).mjd
+    mjd_reciente = obtener_mjd_rastreo()
+    fecha_legible = Time(mjd_reciente, format='mjd').to_datetime().strftime('%Y-%m-%d %H:%M:%S UTC')
+    print(f"➤ Buscando alertas activas desde: {fecha_legible} (MJD: {mjd_reciente:.4f})")
 
-    # Agregamos la red TNS Global al ciclo de patrullaje
     redes_a_escanear = ["ZTF", "LSST", "TNS_GLOBAL"]
 
     for current_survey in redes_a_escanear:
@@ -157,26 +179,25 @@ def main():
         registrar_log("\n" + "="*50, current_survey)
         registrar_log(f"APUNTANDO TELESCOPIO A RED: {current_survey}", current_survey)
         
-        # Eliminamos el filtro estricto (class_name / stellar) para poder atrapar múltiples categorías
         if current_survey == "ZTF":
-            registrar_log("Hemisferio: Norte | 1500 Alertas (Filtro Taxonómico Abierto)", current_survey)
+            registrar_log("Hemisferio: Norte | Búsqueda Continua (Filtro Taxonómico Abierto)", current_survey)
             filtros = {"lastmjd": mjd_reciente, "order_by": "lastmjd", "order_mode": "DESC", "page_size": 1500}
         else:
-            registrar_log("Hemisferio: Sur (LSST) | 1500 Alertas (Filtro Taxonómico Abierto)", current_survey)
+            registrar_log("Hemisferio: Sur (LSST) | Búsqueda Continua (Filtro Taxonómico Abierto)", current_survey)
             filtros = {"lastmjd": mjd_reciente, "order_by": "lastmjd", "order_mode": "DESC", "page_size": 1500, "survey": "lsst"}
         
         registrar_log("="*50, current_survey)
 
         try:
-            registrar_log(f"1. Descargando alertas de {current_survey}...", current_survey)
+            registrar_log(f"1. Descargando alertas nuevas de {current_survey}...", current_survey)
             candidatos = client.query_objects(**filtros)
             
             if candidatos.empty:
-                registrar_log(f"Sin alertas que coincidan con los filtros. (Red en silencio)", current_survey)
+                registrar_log(f"Sin alertas nuevas en esta ventana de tiempo. (Red en silencio)", current_survey)
                 continue
 
             total_alertas = len(candidatos)
-            registrar_log(f"2. Evaluando clasificaciones IA en {total_alertas} candidatos...", current_survey)
+            registrar_log(f"2. Evaluando clasificaciones IA en {total_alertas} candidatos recientes...", current_survey)
             
             mejor_candidato = None
             mejor_prob = 0.0
@@ -184,9 +205,8 @@ def main():
             coordenadas = None
             clase_ia_final = "Desconocida"
             tipo_evento_final = "desconocido"
-            salto_maximo = 0 # Referencia matemática heredada
+            salto_maximo = 0
             
-            # Obtener las categorías que nos interesan para este telescopio específico
             target_classes = diccionario_categorias.get(current_survey, [])
 
             for index, fila in candidatos.iterrows():
@@ -195,23 +215,17 @@ def main():
                     registrar_log(f"   -> Procesadas {index} de {total_alertas} alertas...", current_survey)
                 
                 try:
-                    # 1. Filtro de Inteligencia Artificial (El principal ahora)
                     probs = client.query_probabilities(oid=oid, format='pandas')
-                    if probs.empty:
-                        continue
+                    if probs.empty: continue
                         
                     mejor_prediccion = probs.loc[probs['probability'].idxmax()]
                     temp_ia_class = mejor_prediccion['class_name']
                     temp_ia_prob = mejor_prediccion['probability']
                     
-                    # 2. Si la etiqueta coincide con nuestros intereses astrofísicos y hay alta confianza
                     if temp_ia_class in target_classes and temp_ia_prob > 0.60:
-                        
                         det = client.query_detections(oid=oid, format='pandas')
-                        if det.empty or len(det) < 5:
-                            continue 
+                        if det.empty or len(det) < 5: continue 
                             
-                        # Si es un candidato válido con suficientes datos, competirá por ser el mejor del día
                         if temp_ia_prob > mejor_prob:
                             mejor_prob = temp_ia_prob
                             mejor_candidato = oid
@@ -220,7 +234,6 @@ def main():
                             clase_ia_final = temp_ia_class
                             tipo_evento_final = determinar_tipo_evento(clase_ia_final)
                             
-                            # Cálculo referencial del salto (solo para la bitácora)
                             det = det.sort_values(by='mjd')
                             if len(det) > 10:
                                 mediana_historica = det.iloc[:-1]['magpsf'].median()
@@ -245,9 +258,7 @@ def main():
             mejor_curva['fecha_humana'] = Time(mejor_curva['mjd'].values, format='mjd').to_datetime()
             ultima_fecha = mejor_curva.iloc[-1]['fecha_humana']
             ultima_mag = mejor_curva.iloc[-1]['magpsf']
-            banda_color = "g (verde)" if mejor_curva.iloc[-1]['fid'] == 1 else "r (rojo)"
             
-            # --- 1. GENERAR GRÁFICO (PNG) ---
             plt.style.use('dark_background')
             fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 7))
             fig.patch.set_facecolor('#0f0f0f') 
@@ -262,7 +273,7 @@ def main():
             if not banda_r.empty:
                 ax1.errorbar(banda_r['fecha_humana'], banda_r['magpsf'], yerr=banda_r['sigmapsf'], fmt='o', color='#ff3333', alpha=0.6, markersize=5, label='Banda r')
 
-            ax1.scatter(ultima_fecha, ultima_mag, color='cyan' if tipo_evento_final == "supernova" else 'yellow', edgecolor='white', marker='*', s=400, zorder=5, label='¡Detección!')
+            ax1.scatter(ultima_fecha, ultima_mag, color='cyan' if tipo_evento_final in ["supernova", "agn"] else 'yellow', edgecolor='white', marker='*', s=400, zorder=5, label='¡Detección!')
             ax1.invert_yaxis()
             ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
             fig.autofmt_xdate(rotation=45)
@@ -273,7 +284,7 @@ def main():
             ax1.legend(facecolor='#0f0f0f', edgecolor='gray')
             ax1.grid(True, linestyle='-', color='#333333', alpha=0.7)
 
-            ax2.scatter(coordenadas.ra.deg, coordenadas.dec.deg, color='cyan' if tipo_evento_final == "supernova" else 'yellow', marker='*', s=400, label=f'Posición {current_survey}')
+            ax2.scatter(coordenadas.ra.deg, coordenadas.dec.deg, color='cyan' if tipo_evento_final in ["supernova", "agn"] else 'yellow', marker='*', s=400, label=f'Posición {current_survey}')
             ax2.set_xlim(coordenadas.ra.deg + 1, coordenadas.ra.deg - 1) 
             ax2.set_ylim(coordenadas.dec.deg - 1, coordenadas.dec.deg + 1)
             ax2.set_title(f"Coordenadas en {constelacion}", color='white', pad=15)
@@ -302,12 +313,12 @@ def main():
             fig.text(0.5, 0.01, f"Estación Magallanes | Analizado el {datetime.now().strftime('%Y-%m-%d')} | Red {current_survey}", ha='center', color='gray', fontsize=11)
             
             os.makedirs('data', exist_ok=True)
-            archivo_plot = f"data/flare_PRO_{mejor_candidato}_{current_survey}.png"
+            # --- CORRECCIÓN: Nuevo estándar neutro ---
+            archivo_plot = f"data/curva_luz_{mejor_candidato}.png"
             plt.savefig(archivo_plot, dpi=150, bbox_inches='tight') 
             plt.close()
             registrar_log(f"Reporte cartográfico guardado en: {archivo_plot}", current_survey)
 
-            # --- 2. GENERAR PLANTILLAS DE REPORTE (TXT) ---
             texto_reporte = f"""======================================================================
 REPORTE DE ALERTA ({tipo_evento_final.upper()})
 ======================================================================
@@ -324,18 +335,20 @@ Red de Origen: {current_survey}
                 
             registrar_log(f"Plantillas de comunicación básica guardadas.", current_survey)
 
-            # --- 3. DISPARAR LABORATORIO ASTROFÍSICO (Bifurcado) ---
             registrar_log(f"Disparando pipeline de análisis profundo para {mejor_candidato}...", current_survey)
             try:
-                ejecutar_pipeline_magallanes(coordenadas.ra.deg, coordenadas.dec.deg, nombre_real, tipo_evento_final)
+                # --- CORRECCIÓN: Enviamos el ID oficial de la alerta (mejor_candidato) ---
+                ejecutar_pipeline_magallanes(coordenadas.ra.deg, coordenadas.dec.deg, mejor_candidato, tipo_evento_final)
                 registrar_log(f"Análisis de laboratorio completado con éxito para {mejor_candidato}.", current_survey)
-            except TypeError:
-                 registrar_log(f"El laboratorio.py actual aún no soporta el parámetro 'tipo_evento'. Actualízalo en la Fase 2.", current_survey)
             except Exception as e:
                 registrar_log(f"Error al ejecutar el laboratorio para {mejor_candidato}: {e}", current_survey)
 
         except Exception as e:
             registrar_log(f"Error procesando la red {current_survey}: {e}", current_survey)
+
+    nuevo_mjd = Time(datetime.utcnow()).mjd
+    guardar_mjd_rastreo(nuevo_mjd)
+    print(f"\n=== PATRULLAJE COMPLETADO. MARCADOR DE TIEMPO GUARDADO: {nuevo_mjd:.5f} ===")
 
 if __name__ == "__main__":
     main()
