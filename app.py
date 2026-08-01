@@ -109,6 +109,7 @@ def formatear_nombre_grafico(ruta_archivo):
 
 # --- BARRA LATERAL DE NAVEGACIÓN ---
 st.sidebar.image("logo.jpeg", width="stretch")
+st.sidebar.markdown("[⬅️ Volver a la Estación Magallanes](https://www.estacionmagallanes.org)")
 st.sidebar.divider()
 
 st.sidebar.title("Panel de Control")
