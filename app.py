@@ -213,6 +213,7 @@ elif vista == "Feed de Alertas y Circulares":
 # --- VISTA 3: BITÁCORAS ---
 elif vista == "Bitácoras del Sistema":
     st.title("📜 Bitácoras de Operación de las Redes")
+    st.info("🕒 **Nota de Sincronización Temporal:** Los registros de esta bitácora operan bajo el **Tiempo Universal Coordinado (UTC)**. Para la conversión a la hora local de nuestra estación base, rige la Hora Oficial de la **Región de Aysén y Región de Magallanes y la Antártica Chilena** (UTC-3 fija), dictaminada por el [Servicio Hidrográfico y Oceanográfico de la Armada de Chile (SHOA)](https://www.horaoficial.cl/).")
     st.markdown("Registro interactivo del radar automatizado. Expande un día para ver los detalles del patrullaje.")
     
     col_ztf, col_lsst = st.columns(2)

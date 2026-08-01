@@ -7,7 +7,7 @@ import json
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from alerce.core import Alerce
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from astropy.time import Time
 from astropy.coordinates import SkyCoord, get_constellation
 import astropy.units as u
@@ -63,7 +63,7 @@ def determinar_tipo_evento(clase_ia):
 
 def registrar_log(mensaje, survey):
     print(mensaje) 
-    fecha_hora = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    fecha_hora = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
     archivo_log = f"bitacora_{survey}.log"
     try:
         with open(archivo_log, "a") as f:
@@ -314,7 +314,7 @@ def main():
 
             plt.tight_layout(rect=[0, 0.05, 1, 0.92])
             plt.suptitle(f"Reporte Astronómico: {tipo_evento_final.upper()}", fontsize=20, color='white', fontweight='bold', y=0.98)
-            fig.text(0.5, 0.01, f"Estación Magallanes | Analizado el {datetime.now().strftime('%Y-%m-%d')} | Red {current_survey}", ha='center', color='gray', fontsize=11)
+            fig.text(0.5, 0.01, f"Estación Magallanes | Analizado el {datetime.now(timezone.utc).strftime('%Y-%m-%d')} | Red {current_survey}", ha='center', color='gray', fontsize=11)
             
             os.makedirs('data', exist_ok=True)
             archivo_plot = f"data/curva_luz_{mejor_candidato}.png"
