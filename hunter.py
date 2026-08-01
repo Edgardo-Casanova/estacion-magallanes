@@ -179,12 +179,15 @@ def main():
         registrar_log("\n" + "="*50, current_survey)
         registrar_log(f"APUNTANDO TELESCOPIO A RED: {current_survey}", current_survey)
         
+        # --- CORRECCIÓN: Rango de tiempo con traslape de seguridad ---
+        rango_mjd = [mjd_reciente - 0.2, mjd_reciente + 5.0]
+
         if current_survey == "ZTF":
             registrar_log("Hemisferio: Norte | Búsqueda Continua (Filtro Taxonómico Abierto)", current_survey)
-            filtros = {"lastmjd": mjd_reciente, "order_by": "lastmjd", "order_mode": "DESC", "page_size": 1500}
+            filtros = {"lastmjd": rango_mjd, "order_by": "lastmjd", "order_mode": "DESC", "page_size": 1500}
         else:
             registrar_log("Hemisferio: Sur (LSST) | Búsqueda Continua (Filtro Taxonómico Abierto)", current_survey)
-            filtros = {"lastmjd": mjd_reciente, "order_by": "lastmjd", "order_mode": "DESC", "page_size": 1500, "survey": "lsst"}
+            filtros = {"lastmjd": rango_mjd, "order_by": "lastmjd", "order_mode": "DESC", "page_size": 1500, "survey": "lsst"}
         
         registrar_log("="*50, current_survey)
 
@@ -224,7 +227,8 @@ def main():
                     
                     if temp_ia_class in target_classes and temp_ia_prob > 0.60:
                         det = client.query_detections(oid=oid, format='pandas')
-                        if det.empty or len(det) < 5: continue 
+                        # --- CORRECCIÓN: Filtro relajado a un mínimo de 2 detecciones ---
+                        if det.empty or len(det) < 2: continue 
                             
                         if temp_ia_prob > mejor_prob:
                             mejor_prob = temp_ia_prob
@@ -313,7 +317,6 @@ def main():
             fig.text(0.5, 0.01, f"Estación Magallanes | Analizado el {datetime.now().strftime('%Y-%m-%d')} | Red {current_survey}", ha='center', color='gray', fontsize=11)
             
             os.makedirs('data', exist_ok=True)
-            # --- CORRECCIÓN: Nuevo estándar neutro ---
             archivo_plot = f"data/curva_luz_{mejor_candidato}.png"
             plt.savefig(archivo_plot, dpi=150, bbox_inches='tight') 
             plt.close()
@@ -337,7 +340,6 @@ Red de Origen: {current_survey}
 
             registrar_log(f"Disparando pipeline de análisis profundo para {mejor_candidato}...", current_survey)
             try:
-                # --- CORRECCIÓN: Enviamos el ID oficial de la alerta (mejor_candidato) ---
                 ejecutar_pipeline_magallanes(coordenadas.ra.deg, coordenadas.dec.deg, mejor_candidato, tipo_evento_final)
                 registrar_log(f"Análisis de laboratorio completado con éxito para {mejor_candidato}.", current_survey)
             except Exception as e:
