@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 import requests
 import json
-import matplotlib.subplots as plt_subplots
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from alerce.core import Alerce
@@ -187,11 +186,13 @@ def consultar_tns_sur(mjd_reciente, client):
     # Cargar la memoria inquebrantable
     supernovas_procesadas = leer_memoria_tns()
 
-    # Lógica táctica: Sin filtros de fecha problemáticos. Traemos las clasificadas.
+    # Lógica táctica: Forzamos a la IAU a invertir el catálogo (los más nuevos primero)
     payload = {"api_key": TNS_API_KEY, "data": json.dumps({
         "dec_range": "-90,0", 
         "unclassified_at": 0, 
-        "classified_sne": 1
+        "classified_sne": 1,
+        "order": "desc",
+        "order_by": "discoverydate"
     })}
 
     try:
