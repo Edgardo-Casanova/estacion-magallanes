@@ -6110,3 +6110,319 @@ Hemisferio: Sur (ASAS-SN / ATLAS) | Radar de Supernovas de la IAU
 ==================================================
 
 === PATRULLAJE COMPLETADO. MARCADOR DE TIEMPO GUARDADO: 61254.71162 ===
+[main 5c4d22b] Patrullaje automatico completado: 2026-08-02 17:04
+ 124 files changed, 2619 insertions(+)
+ create mode 100644 alertas/CIRCULAR_ZTF17aaagqvu.txt
+ create mode 100644 alertas/CIRCULAR_ZTF17aaahdwo.txt
+ create mode 100644 alertas/CIRCULAR_ZTF17aaahedh.txt
+ create mode 100644 alertas/CIRCULAR_ZTF17aabshbq.txt
+ create mode 100644 alertas/CIRCULAR_ZTF17aacztsn.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aaaarkj.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aaaarks.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aaafrpz.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aaalwjb.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aaawdhs.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aabjdnq.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aabltda.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aabpubs.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aadezdn.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aadihjn.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aadqdgz.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aagqeuv.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abpdfho.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abvtpgi.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abwspkj.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abydmyu.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abzfadq.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18accbzee.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aczvyeu.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF17aaagqvu.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF17aaahdwo.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF17aaahedh.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF17aabshbq.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF17aacztsn.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aaaarkj.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aaaarks.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aaafrpz.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aaalwjb.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aaawdhs.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aabjdnq.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aabltda.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aabpubs.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aadezdn.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aadihjn.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aadqdgz.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aagqeuv.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abpdfho.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abvtpgi.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abwspkj.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abydmyu.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abzfadq.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18accbzee.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aczvyeu.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF17aaagqvu.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF17aaahdwo.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF17aaahedh.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF17aabshbq.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF17aacztsn.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aaaarkj.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aaaarks.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aaafrpz.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aaalwjb.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aaawdhs.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aabjdnq.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aabltda.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aabpubs.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aadezdn.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aadihjn.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aadqdgz.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aagqeuv.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abpdfho.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abvtpgi.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abwspkj.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abydmyu.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abzfadq.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18accbzee.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aczvyeu.txt
+ create mode 100644 data/curva_luz_ZTF17aaagqvu.png
+ create mode 100644 data/curva_luz_ZTF17aaahdwo.png
+ create mode 100644 data/curva_luz_ZTF17aaahedh.png
+ create mode 100644 data/curva_luz_ZTF17aabshbq.png
+ create mode 100644 data/curva_luz_ZTF17aacztsn.png
+ create mode 100644 data/curva_luz_ZTF18aaaarkj.png
+ create mode 100644 data/curva_luz_ZTF18aaaarks.png
+ create mode 100644 data/curva_luz_ZTF18aaafrpz.png
+ create mode 100644 data/curva_luz_ZTF18aaalwjb.png
+ create mode 100644 data/curva_luz_ZTF18aaawdhs.png
+ create mode 100644 data/curva_luz_ZTF18aabjdnq.png
+ create mode 100644 data/curva_luz_ZTF18aabltda.png
+ create mode 100644 data/curva_luz_ZTF18aabpubs.png
+ create mode 100644 data/curva_luz_ZTF18aadezdn.png
+ create mode 100644 data/curva_luz_ZTF18aadihjn.png
+ create mode 100644 data/curva_luz_ZTF18aadqdgz.png
+ create mode 100644 data/curva_luz_ZTF18aagqeuv.png
+ create mode 100644 data/curva_luz_ZTF18abpdfho.png
+ create mode 100644 data/curva_luz_ZTF18abvtpgi.png
+ create mode 100644 data/curva_luz_ZTF18abwspkj.png
+ create mode 100644 data/curva_luz_ZTF18abydmyu.png
+ create mode 100644 data/curva_luz_ZTF18abzfadq.png
+ create mode 100644 data/curva_luz_ZTF18accbzee.png
+ create mode 100644 data/curva_luz_ZTF18aczvyeu.png
+ create mode 100644 data/espectro_sed_ZTF17aaagqvu.png
+ create mode 100644 data/espectro_sed_ZTF17aaahdwo.png
+ create mode 100644 data/espectro_sed_ZTF17aaahedh.png
+ create mode 100644 data/espectro_sed_ZTF17aabshbq.png
+ create mode 100644 data/espectro_sed_ZTF17aacztsn.png
+ create mode 100644 data/espectro_sed_ZTF18aaaarkj.png
+ create mode 100644 data/espectro_sed_ZTF18aaaarks.png
+ create mode 100644 data/espectro_sed_ZTF18aaafrpz.png
+ create mode 100644 data/espectro_sed_ZTF18aaalwjb.png
+ create mode 100644 data/espectro_sed_ZTF18aaawdhs.png
+ create mode 100644 data/espectro_sed_ZTF18aabjdnq.png
+ create mode 100644 data/espectro_sed_ZTF18aabltda.png
+ create mode 100644 data/espectro_sed_ZTF18aabpubs.png
+ create mode 100644 data/espectro_sed_ZTF18aadezdn.png
+ create mode 100644 data/espectro_sed_ZTF18aadihjn.png
+ create mode 100644 data/espectro_sed_ZTF18aadqdgz.png
+ create mode 100644 data/espectro_sed_ZTF18aagqeuv.png
+ create mode 100644 data/espectro_sed_ZTF18abpdfho.png
+ create mode 100644 data/espectro_sed_ZTF18abvtpgi.png
+ create mode 100644 data/espectro_sed_ZTF18abwspkj.png
+ create mode 100644 data/espectro_sed_ZTF18abydmyu.png
+ create mode 100644 data/espectro_sed_ZTF18abzfadq.png
+ create mode 100644 data/espectro_sed_ZTF18accbzee.png
+ create mode 100644 data/espectro_sed_ZTF18aczvyeu.png
+To https://github.com/Edgardo-Casanova/estacion-magallanes.git
+   5763fb4..5c4d22b  main -> main
+=== INICIANDO CAZADOR MULTIPROPÓSITO v11 (Radar Continuo) ===
+➤ Buscando alertas activas desde: 2026-08-02 16:48:00 UTC (MJD: 61254.7000)
+
+==================================================
+APUNTANDO TELESCOPIO A RED: ZTF
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF19adbmnnl
+➤ Coordenadas ICRS : RA 9.35361 | Dec 19.15037
+
+➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO (Núcleo Galáctico Activo)
+
+[1/3] 🌌 Buscando Galaxia Anfitriona / Entorno Extragaláctico (SIMBAD otypes.htx)...
+   [+] Entidad Extragaláctica identificada: SDSS J003724.87+190901.4 (Tipo SIMBAD: QSO) | Redshift: Desconocido
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/3] 🔭 Evaluación de Seguimiento para AGN...
+   [+] Evento extragaláctico detectado en coordenadas RA 9.35361, Dec 19.15037.
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF19adbmnnl.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF19adbmnnl (AGN)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF19adbmnnl.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF19adbmnnl procesado exitosamente (QSO).
+   -> Procesadas 50 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF18abnckcm
+➤ Coordenadas ICRS : RA 7.12423 | Dec 20.00743
+
+➤ INICIANDO PROTOCOLO ESTELAR LOCAL (NOVA)
+
+[1/4] 📡 Consultando NASA Exoplanet Archive...
+   [-] No se registran exoplanetas confirmados en sistemas planetarios.
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/4] 🔬 Iniciando espectroscopía de alta resolución (H-alfa) para ZTF18abnckcm...
+   [+] Espectro de alta resolución encontrado. Extrayendo línea de Hidrógeno...
+   [-] Error procesando módulo espectroscópico: module 'numpy' has no attribute 'trapz'
+
+[4/4] 🔭 Evaluación de Viabilidad Observacional para ZTF18abnckcm...
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF18abnckcm.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF18abnckcm (NOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF18abnckcm.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF18abnckcm procesado exitosamente (CV/Nova).
+   -> Procesadas 100 de 1500 alertas...
+   -> Procesadas 150 de 1500 alertas...
+   -> Procesadas 200 de 1500 alertas...
+   -> Procesadas 250 de 1500 alertas...
+   -> Procesadas 300 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF17aaaxrjj
+➤ Coordenadas ICRS : RA 106.33477 | Dec 35.64405
+
+➤ INICIANDO PROTOCOLO ESTELAR LOCAL (NOVA)
+
+[1/4] 📡 Consultando NASA Exoplanet Archive...
+   [-] No se registran exoplanetas confirmados en sistemas planetarios.
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/4] 🔬 Iniciando espectroscopía de alta resolución (H-alfa) para ZTF17aaaxrjj...
+   [-] No hay datos de archivo de alta resolución para esta coordenada específica.
+
+[4/4] 🔭 Evaluación de Viabilidad Observacional para ZTF17aaaxrjj...
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF17aaaxrjj.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF17aaaxrjj (NOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF17aaaxrjj.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF17aaaxrjj procesado exitosamente (CV/Nova).
+   -> Procesadas 350 de 1500 alertas...
+   -> Procesadas 400 de 1500 alertas...
+   -> Procesadas 450 de 1500 alertas...
+   -> Procesadas 500 de 1500 alertas...
+   -> Procesadas 550 de 1500 alertas...
+   -> Procesadas 600 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF18aadohek
+➤ Coordenadas ICRS : RA 101.52006 | Dec 37.54802
+
+➤ INICIANDO PROTOCOLO ESTELAR LOCAL (NOVA)
+
+[1/4] 📡 Consultando NASA Exoplanet Archive...
+   [-] No se registran exoplanetas confirmados en sistemas planetarios.
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/4] 🔬 Iniciando espectroscopía de alta resolución (H-alfa) para ZTF18aadohek...
+   [-] Error procesando módulo espectroscópico: 503 Server Error: Service Unavailable for url: https://skyserver.sdss.org/dr17/en/tools/search/X_Results.aspx
+
+[4/4] 🔭 Evaluación de Viabilidad Observacional para ZTF18aadohek...
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF18aadohek.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF18aadohek (NOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF18aadohek.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF18aadohek procesado exitosamente (CV/Nova).
+   -> Procesadas 650 de 1500 alertas...
+   -> Procesadas 700 de 1500 alertas...
+   -> Procesadas 750 de 1500 alertas...
+   -> Procesadas 800 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF18aaebgax
+➤ Coordenadas ICRS : RA 102.27408 | Dec 37.10586
+
+➤ INICIANDO PROTOCOLO ESTELAR LOCAL (NOVA)
+
+[1/4] 📡 Consultando NASA Exoplanet Archive...
+   [-] No se registran exoplanetas confirmados en sistemas planetarios.
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/4] 🔬 Iniciando espectroscopía de alta resolución (H-alfa) para ZTF18aaebgax...
+   [-] Error procesando módulo espectroscópico: 503 Server Error: Service Unavailable for url: https://skyserver.sdss.org/dr17/en/tools/search/X_Results.aspx
+
+[4/4] 🔭 Evaluación de Viabilidad Observacional para ZTF18aaebgax...
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF18aaebgax.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF18aaebgax (NOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF18aaebgax.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF18aaebgax procesado exitosamente (CV/Nova).
+   -> Procesadas 850 de 1500 alertas...
+   -> Procesadas 900 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF18aaebmls
+➤ Coordenadas ICRS : RA 101.74082 | Dec 36.06486
+
+➤ INICIANDO PROTOCOLO ESTELAR LOCAL (NOVA)
+
+[1/4] 📡 Consultando NASA Exoplanet Archive...
+   [-] No se registran exoplanetas confirmados en sistemas planetarios.
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/4] 🔬 Iniciando espectroscopía de alta resolución (H-alfa) para ZTF18aaebmls...
+   [-] No hay datos de archivo de alta resolución para esta coordenada específica.
+
+[4/4] 🔭 Evaluación de Viabilidad Observacional para ZTF18aaebmls...
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF18aaebmls.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF18aaebmls (NOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF18aaebmls.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF18aaebmls procesado exitosamente (CV/Nova).
+   -> Procesadas 950 de 1500 alertas...
+   -> Procesadas 1000 de 1500 alertas...
+   -> Procesadas 1050 de 1500 alertas...
+   -> Procesadas 1100 de 1500 alertas...
+   -> Procesadas 1150 de 1500 alertas...
+   -> Procesadas 1200 de 1500 alertas...
+   -> Procesadas 1250 de 1500 alertas...
+   -> Procesadas 1300 de 1500 alertas...
+   -> Procesadas 1350 de 1500 alertas...
+   -> Procesadas 1400 de 1500 alertas...
+   -> Procesadas 1450 de 1500 alertas...
+
+==================================================
+APUNTANDO TELESCOPIO A RED: LSST
+==================================================
+APUNTANDO TELESCOPIO A RED: TNS_GLOBAL
+Hemisferio: Sur (ASAS-SN / ATLAS) | Radar de Supernovas de la IAU
+==================================================
+
+=== PATRULLAJE COMPLETADO. MARCADOR DE TIEMPO GUARDADO: 61254.75413 ===
