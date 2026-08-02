@@ -177,7 +177,7 @@ def evaluar_estelar_local(tiene_planetas, es_enana_roja, id_evento, ra, dec, pla
 def buscar_galaxia_anfitriona(coordenadas):
     print(f"\n[1/3] 🌌 Buscando Galaxia Anfitriona / Entorno Extragaláctico (SIMBAD otypes.htx)...")
     galaxia = "Desconocida (Intergaláctica / Muy lejana)"
-    redshift = 0.0
+    redshift = "Desconocido"
     evento_historico = None
     
     try:
@@ -216,7 +216,9 @@ def buscar_galaxia_anfitriona(coordenadas):
                         galaxia = nombre_obj
                         if col_z and not np.ma.is_masked(fila[col_z]):
                             redshift = float(fila[col_z])
-                        print(f"   [+] Entidad Extragaláctica identificada: {galaxia} (Tipo SIMBAD: {otype}) | Redshift: {redshift:.5f}")
+                        
+                        z_print = f"{redshift:.5f}" if isinstance(redshift, float) else redshift
+                        print(f"   [+] Entidad Extragaláctica identificada: {galaxia} (Tipo SIMBAD: {otype}) | Redshift: {z_print}")
                 
                 if tipo_upper in codigos_transitorios and evento_historico is None:
                     evento_historico = f"{nombre_obj} ({otype})"
@@ -235,6 +237,8 @@ def generar_circular_extragalactica(ra, dec, id_evento, galaxia, redshift, tipo_
     fecha_emision = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
     ruta_archivo = f"alertas/CIRCULAR_{id_evento}.txt"
     
+    z_str = f"{redshift:.5f}" if isinstance(redshift, float) else str(redshift)
+    
     with open(ruta_archivo, 'w', encoding='utf-8') as f:
         f.write("=================================================================\n")
         f.write(" CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES\n")
@@ -248,7 +252,7 @@ def generar_circular_extragalactica(ra, dec, id_evento, galaxia, redshift, tipo_
             f.write(f"    OBJETO CENTRAL     : {galaxia} (Núcleo Activo)\n")
         else:
             f.write(f"    GALAXIA ANFITRIONA : {galaxia}\n")
-        f.write(f"    REDSHIFT (z)       : {redshift:.5f}\n")
+        f.write(f"    REDSHIFT (z)       : {z_str}\n")
         f.write("\n[2] RESOLUCIÓN DE SEGUIMIENTO\n")
         f.write("    DICTAMEN    : ALTA PRIORIDAD ESPECTROSCÓPICA\n")
         f.write("    INSTRUMENTO : Observatorios masivos terrestres (VLT / Gemini).\n")

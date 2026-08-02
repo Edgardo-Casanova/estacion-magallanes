@@ -2,6 +2,8 @@ import streamlit as st
 import os
 import glob
 import time
+import re
+from datetime import datetime
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from dotenv import load_dotenv
@@ -45,35 +47,46 @@ def obtener_estado_red(log_file):
         return "Desconocido", "⚪"
 
 def extraer_coordenadas_alertas():
-    ra_list, dec_list, nombres, tipos = [], [], [], []
+    ra_list, dec_list, nombres, tipos, fechas = [], [], [], [], []
     archivos = glob.glob("alertas/CIRCULAR_*.txt")
+    
     for archivo in archivos:
         try:
             with open(archivo, 'r', encoding='utf-8') as f:
-                lineas = f.readlines()
-                nombre_actual = "Desconocido"
-                tipo_actual = "FLARE" 
+                contenido = f.read()
                 
-                for linea in lineas:
-                    if "OBJETO DETECTADO" in linea or "EVENTO DETECTADO" in linea:
-                        parte_valor = linea.split(":", 1)[1].strip()
-                        if "(" in parte_valor and ")" in parte_valor:
-                            nombre_actual = parte_valor.split("(")[0].strip()
-                            tipo_actual = parte_valor.split("(")[1].replace(")", "").strip().upper()
-                        else:
-                            nombre_actual = parte_valor
-                            
-                    if "COORDENADAS ICRS" in linea:
-                        partes = linea.split("|")
-                        ra = float(partes[0].split("RA")[1].strip())
-                        dec = float(partes[1].split("Dec")[1].strip())
-                        ra_list.append(ra)
-                        dec_list.append(dec)
-                        nombres.append(nombre_actual)
-                        tipos.append(tipo_actual)
+                # 1. Extraer la fecha exacta de emisión
+                match_fecha = re.search(r"FECHA DE EMISIÓN\s*:\s*(\d{4}-\d{2}-\d{2})", contenido)
+                if not match_fecha:
+                    continue # Si no tiene formato de fecha válido, se omite
+                    
+                fecha_emision = datetime.strptime(match_fecha.group(1), "%Y-%m-%d").date()
+                
+                # 2. Extraer nombre y tipo del objeto
+                nombre_actual = "Desconocido"
+                tipo_actual = "FLARE"
+                match_obj = re.search(r"(?:OBJETO|EVENTO) DETECTADO\s*:\s*(.+?)\s*\((.+?)\)", contenido)
+                if match_obj:
+                    nombre_actual = match_obj.group(1).strip()
+                    tipo_actual = match_obj.group(2).strip().upper()
+                
+                # 3. Extraer coordenadas
+                match_coord = re.search(r"RA\s*([0-9\.\-]+)\s*\|\s*Dec\s*([0-9\.\-]+)", contenido)
+                if match_coord:
+                    ra = float(match_coord.group(1))
+                    dec = float(match_coord.group(2))
+                    
+                    # Añadir a las listas maestras
+                    ra_list.append(ra)
+                    dec_list.append(dec)
+                    nombres.append(nombre_actual)
+                    tipos.append(tipo_actual)
+                    fechas.append(fecha_emision)
+                    
         except Exception:
             pass
-    return ra_list, dec_list, nombres, tipos
+            
+    return ra_list, dec_list, nombres, tipos, fechas
 
 def formatear_nombre_circular(ruta_archivo):
     """Lee una circular y devuelve un nombre bonito para el menú desplegable."""
@@ -124,15 +137,32 @@ vista = st.sidebar.selectbox(
     ]
 )
 
+# EL NUEVO ESCUDO: Selector de Fecha (Visible en todas las vistas, pero afecta principalmente al Dashboard)
+st.sidebar.divider()
+fecha_hoy = datetime.utcnow().date()
+fecha_seleccionada = st.sidebar.date_input("📅 Filtro de Fecha (UTC):", fecha_hoy)
+
+
 # --- VISTA 1: DASHBOARD PRINCIPAL Y MAPA ESTELAR ---
 if vista == "Dashboard Principal (Telemetría)":
     st.title("🛰️ Estación Magallanes - Telemetría")
     
     estado_ztf, icono_ztf = obtener_estado_red("bitacora_ZTF.log")
     estado_lsst, icono_lsst = obtener_estado_red("bitacora_TNS_GLOBAL.log")
-    ra_list, dec_list, nombres, tipos = extraer_coordenadas_alertas()
     
-    # NUEVA LÓGICA DE CONTADORES SEPARADOS
+    # Extraer todos los datos
+    ra_full, dec_full, nom_full, tip_full, fec_full = extraer_coordenadas_alertas()
+    
+    # Filtrar estrictamente por la fecha seleccionada en el calendario
+    ra_list, dec_list, nombres, tipos = [], [], [], []
+    for i in range(len(fec_full)):
+        if fec_full[i] == fecha_seleccionada:
+            ra_list.append(ra_full[i])
+            dec_list.append(dec_full[i])
+            nombres.append(nom_full[i])
+            tipos.append(tip_full[i])
+    
+    # LÓGICA DE CONTADORES SEPARADOS (Aplicado solo a los datos filtrados del día)
     total_flares = sum(1 for t in tipos if "FLARE" in t)
     total_novas = sum(1 for t in tipos if "NOVA" in t and "SUPERNOVA" not in t)
     total_supernovas = sum(1 for t in tipos if "SUPERNOVA" in t)
@@ -143,7 +173,7 @@ if vista == "Dashboard Principal (Telemetría)":
     col_red1.metric(f"ZTF (Norte)", estado_ztf, icono_ztf)
     col_red2.metric(f"LSST / TNS (Sur)", estado_lsst, icono_lsst)
     
-    st.subheader("📊 Detecciones Clasificadas")
+    st.subheader(f"📊 Detecciones Clasificadas ({fecha_seleccionada.strftime('%d-%m-%Y')})")
     col_det1, col_det2, col_det3, col_det4 = st.columns(4)
     col_det1.metric("Flares (Enanas Rojas)", str(total_flares), "Estelar", delta_color="normal")
     col_det2.metric("Novas (Cataclísmicas)", str(total_novas), "Binaria", delta_color="normal")
@@ -183,7 +213,7 @@ if vista == "Dashboard Principal (Telemetría)":
         
         st.pyplot(fig)
     else:
-        st.info("Aún no hay eventos registrados para dibujar en el mapa estelar.")
+        st.info(f"El radar no registró eventos de alta prioridad para la fecha seleccionada ({fecha_seleccionada.strftime('%d-%m-%Y')}).")
 
 # --- VISTA 2: FEED DE ALERTAS ---
 elif vista == "Feed de Alertas y Circulares":
@@ -293,6 +323,10 @@ elif vista == "Mantenimiento del Sistema":
             for carpeta in carpetas:
                 if os.path.exists(carpeta):
                     for archivo in os.listdir(carpeta):
+                        # BLINDAJE: Jamás borrar el Libro Mayor de Supernovas
+                        if archivo == "memoria_tns.txt":
+                            continue
+                            
                         ruta_completa = os.path.join(carpeta, archivo)
                         if os.path.isfile(ruta_completa) and os.path.getmtime(ruta_completa) <= tiempo_limite:
                             os.remove(ruta_completa)

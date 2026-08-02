@@ -1,0 +1,43 @@
+======================================================================
+[ESPAÑOL] BORRADOR TELEGRAMA ASTRONÓMICO (ATel) - ESTACIÓN MAGALLANES
+======================================================================
+TEMA: Descubrimiento/recuperación automatizada de candidato a AGN (ZTF18aaqnqvp)
+OBSERVADORES: Pipeline Automatizado (Estación Magallanes, Punta Arenas, Chile)
+
+Reportamos la detección algorítmica de un candidato a AGN
+ubicado en la entidad anfitriona PMN J1506+0814 (z = Desconocido).
+
+[1] INFORMACIÓN DEL OBJETIVO
+* ID del Transitorio    : ZTF18aaqnqvp
+* Coordenadas (ICRS)    : RA 226.68524 | Dec 8.23354
+* Entidad Anfitriona    : PMN J1506+0814
+* Redshift (z)          : Desconocido
+
+[2] SOLICITUD DE OBSERVACIÓN
+* Acción Requerida      : SEGUIMIENTO ESPECTROSCÓPICO URGENTE
+* Objetivo Científico   : Confirmar subtipo exacto de AGN (Cuásar, Blazar) y medir dinámica de acreción.
+
+----------------------------------------------------------------------
+[ENGLISH] ASTRONOMER'S TELEGRAM (ATel) DRAFT - MAGALLANES STATION
+----------------------------------------------------------------------
+SUBJECT: Automated discovery/recovery of AGN candidate ZTF18aaqnqvp
+OBSERVERS: Automated Pipeline (Magallanes Station, Punta Arenas, Chile)
+
+We report the automated algorithmic detection of a highly probable AGN candidate 
+located in the host entity PMN J1506+0814 (z = Desconocido). 
+
+[1] TARGET INFORMATION
+* Transient ID          : ZTF18aaqnqvp
+* Coordinates (ICRS)    : RA 226.68524 | Dec 8.23354
+* Host Entity           : PMN J1506+0814
+* Redshift (z)          : Desconocido
+
+[2] OBSERVATIONAL REQUEST
+* Requested Action      : URGENT SPECTROSCOPIC FOLLOW-UP
+* Scientific Goal       : Confirm exact AGN subtype (Quasar, Blazar) and measure accretion dynamics.
+
+This transient was identified utilizing algorithmic broker pipelines. 
+Photometric light curve data indicates a significant deviation from the historical baseline.
+
+Magallanes Station Automated Alert System
+======================================================================

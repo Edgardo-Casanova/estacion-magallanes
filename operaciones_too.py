@@ -80,7 +80,12 @@ Magallanes Station Automated Pipeline | AAVSO Observer Code: ECDA
     # =================================================================
     elif tipo_evento in ["supernova", "nova", "agn"]:
         galaxia = extra_data.get("galaxia", "Desconocida")
-        redshift = extra_data.get("redshift", 0.0)
+        
+        redshift = extra_data.get("redshift", "Desconocido")
+        if redshift == 0.0: 
+            redshift = "Desconocido"
+            
+        z_str = f"{redshift:.5f}" if isinstance(redshift, float) else str(redshift)
         
         # Bifurcación dinámica del objetivo
         if tipo_evento == "agn":
@@ -97,13 +102,13 @@ TEMA: Descubrimiento/recuperación automatizada de candidato a {tipo_evento.uppe
 OBSERVADORES: Pipeline Automatizado (Estación Magallanes, Punta Arenas, Chile)
 
 Reportamos la detección algorítmica de un candidato a {tipo_evento.upper()}
-ubicado en la entidad anfitriona {galaxia} (z = {redshift:.5f}).
+ubicado en la entidad anfitriona {galaxia} (z = {z_str}).
 
 [1] INFORMACIÓN DEL OBJETIVO
 * ID del Transitorio    : {nombre_evento}
 * Coordenadas (ICRS)    : RA {ra:.5f} | Dec {dec:.5f}
 * Entidad Anfitriona    : {galaxia}
-* Redshift (z)          : {redshift:.5f}
+* Redshift (z)          : {z_str}
 
 [2] SOLICITUD DE OBSERVACIÓN
 * Acción Requerida      : SEGUIMIENTO ESPECTROSCÓPICO URGENTE
@@ -116,13 +121,13 @@ SUBJECT: Automated discovery/recovery of {tipo_evento.upper()} candidate {nombre
 OBSERVERS: Automated Pipeline (Magallanes Station, Punta Arenas, Chile)
 
 We report the automated algorithmic detection of a highly probable {tipo_evento.upper()} candidate 
-located in the host entity {galaxia} (z = {redshift:.5f}). 
+located in the host entity {galaxia} (z = {z_str}). 
 
 [1] TARGET INFORMATION
 * Transient ID          : {nombre_evento}
 * Coordinates (ICRS)    : RA {ra:.5f} | Dec {dec:.5f}
 * Host Entity           : {galaxia}
-* Redshift (z)          : {redshift:.5f}
+* Redshift (z)          : {z_str}
 
 [2] OBSERVATIONAL REQUEST
 * Requested Action      : URGENT SPECTROSCOPIC FOLLOW-UP
