@@ -1004,3 +1004,383 @@ Procesamiento completo y blindado para: SN 2026vbo
 Procesamiento completo y blindado para: SN 2026vbh
 
 === PATRULLAJE COMPLETADO. MARCADOR DE TIEMPO GUARDADO: 61254.38449 ===
+[main 60ed16e] Patrullaje automatico completado: 2026-08-02 09:13
+ 251 files changed, 4889 insertions(+), 7 deletions(-)
+ create mode 100644 alertas/CIRCULAR_SN_2026vbh.txt
+ create mode 100644 alertas/CIRCULAR_SN_2026vbo.txt
+ create mode 100644 alertas/CIRCULAR_SN_2026vbs.txt
+ create mode 100644 alertas/CIRCULAR_SN_2026vd.txt
+ create mode 100644 alertas/CIRCULAR_SN_2026vdr.txt
+ create mode 100644 alertas/CIRCULAR_SN_2026vec.txt
+ create mode 100644 alertas/CIRCULAR_SN_2026ved.txt
+ create mode 100644 alertas/CIRCULAR_SN_2026veg.txt
+ create mode 100644 alertas/CIRCULAR_SN_2026ves.txt
+ create mode 100644 alertas/CIRCULAR_SN_2026vfd.txt
+ create mode 100644 alertas/CIRCULAR_SN_2026vhb.txt
+ create mode 100644 alertas/CIRCULAR_SN_2026vhn.txt
+ create mode 100644 alertas/CIRCULAR_SN_2026vsh.txt
+ create mode 100644 alertas/CIRCULAR_SN_2026vts.txt
+ create mode 100644 alertas/CIRCULAR_ZTF17aaadosk.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abmfmjk.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abmfmnq.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abmfmoe.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abmqtzk.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abmqufl.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abmqugk.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abmqumx.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abnmtlg.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abnmtnv.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abnmtwb.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abnmuii.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abnuexr.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abnufbg.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abobpip.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abobpky.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abobpmt.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abobpps.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abobprl.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abrxqkx.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abssrbs.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18absvcax.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abtvhax.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abtvhno.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abtvjdi.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abtvjgg.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abutbfn.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18accxoeb.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18admgdeu.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18adndcac.txt
+ create mode 100644 alertas/CIRCULAR_ZTF19aaxhzly.txt
+ create mode 100644 alertas/CIRCULAR_ZTF19abbwlur.txt
+ create mode 100644 alertas/CIRCULAR_ZTF19addfbai.txt
+ create mode 100644 alertas/CIRCULAR_ZTF20aawiqwz.txt
+ create mode 100644 alertas/CIRCULAR_ZTF21abbtezd.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_SN_2026vbh.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_SN_2026vbo.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_SN_2026vbs.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_SN_2026vd.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_SN_2026vdr.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_SN_2026vec.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_SN_2026ved.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_SN_2026veg.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_SN_2026ves.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_SN_2026vfd.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_SN_2026vhb.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_SN_2026vhn.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_SN_2026vsh.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_SN_2026vts.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF17aaadosk.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abmfmjk.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abmfmnq.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abmfmoe.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abmqtzk.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abmqufl.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abmqugk.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abmqumx.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abnmtlg.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abnmtnv.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abnmtwb.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abnmuii.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abnuexr.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abnufbg.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abobpip.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abobpky.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abobpmt.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abobpps.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abobprl.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abrxqkx.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abssrbs.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18absvcax.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abtvhax.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abtvhno.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abtvjdi.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abtvjgg.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abutbfn.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18accxoeb.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18admgdeu.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18adndcac.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF19aaxhzly.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF19abbwlur.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF19addfbai.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF20aawiqwz.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF21abbtezd.txt
+ create mode 100644 bitacora_cron.log
+ create mode 100644 data/REPORTE_ALERTA_SN_2026vbh.txt
+ create mode 100644 data/REPORTE_ALERTA_SN_2026vbo.txt
+ create mode 100644 data/REPORTE_ALERTA_SN_2026vbs.txt
+ create mode 100644 data/REPORTE_ALERTA_SN_2026vd.txt
+ create mode 100644 data/REPORTE_ALERTA_SN_2026vdr.txt
+ create mode 100644 data/REPORTE_ALERTA_SN_2026vec.txt
+ create mode 100644 data/REPORTE_ALERTA_SN_2026ved.txt
+ create mode 100644 data/REPORTE_ALERTA_SN_2026veg.txt
+ create mode 100644 data/REPORTE_ALERTA_SN_2026ves.txt
+ create mode 100644 data/REPORTE_ALERTA_SN_2026vfd.txt
+ create mode 100644 data/REPORTE_ALERTA_SN_2026vhb.txt
+ create mode 100644 data/REPORTE_ALERTA_SN_2026vhn.txt
+ create mode 100644 data/REPORTE_ALERTA_SN_2026vsh.txt
+ create mode 100644 data/REPORTE_ALERTA_SN_2026vts.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF17aaadosk.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abmfmjk.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abmfmnq.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abmfmoe.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abmqtzk.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abmqufl.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abmqugk.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abmqumx.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abnmtlg.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abnmtnv.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abnmtwb.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abnmuii.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abnuexr.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abnufbg.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abobpip.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abobpky.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abobpmt.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abobpps.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abobprl.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abrxqkx.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abssrbs.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18absvcax.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abtvhax.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abtvhno.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abtvjdi.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abtvjgg.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abutbfn.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18accxoeb.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18admgdeu.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18adndcac.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF19aaxhzly.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF19abbwlur.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF19addfbai.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF20aawiqwz.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF21abbtezd.txt
+ create mode 100644 data/curva_luz_SN_2026vbh.png
+ create mode 100644 data/curva_luz_SN_2026vbo.png
+ create mode 100644 data/curva_luz_SN_2026vbs.png
+ create mode 100644 data/curva_luz_SN_2026vd.png
+ create mode 100644 data/curva_luz_SN_2026vdr.png
+ create mode 100644 data/curva_luz_SN_2026vec.png
+ create mode 100644 data/curva_luz_SN_2026ved.png
+ create mode 100644 data/curva_luz_SN_2026veg.png
+ create mode 100644 data/curva_luz_SN_2026ves.png
+ create mode 100644 data/curva_luz_SN_2026vfd.png
+ create mode 100644 data/curva_luz_SN_2026vhb.png
+ create mode 100644 data/curva_luz_SN_2026vhn.png
+ create mode 100644 data/curva_luz_SN_2026vsh.png
+ create mode 100644 data/curva_luz_SN_2026vts.png
+ create mode 100644 data/curva_luz_ZTF17aaadosk.png
+ create mode 100644 data/curva_luz_ZTF18abmfmjk.png
+ create mode 100644 data/curva_luz_ZTF18abmfmnq.png
+ create mode 100644 data/curva_luz_ZTF18abmfmoe.png
+ create mode 100644 data/curva_luz_ZTF18abmqtzk.png
+ create mode 100644 data/curva_luz_ZTF18abmqufl.png
+ create mode 100644 data/curva_luz_ZTF18abmqugk.png
+ create mode 100644 data/curva_luz_ZTF18abmqumx.png
+ create mode 100644 data/curva_luz_ZTF18abnmtlg.png
+ create mode 100644 data/curva_luz_ZTF18abnmtnv.png
+ create mode 100644 data/curva_luz_ZTF18abnmtwb.png
+ create mode 100644 data/curva_luz_ZTF18abnmuii.png
+ create mode 100644 data/curva_luz_ZTF18abnuexr.png
+ create mode 100644 data/curva_luz_ZTF18abnufbg.png
+ create mode 100644 data/curva_luz_ZTF18abobpip.png
+ create mode 100644 data/curva_luz_ZTF18abobpky.png
+ create mode 100644 data/curva_luz_ZTF18abobpmt.png
+ create mode 100644 data/curva_luz_ZTF18abobpps.png
+ create mode 100644 data/curva_luz_ZTF18abobprl.png
+ create mode 100644 data/curva_luz_ZTF18abrxqkx.png
+ create mode 100644 data/curva_luz_ZTF18abssrbs.png
+ create mode 100644 data/curva_luz_ZTF18absvcax.png
+ create mode 100644 data/curva_luz_ZTF18abtvhax.png
+ create mode 100644 data/curva_luz_ZTF18abtvhno.png
+ create mode 100644 data/curva_luz_ZTF18abtvjdi.png
+ create mode 100644 data/curva_luz_ZTF18abtvjgg.png
+ create mode 100644 data/curva_luz_ZTF18abutbfn.png
+ create mode 100644 data/curva_luz_ZTF18accxoeb.png
+ create mode 100644 data/curva_luz_ZTF18admgdeu.png
+ create mode 100644 data/curva_luz_ZTF18adndcac.png
+ create mode 100644 data/curva_luz_ZTF19aaxhzly.png
+ create mode 100644 data/curva_luz_ZTF19abbwlur.png
+ create mode 100644 data/curva_luz_ZTF19addfbai.png
+ create mode 100644 data/curva_luz_ZTF20aawiqwz.png
+ create mode 100644 data/curva_luz_ZTF21abbtezd.png
+ create mode 100644 data/espectro_sed_ZTF17aaadosk.png
+ create mode 100644 data/espectro_sed_ZTF18abmfmjk.png
+ create mode 100644 data/espectro_sed_ZTF18abmfmnq.png
+ create mode 100644 data/espectro_sed_ZTF18abmfmoe.png
+ create mode 100644 data/espectro_sed_ZTF18abmqtzk.png
+ create mode 100644 data/espectro_sed_ZTF18abmqufl.png
+ create mode 100644 data/espectro_sed_ZTF18abmqugk.png
+ create mode 100644 data/espectro_sed_ZTF18abmqumx.png
+ create mode 100644 data/espectro_sed_ZTF18abnmtlg.png
+ create mode 100644 data/espectro_sed_ZTF18abnmtnv.png
+ create mode 100644 data/espectro_sed_ZTF18abnmtwb.png
+ create mode 100644 data/espectro_sed_ZTF18abnmuii.png
+ create mode 100644 data/espectro_sed_ZTF18abnuexr.png
+ create mode 100644 data/espectro_sed_ZTF18abnufbg.png
+ create mode 100644 data/espectro_sed_ZTF18abobpip.png
+ create mode 100644 data/espectro_sed_ZTF18abobpky.png
+ create mode 100644 data/espectro_sed_ZTF18abobpmt.png
+ create mode 100644 data/espectro_sed_ZTF18abobpps.png
+ create mode 100644 data/espectro_sed_ZTF18abobprl.png
+ create mode 100644 data/espectro_sed_ZTF18abrxqkx.png
+ create mode 100644 data/espectro_sed_ZTF18abssrbs.png
+ create mode 100644 data/espectro_sed_ZTF18absvcax.png
+ create mode 100644 data/espectro_sed_ZTF18abtvhax.png
+ create mode 100644 data/espectro_sed_ZTF18abtvhno.png
+ create mode 100644 data/espectro_sed_ZTF18abtvjdi.png
+ create mode 100644 data/espectro_sed_ZTF18abtvjgg.png
+ create mode 100644 data/espectro_sed_ZTF18abutbfn.png
+ create mode 100644 data/espectro_sed_ZTF18accxoeb.png
+ create mode 100644 data/espectro_sed_ZTF18admgdeu.png
+ create mode 100644 data/espectro_sed_ZTF18adndcac.png
+ create mode 100644 data/espectro_sed_ZTF19aaxhzly.png
+ create mode 100644 data/espectro_sed_ZTF19abbwlur.png
+ create mode 100644 data/espectro_sed_ZTF19addfbai.png
+ create mode 100644 data/espectro_sed_ZTF20aawiqwz.png
+ create mode 100644 data/espectro_sed_ZTF21abbtezd.png
+ create mode 100644 memoria_tns.txt
+To https://github.com/Edgardo-Casanova/estacion-magallanes.git
+   986b25e..60ed16e  main -> main
+=== INICIANDO CAZADOR MULTIPROPÓSITO v11 (Radar Continuo) ===
+➤ Buscando alertas activas desde: 2026-08-02 09:36:00 UTC (MJD: 61254.4000)
+
+==================================================
+APUNTANDO TELESCOPIO A RED: ZTF
+   -> Procesadas 50 de 1500 alertas...
+   -> Procesadas 100 de 1500 alertas...
+   -> Procesadas 150 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF18absmppz
+➤ Coordenadas ICRS : RA 257.11937 | Dec -2.96605
+
+➤ INICIANDO PROTOCOLO ESTELAR LOCAL (NOVA)
+
+[1/4] 📡 Consultando NASA Exoplanet Archive...
+   [-] No se registran exoplanetas confirmados en sistemas planetarios.
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/4] 🔬 Iniciando espectroscopía de alta resolución (H-alfa) para ZTF18absmppz...
+   [-] No hay datos de archivo de alta resolución para esta coordenada específica.
+
+[4/4] 🔭 Evaluación de Viabilidad Observacional para ZTF18absmppz...
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF18absmppz.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF18absmppz (NOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF18absmppz.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF18absmppz procesado exitosamente (CV/Nova).
+   -> Procesadas 200 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF19aageled
+➤ Coordenadas ICRS : RA 254.73421 | Dec -0.90097
+
+➤ INICIANDO PROTOCOLO ESTELAR LOCAL (NOVA)
+
+[1/4] 📡 Consultando NASA Exoplanet Archive...
+   [-] No se registran exoplanetas confirmados en sistemas planetarios.
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/4] 🔬 Iniciando espectroscopía de alta resolución (H-alfa) para ZTF19aageled...
+   [-] No hay datos de archivo de alta resolución para esta coordenada específica.
+
+[4/4] 🔭 Evaluación de Viabilidad Observacional para ZTF19aageled...
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF19aageled.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF19aageled (NOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF19aageled.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF19aageled procesado exitosamente (CV/Nova).
+   -> Procesadas 250 de 1500 alertas...
+   -> Procesadas 300 de 1500 alertas...
+   -> Procesadas 350 de 1500 alertas...
+   -> Procesadas 400 de 1500 alertas...
+   -> Procesadas 450 de 1500 alertas...
+   -> Procesadas 500 de 1500 alertas...
+   -> Procesadas 550 de 1500 alertas...
+   -> Procesadas 600 de 1500 alertas...
+   -> Procesadas 650 de 1500 alertas...
+   -> Procesadas 700 de 1500 alertas...
+   -> Procesadas 750 de 1500 alertas...
+   -> Procesadas 800 de 1500 alertas...
+   -> Procesadas 850 de 1500 alertas...
+   -> Procesadas 900 de 1500 alertas...
+   -> Procesadas 950 de 1500 alertas...
+   -> Procesadas 1000 de 1500 alertas...
+   -> Procesadas 1050 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF26aaxexjt
+➤ Coordenadas ICRS : RA 273.76821 | Dec -18.40224
+
+➤ INICIANDO PROTOCOLO ESTELAR LOCAL (NOVA)
+
+[1/4] 📡 Consultando NASA Exoplanet Archive...
+   [-] No se registran exoplanetas confirmados en sistemas planetarios.
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/4] 🔬 Iniciando espectroscopía de alta resolución (H-alfa) para ZTF26aaxexjt...
+   [-] No hay datos de archivo de alta resolución para esta coordenada específica.
+
+[4/4] 🔭 Evaluación de Viabilidad Observacional para ZTF26aaxexjt...
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF26aaxexjt.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF26aaxexjt (NOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF26aaxexjt.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF26aaxexjt procesado exitosamente (CV/Nova).
+   -> Procesadas 1100 de 1500 alertas...
+   -> Procesadas 1150 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF21abcabox
+➤ Coordenadas ICRS : RA 282.09302 | Dec -24.73324
+
+➤ INICIANDO PROTOCOLO ESTELAR LOCAL (NOVA)
+
+[1/4] 📡 Consultando NASA Exoplanet Archive...
+   [-] No se registran exoplanetas confirmados en sistemas planetarios.
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/4] 🔬 Iniciando espectroscopía de alta resolución (H-alfa) para ZTF21abcabox...
+   [-] No hay datos de archivo de alta resolución para esta coordenada específica.
+
+[4/4] 🔭 Evaluación de Viabilidad Observacional para ZTF21abcabox...
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF21abcabox.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF21abcabox (NOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF21abcabox.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF21abcabox procesado exitosamente (CV/Nova).
+   -> Procesadas 1200 de 1500 alertas...
+   -> Procesadas 1250 de 1500 alertas...
+   -> Procesadas 1300 de 1500 alertas...
+   -> Procesadas 1350 de 1500 alertas...
+   -> Procesadas 1400 de 1500 alertas...
+   -> Procesadas 1450 de 1500 alertas...
+
+==================================================
+APUNTANDO TELESCOPIO A RED: LSST
+==================================================
+APUNTANDO TELESCOPIO A RED: TNS_GLOBAL
+Hemisferio: Sur (ASAS-SN / ATLAS) | Radar de Supernovas de la IAU
+==================================================
+
+=== PATRULLAJE COMPLETADO. MARCADOR DE TIEMPO GUARDADO: 61254.42210 ===
