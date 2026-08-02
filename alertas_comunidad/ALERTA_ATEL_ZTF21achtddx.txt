@@ -1,0 +1,43 @@
+======================================================================
+[ESPAÑOL] BORRADOR TELEGRAMA ASTRONÓMICO (ATel) - ESTACIÓN MAGALLANES
+======================================================================
+TEMA: Descubrimiento/recuperación automatizada de candidato a AGN (ZTF21achtddx)
+OBSERVADORES: Pipeline Automatizado (Estación Magallanes, Punta Arenas, Chile)
+
+Reportamos la detección algorítmica de un candidato a AGN
+ubicado en la entidad anfitriona 2MASS J01511697+1600117 (z = Desconocido).
+
+[1] INFORMACIÓN DEL OBJETIVO
+* ID del Transitorio    : ZTF21achtddx
+* Coordenadas (ICRS)    : RA 27.82064 | Dec 16.00342
+* Entidad Anfitriona    : 2MASS J01511697+1600117
+* Redshift (z)          : Desconocido
+
+[2] SOLICITUD DE OBSERVACIÓN
+* Acción Requerida      : SEGUIMIENTO ESPECTROSCÓPICO URGENTE
+* Objetivo Científico   : Confirmar subtipo exacto de AGN (Cuásar, Blazar) y medir dinámica de acreción.
+
+----------------------------------------------------------------------
+[ENGLISH] ASTRONOMER'S TELEGRAM (ATel) DRAFT - MAGALLANES STATION
+----------------------------------------------------------------------
+SUBJECT: Automated discovery/recovery of AGN candidate ZTF21achtddx
+OBSERVERS: Automated Pipeline (Magallanes Station, Punta Arenas, Chile)
+
+We report the automated algorithmic detection of a highly probable AGN candidate 
+located in the host entity 2MASS J01511697+1600117 (z = Desconocido). 
+
+[1] TARGET INFORMATION
+* Transient ID          : ZTF21achtddx
+* Coordinates (ICRS)    : RA 27.82064 | Dec 16.00342
+* Host Entity           : 2MASS J01511697+1600117
+* Redshift (z)          : Desconocido
+
+[2] OBSERVATIONAL REQUEST
+* Requested Action      : URGENT SPECTROSCOPIC FOLLOW-UP
+* Scientific Goal       : Confirm exact AGN subtype (Quasar, Blazar) and measure accretion dynamics.
+
+This transient was identified utilizing algorithmic broker pipelines. 
+Photometric light curve data indicates a significant deviation from the historical baseline.
+
+Magallanes Station Automated Alert System
+======================================================================
