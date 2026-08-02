@@ -6,6 +6,7 @@ import re
 from datetime import datetime
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+import plotly.graph_objects as go
 from dotenv import load_dotenv
 
 # Cargar las variables secretas del archivo .env
@@ -55,14 +56,12 @@ def extraer_coordenadas_alertas():
             with open(archivo, 'r', encoding='utf-8') as f:
                 contenido = f.read()
                 
-                # 1. Extraer la fecha exacta de emisión
                 match_fecha = re.search(r"FECHA DE EMISIÓN\s*:\s*(\d{4}-\d{2}-\d{2})", contenido)
                 if not match_fecha:
-                    continue # Si no tiene formato de fecha válido, se omite
+                    continue 
                     
                 fecha_emision = datetime.strptime(match_fecha.group(1), "%Y-%m-%d").date()
                 
-                # 2. Extraer nombre y tipo del objeto
                 nombre_actual = "Desconocido"
                 tipo_actual = "FLARE"
                 match_obj = re.search(r"(?:OBJETO|EVENTO) DETECTADO\s*:\s*(.+?)\s*\((.+?)\)", contenido)
@@ -70,13 +69,22 @@ def extraer_coordenadas_alertas():
                     nombre_actual = match_obj.group(1).strip()
                     tipo_actual = match_obj.group(2).strip().upper()
                 
-                # 3. Extraer coordenadas
                 match_coord = re.search(r"RA\s*([0-9\.\-]+)\s*\|\s*Dec\s*([0-9\.\-]+)", contenido)
                 if match_coord:
                     ra = float(match_coord.group(1))
                     dec = float(match_coord.group(2))
                     
-                    # Añadir a las listas maestras
+                    nombre_archivo_base = nombre_actual.replace(' ', '_')
+                    ruta_reporte = f"data/REPORTE_ALERTA_{nombre_archivo_base}.txt"
+                    if os.path.exists(ruta_reporte):
+                        with open(ruta_reporte, 'r', encoding='utf-8') as f_rep:
+                            cont_rep = f_rep.read()
+                            match_clase = re.search(r"Clasificaci(?:o|ó)n.*?:\s*([^\n\(]+)", cont_rep, re.IGNORECASE)
+                            if match_clase:
+                                clase_fina = match_clase.group(1).strip().upper()
+                                if clase_fina and clase_fina != "DESCONOCIDA":
+                                    tipo_actual = clase_fina
+                    
                     ra_list.append(ra)
                     dec_list.append(dec)
                     nombres.append(nombre_actual)
@@ -89,7 +97,6 @@ def extraer_coordenadas_alertas():
     return ra_list, dec_list, nombres, tipos, fechas
 
 def formatear_nombre_circular(ruta_archivo):
-    """Lee una circular y devuelve un nombre bonito para el menú desplegable."""
     try:
         with open(ruta_archivo, 'r', encoding='utf-8') as f:
             lineas = f.readlines()
@@ -105,9 +112,7 @@ def formatear_nombre_circular(ruta_archivo):
         return os.path.basename(ruta_archivo)
 
 def formatear_nombre_grafico(ruta_archivo):
-    """Transforma el nombre crudo del gráfico en una etiqueta elegante."""
     nombre_base = os.path.basename(ruta_archivo).replace('.png', '')
-    
     if "curva_luz" in nombre_base:
         obj = nombre_base.replace("curva_luz_", "")
         return f"📉 Curva de Luz y Mapa Celeste | {obj}"
@@ -117,7 +122,6 @@ def formatear_nombre_grafico(ruta_archivo):
     elif "quimica_halfa" in nombre_base:
         obj = nombre_base.replace("quimica_halfa_", "")
         return f"🔬 Análisis Químico Cromosférico (H-alfa) | {obj}"
-    
     return nombre_base
 
 # --- BARRA LATERAL DE NAVEGACIÓN ---
@@ -137,7 +141,6 @@ vista = st.sidebar.selectbox(
     ]
 )
 
-# EL NUEVO ESCUDO: Selector de Fecha (Visible en todas las vistas, pero afecta principalmente al Dashboard)
 st.sidebar.divider()
 fecha_hoy = datetime.utcnow().date()
 fecha_seleccionada = st.sidebar.date_input("📅 Filtro de Fecha (UTC):", fecha_hoy)
@@ -150,10 +153,8 @@ if vista == "Dashboard Principal (Telemetría)":
     estado_ztf, icono_ztf = obtener_estado_red("bitacora_ZTF.log")
     estado_lsst, icono_lsst = obtener_estado_red("bitacora_TNS_GLOBAL.log")
     
-    # Extraer todos los datos
     ra_full, dec_full, nom_full, tip_full, fec_full = extraer_coordenadas_alertas()
     
-    # Filtrar estrictamente por la fecha seleccionada en el calendario
     ra_list, dec_list, nombres, tipos = [], [], [], []
     for i in range(len(fec_full)):
         if fec_full[i] == fecha_seleccionada:
@@ -162,10 +163,9 @@ if vista == "Dashboard Principal (Telemetría)":
             nombres.append(nom_full[i])
             tipos.append(tip_full[i])
     
-    # LÓGICA DE CONTADORES SEPARADOS (Aplicado solo a los datos filtrados del día)
     total_flares = sum(1 for t in tipos if "FLARE" in t)
-    total_novas = sum(1 for t in tipos if "NOVA" in t and "SUPERNOVA" not in t)
-    total_supernovas = sum(1 for t in tipos if "SUPERNOVA" in t)
+    total_novas = sum(1 for t in tipos if "NOVA" in t and "SUPERNOVA" not in t) or sum(1 for t in tipos if "CV" in t)
+    total_supernovas = sum(1 for t in tipos if "SUPERNOVA" in t or "SN" in t)
     total_agn = sum(1 for t in tipos if "AGN" in t or "QSO" in t or "BLAZAR" in t)
     
     st.subheader("📡 Estado de la Red de Alertas")
@@ -180,125 +180,280 @@ if vista == "Dashboard Principal (Telemetría)":
     col_det3.metric("Supernovas", str(total_supernovas), "Destrucción", delta_color="normal")
     col_det4.metric("Cuásares / AGN", str(total_agn), "Agujero Negro", delta_color="normal")
     
+    with st.expander("📚 Glosario Taxonómico (¿Qué subcategorías incluyen estos contadores?)"):
+        st.markdown("""
+        *   **Supernovas:** Incluye subcategorías como **Tipo Ia** (Explosiones termonucleares), **Tipo Ib/c y II** (Colapso de núcleo masivo), y **SLSN** (Supernovas Superluminosas).
+        *   **Cuásares / AGN:** Incluye **QSO** (Cuásares o Núcleos Galácticos Activos clásicos) y **Blazares** (Variantes extremas con jets relativistas apuntando directamente hacia nuestra línea de visión).
+        *   **Novas (Cataclísmicas):** Incluye **CV** (Variables Cataclísmicas, sistemas binarios interactuantes) y **Novas** estelares clásicas de nuestra galaxia.
+        *   **Flares (Enanas Rojas):** Destellos súbitos magnéticos provenientes de estrellas de baja masa (**M-dwarf**).
+        """)
+
     st.divider()
     
-    st.subheader("🌌 Mapa Celeste de Impactos (Eventos Transitorios)")
+    col_map1, col_map2 = st.columns([2, 1])
+    with col_map1:
+        st.subheader("🌌 Mapa Celeste de Impactos (Interactivo)")
+    with col_map2:
+        categoria_mapa = st.selectbox(
+            "Filtrar por Categoría:",
+            ["👁️ Ver Todo", "💥 Supernovas", "✨ Novas (Cataclísmicas)", "🕳️ Cuásares / AGN", "🔥 Flares (Enanas Rojas)"],
+            label_visibility="collapsed"
+        )
     
     if ra_list:
-        fig, ax = plt.subplots(figsize=(12, 5), facecolor='#0e1117')
-        ax.set_facecolor('#0e1117')
-        
-        for i in range(len(ra_list)):
-            if "FLARE" in tipos[i]: color_punto = '#ff0055'
-            elif "AGN" in tipos[i]: color_punto = '#ffff00'
-            else: color_punto = '#00ffff'
-                
-            ax.scatter(ra_list[i], dec_list[i], color=color_punto, s=150, marker='*', edgecolor='white', zorder=2)
+        datos_plotly = {
+            "Supernova Ia": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#00ffff"},
+            "Supernova II / Ibc": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#bf00ff"},
+            "Supernova Superluminosa (SLSN)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#ff00ff"},
+            "Supernova (Sin clasificar)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#00cccc"},
+            "Nova (Clásica)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#39ff14"},
+            "Variable Cataclísmica (CV)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#00ff00"},
+            "Cuásar (QSO)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#ffff00"},
+            "Blazar": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#ff6600"},
+            "AGN (Genérico)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#ffcc00"},
+            "Flares (Enanas Rojas)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#ff0055"}
+        }
+
+        for r, d, n, t in zip(ra_list, dec_list, nombres, tipos):
+            t_upper = str(t).upper()
             
-            etiqueta = f"{nombres[i]}\n({tipos[i]})"
-            ax.annotate(etiqueta, (ra_list[i], dec_list[i]), textcoords="offset points", xytext=(0,10), ha='center', color='lightgray', fontsize=8)
-        
-        ax.set_xlim(0, 360)
-        ax.set_ylim(-90, 90)
-        ax.axhline(0, color='gray', linestyle='--', alpha=0.3)
-        ax.set_xlabel("Ascensión Recta (Grados)", color='lightgray')
-        ax.set_ylabel("Declinación (Grados)", color='lightgray')
-        ax.tick_params(colors='lightgray')
-        ax.grid(True, alpha=0.1)
-        
-        red_patch = mpatches.Patch(color='#ff0055', label='Flares (Enanas Rojas)')
-        cyan_patch = mpatches.Patch(color='#00ffff', label='Supernovas / Novas')
-        yellow_patch = mpatches.Patch(color='#ffff00', label='Cuásares (AGN)')
-        ax.legend(handles=[red_patch, cyan_patch, yellow_patch], facecolor='#0e1117', edgecolor='gray', loc='upper right', labelcolor='white')
-        
-        st.pyplot(fig)
+            if "CV/NOVA" in t_upper or "CV" in t_upper: cat = "Variable Cataclísmica (CV)"
+            elif "NOVA" in t_upper and "SUPERNOVA" not in t_upper: cat = "Nova (Clásica)"
+            elif "BLAZAR" in t_upper: cat = "Blazar"
+            elif "QSO" in t_upper: cat = "Cuásar (QSO)"
+            elif "AGN" in t_upper: cat = "AGN (Genérico)"
+            elif "SLSN" in t_upper: cat = "Supernova Superluminosa (SLSN)"
+            elif "SN IA" in t_upper or "SNIA" in t_upper: cat = "Supernova Ia"
+            elif "SN II" in t_upper or "SNII" in t_upper or "IBC" in t_upper or "SN IBC" in t_upper: cat = "Supernova II / Ibc"
+            elif "SUPERNOVA" in t_upper or "SN" in t_upper: cat = "Supernova (Sin clasificar)"
+            elif "FLARE" in t_upper: cat = "Flares (Enanas Rojas)"
+            else: continue
+            
+            if categoria_mapa == "💥 Supernovas" and "Supernova" not in cat: continue
+            if categoria_mapa == "✨ Novas (Cataclísmicas)" and cat not in ["Nova (Clásica)", "Variable Cataclísmica (CV)"]: continue
+            if categoria_mapa == "🕳️ Cuásares / AGN" and cat not in ["Cuásar (QSO)", "Blazar", "AGN (Genérico)"]: continue
+            if categoria_mapa == "🔥 Flares (Enanas Rojas)" and "Flare" not in cat: continue
+            
+            datos_plotly[cat]["ra"].append(r)
+            datos_plotly[cat]["dec"].append(d)
+            datos_plotly[cat]["nombres"].append(n)
+            datos_plotly[cat]["tipos"].append(t_upper)
+
+        fig = go.Figure()
+
+        for nombre_cat, datos in datos_plotly.items():
+            if len(datos["ra"]) > 0:
+                textos_hover = [f"<b>{nom}</b><br>Subclase: {tip}<br>RA: {ra:.4f}°<br>Dec: {dec:.4f}°" 
+                                for nom, tip, ra, dec in zip(datos["nombres"], datos["tipos"], datos["ra"], datos["dec"])]
+                
+                fig.add_trace(go.Scatter(
+                    x=datos["ra"],
+                    y=datos["dec"],
+                    mode='markers',
+                    name=nombre_cat,
+                    text=textos_hover,
+                    hoverinfo='text',
+                    marker=dict(
+                        symbol='star',
+                        size=14,
+                        color=datos["color"],
+                        opacity=0.75,
+                        line=dict(width=0.5, color='white')
+                    )
+                ))
+
+        fig.update_layout(
+            plot_bgcolor='#0e1117',
+            paper_bgcolor='#0e1117',
+            font=dict(color='lightgray'),
+            xaxis=dict(title='Ascensión Recta (Grados)', range=[0, 360], gridcolor='rgba(255, 255, 255, 0.1)', zerolinecolor='gray'),
+            yaxis=dict(title='Declinación (Grados)', range=[-90, 90], gridcolor='rgba(255, 255, 255, 0.1)', zerolinecolor='gray'),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+            margin=dict(l=40, r=40, t=40, b=40),
+            hovermode='closest'
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
     else:
-        st.info(f"El radar no registró eventos de alta prioridad para la fecha seleccionada ({fecha_seleccionada.strftime('%d-%m-%Y')}).")
+        st.info(f"No hay eventos de la categoría seleccionada para el {fecha_seleccionada.strftime('%d-%m-%Y')}.")
 
 # --- VISTA 2: FEED DE ALERTAS ---
 elif vista == "Feed de Alertas y Circulares":
     st.title("📋 Historial de Circulares de Observación")
-    alertas = sorted(glob.glob("alertas/CIRCULAR_*.txt"), reverse=True)
-    graficos = sorted(glob.glob("data/*.png"), reverse=True)
     
-    if alertas:
-        alerta_sel = st.selectbox("Selecciona un evento para inspeccionar:", alertas, format_func=formatear_nombre_circular)
+    cat_filtro = st.selectbox(
+        "Filtro Rápido de Categoría:", 
+        ["Todas las Alertas", "Supernovas", "Novas / Cataclísmicas", "Cuásares / AGN", "Flares"]
+    )
+    
+    todas_las_alertas = sorted(glob.glob("alertas/CIRCULAR_*.txt"), reverse=True)
+    alertas_filtradas = []
+    
+    for alerta in todas_las_alertas:
+        nombre_fmt = formatear_nombre_circular(alerta).upper()
+        if cat_filtro == "Todas las Alertas":
+            alertas_filtradas.append(alerta)
+        elif cat_filtro == "Supernovas" and ("SUPERNOVA" in nombre_fmt or "SN " in nombre_fmt or "(SN" in nombre_fmt):
+            alertas_filtradas.append(alerta)
+        elif cat_filtro == "Novas / Cataclísmicas" and ("NOVA" in nombre_fmt and "SUPERNOVA" not in nombre_fmt):
+            alertas_filtradas.append(alerta)
+        elif cat_filtro == "Cuásares / AGN" and any(x in nombre_fmt for x in ["AGN", "QSO", "BLAZAR"]):
+            alertas_filtradas.append(alerta)
+        elif cat_filtro == "Flares" and "FLARE" in nombre_fmt:
+            alertas_filtradas.append(alerta)
+            
+    todos_los_graficos = sorted(glob.glob("data/*.png"), reverse=True)
+    
+    if alertas_filtradas:
+        alerta_sel = st.selectbox("Selecciona un evento para inspeccionar:", alertas_filtradas, format_func=formatear_nombre_circular)
+        
+        nombre_base = os.path.basename(alerta_sel).replace("CIRCULAR_", "").replace(".txt", "")
+        ruta_atel = f"alertas_comunidad/ALERTA_ATEL_{nombre_base}.txt"
+        
         col1, col2 = st.columns([1, 1])
+        
         with col1:
-            st.subheader("📄 Reporte Oficial (Circular)")
-            with open(alerta_sel, "r", encoding="utf-8") as f:
-                st.code(f.read(), language="text")
+            st.subheader("📄 Documentación del Evento")
+            tab1, tab2 = st.tabs(["Circular de Observación", "Borrador Telegrama (ATel)"])
+            
+            with tab1:
+                with open(alerta_sel, "r", encoding="utf-8") as f:
+                    st.code(f.read(), language="text")
+                    
+            with tab2:
+                if os.path.exists(ruta_atel):
+                    with open(ruta_atel, "r", encoding="utf-8") as f:
+                        st.code(f.read(), language="text")
+                else:
+                    st.info("El borrador ATel no se encuentra disponible para este evento.")
+                    
         with col2:
             st.subheader("📊 Evidencia Visual (Gráficos)")
-            if graficos:
-                nombre_base = os.path.basename(alerta_sel).replace("CIRCULAR_", "").replace(".txt", "")
-                grafico_recomendado = next((g for g in graficos if nombre_base in g), graficos[0])
-                graf_indice = graficos.index(grafico_recomendado) if grafico_recomendado in graficos else 0
-                
-                graf_sel = st.selectbox("Selecciona la pestaña de evidencia:", graficos, index=graf_indice, format_func=formatear_nombre_grafico)
+            graficos_del_evento = [g for g in todos_los_graficos if nombre_base in g]
+            
+            if graficos_del_evento:
+                graf_sel = st.selectbox("Selecciona la pestaña de evidencia:", graficos_del_evento, format_func=formatear_nombre_grafico)
                 st.image(graf_sel, width="stretch")
+            else:
+                st.warning("No se generaron gráficos u óptica visual para este evento.")
     else:
-        st.info("Aún no se han generado circulares de alerta.")
+        st.info(f"No hay circulares que coincidan con la categoría: {cat_filtro}")
 
 # --- VISTA 3: BITÁCORAS ---
 elif vista == "Bitácoras del Sistema":
-    st.title("📜 Bitácoras de Operación de las Redes")
-    st.info("🕒 **Nota de Sincronización Temporal:** Los registros de esta bitácora operan bajo el **Tiempo Universal Coordinado (UTC)**. Para la conversión a la hora local de nuestra estación base, rige la Hora Oficial de la **Región de Aysén y Región de Magallanes y la Antártica Chilena** (UTC-3 fija), dictaminada por el [Servicio Hidrográfico y Oceanográfico de la Armada de Chile (SHOA)](https://www.horaoficial.cl/).")
-    st.markdown("Registro interactivo del radar automatizado. Expande un día para ver los detalles del patrullaje.")
+    st.title("📜 Monitoreo de Operaciones en Tiempo Real")
+    st.info("🕒 **Sincronización:** Registros en Tiempo Universal Coordinado (UTC). Base: Hora Oficial de Magallanes (UTC-3).")
     
-    col_ztf, col_lsst = st.columns(2)
+    def parse_logs(log_file, red_name):
+        parsed = []
+        if os.path.exists(log_file):
+            with open(log_file, "r", encoding="utf-8") as f:
+                for linea in f:
+                    if "-> Procesadas" in linea or "===" in linea or linea.strip() == "":
+                        continue
+                    try:
+                        if linea.startswith("["):
+                            fecha_str = linea[1:11]
+                            hora_str = linea[12:20]
+                            mensaje = linea[22:].strip()
+                            timestamp_str = f"{fecha_str} {hora_str}"
+                            parsed.append({
+                                'timestamp': timestamp_str,
+                                'fecha': fecha_str,
+                                'hora': hora_str,
+                                'msg': mensaje,
+                                'red': red_name
+                            })
+                    except Exception:
+                        pass
+        return parsed
+
+    logs_ztf = parse_logs("bitacora_ZTF.log", "ZTF (Norte)")
+    logs_tns = parse_logs("bitacora_TNS_GLOBAL.log", "TNS Global (Sur)")
     
-    def render_bitacora_visual(ruta):
-        if not os.path.exists(ruta): 
-            st.info("Sin registros de actividad.")
-            return
-            
-        with open(ruta, "r", encoding="utf-8") as f:
-            lineas = f.readlines()
-            
-        dias = {}
-        for linea in lineas:
-            if "-> Procesadas" in linea or "===" in linea or linea.strip() == "":
-                continue
+    def agrupar_en_ciclos(logs):
+        ciclos_agrupados = []
+        ciclo_actual = None
+        for log in logs:
+            if "APUNTANDO TELESCOPIO" in log['msg']:
+                if ciclo_actual is not None:
+                    ciclos_agrupados.append(ciclo_actual)
+                ciclo_actual = {
+                    'red': log['red'],
+                    'fecha': log['fecha'],
+                    'inicio': log['hora'],
+                    'timestamp': log['timestamp'],
+                    'logs': [log],
+                    'candidatos': 0,
+                    'errores': 0
+                }
+            else:
+                if ciclo_actual is None:
+                    ciclo_actual = {
+                        'red': log['red'],
+                        'fecha': log['fecha'],
+                        'inicio': log['hora'],
+                        'timestamp': log['timestamp'],
+                        'logs': [],
+                        'candidatos': 0,
+                        'errores': 0
+                    }
+                ciclo_actual['logs'].append(log)
                 
-            try:
-                if linea.startswith("["):
-                    fecha = linea[1:11] 
-                    hora = linea[12:20] 
-                    mensaje = linea[22:].strip() 
+            if "procesado exitosamente" in log['msg'] or "Descargando ficha" in log['msg'] or "identificado" in log['msg'].lower():
+                ciclo_actual['candidatos'] += 1
+            if "Error" in log['msg'] or "denegado" in log['msg'].lower():
+                ciclo_actual['errores'] += 1
+                
+        if ciclo_actual is not None:
+            ciclos_agrupados.append(ciclo_actual)
+        return ciclos_agrupados
+
+    ciclos_ztf = agrupar_en_ciclos(logs_ztf)
+    ciclos_tns = agrupar_en_ciclos(logs_tns)
+    
+    todos_los_ciclos = ciclos_ztf + ciclos_tns
+    todos_los_ciclos.sort(key=lambda x: x['timestamp'], reverse=True)
+    
+    fecha_str_seleccionada = fecha_seleccionada.strftime("%Y-%m-%d")
+    ciclos_del_dia = [c for c in todos_los_ciclos if c['fecha'] == fecha_str_seleccionada]
+
+    total_patrullajes = len(ciclos_del_dia)
+    total_candidatos = sum(c['candidatos'] for c in ciclos_del_dia)
+    total_errores = sum(c['errores'] for c in ciclos_del_dia)
+    
+    st.subheader(f"📊 Métricas de Patrullaje ({fecha_str_seleccionada})")
+    col1, col2, col3 = st.columns(3)
+    col1.metric("📡 Ciclos de Patrullaje", str(total_patrullajes))
+    col2.metric("🌌 Alertas Analizadas", str(total_candidatos))
+    col3.metric("🚨 Errores de Red", str(total_errores))
+    
+    st.divider()
+
+    st.subheader("⏱️ Secuencia de Eventos (Timeline)")
+    
+    if ciclos_del_dia:
+        for ciclo in ciclos_del_dia:
+            with st.container():
+                color_red = "🔵" if "ZTF" in ciclo['red'] else "🟣"
+                st.markdown(f"#### {color_red} [{ciclo['inicio']} UTC] {ciclo['red']}")
+                
+                if ciclo['errores'] > 0:
+                    st.error(f"⚠️ **Atención:** Se detectaron {ciclo['errores']} errores de conexión. | ⚡ {ciclo['candidatos']} alertas evaluadas.")
+                elif ciclo['candidatos'] > 0:
+                    st.success(f"✅ Ciclo operativo y sin errores. | ⚡ **{ciclo['candidatos']} candidatas astrofísicas** aisladas y procesadas.")
+                else:
+                    st.info(f"💤 Ciclo completado. No se detectaron eventos anómalos o de alta prioridad en este patrullaje.")
                     
-                    if fecha not in dias:
-                        dias[fecha] = []
-                    dias[fecha].append((hora, mensaje))
-            except Exception:
-                pass
+                with st.expander("👨‍💻 Auditar Registro Técnico (Modo Terminal)"):
+                    log_text = ""
+                    for log in ciclo['logs']:
+                        log_text += f"[{log['hora']}] {log['msg']}\n"
+                    st.code(log_text, language="text")
                 
-        if not dias:
-            st.info("Bitácora limpia. Esperando nuevos eventos.")
-            return
-            
-        for fecha in sorted(dias.keys(), reverse=True):
-            es_hoy = (fecha == max(dias.keys()))
-            with st.expander(f"📅 Resumen Operativo: {fecha}", expanded=es_hoy):
-                for hora, msg in dias[fecha]:
-                    if "BINGO" in msg or "éxito" in msg or "identificado" in msg.lower() or "guardado" in msg.lower():
-                        st.success(f"**{hora}** | ✅ {msg}")
-                    elif "Error" in msg or "denegado" in msg.lower():
-                        st.error(f"**{hora}** | 🚨 {msg}")
-                    elif "APUNTANDO" in msg or "Contactando" in msg or "Descargando" in msg or "Disparando" in msg:
-                        st.info(f"**{hora}** | 📡 {msg}")
-                    elif "Sin alertas" in msg or "Ningún evento" in msg or "silencio" in msg.lower():
-                        st.warning(f"**{hora}** | 💤 {msg}")
-                    else:
-                        st.markdown(f"`{hora}` | {msg}")
-            
-    with col_ztf:
-        st.subheader("Bitácora ZTF (Norte)")
-        render_bitacora_visual("bitacora_ZTF.log")
-            
-    with col_lsst:
-        st.subheader("Bitácora TNS Global (Sur)")
-        render_bitacora_visual("bitacora_TNS_GLOBAL.log")
+                st.write("---")
+    else:
+        st.warning(f"El observatorio no registró patrullajes para la fecha seleccionada ({fecha_str_seleccionada}).")
 
 # --- VISTA 4: MANTENIMIENTO ---
 elif vista == "Mantenimiento del Sistema":
@@ -323,7 +478,6 @@ elif vista == "Mantenimiento del Sistema":
             for carpeta in carpetas:
                 if os.path.exists(carpeta):
                     for archivo in os.listdir(carpeta):
-                        # BLINDAJE: Jamás borrar el Libro Mayor de Supernovas
                         if archivo == "memoria_tns.txt":
                             continue
                             
@@ -348,31 +502,47 @@ elif vista == "Mantenimiento del Sistema":
     elif password != "":
         st.error("Código de autorización incorrecto. Intento bloqueado.")
 
-# --- VISTA 5: ACERCA DE / CONTACTO ---
+# --- VISTA 5: ACERCA DE / CONTACTO (ACTUALIZADA) ---
 elif vista == "Acerca del Observatorio":
     st.title("🔭 Estación Magallanes")
+    st.success("🟢 **Nodo Activo y Operando** - Punta Arenas, Región de Magallanes, Chile.")
     
     col_texto, col_imagen = st.columns([2, 1])
     
     with col_texto:
         st.markdown("""
         ### Explorando el Universo Dinámico desde el Fin del Mundo
-        La **Estación Magallanes** es un nodo de investigación y ciencia ciudadana astrofísica automatizado operando ininterrumpidamente desde Punta Arenas, en la Patagonia Chilena. 
+        La **Estación Magallanes** es un nodo de investigación y ciencia ciudadana astrofísica automatizado, operando ininterrumpidamente desde la Patagonia Chilena. 
         
-        Nuestro algoritmo rastrea el cielo nocturno en tiempo real, operando como un **Broker Astrofísico local**. Utilizamos Inteligencia Artificial de frontera para procesar "ríos de datos" masivos y detectar eventos catastróficos y transitorios antes de que se desvanezcan.
+        Nuestro algoritmo rastrea el cielo nocturno en tiempo real, actuando como un **Broker Astrofísico local**. Utilizamos Inteligencia Artificial de frontera para procesar "ríos de datos" masivos y detectar eventos catastróficos o transitorios antes de que se desvanezcan en el cosmos.
         
-        #### Arquitectura del Flujo de Datos
-        Nuestros radares barren las corrientes de alertas de las instituciones más prestigiosas del mundo para democratizar el seguimiento astronómico táctico:
-        *   **Zwicky Transient Facility (ZTF):** Captura de explosiones en el hemisferio norte (Palomar, California).
-        *   **Transient Name Server (TNS) / IAU:** Radar global oficial de descubrimientos de supernovas.
-        *   **ALeRCE:** Nuestra principal red neuronal de clasificación predictiva desarrollada en Chile.
-        *   **Vera C. Rubin Observatory (LSST):** En preparación para el aluvión de datos astronómicos más grande de la historia humana (Cerro Pachón, Chile).
-        
-        #### Colaboración Científica
-        Este sistema fue construido para tender un puente entre la ciencia de frontera y la observación independiente. Si deseas integrar nuestra telemetría a tu observatorio o colaborar en el análisis espectroscópico de nuestros candidatos, la puerta está abierta.
+        *Un proyecto independiente de ciencia ciudadana, desarrollado y mantenido por Edgardo A. Casanova Pino.*
         """)
         
-        st.info("✉️ **Contacto:** [contacto@estacionmagallanes.org](mailto:contacto@estacionmagallanes.org)")
-        
     with col_imagen:
-        st.image("logo.jpeg", width="stretch", caption="Sede Virtual Estación Magallanes. Patagonia, Chile.")
+        st.image("logo.jpeg", width="stretch", caption="Sede Virtual Estación Magallanes.")
+        
+    st.divider()
+    st.subheader("Arquitectura del Flujo de Datos")
+    
+    col_c1, col_c2, col_c3, col_c4 = st.columns(4)
+    with col_c1:
+        st.info("**🛰️ ZTF (Norte)**\n\nCaptura de explosiones desde el Observatorio Palomar, California.")
+    with col_c2:
+        st.info("**📡 TNS / IAU**\n\nEl radar global y oficial de descubrimientos de la Unión Astronómica Internacional.")
+    with col_c3:
+        st.info("**🧠 ALeRCE**\n\nRed neuronal chilena de clasificación predictiva en tiempo real.")
+    with col_c4:
+        st.info("**🔭 LSST (Rubin)**\n\nPreparación para el aluvión de datos astronómicos más grande de la historia.")
+
+    st.divider()
+    st.subheader("Colaboración Científica")
+    st.markdown("""
+    Este sistema fue construido para tender un puente entre la ciencia de frontera y la observación independiente. Si deseas integrar nuestra telemetría a tu observatorio o colaborar en el análisis espectroscópico de nuestros candidatos, la puerta está abierta.
+    """)
+    
+    col_btn1, col_btn2, _ = st.columns([1.5, 1, 1])
+    with col_btn1:
+        st.markdown("<div style='padding-top: 5px;'>✉️ <b>Contactar al Proyecto:</b> <code>contacto@estacionmagallanes.org</code></div>", unsafe_allow_html=True)
+    with col_btn2:
+        st.link_button("💻 Ver Repositorio en GitHub", "https://github.com/Edgardo-Casanova/estacion-magallanes", use_container_width=True)
