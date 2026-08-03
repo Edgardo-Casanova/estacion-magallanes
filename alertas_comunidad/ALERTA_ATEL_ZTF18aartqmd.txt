@@ -1,0 +1,43 @@
+======================================================================
+[ESPAÑOL] BORRADOR TELEGRAMA ASTRONÓMICO (ATel) - ESTACIÓN MAGALLANES
+======================================================================
+TEMA: Descubrimiento/recuperación automatizada de candidato a AGN (ZTF18aartqmd)
+OBSERVADORES: Pipeline Automatizado (Estación Magallanes, Punta Arenas, Chile)
+
+Reportamos la detección algorítmica de un candidato a AGN
+ubicado en la entidad anfitriona SDSS J154148.64+152711.1 (z = Desconocido).
+
+[1] INFORMACIÓN DEL OBJETIVO
+* ID del Transitorio    : ZTF18aartqmd
+* Coordenadas (ICRS)    : RA 235.45269 | Dec 15.45310
+* Entidad Anfitriona    : SDSS J154148.64+152711.1
+* Redshift (z)          : Desconocido
+
+[2] SOLICITUD DE OBSERVACIÓN
+* Acción Requerida      : SEGUIMIENTO ESPECTROSCÓPICO URGENTE
+* Objetivo Científico   : Confirmar subtipo exacto de AGN (Cuásar, Blazar) y medir dinámica de acreción.
+
+----------------------------------------------------------------------
+[ENGLISH] ASTRONOMER'S TELEGRAM (ATel) DRAFT - MAGALLANES STATION
+----------------------------------------------------------------------
+SUBJECT: Automated discovery/recovery of AGN candidate ZTF18aartqmd
+OBSERVERS: Automated Pipeline (Magallanes Station, Punta Arenas, Chile)
+
+We report the automated algorithmic detection of a highly probable AGN candidate 
+located in the host entity SDSS J154148.64+152711.1 (z = Desconocido). 
+
+[1] TARGET INFORMATION
+* Transient ID          : ZTF18aartqmd
+* Coordinates (ICRS)    : RA 235.45269 | Dec 15.45310
+* Host Entity           : SDSS J154148.64+152711.1
+* Redshift (z)          : Desconocido
+
+[2] OBSERVATIONAL REQUEST
+* Requested Action      : URGENT SPECTROSCOPIC FOLLOW-UP
+* Scientific Goal       : Confirm exact AGN subtype (Quasar, Blazar) and measure accretion dynamics.
+
+This transient was identified utilizing algorithmic broker pipelines. 
+Photometric light curve data indicates a significant deviation from the historical baseline.
+
+Magallanes Station Automated Alert System
+======================================================================
