@@ -14674,3 +14674,66 @@ Hemisferio: Sur (ASAS-SN / ATLAS) | Radar de Supernovas de la IAU
 ==================================================
 
 === PATRULLAJE COMPLETADO. MARCADOR DE TIEMPO GUARDADO: 61255.75456 ===
+[main da90379] Patrullaje automatico completado: 2026-08-03 18:06
+ 45 files changed, 993 insertions(+), 1 deletion(-)
+ create mode 100644 alertas/CIRCULAR_ZTF17aadcbci.txt
+ create mode 100644 alertas/CIRCULAR_ZTF17aadsivn.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aaafong.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aaaiiqw.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aaapivw.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aaedhqz.txt
+ create mode 100644 alertas/CIRCULAR_ZTF19abegshb.txt
+ create mode 100644 alertas/CIRCULAR_ZTF19abzrknc.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF17aadcbci.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF17aadsivn.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aaafong.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aaaiiqw.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aaapivw.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aaedhqz.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF19abegshb.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF19abzrknc.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF17aadcbci.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF17aadsivn.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aaafong.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aaaiiqw.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aaapivw.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aaedhqz.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF19abegshb.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF19abzrknc.txt
+ create mode 100644 data/curva_luz_ZTF17aadcbci.png
+ create mode 100644 data/curva_luz_ZTF17aadsivn.png
+ create mode 100644 data/curva_luz_ZTF18aaafong.png
+ create mode 100644 data/curva_luz_ZTF18aaaiiqw.png
+ create mode 100644 data/curva_luz_ZTF18aaapivw.png
+ create mode 100644 data/curva_luz_ZTF18aaedhqz.png
+ create mode 100644 data/curva_luz_ZTF19abegshb.png
+ create mode 100644 data/curva_luz_ZTF19abzrknc.png
+ create mode 100644 data/espectro_sed_ZTF17aadcbci.png
+ create mode 100644 data/espectro_sed_ZTF17aadsivn.png
+ create mode 100644 data/espectro_sed_ZTF18aaafong.png
+ create mode 100644 data/espectro_sed_ZTF18aaaiiqw.png
+ create mode 100644 data/espectro_sed_ZTF18aaapivw.png
+ create mode 100644 data/espectro_sed_ZTF18aaedhqz.png
+ create mode 100644 data/espectro_sed_ZTF19abegshb.png
+ create mode 100644 data/espectro_sed_ZTF19abzrknc.png
+To https://github.com/Edgardo-Casanova/estacion-magallanes.git
+   64e6703..da90379  main -> main
+=== INICIANDO CAZADOR MULTIPROPÓSITO v11 (Radar Continuo) ===
+➤ Buscando alertas activas desde: 2026-08-03 19:12:00 UTC (MJD: 61255.8000)
+
+==================================================
+APUNTANDO TELESCOPIO A RED: ZTF
+
+==================================================
+APUNTANDO TELESCOPIO A RED: LSST
+==================================================
+APUNTANDO TELESCOPIO A RED: TNS_GLOBAL
+Hemisferio: Sur (ASAS-SN / ATLAS) | Radar de Supernovas de la IAU
+==================================================
+¡Nueva Supernova detectada! Descargando ficha para SN 2026wgm...
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA SN 2026wgm (SUPERNOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_SN_2026wgm.txt
+Procesamiento completo y blindado para: SN 2026wgm
+
+=== PATRULLAJE COMPLETADO. MARCADOR DE TIEMPO GUARDADO: 61255.78163 ===
