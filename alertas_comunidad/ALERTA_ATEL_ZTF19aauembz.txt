@@ -1,0 +1,43 @@
+======================================================================
+[ESPAÑOL] BORRADOR TELEGRAMA ASTRONÓMICO (ATel) - ESTACIÓN MAGALLANES
+======================================================================
+TEMA: Descubrimiento/recuperación automatizada de candidato a SUPERNOVA (ZTF19aauembz)
+OBSERVADORES: Pipeline Automatizado (Estación Magallanes, Punta Arenas, Chile)
+
+Reportamos la detección algorítmica de un candidato a SUPERNOVA
+ubicado en la entidad anfitriona Gaia DR3 6902333983103694848 (z = Desconocido).
+
+[1] INFORMACIÓN DEL OBJETIVO
+* ID del Transitorio    : ZTF19aauembz
+* Coordenadas (ICRS)    : RA 313.52194 | Dec -10.69668
+* Entidad Anfitriona    : Gaia DR3 6902333983103694848
+* Redshift (z)          : Desconocido
+
+[2] SOLICITUD DE OBSERVACIÓN
+* Acción Requerida      : SEGUIMIENTO ESPECTROSCÓPICO URGENTE
+* Objetivo Científico   : Confirmar subtipo exacto de explosión y medir velocidad de expansión.
+
+----------------------------------------------------------------------
+[ENGLISH] ASTRONOMER'S TELEGRAM (ATel) DRAFT - MAGALLANES STATION
+----------------------------------------------------------------------
+SUBJECT: Automated discovery/recovery of SUPERNOVA candidate ZTF19aauembz
+OBSERVERS: Automated Pipeline (Magallanes Station, Punta Arenas, Chile)
+
+We report the automated algorithmic detection of a highly probable SUPERNOVA candidate 
+located in the host entity Gaia DR3 6902333983103694848 (z = Desconocido). 
+
+[1] TARGET INFORMATION
+* Transient ID          : ZTF19aauembz
+* Coordinates (ICRS)    : RA 313.52194 | Dec -10.69668
+* Host Entity           : Gaia DR3 6902333983103694848
+* Redshift (z)          : Desconocido
+
+[2] OBSERVATIONAL REQUEST
+* Requested Action      : URGENT SPECTROSCOPIC FOLLOW-UP
+* Scientific Goal       : Confirm exact explosion subtype and measure expansion velocity.
+
+This transient was identified utilizing algorithmic broker pipelines. 
+Photometric light curve data indicates a significant deviation from the historical baseline.
+
+Magallanes Station Automated Alert System
+======================================================================

@@ -1,0 +1,43 @@
+======================================================================
+[ESPAÑOL] BORRADOR TELEGRAMA ASTRONÓMICO (ATel) - ESTACIÓN MAGALLANES
+======================================================================
+TEMA: Descubrimiento/recuperación automatizada de candidato a AGN (ZTF22abvcujh)
+OBSERVADORES: Pipeline Automatizado (Estación Magallanes, Punta Arenas, Chile)
+
+Reportamos la detección algorítmica de un candidato a AGN
+ubicado en la entidad anfitriona LAMOST J210128.33+011846.3 (z = Desconocido).
+
+[1] INFORMACIÓN DEL OBJETIVO
+* ID del Transitorio    : ZTF22abvcujh
+* Coordenadas (ICRS)    : RA 315.36810 | Dec 1.31286
+* Entidad Anfitriona    : LAMOST J210128.33+011846.3
+* Redshift (z)          : Desconocido
+
+[2] SOLICITUD DE OBSERVACIÓN
+* Acción Requerida      : SEGUIMIENTO ESPECTROSCÓPICO URGENTE
+* Objetivo Científico   : Confirmar subtipo exacto de AGN (Cuásar, Blazar) y medir dinámica de acreción.
+
+----------------------------------------------------------------------
+[ENGLISH] ASTRONOMER'S TELEGRAM (ATel) DRAFT - MAGALLANES STATION
+----------------------------------------------------------------------
+SUBJECT: Automated discovery/recovery of AGN candidate ZTF22abvcujh
+OBSERVERS: Automated Pipeline (Magallanes Station, Punta Arenas, Chile)
+
+We report the automated algorithmic detection of a highly probable AGN candidate 
+located in the host entity LAMOST J210128.33+011846.3 (z = Desconocido). 
+
+[1] TARGET INFORMATION
+* Transient ID          : ZTF22abvcujh
+* Coordinates (ICRS)    : RA 315.36810 | Dec 1.31286
+* Host Entity           : LAMOST J210128.33+011846.3
+* Redshift (z)          : Desconocido
+
+[2] OBSERVATIONAL REQUEST
+* Requested Action      : URGENT SPECTROSCOPIC FOLLOW-UP
+* Scientific Goal       : Confirm exact AGN subtype (Quasar, Blazar) and measure accretion dynamics.
+
+This transient was identified utilizing algorithmic broker pipelines. 
+Photometric light curve data indicates a significant deviation from the historical baseline.
+
+Magallanes Station Automated Alert System
+======================================================================

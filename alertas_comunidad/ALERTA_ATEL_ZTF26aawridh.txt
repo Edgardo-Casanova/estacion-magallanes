@@ -1,0 +1,43 @@
+======================================================================
+[ESPAÑOL] BORRADOR TELEGRAMA ASTRONÓMICO (ATel) - ESTACIÓN MAGALLANES
+======================================================================
+TEMA: Descubrimiento/recuperación automatizada de candidato a AGN (ZTF26aawridh)
+OBSERVADORES: Pipeline Automatizado (Estación Magallanes, Punta Arenas, Chile)
+
+Reportamos la detección algorítmica de un candidato a AGN
+ubicado en la entidad anfitriona Desconocida (Intergaláctica / Muy lejana) (z = Desconocido).
+
+[1] INFORMACIÓN DEL OBJETIVO
+* ID del Transitorio    : ZTF26aawridh
+* Coordenadas (ICRS)    : RA 318.85438 | Dec -2.81442
+* Entidad Anfitriona    : Desconocida (Intergaláctica / Muy lejana)
+* Redshift (z)          : Desconocido
+
+[2] SOLICITUD DE OBSERVACIÓN
+* Acción Requerida      : SEGUIMIENTO ESPECTROSCÓPICO URGENTE
+* Objetivo Científico   : Confirmar subtipo exacto de AGN (Cuásar, Blazar) y medir dinámica de acreción.
+
+----------------------------------------------------------------------
+[ENGLISH] ASTRONOMER'S TELEGRAM (ATel) DRAFT - MAGALLANES STATION
+----------------------------------------------------------------------
+SUBJECT: Automated discovery/recovery of AGN candidate ZTF26aawridh
+OBSERVERS: Automated Pipeline (Magallanes Station, Punta Arenas, Chile)
+
+We report the automated algorithmic detection of a highly probable AGN candidate 
+located in the host entity Desconocida (Intergaláctica / Muy lejana) (z = Desconocido). 
+
+[1] TARGET INFORMATION
+* Transient ID          : ZTF26aawridh
+* Coordinates (ICRS)    : RA 318.85438 | Dec -2.81442
+* Host Entity           : Desconocida (Intergaláctica / Muy lejana)
+* Redshift (z)          : Desconocido
+
+[2] OBSERVATIONAL REQUEST
+* Requested Action      : URGENT SPECTROSCOPIC FOLLOW-UP
+* Scientific Goal       : Confirm exact AGN subtype (Quasar, Blazar) and measure accretion dynamics.
+
+This transient was identified utilizing algorithmic broker pipelines. 
+Photometric light curve data indicates a significant deviation from the historical baseline.
+
+Magallanes Station Automated Alert System
+======================================================================
