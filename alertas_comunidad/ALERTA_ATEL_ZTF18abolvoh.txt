@@ -1,0 +1,43 @@
+======================================================================
+[ESPAÑOL] BORRADOR TELEGRAMA ASTRONÓMICO (ATel) - ESTACIÓN MAGALLANES
+======================================================================
+TEMA: Descubrimiento/recuperación automatizada de candidato a SUPERNOVA (ZTF18abolvoh)
+OBSERVADORES: Pipeline Automatizado (Estación Magallanes, Punta Arenas, Chile)
+
+Reportamos la detección algorítmica de un candidato a SUPERNOVA
+ubicado en la entidad anfitriona SDSS J225411.43+050349.6 (z = Desconocido).
+
+[1] INFORMACIÓN DEL OBJETIVO
+* ID del Transitorio    : ZTF18abolvoh
+* Coordenadas (ICRS)    : RA 343.54882 | Dec 5.06410
+* Entidad Anfitriona    : SDSS J225411.43+050349.6
+* Redshift (z)          : Desconocido
+
+[2] SOLICITUD DE OBSERVACIÓN
+* Acción Requerida      : SEGUIMIENTO ESPECTROSCÓPICO URGENTE
+* Objetivo Científico   : Confirmar subtipo exacto de explosión y medir velocidad de expansión.
+
+----------------------------------------------------------------------
+[ENGLISH] ASTRONOMER'S TELEGRAM (ATel) DRAFT - MAGALLANES STATION
+----------------------------------------------------------------------
+SUBJECT: Automated discovery/recovery of SUPERNOVA candidate ZTF18abolvoh
+OBSERVERS: Automated Pipeline (Magallanes Station, Punta Arenas, Chile)
+
+We report the automated algorithmic detection of a highly probable SUPERNOVA candidate 
+located in the host entity SDSS J225411.43+050349.6 (z = Desconocido). 
+
+[1] TARGET INFORMATION
+* Transient ID          : ZTF18abolvoh
+* Coordinates (ICRS)    : RA 343.54882 | Dec 5.06410
+* Host Entity           : SDSS J225411.43+050349.6
+* Redshift (z)          : Desconocido
+
+[2] OBSERVATIONAL REQUEST
+* Requested Action      : URGENT SPECTROSCOPIC FOLLOW-UP
+* Scientific Goal       : Confirm exact explosion subtype and measure expansion velocity.
+
+This transient was identified utilizing algorithmic broker pipelines. 
+Photometric light curve data indicates a significant deviation from the historical baseline.
+
+Magallanes Station Automated Alert System
+======================================================================
