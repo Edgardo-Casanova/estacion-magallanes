@@ -293,13 +293,23 @@ elif vista == "Feed de Alertas y Circulares":
     fecha_str_busqueda = fecha_seleccionada.strftime("%Y-%m-%d")
     
     for alerta in todas_las_alertas:
-        nombre_fmt = formatear_nombre_circular(alerta).upper()
-        
-        # 2. NUEVO FILTRO DE FECHA: Si la circular no contiene la fecha seleccionada, la saltamos.
-        if fecha_str_busqueda not in nombre_fmt:
+        # 2. NUEVO FILTRO DE FECHA SUPERIOR: Buscamos la fecha directamente dentro del archivo
+        coincide_fecha = False
+        try:
+            # errors='ignore' protege contra fallas de codificación en entornos locales
+            with open(alerta, 'r', encoding='utf-8', errors='ignore') as f:
+                if fecha_str_busqueda in f.read():
+                    coincide_fecha = True
+        except Exception:
+            pass
+            
+        # Si el documento no tiene la fecha seleccionada, lo saltamos
+        if not coincide_fecha:
             continue
             
-        # 3. Si pasó el filtro de fecha, aplicamos el filtro de categoría original
+        # 3. Si pasó el filtro de fecha, procedemos con el filtro taxonómico normal
+        nombre_fmt = formatear_nombre_circular(alerta).upper()
+        
         if cat_filtro == "Todas las Alertas":
             alertas_filtradas.append(alerta)
         elif cat_filtro == "Supernovas" and ("SUPERNOVA" in nombre_fmt or "SN " in nombre_fmt or "(SN" in nombre_fmt):
@@ -314,6 +324,9 @@ elif vista == "Feed de Alertas y Circulares":
     todos_los_graficos = sorted(glob.glob("data/*.png"), reverse=True)
     
     if alertas_filtradas:
+        # 4. ORDENAMIENTO CRONOLÓGICO: Ordena del más reciente al más antiguo basado en la hora de emisión
+        alertas_filtradas.sort(key=formatear_nombre_circular, reverse=True)
+        
         alerta_sel = st.selectbox("Selecciona un evento para inspeccionar:", alertas_filtradas, format_func=formatear_nombre_circular)
         
         nombre_base = os.path.basename(alerta_sel).replace("CIRCULAR_", "").replace(".txt", "")
