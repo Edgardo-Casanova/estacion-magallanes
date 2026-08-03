@@ -13104,3 +13104,452 @@ Hemisferio: Sur (ASAS-SN / ATLAS) | Radar de Supernovas de la IAU
 ==================================================
 
 === PATRULLAJE COMPLETADO. MARCADOR DE TIEMPO GUARDADO: 61255.63123 ===
+[main b8d0979] Patrullaje automatico completado: 2026-08-03 15:09
+ 99 files changed, 1993 insertions(+)
+ create mode 100644 alertas/CIRCULAR_ZTF17aaafglk.txt
+ create mode 100644 alertas/CIRCULAR_ZTF17aabvinb.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aaadrcv.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aaadrut.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abtzbzj.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abynwcb.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18abyxwpa.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18acaduzx.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18acebeht.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18acebfse.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18acvbqtc.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18adccprf.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18admvilo.txt
+ create mode 100644 alertas/CIRCULAR_ZTF19abpgdxb.txt
+ create mode 100644 alertas/CIRCULAR_ZTF19acgtfll.txt
+ create mode 100644 alertas/CIRCULAR_ZTF21ablwhyz.txt
+ create mode 100644 alertas/CIRCULAR_ZTF23aaqadra.txt
+ create mode 100644 alertas/CIRCULAR_ZTF23abfsmta.txt
+ create mode 100644 alertas/CIRCULAR_ZTF26abjhtlb.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF17aaafglk.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF17aabvinb.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aaadrcv.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aaadrut.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abtzbzj.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abynwcb.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18abyxwpa.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18acaduzx.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18acebeht.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18acebfse.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18acvbqtc.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18adccprf.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18admvilo.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF19abpgdxb.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF19acgtfll.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF21ablwhyz.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF23aaqadra.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF23abfsmta.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF26abjhtlb.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF17aaafglk.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF17aabvinb.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aaadrcv.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aaadrut.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abtzbzj.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abynwcb.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18abyxwpa.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18acaduzx.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18acebeht.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18acebfse.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18acvbqtc.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18adccprf.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18admvilo.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF19abpgdxb.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF19acgtfll.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF21ablwhyz.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF23aaqadra.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF23abfsmta.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF26abjhtlb.txt
+ create mode 100644 data/curva_luz_ZTF17aaafglk.png
+ create mode 100644 data/curva_luz_ZTF17aabvinb.png
+ create mode 100644 data/curva_luz_ZTF18aaadrcv.png
+ create mode 100644 data/curva_luz_ZTF18aaadrut.png
+ create mode 100644 data/curva_luz_ZTF18abtzbzj.png
+ create mode 100644 data/curva_luz_ZTF18abynwcb.png
+ create mode 100644 data/curva_luz_ZTF18abyxwpa.png
+ create mode 100644 data/curva_luz_ZTF18acaduzx.png
+ create mode 100644 data/curva_luz_ZTF18acebeht.png
+ create mode 100644 data/curva_luz_ZTF18acebfse.png
+ create mode 100644 data/curva_luz_ZTF18acvbqtc.png
+ create mode 100644 data/curva_luz_ZTF18adccprf.png
+ create mode 100644 data/curva_luz_ZTF18admvilo.png
+ create mode 100644 data/curva_luz_ZTF19abpgdxb.png
+ create mode 100644 data/curva_luz_ZTF19acgtfll.png
+ create mode 100644 data/curva_luz_ZTF21ablwhyz.png
+ create mode 100644 data/curva_luz_ZTF23aaqadra.png
+ create mode 100644 data/curva_luz_ZTF23abfsmta.png
+ create mode 100644 data/curva_luz_ZTF26abjhtlb.png
+ create mode 100644 data/espectro_sed_ZTF17aaafglk.png
+ create mode 100644 data/espectro_sed_ZTF17aabvinb.png
+ create mode 100644 data/espectro_sed_ZTF18aaadrcv.png
+ create mode 100644 data/espectro_sed_ZTF18aaadrut.png
+ create mode 100644 data/espectro_sed_ZTF18abtzbzj.png
+ create mode 100644 data/espectro_sed_ZTF18abynwcb.png
+ create mode 100644 data/espectro_sed_ZTF18abyxwpa.png
+ create mode 100644 data/espectro_sed_ZTF18acaduzx.png
+ create mode 100644 data/espectro_sed_ZTF18acebeht.png
+ create mode 100644 data/espectro_sed_ZTF18acebfse.png
+ create mode 100644 data/espectro_sed_ZTF18acvbqtc.png
+ create mode 100644 data/espectro_sed_ZTF18adccprf.png
+ create mode 100644 data/espectro_sed_ZTF18admvilo.png
+ create mode 100644 data/espectro_sed_ZTF19abpgdxb.png
+ create mode 100644 data/espectro_sed_ZTF19acgtfll.png
+ create mode 100644 data/espectro_sed_ZTF21ablwhyz.png
+ create mode 100644 data/espectro_sed_ZTF23aaqadra.png
+ create mode 100644 data/espectro_sed_ZTF23abfsmta.png
+ create mode 100644 data/espectro_sed_ZTF26abjhtlb.png
+To https://github.com/Edgardo-Casanova/estacion-magallanes.git
+   2c95a4f..b8d0979  main -> main
+=== INICIANDO CAZADOR MULTIPROPÓSITO v11 (Radar Continuo) ===
+➤ Buscando alertas activas desde: 2026-08-03 14:24:00 UTC (MJD: 61255.6000)
+
+==================================================
+APUNTANDO TELESCOPIO A RED: ZTF
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF19abttcxq
+➤ Coordenadas ICRS : RA 50.15848 | Dec 11.41456
+
+➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO (Núcleo Galáctico Activo)
+
+[1/3] 🌌 Buscando Galaxia Anfitriona / Entorno Extragaláctico (SIMBAD otypes.htx)...
+   [-] No se identificó una entidad principal en las cercanías del evento.
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/3] 🔭 Evaluación de Seguimiento para AGN...
+   [+] Evento extragaláctico detectado en coordenadas RA 50.15848, Dec 11.41456.
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF19abttcxq.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF19abttcxq (AGN)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF19abttcxq.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF19abttcxq procesado exitosamente (Blazar).
+   -> Procesadas 50 de 1500 alertas...
+   -> Procesadas 100 de 1500 alertas...
+   -> Procesadas 150 de 1500 alertas...
+   -> Procesadas 200 de 1500 alertas...
+   -> Procesadas 250 de 1500 alertas...
+   -> Procesadas 300 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF19abdjszd
+➤ Coordenadas ICRS : RA 334.45466 | Dec -23.61523
+
+➤ INICIANDO PROTOCOLO ESTELAR LOCAL (NOVA)
+
+[1/4] 📡 Consultando NASA Exoplanet Archive...
+   [-] No se registran exoplanetas confirmados en sistemas planetarios.
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/4] 🔬 Iniciando espectroscopía de alta resolución (H-alfa) para ZTF19abdjszd...
+   [-] No hay datos de archivo de alta resolución para esta coordenada específica.
+
+[4/4] 🔭 Evaluación de Viabilidad Observacional para ZTF19abdjszd...
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF19abdjszd.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF19abdjszd (NOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF19abdjszd.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF19abdjszd procesado exitosamente (CV/Nova).
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF19abcfavb
+➤ Coordenadas ICRS : RA 332.16032 | Dec -21.79960
+
+➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO (Búsqueda de Galaxia Anfitriona)
+
+[1/3] 🌌 Buscando Galaxia Anfitriona / Entorno Extragaláctico (SIMBAD otypes.htx)...
+   [+] Entidad Extragaláctica identificada: LEDA  823570 (Tipo SIMBAD: G) | Redshift: Desconocido
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/3] 🔭 Evaluación de Seguimiento para SUPERNOVA...
+   [+] Evento extragaláctico detectado en coordenadas RA 332.16032, Dec -21.79960.
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF19abcfavb.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF19abcfavb (SUPERNOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF19abcfavb.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF19abcfavb procesado exitosamente (SNII).
+   -> Procesadas 350 de 1500 alertas...
+   -> Procesadas 400 de 1500 alertas...
+   -> Procesadas 450 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF18abtehyb
+➤ Coordenadas ICRS : RA 344.32205 | Dec 7.72012
+
+➤ INICIANDO PROTOCOLO ESTELAR LOCAL (NOVA)
+
+[1/4] 📡 Consultando NASA Exoplanet Archive...
+   [-] No se registran exoplanetas confirmados en sistemas planetarios.
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/4] 🔬 Iniciando espectroscopía de alta resolución (H-alfa) para ZTF18abtehyb...
+   [-] No hay datos de archivo de alta resolución para esta coordenada específica.
+
+[4/4] 🔭 Evaluación de Viabilidad Observacional para ZTF18abtehyb...
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF18abtehyb.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF18abtehyb (NOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF18abtehyb.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF18abtehyb procesado exitosamente (CV/Nova).
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF19abkekrp
+➤ Coordenadas ICRS : RA 341.68806 | Dec 3.43991
+
+➤ INICIANDO PROTOCOLO ESTELAR LOCAL (NOVA)
+
+[1/4] 📡 Consultando NASA Exoplanet Archive...
+   [-] No se registran exoplanetas confirmados en sistemas planetarios.
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/4] 🔬 Iniciando espectroscopía de alta resolución (H-alfa) para ZTF19abkekrp...
+   [-] No hay datos de archivo de alta resolución para esta coordenada específica.
+
+[4/4] 🔭 Evaluación de Viabilidad Observacional para ZTF19abkekrp...
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF19abkekrp.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF19abkekrp (NOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF19abkekrp.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF19abkekrp procesado exitosamente (CV/Nova).
+   -> Procesadas 500 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF19aawezjz
+➤ Coordenadas ICRS : RA 345.19105 | Dec 5.86240
+
+➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO (Núcleo Galáctico Activo)
+
+[1/3] 🌌 Buscando Galaxia Anfitriona / Entorno Extragaláctico (SIMBAD otypes.htx)...
+   [+] Entidad Extragaláctica identificada: SDSS J230045.85+055144.6 (Tipo SIMBAD: QSO) | Redshift: Desconocido
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/3] 🔭 Evaluación de Seguimiento para AGN...
+   [+] Evento extragaláctico detectado en coordenadas RA 345.19105, Dec 5.86240.
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF19aawezjz.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF19aawezjz (AGN)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF19aawezjz.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF19aawezjz procesado exitosamente (QSO).
+   -> Procesadas 550 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF19abkeywh
+➤ Coordenadas ICRS : RA 347.38889 | Dec 7.64725
+
+➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO (Núcleo Galáctico Activo)
+
+[1/3] 🌌 Buscando Galaxia Anfitriona / Entorno Extragaláctico (SIMBAD otypes.htx)...
+   [+] Entidad Extragaláctica identificada: SDSS J230935.29+073832.6 (Tipo SIMBAD: QSO) | Redshift: Desconocido
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/3] 🔭 Evaluación de Seguimiento para AGN...
+   [+] Evento extragaláctico detectado en coordenadas RA 347.38889, Dec 7.64725.
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF19abkeywh.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF19abkeywh (AGN)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF19abkeywh.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF19abkeywh procesado exitosamente (QSO).
+   -> Procesadas 600 de 1500 alertas...
+   -> Procesadas 650 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF24aaxpshz
+➤ Coordenadas ICRS : RA 341.81394 | Dec 3.07826
+
+➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO (Núcleo Galáctico Activo)
+
+[1/3] 🌌 Buscando Galaxia Anfitriona / Entorno Extragaláctico (SIMBAD otypes.htx)...
+   [+] Entidad Extragaláctica identificada: SDSS J224715.93+030242.2 (Tipo SIMBAD: QSO) | Redshift: Desconocido
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/3] 🔭 Evaluación de Seguimiento para AGN...
+   [+] Evento extragaláctico detectado en coordenadas RA 341.81394, Dec 3.07826.
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF24aaxpshz.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF24aaxpshz (AGN)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF24aaxpshz.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF24aaxpshz procesado exitosamente (QSO).
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF19aawnawv
+➤ Coordenadas ICRS : RA 343.00378 | Dec 8.25685
+
+➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO (Núcleo Galáctico Activo)
+
+[1/3] 🌌 Buscando Galaxia Anfitriona / Entorno Extragaláctico (SIMBAD otypes.htx)...
+   [+] Entidad Extragaláctica identificada: LAMOST J225200.91+081524.6 (Tipo SIMBAD: QSO) | Redshift: Desconocido
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/3] 🔭 Evaluación de Seguimiento para AGN...
+   [+] Evento extragaláctico detectado en coordenadas RA 343.00378, Dec 8.25685.
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF19aawnawv.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF19aawnawv (AGN)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF19aawnawv.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF19aawnawv procesado exitosamente (QSO).
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF18abolvoh
+➤ Coordenadas ICRS : RA 343.54882 | Dec 5.06410
+
+➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO (Búsqueda de Galaxia Anfitriona)
+
+[1/3] 🌌 Buscando Galaxia Anfitriona / Entorno Extragaláctico (SIMBAD otypes.htx)...
+   [+] Entidad Extragaláctica identificada: SDSS J225411.43+050349.6 (Tipo SIMBAD: G) | Redshift: Desconocido
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/3] 🔭 Evaluación de Seguimiento para SUPERNOVA...
+   [+] Evento extragaláctico detectado en coordenadas RA 343.54882, Dec 5.06410.
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF18abolvoh.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF18abolvoh (SUPERNOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF18abolvoh.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF18abolvoh procesado exitosamente (SNII).
+   -> Procesadas 700 de 1500 alertas...
+   -> Procesadas 750 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF19aaaregs
+➤ Coordenadas ICRS : RA 332.47465 | Dec -17.82736
+
+➤ INICIANDO PROTOCOLO ESTELAR LOCAL (NOVA)
+
+[1/4] 📡 Consultando NASA Exoplanet Archive...
+   [-] No se registran exoplanetas confirmados en sistemas planetarios.
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/4] 🔬 Iniciando espectroscopía de alta resolución (H-alfa) para ZTF19aaaregs...
+   [-] No hay datos de archivo de alta resolución para esta coordenada específica.
+
+[4/4] 🔭 Evaluación de Viabilidad Observacional para ZTF19aaaregs...
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF19aaaregs.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF19aaaregs (NOVA)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF19aaaregs.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF19aaaregs procesado exitosamente (CV/Nova).
+   -> Procesadas 800 de 1500 alertas...
+   -> Procesadas 850 de 1500 alertas...
+   -> Procesadas 900 de 1500 alertas...
+   -> Procesadas 950 de 1500 alertas...
+   -> Procesadas 1000 de 1500 alertas...
+   -> Procesadas 1050 de 1500 alertas...
+   -> Procesadas 1100 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF23aaxwrcj
+➤ Coordenadas ICRS : RA 328.58207 | Dec -9.29817
+
+➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO (Núcleo Galáctico Activo)
+
+[1/3] 🌌 Buscando Galaxia Anfitriona / Entorno Extragaláctico (SIMBAD otypes.htx)...
+   [+] Entidad Extragaláctica identificada: SDSS J215420.08-091803.2 (Tipo SIMBAD: G) | Redshift: Desconocido
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/3] 🔭 Evaluación de Seguimiento para AGN...
+   [+] Evento extragaláctico detectado en coordenadas RA 328.58207, Dec -9.29817.
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF23aaxwrcj.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF23aaxwrcj (AGN)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF23aaxwrcj.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF23aaxwrcj procesado exitosamente (QSO).
+   -> Procesadas 1150 de 1500 alertas...
+   -> Procesadas 1200 de 1500 alertas...
+   -> Procesadas 1250 de 1500 alertas...
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF19abdrthq
+➤ Coordenadas ICRS : RA 329.20969 | Dec -8.92649
+
+➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO (Núcleo Galáctico Activo)
+
+[1/3] 🌌 Buscando Galaxia Anfitriona / Entorno Extragaláctico (SIMBAD otypes.htx)...
+   [+] Entidad Extragaláctica identificada: 6dFGS gJ215650.3-085535 (Tipo SIMBAD: BLL) | Redshift: Desconocido
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/3] 🔭 Evaluación de Seguimiento para AGN...
+   [+] Evento extragaláctico detectado en coordenadas RA 329.20969, Dec -8.92649.
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF19abdrthq.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF19abdrthq (AGN)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF19abdrthq.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF19abdrthq procesado exitosamente (Blazar).
+   -> Procesadas 1300 de 1500 alertas...
+   -> Procesadas 1350 de 1500 alertas...
+   -> Procesadas 1400 de 1500 alertas...
+   -> Procesadas 1450 de 1500 alertas...
+
+==================================================
+APUNTANDO TELESCOPIO A RED: LSST
+==================================================
+APUNTANDO TELESCOPIO A RED: TNS_GLOBAL
+Hemisferio: Sur (ASAS-SN / ATLAS) | Radar de Supernovas de la IAU
+==================================================
+
+=== PATRULLAJE COMPLETADO. MARCADOR DE TIEMPO GUARDADO: 61255.67138 ===
