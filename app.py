@@ -289,8 +289,17 @@ elif vista == "Feed de Alertas y Circulares":
     todas_las_alertas = sorted(glob.glob("alertas/CIRCULAR_*.txt"), reverse=True)
     alertas_filtradas = []
     
+    # 1. Convertimos la fecha del menú lateral a formato texto (YYYY-MM-DD)
+    fecha_str_busqueda = fecha_seleccionada.strftime("%Y-%m-%d")
+    
     for alerta in todas_las_alertas:
         nombre_fmt = formatear_nombre_circular(alerta).upper()
+        
+        # 2. NUEVO FILTRO DE FECHA: Si la circular no contiene la fecha seleccionada, la saltamos.
+        if fecha_str_busqueda not in nombre_fmt:
+            continue
+            
+        # 3. Si pasó el filtro de fecha, aplicamos el filtro de categoría original
         if cat_filtro == "Todas las Alertas":
             alertas_filtradas.append(alerta)
         elif cat_filtro == "Supernovas" and ("SUPERNOVA" in nombre_fmt or "SN " in nombre_fmt or "(SN" in nombre_fmt):
@@ -337,7 +346,7 @@ elif vista == "Feed de Alertas y Circulares":
             else:
                 st.warning("No se generaron gráficos u óptica visual para este evento.")
     else:
-        st.info(f"No hay circulares que coincidan con la categoría: {cat_filtro}")
+        st.info(f"No hay circulares de '{cat_filtro}' registradas para la fecha {fecha_str_busqueda}.")
 
 # --- VISTA 3: BITÁCORAS ---
 elif vista == "Bitácoras del Sistema":
