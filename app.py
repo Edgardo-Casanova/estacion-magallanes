@@ -40,7 +40,7 @@ def obtener_estado_red(log_file):
         
         if "Error" in contenido_final:
             return "Error API", "🔴"
-        elif "Ningún evento superó" in contenido_final or "Procesadas" in contenido_final or "Conexión exitosa" in contenido_final:
+        elif "Ningún evento superó" in contenido_final or "Procesadas" in contenido_final or "Conexión exitosa" in contenido_final or "Patrullaje" in contenido_final:
             return "Operativa", "🟢"
         else:
             return "En reposo", "🟡"
@@ -79,11 +79,22 @@ def extraer_coordenadas_alertas():
                     if os.path.exists(ruta_reporte):
                         with open(ruta_reporte, 'r', encoding='utf-8') as f_rep:
                             cont_rep = f_rep.read()
-                            match_clase = re.search(r"Clasificaci(?:o|ó)n.*?:\s*([^\n\(]+)", cont_rep, re.IGNORECASE)
-                            if match_clase:
-                                clase_fina = match_clase.group(1).strip().upper()
-                                if clase_fina and clase_fina != "DESCONOCIDA":
-                                    tipo_actual = clase_fina
+                            
+                            # Prioridad 1: Reclasificación Estación Magallanes
+                            match_magallanes = re.search(r"Reclasificaci(?:o|ó)n \(An(?:a|á)lisis Estaci(?:o|ó)n Magallanes\):\s*([^\n]+)", cont_rep, re.IGNORECASE)
+                            # Prioridad 2: TNS
+                            match_tns = re.search(r"Clasificaci(?:o|ó)n \(TNS\):\s*([^\n\(]+)", cont_rep, re.IGNORECASE)
+                            
+                            clase_fina = None
+                            if match_magallanes:
+                                clase_fina = match_magallanes.group(1).strip().upper()
+                            elif match_tns:
+                                clase_fina = match_tns.group(1).strip().upper()
+                                
+                            if clase_fina and clase_fina != "DESCONOCIDA":
+                                # Limpiar descripciones adicionales entre paréntesis para el mapa
+                                clase_limpia = clase_fina.split("(")[0].strip()
+                                tipo_actual = clase_limpia
                     
                     ra_list.append(ra)
                     dec_list.append(dec)
@@ -163,10 +174,11 @@ if vista == "Dashboard Principal (Telemetría)":
             nombres.append(nom_full[i])
             tipos.append(tip_full[i])
     
-    total_flares = sum(1 for t in tipos if "FLARE" in t)
-    total_novas = sum(1 for t in tipos if "NOVA" in t and "SUPERNOVA" not in t) or sum(1 for t in tipos if "CV" in t)
+    # Contadores actualizados para coincidir con el análisis físico de Magallanes
+    total_flares = sum(1 for t in tipos if "FLARE" in t or "ENANA M" in t)
+    total_novas = sum(1 for t in tipos if ("NOVA" in t and "SUPERNOVA" not in t) or "CATACL" in t or "CV" in t)
     total_supernovas = sum(1 for t in tipos if "SUPERNOVA" in t or "SN" in t)
-    total_agn = sum(1 for t in tipos if "AGN" in t or "QSO" in t or "BLAZAR" in t)
+    total_agn = sum(1 for t in tipos if "AGN" in t or "QSO" in t or "BLAZAR" in t or "CUÁSAR" in t)
     
     st.subheader("📡 Estado de la Red de Alertas")
     col_red1, col_red2 = st.columns(2)
@@ -217,16 +229,16 @@ if vista == "Dashboard Principal (Telemetría)":
         for r, d, n, t in zip(ra_list, dec_list, nombres, tipos):
             t_upper = str(t).upper()
             
-            if "CV/NOVA" in t_upper or "CV" in t_upper: cat = "Variable Cataclísmica (CV)"
+            if "CATACL" in t_upper or "CV" in t_upper: cat = "Variable Cataclísmica (CV)"
             elif "NOVA" in t_upper and "SUPERNOVA" not in t_upper: cat = "Nova (Clásica)"
             elif "BLAZAR" in t_upper: cat = "Blazar"
-            elif "QSO" in t_upper: cat = "Cuásar (QSO)"
+            elif "QSO" in t_upper or "CUÁSAR" in t_upper: cat = "Cuásar (QSO)"
             elif "AGN" in t_upper: cat = "AGN (Genérico)"
             elif "SLSN" in t_upper: cat = "Supernova Superluminosa (SLSN)"
             elif "SN IA" in t_upper or "SNIA" in t_upper: cat = "Supernova Ia"
             elif "SN II" in t_upper or "SNII" in t_upper or "IBC" in t_upper or "SN IBC" in t_upper: cat = "Supernova II / Ibc"
             elif "SUPERNOVA" in t_upper or "SN" in t_upper: cat = "Supernova (Sin clasificar)"
-            elif "FLARE" in t_upper: cat = "Flares (Enanas Rojas)"
+            elif "FLARE" in t_upper or "ENANA M" in t_upper: cat = "Flares (Enanas Rojas)"
             else: continue
             
             if categoria_mapa == "💥 Supernovas" and "Supernova" not in cat: continue
@@ -289,25 +301,20 @@ elif vista == "Feed de Alertas y Circulares":
     todas_las_alertas = sorted(glob.glob("alertas/CIRCULAR_*.txt"), reverse=True)
     alertas_filtradas = []
     
-    # 1. Convertimos la fecha del menú lateral a formato texto (YYYY-MM-DD)
     fecha_str_busqueda = fecha_seleccionada.strftime("%Y-%m-%d")
     
     for alerta in todas_las_alertas:
-        # 2. NUEVO FILTRO DE FECHA SUPERIOR: Buscamos la fecha directamente dentro del archivo
         coincide_fecha = False
         try:
-            # errors='ignore' protege contra fallas de codificación en entornos locales
             with open(alerta, 'r', encoding='utf-8', errors='ignore') as f:
                 if fecha_str_busqueda in f.read():
                     coincide_fecha = True
         except Exception:
             pass
             
-        # Si el documento no tiene la fecha seleccionada, lo saltamos
         if not coincide_fecha:
             continue
             
-        # 3. Si pasó el filtro de fecha, procedemos con el filtro taxonómico normal
         nombre_fmt = formatear_nombre_circular(alerta).upper()
         
         if cat_filtro == "Todas las Alertas":
@@ -316,7 +323,7 @@ elif vista == "Feed de Alertas y Circulares":
             alertas_filtradas.append(alerta)
         elif cat_filtro == "Novas / Cataclísmicas" and ("NOVA" in nombre_fmt and "SUPERNOVA" not in nombre_fmt):
             alertas_filtradas.append(alerta)
-        elif cat_filtro == "Cuásares / AGN" and any(x in nombre_fmt for x in ["AGN", "QSO", "BLAZAR"]):
+        elif cat_filtro == "Cuásares / AGN" and any(x in nombre_fmt for x in ["AGN", "QSO", "BLAZAR", "CUÁSAR"]):
             alertas_filtradas.append(alerta)
         elif cat_filtro == "Flares" and "FLARE" in nombre_fmt:
             alertas_filtradas.append(alerta)
@@ -324,7 +331,6 @@ elif vista == "Feed de Alertas y Circulares":
     todos_los_graficos = sorted(glob.glob("data/*.png"), reverse=True)
     
     if alertas_filtradas:
-        # 4. ORDENAMIENTO CRONOLÓGICO: Ordena del más reciente al más antiguo basado en la hora de emisión
         alertas_filtradas.sort(key=formatear_nombre_circular, reverse=True)
         
         alerta_sel = st.selectbox("Selecciona un evento para inspeccionar:", alertas_filtradas, format_func=formatear_nombre_circular)
@@ -422,7 +428,7 @@ elif vista == "Bitácoras del Sistema":
                     }
                 ciclo_actual['logs'].append(log)
                 
-            if "procesado exitosamente" in log['msg'] or "Descargando ficha" in log['msg'] or "identificado" in log['msg'].lower():
+            if "procesado exitosamente" in log['msg'] or "Descargando ficha" in log['msg'] or "identificado" in log['msg'].lower() or "RECLASIFICADO" in log['msg']:
                 ciclo_actual['candidatos'] += 1
             if "Error" in log['msg'] or "denegado" in log['msg'].lower():
                 ciclo_actual['errores'] += 1

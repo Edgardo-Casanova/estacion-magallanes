@@ -37,7 +37,7 @@ debido a la detección automatizada de alta actividad cromosférica (posible meg
 * Nombre / ID SIMBAD    : {nombre_evento}
 * Coordenadas (ICRS)    : RA {ra:.5f} | Dec {dec:.5f}
 
-[2] JUSTIFICACIÓN ASTROFÍSICA
+[2] JUSTIFICACIÓN ASTROFÍSICA (Análisis Estación Magallanes)
 * Tipo de Estrella      : Enana Roja (Firma infrarroja confirmada)
 * Emisión H-alfa        : Activa extrema (Ancho Equivalente: {ew_halfa:.2f} Å)
 * Sistema Planetario    : {planetas_es}
@@ -61,7 +61,7 @@ due to the automated detection of high chromospheric activity (potential mega-fl
 * Name / SIMBAD ID      : {nombre_evento}
 * Coordinates (ICRS)    : RA {ra:.5f} | Dec {dec:.5f}
 
-[2] ASTROPHYSICAL JUSTIFICATION
+[2] ASTROPHYSICAL JUSTIFICATION (Magallanes Station Analysis)
 * Star Type             : Red Dwarf (Confirmed infrared signature)
 * H-alpha Emission      : Extreme activity (Equivalent Width: {ew_halfa:.2f} Å)
 * Planetary System      : {planetas_en}
@@ -76,9 +76,9 @@ Magallanes Station Automated Pipeline | AAVSO Observer Code: ECDA
         ruta_txt = f"alertas_comunidad/ALERTA_AAVSO_{nombre_archivo}.txt"
 
     # =================================================================
-    # PLANTILLA 2: REDES EXTRAGALÁCTICAS (ATel) -> Para Supernovas, Novas y AGN
+    # PLANTILLA 2: REDES EXTRAGALÁCTICAS (ATel) -> SN, Nova, AGN, Blazar
     # =================================================================
-    elif tipo_evento in ["supernova", "nova", "agn"]:
+    elif tipo_evento in ["supernova", "nova", "agn", "blazar"]:
         galaxia = extra_data.get("galaxia", "Desconocida")
         
         redshift = extra_data.get("redshift", "Desconocido")
@@ -87,21 +87,24 @@ Magallanes Station Automated Pipeline | AAVSO Observer Code: ECDA
             
         z_str = f"{redshift:.5f}" if isinstance(redshift, float) else str(redshift)
         
-        # Bifurcación dinámica del objetivo
-        if tipo_evento == "agn":
-            goal_es = "Confirmar subtipo exacto de AGN (Cuásar, Blazar) y medir dinámica de acreción."
-            goal_en = "Confirm exact AGN subtype (Quasar, Blazar) and measure accretion dynamics."
+        # Bifurcación dinámica de los objetivos científicos del Telegrama
+        if tipo_evento == "blazar":
+            goal_es = "Confirmar chorro relativista (jet) apuntando a la Tierra y fotometría de alta cadencia."
+            goal_en = "Confirm Earth-pointing relativistic jet and perform high-cadence photometry."
+        elif tipo_evento == "agn":
+            goal_es = "Confirmar fluctuación lenta de AGN (Cuásar) y medir dinámica de acreción."
+            goal_en = "Confirm slow AGN (Quasar) fluctuation and measure accretion dynamics."
         else:
-            goal_es = "Confirmar subtipo exacto de explosión y medir velocidad de expansión."
-            goal_en = "Confirm exact explosion subtype and measure expansion velocity."
+            goal_es = "Obtener espectro para confirmar subtipo exacto de explosión termonuclear/colapso."
+            goal_en = "Obtain spectra to confirm exact thermonuclear/core-collapse explosion subtype."
             
         texto_alerta = f"""======================================================================
 [ESPAÑOL] BORRADOR TELEGRAMA ASTRONÓMICO (ATel) - ESTACIÓN MAGALLANES
 ======================================================================
-TEMA: Descubrimiento/recuperación automatizada de candidato a {tipo_evento.upper()} ({nombre_evento})
-OBSERVADORES: Pipeline Automatizado (Estación Magallanes, Punta Arenas, Chile)
+TEMA: Análisis Estación Magallanes: Candidato a {tipo_evento.upper()} ({nombre_evento})
+OBSERVADORES: Estación Magallanes (Punta Arenas, Chile) - AAVSO: ECDA
 
-Reportamos la detección algorítmica de un candidato a {tipo_evento.upper()}
+Reportamos la evaluación física y fotométrica de un candidato a {tipo_evento.upper()}
 ubicado en la entidad anfitriona {galaxia} (z = {z_str}).
 
 [1] INFORMACIÓN DEL OBJETIVO
@@ -114,13 +117,17 @@ ubicado en la entidad anfitriona {galaxia} (z = {z_str}).
 * Acción Requerida      : SEGUIMIENTO ESPECTROSCÓPICO URGENTE
 * Objetivo Científico   : {goal_es}
 
+* NOTA: Este transitorio fue alertado inicialmente por un broker IA y posteriormente
+confirmado/reclasificado mediante el filtro de Análisis de la Estación Magallanes, 
+detectando desviaciones significativas en su línea base de luminosidad histórica.
+
 ----------------------------------------------------------------------
 [ENGLISH] ASTRONOMER'S TELEGRAM (ATel) DRAFT - MAGALLANES STATION
 ----------------------------------------------------------------------
-SUBJECT: Automated discovery/recovery of {tipo_evento.upper()} candidate {nombre_evento}
-OBSERVERS: Automated Pipeline (Magallanes Station, Punta Arenas, Chile)
+SUBJECT: Magallanes Station Analysis: {tipo_evento.upper()} candidate {nombre_evento}
+OBSERVERS: Magallanes Station (Punta Arenas, Chile) - AAVSO: ECDA
 
-We report the automated algorithmic detection of a highly probable {tipo_evento.upper()} candidate 
+We report the physical and photometric evaluation of a highly probable {tipo_evento.upper()} candidate 
 located in the host entity {galaxia} (z = {z_str}). 
 
 [1] TARGET INFORMATION
@@ -133,10 +140,11 @@ located in the host entity {galaxia} (z = {z_str}).
 * Requested Action      : URGENT SPECTROSCOPIC FOLLOW-UP
 * Scientific Goal       : {goal_en}
 
-This transient was identified utilizing algorithmic broker pipelines. 
-Photometric light curve data indicates a significant deviation from the historical baseline.
+* NOTE: This transient was initially alerted by an AI broker and subsequently 
+confirmed/reclassified through the Magallanes Station Analysis filter, which 
+detected significant deviations from its historical luminosity baseline.
 
-Magallanes Station Automated Alert System
+Magallanes Station Automated Alert System | AAVSO: ECDA
 ======================================================================"""
         ruta_txt = f"alertas_comunidad/ALERTA_ATEL_{nombre_archivo}.txt"
         

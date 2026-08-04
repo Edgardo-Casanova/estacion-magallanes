@@ -183,10 +183,8 @@ def consultar_tns_sur(mjd_reciente, client):
     TNS_API_KEY = os.getenv("TNS_API_KEY")
     headers = {'User-Agent': f'tns_marker{{"tns_id":{TNS_BOT_ID}, "type":"bot", "name":"Magallanes_Bot"}}'}
 
-    # Cargar la memoria inquebrantable
     supernovas_procesadas = leer_memoria_tns()
 
-    # Lógica táctica: Forzamos a la IAU a invertir el catálogo (los más nuevos primero)
     payload = {"api_key": TNS_API_KEY, "data": json.dumps({
         "dec_range": "-90,0", 
         "unclassified_at": 0, 
@@ -212,7 +210,6 @@ def consultar_tns_sur(mjd_reciente, client):
                 os.makedirs('data', exist_ok=True)
                 os.makedirs('alertas_comunidad', exist_ok=True)
                 
-                # Ordenar para procesar desde la más reciente y tomar una ventana segura (últimas 20)
                 lista_eventos = sorted(lista_eventos, key=lambda x: str(x.get('objname', '')), reverse=True)[:20]
                 
                 for evento in lista_eventos:
@@ -223,10 +220,6 @@ def consultar_tns_sur(mjd_reciente, client):
                         
                         id_evento = f"{prefix} {objname}".strip()
                         
-                        # =========================================================
-                        # EL ESCUDO DEL LIBRO MAYOR (INDISPENSABLE)
-                        # Compara directo con la memoria, no importa si se purgó el .txt
-                        # =========================================================
                         if id_evento in supernovas_procesadas:
                             continue
                             
@@ -315,7 +308,6 @@ Red de Origen: TNS_GLOBAL
 
                         registrar_log(f"Procesamiento completo y blindado para: {id_evento}", "TNS_GLOBAL")
                         
-                        # Anotar permanentemente en el libro mayor
                         guardar_en_memoria_tns(id_evento)
                         time.sleep(2.5)
 
@@ -338,7 +330,6 @@ def main():
         registrar_log("\n" + "="*50, current_survey)
         registrar_log(f"APUNTANDO TELESCOPIO A RED: {current_survey}", current_survey)
         
-        # MODO PRODUCCIÓN: Mantener la ventana acotada
         rango_mjd = [mjd_reciente - 0.2, mjd_reciente + 5.0]
 
         filtros = {"lastmjd": rango_mjd, "order_by": "lastmjd", "order_mode": "DESC", "page_size": 1500}
@@ -352,14 +343,10 @@ def main():
             total_alertas = len(candidatos)
 
             for index, fila in candidatos.iterrows():
-                # BARRA DE PROGRESO Y RESPIRACIÓN DE API
                 if index % 50 == 0 and index > 0:
                     registrar_log(f"   -> Procesadas {index} de {total_alertas} alertas...", current_survey)
                 time.sleep(0.05)
                 
-                # ========================================================
-                # ESCUDO ANTI-DUPLICADOS (ALeRCE) - MODO TURBO
-                # ========================================================
                 if os.path.exists(f"data/REPORTE_ALERTA_{fila['oid']}.txt"):
                     continue
                 
@@ -371,14 +358,102 @@ def main():
                     clase_ia_final = mejor_prediccion['class_name']
                     probabilidad = mejor_prediccion['probability']
                     
-                    # FILTRO ESTRICTO DE TAXONOMÍA
                     if clase_ia_final in target_classes and probabilidad > 0.60:
                         
                         det = client.query_detections(oid=fila['oid'], format='pandas')
+                        det = det.dropna(subset=['magpsf', 'mjd'])
                         if det.empty or len(det) < 2: continue 
                             
                         coordenadas = SkyCoord(ra=fila['meanra']*u.degree, dec=fila['meandec']*u.degree, frame='icrs')
-                        tipo_evento_final = determinar_tipo_evento(clase_ia_final)
+                        
+                        # ====================================================
+                        # LÓGICA FÍSICA Y RECLASIFICACIÓN ESTACIÓN MAGALLANES
+                        # ====================================================
+                        mjd_min, mjd_max = det['mjd'].min(), det['mjd'].max()
+                        edad_dias = mjd_max - mjd_min
+                        mag_min, mag_max = det['magpsf'].min(), det['magpsf'].max()
+                        amplitud_mag = mag_max - mag_min
+
+                        mjd_pico = det.loc[det['magpsf'].idxmin(), 'mjd']
+                        dias_al_pico = mjd_pico - mjd_min
+                        if dias_al_pico <= 0: dias_al_pico = 1.0
+                        tasa_acel = amplitud_mag / dias_al_pico
+
+                        latitud_b = coordenadas.galactic.b.degree
+                        en_plano = abs(latitud_b) <= 10.0
+
+                        oid_str = str(fila['oid'])
+                        if oid_str.startswith("ZTF"):
+                            try:
+                                año_descubrimiento = 2000 + int(oid_str[3:5])
+                            except ValueError:
+                                año_descubrimiento = 2026
+                        else:
+                            año_descubrimiento = 2026 
+
+                        es_viejo = (año_descubrimiento < 2025) or (edad_dias > 400)
+
+                        # Protocolo de Inmunidad por Salto Base (Delta de Luminosidad)
+                        inmunidad_concedida = False
+                        salto_luminosidad_delta = 0.0
+                        motivo_inmunidad = ""
+                        
+                        if es_viejo and edad_dias > 60:
+                            recientes = det[det['mjd'] >= mjd_max - 60]
+                            antiguas = det[det['mjd'] < mjd_max - 60]
+                            
+                            if not recientes.empty and not antiguas.empty:
+                                linea_base_historica = antiguas['magpsf'].median()
+                                pico_brillo_reciente = recientes['magpsf'].min()
+                                salto_luminosidad_delta = linea_base_historica - pico_brillo_reciente
+                                
+                                # Si el salto supera 1.5 magnitudes, se asume explosión sobre galaxia antigua
+                                if salto_luminosidad_delta > 1.5:
+                                    inmunidad_concedida = True
+                                    motivo_inmunidad = "(Brote sobre anfitrión antiguo)"
+
+                        # Análisis Central
+                        analisis_magallanes = "DESCONOCIDO"
+
+                        if inmunidad_concedida:
+                            if en_plano:
+                                analisis_magallanes = f"VARIABLE CATACLÍSMICA {motivo_inmunidad}"
+                                tipo_evento_final = "nova"
+                            else:
+                                analisis_magallanes = f"SUPERNOVA CONFIRMADA {motivo_inmunidad}"
+                                tipo_evento_final = "supernova"
+                        elif edad_dias < 3.0 and tasa_acel > 1.0 and not es_viejo:
+                            analisis_magallanes = "FLARE (Enana M)"
+                            tipo_evento_final = "flare"
+                        elif es_viejo:
+                            if tasa_acel < 0.1:
+                                analisis_magallanes = "AGN / CUÁSAR"
+                                tipo_evento_final = "agn"
+                            else:
+                                if en_plano:
+                                    analisis_magallanes = "VARIABLE CATACLÍSMICA"
+                                    tipo_evento_final = "nova"
+                                else:
+                                    analisis_magallanes = "BLAZAR"
+                                    tipo_evento_final = "agn"
+                        else:
+                            if en_plano:
+                                analisis_magallanes = "VARIABLE CATACLÍSMICA (Local)"
+                                tipo_evento_final = "nova"
+                            elif amplitud_mag >= 0.5:
+                                analisis_magallanes = "SUPERNOVA CONFIRMADA"
+                                tipo_evento_final = "supernova"
+                            else:
+                                analisis_magallanes = "RUIDO / ARTEFACTO"
+
+                        if analisis_magallanes == "RUIDO / ARTEFACTO":
+                            registrar_log(f"   [X] {oid_str} vetado (Ruido sin amplitud).", current_survey)
+                            continue 
+                            
+                        if "SUPERNOVA" not in analisis_magallanes and ("SN" in clase_ia_final.upper() or "SUPERNOVA" in clase_ia_final.upper()):
+                            registrar_log(f"   [⚠️] RECLASIFICADO: De '{clase_ia_final}' a '{analisis_magallanes}'", current_survey)
+
+                        # ====================================================
                         
                         det = det.sort_values(by='mjd')
                         salto_maximo = 0
@@ -436,7 +511,8 @@ def main():
                             f"Aumento Ref: {salto_maximo:.2f} mag\n"
                             f"Fecha (UTC): {ultima_fecha.strftime('%Y-%m-%d %H:%M')}\n"
                             "------------------------\n"
-                            f"Validación IA: {clase_ia_final} ({probabilidad*100:.1f}%)"
+                            f"Validación IA: {clase_ia_final} ({probabilidad*100:.1f}%)\n"
+                            f"Estación Magallanes: {analisis_magallanes}"
                         )
                         ax2.text(0.05, 0.95, info_text, transform=ax2.transAxes, fontsize=10, verticalalignment='top', color='white', bbox=dict(boxstyle='round,pad=0.6', facecolor='#2a2a2a', alpha=0.9, edgecolor='#555555'))
 
@@ -455,6 +531,10 @@ ID de Alerta: {fila['oid']}
 Coordenadas (RA / Dec): {coordenadas.ra.deg:.5f} / {coordenadas.dec.deg:.5f}
 Catálogo SIMBAD: {nombre_real}
 Clasificación IA (ALeRCE): {clase_ia_final} (Confianza: {probabilidad*100:.1f}%)
+Reclasificación (Análisis Estación Magallanes): {analisis_magallanes}
+Edad de Evento Histórico: {edad_dias:.1f} días
+Salto de Luminosidad (Delta): {salto_luminosidad_delta:.2f} magnitudes
+Tasa de Aceleración: {tasa_acel:.3f} mag/día
 Red de Origen: {current_survey}
 ======================================================================"""
                         
@@ -462,7 +542,7 @@ Red de Origen: {current_survey}
                             
                         ejecutar_pipeline_magallanes(coordenadas.ra.deg, coordenadas.dec.deg, fila['oid'], tipo_evento_final)
                         
-                        registrar_log(f"Candidato {fila['oid']} procesado exitosamente ({clase_ia_final}).", current_survey)
+                        registrar_log(f"Candidato {fila['oid']} procesado exitosamente ({analisis_magallanes}).", current_survey)
 
                 except Exception: pass
         except Exception: pass

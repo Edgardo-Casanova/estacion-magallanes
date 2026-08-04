@@ -154,13 +154,13 @@ def generar_circular_estelar_local(ra, dec, id_evento, tiene_planetas, es_enana_
         else:
             f.write(f"    ESTADO QUÍMICO: Sin línea de emisión significativa en H-alfa.\n")
 
-        f.write("\n[4] RESOLUCIÓN DE SEGUIMIENTO\n")
+        f.write("\n[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN DE SEGUIMIENTO)\n")
         if tipo_evento == "flare" and tiene_planetas:
-            f.write("    DICTAMEN    : MÁXIMA PRIORIDAD ESPACIAL\n")
-            f.write("    INSTRUMENTO : Telescopio Espacial James Webb (NIRSpec / MIRI).\n")
+            f.write("    PRIORIDAD   : MÁXIMA PRIORIDAD ESPACIAL\n")
+            f.write("    INSTRUMENTO : Recomendado para Telescopio Espacial James Webb (NIRSpec / MIRI).\n")
         else:
-            f.write("    DICTAMEN    : PRIORIDAD ESTÁNDAR DE MONITOREO\n")
-            f.write("    INSTRUMENTO : Telescopios terrestres y fotometría continua.\n")
+            f.write("    PRIORIDAD   : PRIORIDAD ESTÁNDAR DE MONITOREO\n")
+            f.write("    INSTRUMENTO : Recomendado para telescopios terrestres y fotometría continua.\n")
             
         f.write("\n=================================================================\n")
     return ruta_archivo
@@ -172,7 +172,7 @@ def evaluar_estelar_local(tiene_planetas, es_enana_roja, id_evento, ra, dec, pla
 
 
 # =====================================================================
-# VÍA 2 y 3: TRANSITORIOS EXTRAGALÁCTICOS (Supernovas) Y AGN
+# VÍA 2 y 3: TRANSITORIOS EXTRAGALÁCTICOS (Supernovas, AGN, Blazares)
 # =====================================================================
 def buscar_galaxia_anfitriona(coordenadas):
     print(f"\n[1/3] 🌌 Buscando Galaxia Anfitriona / Entorno Extragaláctico (SIMBAD otypes.htx)...")
@@ -247,14 +247,18 @@ def generar_circular_extragalactica(ra, dec, id_evento, galaxia, redshift, tipo_
         f.write(f"EVENTO DETECTADO : {id_evento} ({tipo_evento.upper()})\n")
         f.write(f"COORDENADAS ICRS : RA {ra:.5f} | Dec {dec:.5f}\n")
         f.write("-----------------------------------------------------------------\n\n")
+        
         f.write("[1] ENTORNO COSMOLÓGICO\n")
         if tipo_evento == "agn":
             f.write(f"    OBJETO CENTRAL     : {galaxia} (Núcleo Activo)\n")
+        elif tipo_evento == "blazar":
+            f.write(f"    OBJETO CENTRAL     : {galaxia} (Blazar / Chorro Relativista)\n")
         else:
             f.write(f"    GALAXIA ANFITRIONA : {galaxia}\n")
+            
         f.write(f"    REDSHIFT (z)       : {z_str}\n")
-        f.write("\n[2] RESOLUCIÓN DE SEGUIMIENTO\n")
-        f.write("    DICTAMEN    : ALTA PRIORIDAD ESPECTROSCÓPICA\n")
+        f.write("\n[2] EVALUACIÓN MAGALLANES (RECOMENDACIÓN DE SEGUIMIENTO)\n")
+        f.write("    PRIORIDAD   : ALTA PRIORIDAD ESPECTROSCÓPICA\n")
         f.write("    INSTRUMENTO : Observatorios masivos terrestres (VLT / Gemini).\n")
         f.write("    ACCIÓN      : Obtener espectro óptico profundo para confirmación física.\n")
         f.write("\n=================================================================\n")
@@ -392,10 +396,10 @@ def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_
                 pass
                 
         # ---------------------------------------------------------
-        # VÍA 3: NÚCLEOS GALÁCTICOS ACTIVOS (Cuásares / AGN)
+        # VÍA 3: NÚCLEOS GALÁCTICOS ACTIVOS (Cuásares / AGN / Blazares)
         # ---------------------------------------------------------
-        elif tipo_evento == "agn":
-            print("\n➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO (Núcleo Galáctico Activo)")
+        elif tipo_evento in ["agn", "blazar"]:
+            print(f"\n➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO ({tipo_evento.upper()})")
             objeto_agn, redshift = buscar_galaxia_anfitriona(coordenadas)
             _ = buscar_espectro_y_fotometria(coordenadas, id_limpio)
             
@@ -419,8 +423,8 @@ if __name__ == "__main__":
     try:
         ra_input = float(input("\n➤ Ascensión Recta (RA) : "))
         dec_input = float(input("➤ Declinación (Dec)    : "))
-        tipo_input = input("➤ Tipo (flare/nova/supernova/agn): ").strip().lower()
-        if tipo_input not in ["flare", "nova", "supernova", "agn"]: tipo_input = "flare"
+        tipo_input = input("➤ Tipo (flare/nova/supernova/agn/blazar): ").strip().lower()
+        if tipo_input not in ["flare", "nova", "supernova", "agn", "blazar"]: tipo_input = "flare"
         ejecutar_pipeline_magallanes(ra_input, dec_input, f"Manual_{tipo_input.upper()}", tipo_evento=tipo_input)
     except ValueError:
         print("\n[!] Error: Formato inválido.")
