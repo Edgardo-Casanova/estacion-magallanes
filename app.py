@@ -214,16 +214,16 @@ if vista == "Dashboard Principal (Telemetría)":
     
     if ra_list:
         datos_plotly = {
-            "Supernova Ia": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#00ffff"},
-            "Supernova II / Ibc": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#bf00ff"},
-            "Supernova Superluminosa (SLSN)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#ff00ff"},
-            "Supernova (Sin clasificar)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#00cccc"},
-            "Nova (Clásica)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#39ff14"},
-            "Variable Cataclísmica (CV)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#00ff00"},
-            "Cuásar (QSO)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#ffff00"},
-            "Blazar": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#ff6600"},
-            "AGN (Genérico)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#ffcc00"},
-            "Flares (Enanas Rojas)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#ff0055"}
+            "Supernova Ia": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#00FFFF", "symbol": "circle"},
+            "Supernova II / Ibc": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#39FF14", "symbol": "square"},
+            "Supernova Superluminosa (SLSN)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#FFD700", "symbol": "diamond"},
+            "Supernova (Sin clasificar)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#FF00FF", "symbol": "cross"},
+            "Nova (Clásica)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#00BFFF", "symbol": "star"},
+            "Variable Cataclísmica (CV)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#00FA9A", "symbol": "star"},
+            "Cuásar (QSO)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#FF4500", "symbol": "triangle-up"},
+            "Blazar": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#FF6600", "symbol": "triangle-down"},
+            "AGN (Genérico)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#FF9900", "symbol": "triangle-right"},
+            "Flares (Enanas Rojas)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#FF0055", "symbol": "hexagon"}
         }
 
         for r, d, n, t in zip(ra_list, dec_list, nombres, tipos):
@@ -266,7 +266,7 @@ if vista == "Dashboard Principal (Telemetría)":
                     text=textos_hover,
                     hoverinfo='text',
                     marker=dict(
-                        symbol='star',
+                        symbol=datos.get("symbol", "star"),
                         size=14,
                         color=datos["color"],
                         opacity=0.75,
