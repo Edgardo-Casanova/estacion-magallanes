@@ -1885,3 +1885,41 @@ Hemisferio: Global | Radar de Supernovas de la IAU
 ==================================================
 
 === PATRULLAJE COMPLETADO. MARCADOR DE TIEMPO GUARDADO: 61256.75432 ===
+[main 4be090e] Patrullaje automatico completado: 2026-08-04 18:06
+ 25 files changed, 508 insertions(+), 1 deletion(-)
+ create mode 100644 alertas/CIRCULAR_ZTF17aadcbci.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aaaarks.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18aaeorsf.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18acnjzuw.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF17aadcbci.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aaaarks.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18aaeorsf.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18acnjzuw.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF17aadcbci.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aaaarks.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18aaeorsf.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18acnjzuw.txt
+ create mode 100644 data/curva_luz_ZTF17aadcbci.png
+ create mode 100644 data/curva_luz_ZTF18aaaarks.png
+ create mode 100644 data/curva_luz_ZTF18aaeorsf.png
+ create mode 100644 data/curva_luz_ZTF18acnjzuw.png
+ create mode 100644 data/espectro_sed_ZTF17aadcbci.png
+ create mode 100644 data/espectro_sed_ZTF18aaaarks.png
+ create mode 100644 data/espectro_sed_ZTF18aaeorsf.png
+ create mode 100644 data/espectro_sed_ZTF18acnjzuw.png
+To https://github.com/Edgardo-Casanova/estacion-magallanes.git
+   6c36816..4be090e  main -> main
+=== INICIANDO CAZADOR MULTIPROPÓSITO v11 (Radar Continuo) ===
+➤ Buscando alertas activas desde: 2026-08-04 19:12:00 UTC (MJD: 61256.8000)
+
+==================================================
+APUNTANDO TELESCOPIO A RED: ZTF
+
+==================================================
+APUNTANDO TELESCOPIO A RED: LSST
+==================================================
+APUNTANDO TELESCOPIO A RED: TNS_GLOBAL
+Hemisferio: Global | Radar de Supernovas de la IAU
+==================================================
+
+=== PATRULLAJE COMPLETADO. MARCADOR DE TIEMPO GUARDADO: 61256.78151 ===
