@@ -213,8 +213,8 @@ def consultar_tns_sur(mjd_reciente, client):
                 os.makedirs('data', exist_ok=True)
                 os.makedirs('alertas_comunidad', exist_ok=True)
                 
-                # Aumentamos a 100 eventos para abarcar tranquilamente el registro retroactivo completo de 48 horas
-                lista_eventos = sorted(lista_eventos, key=lambda x: str(x.get('objname', '')), reverse=True)[:100]
+                # Límite ajustado a 20 eventos, cantidad suficiente para cubrir el patrullaje automático de cada 1 hora
+                lista_eventos = sorted(lista_eventos, key=lambda x: str(x.get('objname', '')), reverse=True)[:20]
                 
                 for evento in lista_eventos:
                     if isinstance(evento, dict):
