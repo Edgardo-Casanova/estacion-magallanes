@@ -162,9 +162,13 @@ def graficar_reporte_tns(det, id_evento, red_descubridora, ra_float, dec_float):
     
     estado_datos = f"Mediciones: {len(det)}" if det is not None and not det.empty else "Datos: TNS Restringido"
     info_text = f"ESTADÍSTICAS DEL EVENTO (SUPERNOVA)\n------------------------\nID Alerta: {id_evento}\nRed Base: {red_descubridora}\n{estado_datos}\nValidación: Transient Name Server (IAU)"
-    ax2.text(0.05, 0.95, info_text, transform=ax2.transAxes, fontsize=10, verticalalignment='top', color='white', bbox=dict(boxstyle='round,pad=0.6', facecolor='#2a2a2a', alpha=0.9, edgecolor='#555555'))
     
-    plt.tight_layout(rect=[0, 0.05, 1, 0.92])
+    # NUEVO ANCLAJE: Fuera del área de coordenadas (hacia la derecha) para no tapar la estrella
+    ax2.text(1.05, 1.0, info_text, transform=ax2.transAxes, fontsize=10, verticalalignment='top', horizontalalignment='left', color='white', bbox=dict(boxstyle='round,pad=0.6', facecolor='#2a2a2a', alpha=0.9, edgecolor='#555555'))
+    
+    # Ajustar márgenes para darle espacio al cuadro de texto a la derecha
+    plt.tight_layout(rect=[0, 0.05, 0.82, 0.92])
+    
     plt.suptitle(f"Reporte Astronómico: SUPERNOVA", fontsize=20, color='white', fontweight='bold', y=0.98)
     fig.text(0.5, 0.01, f"Estación Magallanes | Analizado el {datetime.now(timezone.utc).strftime('%Y-%m-%d')} | Red TNS", ha='center', color='gray', fontsize=11)
     
@@ -176,7 +180,7 @@ def graficar_reporte_tns(det, id_evento, red_descubridora, ra_float, dec_float):
 def consultar_tns_sur(mjd_reciente, client):
     registrar_log("="*50, "TNS_GLOBAL")
     registrar_log("APUNTANDO TELESCOPIO A RED: TNS_GLOBAL", "TNS_GLOBAL")
-    registrar_log("Hemisferio: Sur (ASAS-SN / ATLAS) | Radar de Supernovas de la IAU", "TNS_GLOBAL")
+    registrar_log("Hemisferio: Global | Radar de Supernovas de la IAU", "TNS_GLOBAL")
     registrar_log("="*50, "TNS_GLOBAL")
 
     TNS_BOT_ID = os.getenv("TNS_BOT_ID")
@@ -185,12 +189,11 @@ def consultar_tns_sur(mjd_reciente, client):
 
     supernovas_procesadas = leer_memoria_tns()
 
+    # Payload adaptado para barrer a nivel global y filtrar por fecha de clasificación (Time received)
     payload = {"api_key": TNS_API_KEY, "data": json.dumps({
-        "dec_range": "-90,0", 
-        "unclassified_at": 0, 
         "classified_sne": 1,
         "order": "desc",
-        "order_by": "discoverydate"
+        "order_by": "public_timestamp"
     })}
 
     try:
@@ -210,7 +213,8 @@ def consultar_tns_sur(mjd_reciente, client):
                 os.makedirs('data', exist_ok=True)
                 os.makedirs('alertas_comunidad', exist_ok=True)
                 
-                lista_eventos = sorted(lista_eventos, key=lambda x: str(x.get('objname', '')), reverse=True)[:20]
+                # Aumentamos a 100 eventos para abarcar tranquilamente el registro retroactivo completo de 48 horas
+                lista_eventos = sorted(lista_eventos, key=lambda x: str(x.get('objname', '')), reverse=True)[:100]
                 
                 for evento in lista_eventos:
                     if isinstance(evento, dict):
@@ -236,11 +240,25 @@ def consultar_tns_sur(mjd_reciente, client):
                                 clasificacion = (datos_obj.get('object_type', {}) or {}).get('name', 'SUPERNOVA') if isinstance(datos_obj.get('object_type'), dict) else 'SUPERNOVA'
                                 fecha_descubrimiento, mag_descubrimiento = datos_obj.get('discoverydate', 'Desconocida'), datos_obj.get('discoverymag', 'Desconocida')
                                 descubridor = str((datos_obj.get('discovery_data_source', {}) or {}).get('group_name', 'Desconocido')) if isinstance(datos_obj.get('discovery_data_source'), dict) else 'Desconocido'
+                                internal_names = str(datos_obj.get('internal_names') or '')
                             else:
                                 raise Exception("Fallo en la consulta profunda TNS.")
                         except Exception as e:
                             registrar_log(f"   [-] Error extrayendo detalles: {e}", "TNS_GLOBAL")
                             continue
+
+                        # --- UPGRADE HÍBRIDO (Reemplazo de archivo ZTF provisional) ---
+                        for fname in os.listdir('data'):
+                            if fname.startswith('REPORTE_ALERTA_') and fname.endswith('.txt'):
+                                oid_local = fname.replace('REPORTE_ALERTA_', '').replace('.txt', '')
+                                if oid_local in internal_names and oid_local.strip() != "":
+                                    registrar_log(f"   [UPGRADE] Candidato previo {oid_local} promovido a oficial ({id_evento}).", "TNS_GLOBAL")
+                                    try:
+                                        os.remove(f"data/{fname}")
+                                        if os.path.exists(f"data/curva_luz_{oid_local}.png"):
+                                            os.remove(f"data/curva_luz_{oid_local}.png")
+                                    except Exception: pass
+                        # -------------------------------------------------------------
                         
                         rango_mpc, rango_mly = calcular_distancia_hubble(redshift)
                         fecha_reporte_utc = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
@@ -393,7 +411,7 @@ def main():
 
                         es_viejo = (año_descubrimiento < 2025) or (edad_dias > 400)
 
-                        # Protocolo de Inmunidad por Salto Base (Delta de Luminosidad)
+                        # Protocolo de Inmunidad por Salto Base
                         inmunidad_concedida = False
                         salto_luminosidad_delta = 0.0
                         motivo_inmunidad = ""
@@ -407,50 +425,49 @@ def main():
                                 pico_brillo_reciente = recientes['magpsf'].min()
                                 salto_luminosidad_delta = linea_base_historica - pico_brillo_reciente
                                 
-                                # Si el salto supera 1.5 magnitudes, se asume explosión sobre galaxia antigua
                                 if salto_luminosidad_delta > 1.5:
                                     inmunidad_concedida = True
                                     motivo_inmunidad = "(Brote sobre anfitrión antiguo)"
 
-                        # Análisis Central
+                        # Análisis Central (Nomenclatura Corregida)
                         analisis_magallanes = "DESCONOCIDO"
 
                         if inmunidad_concedida:
                             if en_plano:
-                                analisis_magallanes = f"VARIABLE CATACLÍSMICA {motivo_inmunidad}"
+                                analisis_magallanes = f"Variable Cataclísmica {motivo_inmunidad}"
                                 tipo_evento_final = "nova"
                             else:
-                                analisis_magallanes = f"SUPERNOVA CONFIRMADA {motivo_inmunidad}"
+                                analisis_magallanes = f"Candidata {motivo_inmunidad} (Esperando confirmación TNS)"
                                 tipo_evento_final = "supernova"
                         elif edad_dias < 3.0 and tasa_acel > 1.0 and not es_viejo:
-                            analisis_magallanes = "FLARE (Enana M)"
+                            analisis_magallanes = "Flare (Enana M)"
                             tipo_evento_final = "flare"
                         elif es_viejo:
                             if tasa_acel < 0.1:
-                                analisis_magallanes = "AGN / CUÁSAR"
+                                analisis_magallanes = "AGN / Cuásar"
                                 tipo_evento_final = "agn"
                             else:
                                 if en_plano:
-                                    analisis_magallanes = "VARIABLE CATACLÍSMICA"
+                                    analisis_magallanes = "Variable Cataclísmica"
                                     tipo_evento_final = "nova"
                                 else:
-                                    analisis_magallanes = "BLAZAR"
+                                    analisis_magallanes = "Blazar"
                                     tipo_evento_final = "agn"
                         else:
                             if en_plano:
-                                analisis_magallanes = "VARIABLE CATACLÍSMICA (Local)"
+                                analisis_magallanes = "Variable Cataclísmica (Local)"
                                 tipo_evento_final = "nova"
                             elif amplitud_mag >= 0.5:
-                                analisis_magallanes = "SUPERNOVA CONFIRMADA"
+                                analisis_magallanes = "Candidata (Esperando confirmación TNS)"
                                 tipo_evento_final = "supernova"
                             else:
-                                analisis_magallanes = "RUIDO / ARTEFACTO"
+                                analisis_magallanes = "Ruido / Artefacto"
 
-                        if analisis_magallanes == "RUIDO / ARTEFACTO":
+                        if analisis_magallanes == "Ruido / Artefacto":
                             registrar_log(f"   [X] {oid_str} vetado (Ruido sin amplitud).", current_survey)
                             continue 
                             
-                        if "SUPERNOVA" not in analisis_magallanes and ("SN" in clase_ia_final.upper() or "SUPERNOVA" in clase_ia_final.upper()):
+                        if "Candidata" not in analisis_magallanes and ("SN" in clase_ia_final.upper() or "SUPERNOVA" in clase_ia_final.upper()):
                             registrar_log(f"   [⚠️] RECLASIFICADO: De '{clase_ia_final}' a '{analisis_magallanes}'", current_survey)
 
                         # ====================================================
@@ -514,9 +531,13 @@ def main():
                             f"Validación IA: {clase_ia_final} ({probabilidad*100:.1f}%)\n"
                             f"Estación Magallanes: {analisis_magallanes}"
                         )
-                        ax2.text(0.05, 0.95, info_text, transform=ax2.transAxes, fontsize=10, verticalalignment='top', color='white', bbox=dict(boxstyle='round,pad=0.6', facecolor='#2a2a2a', alpha=0.9, edgecolor='#555555'))
+                        
+                        # NUEVO ANCLAJE: Fuera del área de coordenadas (hacia la derecha) para no tapar la estrella
+                        ax2.text(1.05, 1.0, info_text, transform=ax2.transAxes, fontsize=10, verticalalignment='top', horizontalalignment='left', color='white', bbox=dict(boxstyle='round,pad=0.6', facecolor='#2a2a2a', alpha=0.9, edgecolor='#555555'))
 
-                        plt.tight_layout(rect=[0, 0.05, 1, 0.92])
+                        # Ajustar márgenes para darle espacio al cuadro de texto a la derecha
+                        plt.tight_layout(rect=[0, 0.05, 0.82, 0.92])
+                        
                         plt.suptitle(f"Reporte Astronómico: {tipo_evento_final.upper()}", fontsize=20, color='white', fontweight='bold', y=0.98)
                         fig.text(0.5, 0.01, f"Estación Magallanes | Analizado el {datetime.now(timezone.utc).strftime('%Y-%m-%d')} | Red {current_survey}", ha='center', color='gray', fontsize=11)
                         
