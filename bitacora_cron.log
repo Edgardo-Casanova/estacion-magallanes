@@ -1630,3 +1630,112 @@ Hemisferio: Global | Radar de Supernovas de la IAU
 ==================================================
 
 === PATRULLAJE COMPLETADO. MARCADOR DE TIEMPO GUARDADO: 61256.67131 ===
+[main de9d43b] Patrullaje automatico completado: 2026-08-04 16:06
+ 70 files changed, 1562 insertions(+), 1 deletion(-)
+ create mode 100644 alertas/CIRCULAR_ZTF17aabwwho.txt
+ create mode 100644 alertas/CIRCULAR_ZTF17aaeeatd.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18admcaor.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18admjnfw.txt
+ create mode 100644 alertas/CIRCULAR_ZTF18admohws.txt
+ create mode 100644 alertas/CIRCULAR_ZTF19aawgbtl.txt
+ create mode 100644 alertas/CIRCULAR_ZTF19aayrhme.txt
+ create mode 100644 alertas/CIRCULAR_ZTF20abbjqut.txt
+ create mode 100644 alertas/CIRCULAR_ZTF20abcgkhd.txt
+ create mode 100644 alertas/CIRCULAR_ZTF20abcxlvc.txt
+ create mode 100644 alertas/CIRCULAR_ZTF20abpnlcq.txt
+ create mode 100644 alertas/CIRCULAR_ZTF22aasoqoj.txt
+ create mode 100644 alertas/CIRCULAR_ZTF23aaozhdf.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF17aabwwho.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF17aaeeatd.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18admcaor.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18admjnfw.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF18admohws.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF19aawgbtl.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF19aayrhme.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF20abbjqut.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF20abcgkhd.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF20abcxlvc.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF20abpnlcq.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF22aasoqoj.txt
+ create mode 100644 alertas_comunidad/ALERTA_ATEL_ZTF23aaozhdf.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF17aabwwho.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF17aaeeatd.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18admcaor.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18admjnfw.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF18admohws.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF19aawgbtl.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF19aayrhme.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF20abbjqut.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF20abcgkhd.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF20abcxlvc.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF20abpnlcq.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF22aasoqoj.txt
+ create mode 100644 data/REPORTE_ALERTA_ZTF23aaozhdf.txt
+ create mode 100644 data/curva_luz_ZTF17aabwwho.png
+ create mode 100644 data/curva_luz_ZTF17aaeeatd.png
+ create mode 100644 data/curva_luz_ZTF18admcaor.png
+ create mode 100644 data/curva_luz_ZTF18admjnfw.png
+ create mode 100644 data/curva_luz_ZTF18admohws.png
+ create mode 100644 data/curva_luz_ZTF19aawgbtl.png
+ create mode 100644 data/curva_luz_ZTF19aayrhme.png
+ create mode 100644 data/curva_luz_ZTF20abbjqut.png
+ create mode 100644 data/curva_luz_ZTF20abcgkhd.png
+ create mode 100644 data/curva_luz_ZTF20abcxlvc.png
+ create mode 100644 data/curva_luz_ZTF20abpnlcq.png
+ create mode 100644 data/curva_luz_ZTF22aasoqoj.png
+ create mode 100644 data/curva_luz_ZTF23aaozhdf.png
+ create mode 100644 data/espectro_sed_ZTF17aabwwho.png
+ create mode 100644 data/espectro_sed_ZTF17aaeeatd.png
+ create mode 100644 data/espectro_sed_ZTF18admcaor.png
+ create mode 100644 data/espectro_sed_ZTF18admjnfw.png
+ create mode 100644 data/espectro_sed_ZTF18admohws.png
+ create mode 100644 data/espectro_sed_ZTF19aawgbtl.png
+ create mode 100644 data/espectro_sed_ZTF19aayrhme.png
+ create mode 100644 data/espectro_sed_ZTF20abbjqut.png
+ create mode 100644 data/espectro_sed_ZTF20abcgkhd.png
+ create mode 100644 data/espectro_sed_ZTF20abcxlvc.png
+ create mode 100644 data/espectro_sed_ZTF20abpnlcq.png
+ create mode 100644 data/espectro_sed_ZTF22aasoqoj.png
+ create mode 100644 data/espectro_sed_ZTF23aaozhdf.png
+To https://github.com/Edgardo-Casanova/estacion-magallanes.git
+   dc8ac58..de9d43b  main -> main
+=== INICIANDO CAZADOR MULTIPROPÓSITO v11 (Radar Continuo) ===
+➤ Buscando alertas activas desde: 2026-08-04 16:48:00 UTC (MJD: 61256.7000)
+
+==================================================
+APUNTANDO TELESCOPIO A RED: ZTF
+
+[ESTACIÓN MAGALLANES] Recibida alerta automática para: ZTF17aabvzfd
+➤ Coordenadas ICRS : RA 98.20543 | Dec 45.49489
+
+➤ INICIANDO PROTOCOLO EXTRAGALÁCTICO (AGN)
+
+[1/3] 🌌 Buscando Galaxia Anfitriona / Entorno Extragaláctico (SIMBAD otypes.htx)...
+   [-] No se identificó una entidad principal en las cercanías del evento.
+
+[2/X] 🌈 Iniciando análisis térmico / fotométrico global...
+   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...
+   [!] Catálogo fotométrico limitado. Generando perfil estándar...
+
+[3/3] 🔭 Evaluación de Seguimiento para AGN...
+   [+] Evento extragaláctico detectado en coordenadas RA 98.20543, Dec 45.49489.
+
+   [📝] DOCUMENTO GENERADO: Circular guardada en 'alertas/CIRCULAR_ZTF17aabvzfd.txt'
+
+[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA ZTF17aabvzfd (AGN)
+   [+] ¡Megáfono encendido! Telegrama/Alerta oficial generado en: alertas_comunidad/ALERTA_ATEL_ZTF17aabvzfd.txt
+
+=== PIPELINE AUTOMÁTICO DE LABORATORIO COMPLETADO ===
+Candidato ZTF17aabvzfd procesado exitosamente (AGN / Cuásar).
+   -> Procesadas 50 de 55 alertas...
+   [X] ZTF17aaaheof vetado por filtro científico: Variable Galáctica Lenta (Fuera de objetivo).
+   [X] ZTF17aadrhuz vetado por filtro científico: Variable Galáctica Lenta (Fuera de objetivo).
+
+==================================================
+APUNTANDO TELESCOPIO A RED: LSST
+==================================================
+APUNTANDO TELESCOPIO A RED: TNS_GLOBAL
+Hemisferio: Global | Radar de Supernovas de la IAU
+==================================================
+
+=== PATRULLAJE COMPLETADO. MARCADOR DE TIEMPO GUARDADO: 61256.69890 ===
