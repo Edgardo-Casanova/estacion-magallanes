@@ -429,7 +429,7 @@ def main():
                                     inmunidad_concedida = True
                                     motivo_inmunidad = "(Brote sobre anfitrión antiguo)"
 
-                        # Análisis Central (Nomenclatura Corregida)
+                        # Análisis Central (Nomenclatura Corregida y Filtro de Evitación)
                         analisis_magallanes = "DESCONOCIDO"
 
                         if inmunidad_concedida:
@@ -444,8 +444,13 @@ def main():
                             tipo_evento_final = "flare"
                         elif es_viejo:
                             if tasa_acel < 0.1:
-                                analisis_magallanes = "AGN / Cuásar"
-                                tipo_evento_final = "agn"
+                                # EL NUEVO ESCUDO: FILTRO DE LA ZONA DE EVITACIÓN
+                                if en_plano:
+                                    analisis_magallanes = "Variable Galáctica Lenta (Fuera de objetivo)"
+                                    tipo_evento_final = "descarte"
+                                else:
+                                    analisis_magallanes = "AGN / Cuásar"
+                                    tipo_evento_final = "agn"
                             else:
                                 if en_plano:
                                     analisis_magallanes = "Variable Cataclísmica"
@@ -462,9 +467,11 @@ def main():
                                 tipo_evento_final = "supernova"
                             else:
                                 analisis_magallanes = "Ruido / Artefacto"
+                                tipo_evento_final = "descarte"
 
-                        if analisis_magallanes == "Ruido / Artefacto":
-                            registrar_log(f"   [X] {oid_str} vetado (Ruido sin amplitud).", current_survey)
+                        # EL SILENCIADOR DE PUBLICACIÓN
+                        if analisis_magallanes in ["Ruido / Artefacto", "Variable Galáctica Lenta (Fuera de objetivo)"]:
+                            registrar_log(f"   [X] {oid_str} vetado por filtro científico: {analisis_magallanes}.", current_survey)
                             continue 
                             
                         if "Candidata" not in analisis_magallanes and ("SN" in clase_ia_final.upper() or "SUPERNOVA" in clase_ia_final.upper()):
