@@ -349,9 +349,9 @@ Red de Origen: TNS_GLOBAL
                         try:
                             z_val = float(redshift) if redshift else 0.0
                             # ==============================================================
-                            # 3: SILENCIADOR ACTIVO (MAÑANA QUÍTALE EL '#' A LA LÍNEA DE ABAJO)
+                            # 3: SILENCIADOR DESACTIVADO (MODO PRODUCCIÓN)
                             # ==============================================================
-                            # generar_alerta_comunidad(id_evento, ra_float, dec_float, tipo_evento="supernova", extra_data={"galaxia": "Desconocida (Intergaláctica)", "redshift": z_val, "red_origen": "TNS_GLOBAL"})
+                            generar_alerta_comunidad(id_evento, ra_float, dec_float, tipo_evento="supernova", extra_data={"galaxia": "Desconocida (Intergaláctica)", "redshift": z_val, "red_origen": "TNS_GLOBAL"})
                         except Exception as e:
                             registrar_log(f"   [-] Error generando ATel para {id_evento}: {e}", "TNS_GLOBAL")
 
