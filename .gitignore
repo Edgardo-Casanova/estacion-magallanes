@@ -1,6 +1,20 @@
+# Entornos y caché
 venv/
 .env
 __pycache__/
+
+# Carpetas de datos locales (Resultados generados)
+alertas/
+alertas_comunidad/
+data/
+
+# Estado y memoria local (Cada entorno mantiene el suyo)
+bitacora_*.log
+memoria_tns.txt
+tracker_mjd.txt
+
+# Documentos y scripts de prueba
 Guia_Transitorios_Estelares.pdf
 Manual_General.pdf
 simulador.py
+verificar_distancia.py

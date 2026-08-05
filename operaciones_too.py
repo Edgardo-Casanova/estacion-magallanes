@@ -11,9 +11,11 @@ def generar_alerta_comunidad(nombre_evento, ra, dec, tipo_evento="flare", extra_
         
     print(f"\n[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA {nombre_evento} ({tipo_evento.upper()})")
     
-    # Crear carpeta específica para las alertas externas
     os.makedirs('alertas_comunidad', exist_ok=True)
     nombre_archivo = nombre_evento.replace(' ', '_').replace('/', '-')
+    
+    # Extraemos la distancia oficial enviada desde el motor principal
+    distancia = extra_data.get("distancia", "Desconocida")
     
     # =================================================================
     # PLANTILLA 1: REDES ESTELARES (AAVSO) -> Para Flares
@@ -36,6 +38,7 @@ debido a la detección automatizada de alta actividad cromosférica (posible meg
 [1] IDENTIFICACIÓN DEL OBJETIVO
 * Nombre / ID SIMBAD    : {nombre_evento}
 * Coordenadas (ICRS)    : RA {ra:.5f} | Dec {dec:.5f}
+* Distancia Estimada    : {distancia}
 
 [2] JUSTIFICACIÓN ASTROFÍSICA (Análisis Estación Magallanes)
 * Tipo de Estrella      : Enana Roja (Firma infrarroja confirmada)
@@ -60,6 +63,7 @@ due to the automated detection of high chromospheric activity (potential mega-fl
 [1] TARGET IDENTIFICATION
 * Name / SIMBAD ID      : {nombre_evento}
 * Coordinates (ICRS)    : RA {ra:.5f} | Dec {dec:.5f}
+* Est. Distance         : {distancia}
 
 [2] ASTROPHYSICAL JUSTIFICATION (Magallanes Station Analysis)
 * Star Type             : Red Dwarf (Confirmed infrared signature)
@@ -76,12 +80,12 @@ Magallanes Station Automated Pipeline | AAVSO Observer Code: ECDA
         ruta_txt = f"alertas_comunidad/ALERTA_AAVSO_{nombre_archivo}.txt"
 
     # =================================================================
-    # PLANTILLA 2: REDES EXTRAGALÁCTICAS (ATel) -> SN, Nova, AGN, Blazar
+    # PLANTILLA 2: REDES EXTRAGALÁCTICAS E INTRAGALÁCTICAS (ATel)
     # =================================================================
     elif tipo_evento in ["supernova", "nova", "agn", "blazar"]:
         galaxia = extra_data.get("galaxia", "Desconocida")
-        
         redshift = extra_data.get("redshift", "Desconocido")
+        
         if redshift == 0.0: 
             redshift = "Desconocido"
             
@@ -98,6 +102,27 @@ Magallanes Station Automated Pipeline | AAVSO Observer Code: ECDA
             goal_es = "Obtener espectro para confirmar subtipo exacto de explosión termonuclear/colapso."
             goal_en = "Obtain spectra to confirm exact thermonuclear/core-collapse explosion subtype."
             
+        origen = extra_data.get("red_origen", "ZTF")
+        
+        if origen == "TNS_GLOBAL":
+            nota_es = "* NOTA: Este transitorio es una confirmación oficial extraída directamente del catálogo del Transient Name Server (IAU)."
+            nota_en = "* NOTE: This transient is an official confirmation retrieved directly from the Transient Name Server (IAU) catalog."
+        else:
+            nota_es = "* NOTA: Este transitorio fue alertado inicialmente por un broker IA y posteriormente evaluado/confirmado por el filtro astrofísico de la Estación Magallanes."
+            nota_en = "* NOTE: This transient was initially alerted by an AI broker and subsequently evaluated/confirmed by the Magallanes Station astrophysical filter."
+            
+        # LÓGICA CONDICIONAL: REDSHIFT VS AÑOS LUZ
+        if tipo_evento == "nova":
+            entorno_es = "Vía Láctea (Entorno Galáctico Local)"
+            entorno_en = "Milky Way (Local Galactic Environment)"
+            dist_param_es = f"* Distancia Est.      : {distancia}"
+            dist_param_en = f"* Est. Distance       : {distancia}"
+        else:
+            entorno_es = galaxia
+            entorno_en = galaxia
+            dist_param_es = f"* Redshift (z)        : {z_str}"
+            dist_param_en = f"* Redshift (z)        : {z_str}"
+            
         texto_alerta = f"""======================================================================
 [ESPAÑOL] BORRADOR TELEGRAMA ASTRONÓMICO (ATel) - ESTACIÓN MAGALLANES
 ======================================================================
@@ -105,21 +130,19 @@ TEMA: Análisis Estación Magallanes: Candidato a {tipo_evento.upper()} ({nombre
 OBSERVADORES: Estación Magallanes (Punta Arenas, Chile) - AAVSO: ECDA
 
 Reportamos la evaluación física y fotométrica de un candidato a {tipo_evento.upper()}
-ubicado en la entidad anfitriona {galaxia} (z = {z_str}).
+ubicado en la entidad anfitriona {entorno_es}.
 
 [1] INFORMACIÓN DEL OBJETIVO
 * ID del Transitorio    : {nombre_evento}
 * Coordenadas (ICRS)    : RA {ra:.5f} | Dec {dec:.5f}
-* Entidad Anfitriona    : {galaxia}
-* Redshift (z)          : {z_str}
+* Entidad Anfitriona    : {entorno_es}
+{dist_param_es}
 
 [2] SOLICITUD DE OBSERVACIÓN
 * Acción Requerida      : SEGUIMIENTO ESPECTROSCÓPICO URGENTE
 * Objetivo Científico   : {goal_es}
 
-* NOTA: Este transitorio fue alertado inicialmente por un broker IA y posteriormente
-confirmado/reclasificado mediante el filtro de Análisis de la Estación Magallanes, 
-detectando desviaciones significativas en su línea base de luminosidad histórica.
+{nota_es}
 
 ----------------------------------------------------------------------
 [ENGLISH] ASTRONOMER'S TELEGRAM (ATel) DRAFT - MAGALLANES STATION
@@ -128,27 +151,24 @@ SUBJECT: Magallanes Station Analysis: {tipo_evento.upper()} candidate {nombre_ev
 OBSERVERS: Magallanes Station (Punta Arenas, Chile) - AAVSO: ECDA
 
 We report the physical and photometric evaluation of a highly probable {tipo_evento.upper()} candidate 
-located in the host entity {galaxia} (z = {z_str}). 
+located in the host entity {entorno_en}. 
 
 [1] TARGET INFORMATION
 * Transient ID          : {nombre_evento}
 * Coordinates (ICRS)    : RA {ra:.5f} | Dec {dec:.5f}
-* Host Entity           : {galaxia}
-* Redshift (z)          : {z_str}
+* Host Entity           : {entorno_en}
+{dist_param_en}
 
 [2] OBSERVATIONAL REQUEST
 * Requested Action      : URGENT SPECTROSCOPIC FOLLOW-UP
 * Scientific Goal       : {goal_en}
 
-* NOTE: This transient was initially alerted by an AI broker and subsequently 
-confirmed/reclassified through the Magallanes Station Analysis filter, which 
-detected significant deviations from its historical luminosity baseline.
+{nota_en}
 
 Magallanes Station Automated Alert System | AAVSO: ECDA
 ======================================================================"""
         ruta_txt = f"alertas_comunidad/ALERTA_ATEL_{nombre_archivo}.txt"
         
-    # Guardado del archivo generado
     with open(ruta_txt, "w", encoding="utf-8") as f:
         f.write(texto_alerta)
         

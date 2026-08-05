@@ -174,10 +174,10 @@ if vista == "Dashboard Principal (Telemetría)":
             nombres.append(nom_full[i])
             tipos.append(tip_full[i])
     
-    # Contadores actualizados para coincidir con el análisis físico de Magallanes
+    # Contadores actualizados (Ahora incluyen la etiqueta CANDIDATA)
     total_flares = sum(1 for t in tipos if "FLARE" in t or "ENANA M" in t)
     total_novas = sum(1 for t in tipos if ("NOVA" in t and "SUPERNOVA" not in t) or "CATACL" in t or "CV" in t)
-    total_supernovas = sum(1 for t in tipos if "SUPERNOVA" in t or "SN" in t)
+    total_supernovas = sum(1 for t in tipos if "SUPERNOVA" in t or "SN" in t or "CANDIDATA" in t)
     total_agn = sum(1 for t in tipos if "AGN" in t or "QSO" in t or "BLAZAR" in t or "CUÁSAR" in t)
     
     st.subheader("📡 Estado de la Red de Alertas")
@@ -189,12 +189,12 @@ if vista == "Dashboard Principal (Telemetría)":
     col_det1, col_det2, col_det3, col_det4 = st.columns(4)
     col_det1.metric("Flares (Enanas Rojas)", str(total_flares), "Estelar", delta_color="normal")
     col_det2.metric("Novas (Cataclísmicas)", str(total_novas), "Binaria", delta_color="normal")
-    col_det3.metric("Supernovas", str(total_supernovas), "Destrucción", delta_color="normal")
+    col_det3.metric("Supernovas / Candidatas", str(total_supernovas), "Destrucción", delta_color="normal")
     col_det4.metric("Cuásares / AGN", str(total_agn), "Agujero Negro", delta_color="normal")
     
     with st.expander("📚 Glosario Taxonómico (¿Qué subcategorías incluyen estos contadores?)"):
         st.markdown("""
-        *   **Supernovas:** Incluye subcategorías como **Tipo Ia** (Explosiones termonucleares), **Tipo Ib/c y II** (Colapso de núcleo masivo), y **SLSN** (Supernovas Superluminosas).
+        *   **Supernovas / Candidatas:** Incluye confirmaciones oficiales (Tipo Ia, Ib/c, II, SLSN) y **Candidatas** detectadas autónomamente por la Estación Magallanes a la espera de espectroscopía.
         *   **Cuásares / AGN:** Incluye **QSO** (Cuásares o Núcleos Galácticos Activos clásicos) y **Blazares** (Variantes extremas con jets relativistas apuntando directamente hacia nuestra línea de visión).
         *   **Novas (Cataclísmicas):** Incluye **CV** (Variables Cataclísmicas, sistemas binarios interactuantes) y **Novas** estelares clásicas de nuestra galaxia.
         *   **Flares (Enanas Rojas):** Destellos súbitos magnéticos provenientes de estrellas de baja masa (**M-dwarf**).
@@ -217,7 +217,7 @@ if vista == "Dashboard Principal (Telemetría)":
             "Supernova Ia": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#00FFFF", "symbol": "circle"},
             "Supernova II / Ibc": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#39FF14", "symbol": "square"},
             "Supernova Superluminosa (SLSN)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#FFD700", "symbol": "diamond"},
-            "Supernova (Sin clasificar)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#FF00FF", "symbol": "cross"},
+            "Supernova (Sin clasificar / Candidata)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#FF00FF", "symbol": "cross"},
             "Nova (Clásica)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#00BFFF", "symbol": "star"},
             "Variable Cataclísmica (CV)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#00FA9A", "symbol": "star"},
             "Cuásar (QSO)": {"ra": [], "dec": [], "nombres": [], "tipos": [], "color": "#FF4500", "symbol": "triangle-up"},
@@ -237,7 +237,7 @@ if vista == "Dashboard Principal (Telemetría)":
             elif "SLSN" in t_upper: cat = "Supernova Superluminosa (SLSN)"
             elif "SN IA" in t_upper or "SNIA" in t_upper: cat = "Supernova Ia"
             elif "SN II" in t_upper or "SNII" in t_upper or "IBC" in t_upper or "SN IBC" in t_upper: cat = "Supernova II / Ibc"
-            elif "SUPERNOVA" in t_upper or "SN" in t_upper: cat = "Supernova (Sin clasificar)"
+            elif "SUPERNOVA" in t_upper or "SN" in t_upper or "CANDIDATA" in t_upper: cat = "Supernova (Sin clasificar / Candidata)"
             elif "FLARE" in t_upper or "ENANA M" in t_upper: cat = "Flares (Enanas Rojas)"
             else: continue
             
@@ -317,9 +317,10 @@ elif vista == "Feed de Alertas y Circulares":
             
         nombre_fmt = formatear_nombre_circular(alerta).upper()
         
+        # Filtro corregido para aceptar CANDIDATA
         if cat_filtro == "Todas las Alertas":
             alertas_filtradas.append(alerta)
-        elif cat_filtro == "Supernovas" and ("SUPERNOVA" in nombre_fmt or "SN " in nombre_fmt or "(SN" in nombre_fmt):
+        elif cat_filtro == "Supernovas" and ("SUPERNOVA" in nombre_fmt or "SN " in nombre_fmt or "(SN" in nombre_fmt or "CANDIDATA" in nombre_fmt):
             alertas_filtradas.append(alerta)
         elif cat_filtro == "Novas / Cataclísmicas" and ("NOVA" in nombre_fmt and "SUPERNOVA" not in nombre_fmt):
             alertas_filtradas.append(alerta)
@@ -530,7 +531,7 @@ elif vista == "Mantenimiento del Sistema":
     elif password != "":
         st.error("Código de autorización incorrecto. Intento bloqueado.")
 
-# --- VISTA 5: ACERCA DE / CONTACTO (ACTUALIZADA) ---
+# --- VISTA 5: ACERCA DE / CONTACTO ---
 elif vista == "Acerca del Observatorio":
     st.title("🔭 Estación Magallanes")
     st.success("🟢 **Nodo Activo y Operando** - Punta Arenas, Región de Magallanes, Chile.")

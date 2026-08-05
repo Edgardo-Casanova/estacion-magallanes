@@ -81,7 +81,7 @@ def analizar_quimica_halfa(coordenadas, id_evento):
             
             if len(long_onda_halfa) == 0:
                 print("   [-] Rango espectral insuficiente para analizar H-alfa.")
-                return False, 0.0
+                return None, 0.0
 
             mascara_continuo = ((long_onda_halfa > 6500) & (long_onda_halfa < 6540)) | \
                                ((long_onda_halfa > 6600) & (long_onda_halfa < 6640))
@@ -116,13 +116,13 @@ def analizar_quimica_halfa(coordenadas, id_evento):
             print(f"   [+] Espectro H-alfa guardado en: {archivo_plot}")
             return hay_emision, ew_halfa
         else:
-            print("   [-] No hay datos de archivo de alta resolución para esta coordenada específica.")
-            return False, 0.0
+            print("   [-] No hay datos de espectroscopía SDSS para esta coordenada.")
+            return None, 0.0 
     except Exception as e:
         print(f"   [-] Error procesando módulo espectroscópico: {e}")
-        return False, 0.0
+        return None, 0.0
 
-def generar_circular_estelar_local(ra, dec, id_evento, tiene_planetas, es_enana_roja, planetas_info, emision_activa, valor_ew, tipo_evento):
+def generar_circular_estelar_local(ra, dec, id_evento, tiene_planetas, es_enana_roja, planetas_info, emision_activa, valor_ew, tipo_evento, distancia):
     os.makedirs('alertas', exist_ok=True)
     fecha_emision = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
     ruta_archivo = f"alertas/CIRCULAR_{id_evento}.txt"
@@ -134,6 +134,7 @@ def generar_circular_estelar_local(ra, dec, id_evento, tiene_planetas, es_enana_
         f.write(f"FECHA DE EMISIÓN : {fecha_emision}\n")
         f.write(f"OBJETO DETECTADO : {id_evento} ({tipo_evento.upper()})\n")
         f.write(f"COORDENADAS ICRS : RA {ra:.5f} | Dec {dec:.5f}\n")
+        f.write(f"DISTANCIA GAIA   : {distancia}\n")
         f.write("-----------------------------------------------------------------\n\n")
         
         f.write("[1] ESTADO DEL SISTEMA PLANETARIO\n")
@@ -143,16 +144,20 @@ def generar_circular_estelar_local(ra, dec, id_evento, tiene_planetas, es_enana_
             f.write("    SISTEMA AISLADO: No se registran planetas confirmados.\n")
             
         f.write("\n[2] EVALUACIÓN TERMODINÁMICA (SED)\n")
-        if es_enana_roja:
+        if es_enana_roja is True:
             f.write("    FIRMA TÉRMICA: Sistema Frío / Activo (Emisión Infrarroja Dominante).\n")
-        else:
+        elif es_enana_roja is False:
             f.write("    FIRMA TÉRMICA: Emisión Visible/Óptica Dominante.\n")
+        else:
+            f.write("    FIRMA TÉRMICA: Datos infrarrojos insuficientes para evaluación térmica.\n")
             
         f.write("\n[3] ACTIVIDAD CROMOSFÉRICA / ACRECIÓN (H-alfa)\n")
-        if emision_activa:
+        if emision_activa is True:
             f.write(f"    ESTADO QUÍMICO: Fuerte emisión de plasma/acreción (EW = {valor_ew:.2f} Å).\n")
-        else:
+        elif emision_activa is False:
             f.write(f"    ESTADO QUÍMICO: Sin línea de emisión significativa en H-alfa.\n")
+        else:
+            f.write(f"    ESTADO QUÍMICO: Espectroscopía SDSS no disponible para estas coordenadas.\n")
 
         f.write("\n[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN DE SEGUIMIENTO)\n")
         if tipo_evento == "flare" and tiene_planetas:
@@ -165,9 +170,9 @@ def generar_circular_estelar_local(ra, dec, id_evento, tiene_planetas, es_enana_
         f.write("\n=================================================================\n")
     return ruta_archivo
 
-def evaluar_estelar_local(tiene_planetas, es_enana_roja, id_evento, ra, dec, planetas_info, emision_activa, valor_ew, tipo_evento):
+def evaluar_estelar_local(tiene_planetas, es_enana_roja, id_evento, ra, dec, planetas_info, emision_activa, valor_ew, tipo_evento, distancia):
     print(f"\n[4/4] 🔭 Evaluación de Viabilidad Observacional para {id_evento}...")
-    ruta = generar_circular_estelar_local(ra, dec, id_evento, tiene_planetas, es_enana_roja, planetas_info, emision_activa, valor_ew, tipo_evento)
+    ruta = generar_circular_estelar_local(ra, dec, id_evento, tiene_planetas, es_enana_roja, planetas_info, emision_activa, valor_ew, tipo_evento, distancia)
     print(f"\n   [📝] DOCUMENTO GENERADO: Circular guardada en '{ruta}'")
 
 
@@ -279,7 +284,7 @@ def buscar_espectro_y_fotometria(coordenadas, id_evento):
     magnitudes_finales = []
     l_validas = []
     e_validas = []
-    es_enana_roja = False
+    es_enana_roja = None 
 
     print("   📡 Conectando a bases de datos globales (SIMBAD) para extraer bandas térmicas...")
     try:
@@ -311,10 +316,8 @@ def buscar_espectro_y_fotometria(coordenadas, id_evento):
         print(f"   [-] Error en conexión SIMBAD: {e}")
 
     if len(magnitudes_finales) < 2:
-        print("   [!] Catálogo fotométrico limitado. Generando perfil estándar...")
-        l_validas = [5500, 12200, 16300, 21900]
-        magnitudes_finales = [14.0, 10.5, 9.8, 9.3]
-        e_validas = ['V', 'J', 'H', 'K']
+        print("   [!] Catálogo fotométrico insuficiente. Imposible generar perfil SED real.")
+        return None
 
     flujo_relativo = 10 ** (-0.4 * np.array(magnitudes_finales))
     flujo_relativo = flujo_relativo / np.max(flujo_relativo)
@@ -326,6 +329,8 @@ def buscar_espectro_y_fotometria(coordenadas, id_evento):
         es_enana_roja = True
     elif flujos_ir and not flujos_vis:
         es_enana_roja = True 
+    else:
+        es_enana_roja = False
 
     plt.style.use('dark_background')
     plt.figure(figsize=(12, 6))
@@ -353,9 +358,9 @@ def buscar_espectro_y_fotometria(coordenadas, id_evento):
 # =====================================================================
 # EL ENRUTADOR PRINCIPAL (CEREBRO DEL LABORATORIO)
 # =====================================================================
-def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_evento="flare"):
+def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_evento="flare", distancia_real="Desconocida"):
     """
-    Recibe el identificador oficial (OID) desde hunter.py y asegura la trazabilidad.
+    Recibe el identificador oficial (OID) y la distancia desde hunter.py para asegurar trazabilidad.
     """
     print(f"\n[ESTACIÓN MAGALLANES] Recibida alerta automática para: {id_evento}")
     print(f"➤ Coordenadas ICRS : RA {ra_deg:.5f} | Dec {dec_deg:.5f}")
@@ -373,10 +378,10 @@ def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_
             es_enana_roja = buscar_espectro_y_fotometria(coordenadas, id_limpio)
             emision_activa, valor_ew = analizar_quimica_halfa(coordenadas, id_limpio)
             
-            evaluar_estelar_local(tiene_planetas, es_enana_roja, id_limpio, ra_deg, dec_deg, planetas_info, emision_activa, valor_ew, tipo_evento)
+            evaluar_estelar_local(tiene_planetas, es_enana_roja, id_limpio, ra_deg, dec_deg, planetas_info, emision_activa, valor_ew, tipo_evento, distancia_real)
             
             try:
-                generar_alerta_comunidad(id_limpio, ra_deg, dec_deg, tipo_evento=tipo_evento, extra_data={"ew_halfa": valor_ew, "tiene_planetas": tiene_planetas})
+                generar_alerta_comunidad(id_limpio, ra_deg, dec_deg, tipo_evento=tipo_evento, extra_data={"ew_halfa": valor_ew, "tiene_planetas": tiene_planetas, "distancia": distancia_real})
             except TypeError:
                 pass
                 
@@ -391,7 +396,7 @@ def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_
             evaluar_extragalactico(ra_deg, dec_deg, id_limpio, galaxia, redshift, tipo_evento)
             
             try:
-                generar_alerta_comunidad(id_limpio, ra_deg, dec_deg, tipo_evento=tipo_evento, extra_data={"galaxia": galaxia, "redshift": redshift})
+                generar_alerta_comunidad(id_limpio, ra_deg, dec_deg, tipo_evento=tipo_evento, extra_data={"galaxia": galaxia, "redshift": redshift, "distancia": distancia_real})
             except TypeError:
                 pass
                 
@@ -406,7 +411,7 @@ def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_
             evaluar_extragalactico(ra_deg, dec_deg, id_limpio, objeto_agn, redshift, tipo_evento)
             
             try:
-                generar_alerta_comunidad(id_limpio, ra_deg, dec_deg, tipo_evento=tipo_evento, extra_data={"galaxia": objeto_agn, "redshift": redshift})
+                generar_alerta_comunidad(id_limpio, ra_deg, dec_deg, tipo_evento=tipo_evento, extra_data={"galaxia": objeto_agn, "redshift": redshift, "distancia": distancia_real})
             except TypeError:
                 pass
         

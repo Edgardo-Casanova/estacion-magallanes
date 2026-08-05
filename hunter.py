@@ -12,6 +12,7 @@ from astropy.time import Time
 from astropy.coordinates import SkyCoord, get_constellation
 import astropy.units as u
 from astroquery.simbad import Simbad
+from astroquery.vizier import Vizier
 import warnings
 from dotenv import load_dotenv
 load_dotenv()
@@ -33,7 +34,6 @@ diccionario_categorias = {
 
 # --- FUNCIONES DE MEMORIA TNS (EL LIBRO MAYOR) ---
 def leer_memoria_tns():
-    """Lee el libro mayor para saber qué supernovas ya fueron procesadas en el pasado."""
     if not os.path.exists(MEMORIA_TNS):
         return set()
     try:
@@ -43,7 +43,6 @@ def leer_memoria_tns():
         return set()
 
 def guardar_en_memoria_tns(id_evento):
-    """Anota una nueva supernova en el libro mayor de forma permanente."""
     try:
         with open(MEMORIA_TNS, 'a', encoding='utf-8') as f:
             f.write(f"{id_evento}\n")
@@ -70,20 +69,12 @@ def obtener_mjd_rastreo():
             with open(ARCHIVO_MJD, "r") as f: return round(float(f.read().strip()), 1)
     except Exception as e:
         print(f"No se pudo leer el tracker MJD ({e}). Usando ventana por defecto.")
-    # MODO PRODUCCIÓN: Respaldo de 2 días para ZTF/LSST
     return round(Time(datetime.now(timezone.utc) - timedelta(days=2)).mjd, 1)
 
 def guardar_mjd_rastreo(mjd):
     try:
         with open(ARCHIVO_MJD, "w") as f: f.write(str(round(float(mjd), 1)))
     except Exception: pass
-
-def determinar_tipo_evento(clase_ia):
-    clase_upper = str(clase_ia).upper()
-    if "SN" in clase_upper or "SLSN" in clase_upper: return "supernova"
-    elif "NOVA" in clase_upper or "CV" in clase_upper: return "nova"
-    elif "QSO" in clase_upper or "BLAZAR" in clase_upper or "AGN" in clase_upper: return "agn" 
-    else: return "flare"
 
 def registrar_log(mensaje, survey):
     print(mensaje) 
@@ -92,27 +83,75 @@ def registrar_log(mensaje, survey):
         with open(f"bitacora_{survey}.log", "a") as f: f.write(f"[{fecha_hora}] {mensaje}\n")
     except Exception: pass
 
+# =====================================================================
+# EL EMBUDO ASTROMÉTRICO: SIMBAD + GAIA DR3
+# =====================================================================
 def obtener_datos_astronomicos(coordenadas):
-    nombre, distancia, tipo, metalicidad = "No catalogada", "Desconocida", "Estrella / Transitorio", "Desconocida (Sin estudio previo)"
+    nombre, distancia, tipo, metalicidad = "No catalogada", "Desconocida", "Desconocido", "Desconocida (Sin estudio previo)"
+    es_cuasar = False
+    es_estrella = False
+    es_galaxia = False
+    
+    # 1. CAPA SIMBAD (Literatura Académica)
     try:
         custom_simbad = Simbad()
-        custom_simbad.add_votable_fields('plx', 'sp', 'fe_h')
+        custom_simbad.add_votable_fields('plx', 'sp', 'fe_h', 'otype')
         resultado = custom_simbad.query_region(coordenadas, radius=3*u.arcsec)
+        
         if resultado is not None and len(resultado) > 0:
             raw_name = resultado['MAIN_ID'][0]
             nombre = raw_name.decode('utf-8') if hasattr(raw_name, 'decode') else str(raw_name)
-            if 'SP_TYPE' in resultado.colnames:
+            
+            if 'OTYPE' in resultado.colnames:
+                raw_otype = resultado['OTYPE'][0]
+                if not np.ma.is_masked(raw_otype): 
+                    tipo = raw_otype.decode('utf-8') if hasattr(raw_otype, 'decode') else str(raw_otype)
+            
+            if tipo == "Desconocido" and 'SP_TYPE' in resultado.colnames:
                 raw_sp = resultado['SP_TYPE'][0]
-                if not np.ma.is_masked(raw_sp) and raw_sp: tipo = raw_sp.decode('utf-8') if hasattr(raw_sp, 'decode') else str(raw_sp)
+                if not np.ma.is_masked(raw_sp) and raw_sp: 
+                    tipo = raw_sp.decode('utf-8') if hasattr(raw_sp, 'decode') else str(raw_sp)
+            
             if 'PLX_VALUE' in resultado.colnames:
                 plx = resultado['PLX_VALUE'][0]
-                if not np.ma.is_masked(plx) and not np.isnan(plx) and float(plx) > 0: distancia = f"~{(1000.0 / float(plx)) * 3.26156:.1f} Años Luz"
+                if not np.ma.is_masked(plx) and not np.isnan(plx) and float(plx) > 0: 
+                    distancia = f"~{(1000.0 / float(plx)) * 3.26156:.1f} Años Luz"
+            
             col_feh = [c for c in resultado.colnames if 'fe_h' in c.lower()]
             if col_feh:
                 raw_feh = resultado[col_feh[0]][0]
-                if not np.ma.is_masked(raw_feh) and not np.isnan(float(raw_feh)): metalicidad = f"[Fe/H] = {float(raw_feh):.2f}"
+                if not np.ma.is_masked(raw_feh) and not np.isnan(float(raw_feh)): 
+                    metalicidad = f"[Fe/H] = {float(raw_feh):.2f}"
+                    
+            tipo_upper = str(tipo).upper()
+            es_cuasar = any(x in tipo_upper for x in ["QSO", "AGN", "BLAZAR", "BLLAC", "SEYFERT"])
+            es_estrella = any(x in tipo_upper for x in ["STAR", "FLARE", "CV", "NOVA", "WHITE DWARF", "V*"])
+            es_galaxia = any(x in tipo_upper for x in ["GALAXY", "GLS", "LSB"])
+            
     except Exception: pass
-    return nombre, distancia, tipo, metalicidad
+
+    # 2. CAPA GAIA DR3 (Topografía Robótica para objetos no claros)
+    if not es_cuasar and not es_estrella and not es_galaxia:
+        try:
+            v = Vizier(columns=['Plx', 'e_Plx'], catalog="I/355/gaiadr3")
+            resultado_gaia = v.query_region(coordenadas, radius=2.0*u.arcsec)
+            
+            if len(resultado_gaia) > 0:
+                tabla_gaia = resultado_gaia[0]
+                plx_gaia = tabla_gaia['Plx'][0]
+                e_plx_gaia = tabla_gaia['e_Plx'][0]
+                
+                if not np.ma.is_masked(plx_gaia) and not np.isnan(plx_gaia) and plx_gaia > 0:
+                    if plx_gaia > (3 * e_plx_gaia):
+                        es_estrella = True
+                        tipo = "Estrella (Confirmada por Paralaje Gaia DR3)"
+                        dist_pc = 1000.0 / plx_gaia
+                        distancia = f"~{dist_pc * 3.26156:.1f} Años Luz"
+        except Exception: pass
+        
+    return nombre, distancia, tipo, metalicidad, es_cuasar, es_estrella, es_galaxia
+
+# =====================================================================
 
 def graficar_reporte_tns(det, id_evento, red_descubridora, ra_float, dec_float):
     plt.style.use('dark_background')
@@ -163,12 +202,8 @@ def graficar_reporte_tns(det, id_evento, red_descubridora, ra_float, dec_float):
     estado_datos = f"Mediciones: {len(det)}" if det is not None and not det.empty else "Datos: TNS Restringido"
     info_text = f"ESTADÍSTICAS DEL EVENTO (SUPERNOVA)\n------------------------\nID Alerta: {id_evento}\nRed Base: {red_descubridora}\n{estado_datos}\nValidación: Transient Name Server (IAU)"
     
-    # NUEVO ANCLAJE: Fuera del área de coordenadas (hacia la derecha) para no tapar la estrella
     ax2.text(1.05, 1.0, info_text, transform=ax2.transAxes, fontsize=10, verticalalignment='top', horizontalalignment='left', color='white', bbox=dict(boxstyle='round,pad=0.6', facecolor='#2a2a2a', alpha=0.9, edgecolor='#555555'))
-    
-    # Ajustar márgenes para darle espacio al cuadro de texto a la derecha
     plt.tight_layout(rect=[0, 0.05, 0.82, 0.92])
-    
     plt.suptitle(f"Reporte Astronómico: SUPERNOVA", fontsize=20, color='white', fontweight='bold', y=0.98)
     fig.text(0.5, 0.01, f"Estación Magallanes | Analizado el {datetime.now(timezone.utc).strftime('%Y-%m-%d')} | Red TNS", ha='center', color='gray', fontsize=11)
     
@@ -189,11 +224,10 @@ def consultar_tns_sur(mjd_reciente, client):
 
     supernovas_procesadas = leer_memoria_tns()
 
-    # Payload adaptado para barrer a nivel global y filtrar por fecha de clasificación (Time received)
     payload = {"api_key": TNS_API_KEY, "data": json.dumps({
         "classified_sne": 1,
         "order": "desc",
-        "order_by": "public_timestamp"
+        "order_by": "discoverydate"
     })}
 
     try:
@@ -213,8 +247,11 @@ def consultar_tns_sur(mjd_reciente, client):
                 os.makedirs('data', exist_ok=True)
                 os.makedirs('alertas_comunidad', exist_ok=True)
                 
-                # Límite ajustado a 20 eventos, cantidad suficiente para cubrir el patrullaje automático de cada 1 hora
-                lista_eventos = sorted(lista_eventos, key=lambda x: str(x.get('objname', '')), reverse=True)[:20]
+                # ==============================================================
+                # 1 y 2: INVERTIMOS LA LISTA Y TOMAMOS EL PISO DE 150 OBJETOS
+                # ==============================================================
+                lista_eventos.reverse()
+                lista_eventos = lista_eventos[:150]
                 
                 for evento in lista_eventos:
                     if isinstance(evento, dict):
@@ -247,7 +284,6 @@ def consultar_tns_sur(mjd_reciente, client):
                             registrar_log(f"   [-] Error extrayendo detalles: {e}", "TNS_GLOBAL")
                             continue
 
-                        # --- UPGRADE HÍBRIDO (Reemplazo de archivo ZTF provisional) ---
                         for fname in os.listdir('data'):
                             if fname.startswith('REPORTE_ALERTA_') and fname.endswith('.txt'):
                                 oid_local = fname.replace('REPORTE_ALERTA_', '').replace('.txt', '')
@@ -258,7 +294,6 @@ def consultar_tns_sur(mjd_reciente, client):
                                         if os.path.exists(f"data/curva_luz_{oid_local}.png"):
                                             os.remove(f"data/curva_luz_{oid_local}.png")
                                     except Exception: pass
-                        # -------------------------------------------------------------
                         
                         rango_mpc, rango_mly = calcular_distancia_hubble(redshift)
                         fecha_reporte_utc = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
@@ -293,13 +328,6 @@ COORDENADAS ICRS : RA {ra_float:.5f} | Dec {dec_float:.5f}
     REDSHIFT (z)       : {redshift if redshift else 'Desconocido'}
     DISTANCIA ESTIMADA : {rango_mpc}
                          {rango_mly}
-                         
-    * NOTA DE ASTROFÍSICA:
-    El universo se expande, pero la velocidad de esa expansión 
-    (Constante H0) varía según cómo se mida. El rango entregado 
-    abarca los dos valores científicos vigentes: 
-    H0 = 73.0 km/s/Mpc (Universo local) y 
-    H0 = 67.4 km/s/Mpc (Universo temprano).
 
 [4] TRAZABILIDAD Y ESPECTROSCOPÍA
     EXPEDIENTE TNS     : https://www.wis-tns.org/object/{objname}
@@ -320,7 +348,10 @@ Red de Origen: TNS_GLOBAL
                         
                         try:
                             z_val = float(redshift) if redshift else 0.0
-                            generar_alerta_comunidad(id_evento, ra_float, dec_float, tipo_evento="supernova", extra_data={"galaxia": "Desconocida (Intergaláctica)", "redshift": z_val})
+                            # ==============================================================
+                            # 3: SILENCIADOR ACTIVO (MAÑANA QUÍTALE EL '#' A LA LÍNEA DE ABAJO)
+                            # ==============================================================
+                            # generar_alerta_comunidad(id_evento, ra_float, dec_float, tipo_evento="supernova", extra_data={"galaxia": "Desconocida (Intergaláctica)", "redshift": z_val, "red_origen": "TNS_GLOBAL"})
                         except Exception as e:
                             registrar_log(f"   [-] Error generando ATel para {id_evento}: {e}", "TNS_GLOBAL")
 
@@ -335,7 +366,7 @@ Red de Origen: TNS_GLOBAL
     return None
 
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO v11 (Radar Continuo) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO v14 (Embudo Astrométrico Avanzado) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     print(f"➤ Buscando alertas activas desde: {Time(mjd_reciente, format='mjd').to_datetime().strftime('%Y-%m-%d %H:%M:%S UTC')} (MJD: {mjd_reciente:.4f})")
@@ -384,9 +415,8 @@ def main():
                             
                         coordenadas = SkyCoord(ra=fila['meanra']*u.degree, dec=fila['meandec']*u.degree, frame='icrs')
                         
-                        # ====================================================
-                        # LÓGICA FÍSICA Y RECLASIFICACIÓN ESTACIÓN MAGALLANES
-                        # ====================================================
+                        nombre_real, distancia_real, tipo_real, metalicidad_real, es_cuasar_cat, es_estrella_cat, es_galaxia_cat = obtener_datos_astronomicos(coordenadas)
+
                         mjd_min, mjd_max = det['mjd'].min(), det['mjd'].max()
                         edad_dias = mjd_max - mjd_min
                         mag_min, mag_max = det['magpsf'].min(), det['magpsf'].max()
@@ -411,73 +441,70 @@ def main():
 
                         es_viejo = (año_descubrimiento < 2025) or (edad_dias > 400)
 
-                        # Protocolo de Inmunidad por Salto Base
-                        inmunidad_concedida = False
                         salto_luminosidad_delta = 0.0
-                        motivo_inmunidad = ""
-                        
-                        if es_viejo and edad_dias > 60:
-                            recientes = det[det['mjd'] >= mjd_max - 60]
-                            antiguas = det[det['mjd'] < mjd_max - 60]
-                            
+                        if edad_dias > 30:
+                            recientes = det[det['mjd'] >= mjd_max - 30]
+                            antiguas = det[det['mjd'] < mjd_max - 30]
                             if not recientes.empty and not antiguas.empty:
                                 linea_base_historica = antiguas['magpsf'].median()
                                 pico_brillo_reciente = recientes['magpsf'].min()
                                 salto_luminosidad_delta = linea_base_historica - pico_brillo_reciente
-                                
-                                if salto_luminosidad_delta > 1.5:
-                                    inmunidad_concedida = True
-                                    motivo_inmunidad = "(Brote sobre anfitrión antiguo)"
+                        else:
+                            salto_luminosidad_delta = amplitud_mag
 
-                        # Análisis Central (Nomenclatura Corregida y Filtro de Evitación)
+                        veto_ia_cv = ("CV" in clase_ia_final.upper() or "NOVA" in clase_ia_final.upper()) and probabilidad > 0.90
+                        
                         analisis_magallanes = "DESCONOCIDO"
 
-                        if inmunidad_concedida:
-                            if en_plano:
-                                analisis_magallanes = f"Variable Cataclísmica {motivo_inmunidad}"
-                                tipo_evento_final = "nova"
+                        if es_cuasar_cat:
+                            if salto_luminosidad_delta > 0.5:
+                                analisis_magallanes = "AGN / Cuásar en Erupción"
+                                tipo_evento_final = "agn"
                             else:
-                                analisis_magallanes = f"Candidata {motivo_inmunidad} (Esperando confirmación TNS)"
-                                tipo_evento_final = "supernova"
-                        elif edad_dias < 3.0 and tasa_acel > 1.0 and not es_viejo:
-                            analisis_magallanes = "Flare (Enana M)"
-                            tipo_evento_final = "flare"
-                        elif es_viejo:
-                            if tasa_acel < 0.1:
-                                # EL NUEVO ESCUDO: FILTRO DE LA ZONA DE EVITACIÓN
-                                if en_plano:
-                                    analisis_magallanes = "Variable Galáctica Lenta (Fuera de objetivo)"
-                                    tipo_evento_final = "descarte"
-                                else:
-                                    analisis_magallanes = "AGN / Cuásar"
-                                    tipo_evento_final = "agn"
-                            else:
-                                if en_plano:
-                                    analisis_magallanes = "Variable Cataclísmica"
-                                    tipo_evento_final = "nova"
-                                else:
-                                    analisis_magallanes = "Blazar"
-                                    tipo_evento_final = "agn"
-                        else:
-                            if en_plano:
-                                analisis_magallanes = "Variable Cataclísmica (Local)"
-                                tipo_evento_final = "nova"
-                            elif amplitud_mag >= 0.5:
-                                analisis_magallanes = "Candidata (Esperando confirmación TNS)"
-                                tipo_evento_final = "supernova"
-                            else:
-                                analisis_magallanes = "Ruido / Artefacto"
+                                analisis_magallanes = "Variabilidad rutinaria (Sin estallido reciente)"
                                 tipo_evento_final = "descarte"
+                        elif es_estrella_cat:
+                            if salto_luminosidad_delta > 0.5:
+                                analisis_magallanes = "Variable Cataclísmica (Erupción activa)"
+                                tipo_evento_final = "nova"
+                            elif edad_dias < 3.0 and tasa_acel > 1.0:
+                                analisis_magallanes = "Flare (Enana M)"
+                                tipo_evento_final = "flare"
+                            else:
+                                analisis_magallanes = "Variabilidad rutinaria (Sin estallido reciente)"
+                                tipo_evento_final = "descarte"
+                        else:
+                            if es_viejo:
+                                if salto_luminosidad_delta > 0.5:
+                                    if en_plano or veto_ia_cv:
+                                        analisis_magallanes = "Variable Cataclísmica (Erupción activa)"
+                                        tipo_evento_final = "nova"
+                                    else:
+                                        analisis_magallanes = "AGN / Blazar en Erupción"
+                                        tipo_evento_final = "agn"
+                                else:
+                                    analisis_magallanes = "Variabilidad rutinaria (Sin estallido reciente)"
+                                    tipo_evento_final = "descarte"
+                            else:
+                                if en_plano or veto_ia_cv:
+                                    analisis_magallanes = "Variable Cataclísmica / Nova (Local)"
+                                    tipo_evento_final = "nova"
+                                elif edad_dias < 3.0 and tasa_acel > 1.0:
+                                    analisis_magallanes = "Flare (Enana M)"
+                                    tipo_evento_final = "flare"
+                                elif salto_luminosidad_delta >= 0.5: 
+                                    analisis_magallanes = "Candidata (Esperando confirmación TNS)"
+                                    tipo_evento_final = "supernova"
+                                else:
+                                    analisis_magallanes = "Ruido / Artefacto"
+                                    tipo_evento_final = "descarte"
 
-                        # EL SILENCIADOR DE PUBLICACIÓN
-                        if analisis_magallanes in ["Ruido / Artefacto", "Variable Galáctica Lenta (Fuera de objetivo)"]:
+                        if analisis_magallanes in ["Ruido / Artefacto", "Variable Galáctica Lenta (Fuera de objetivo)", "Variabilidad rutinaria (Sin estallido reciente)"]:
                             registrar_log(f"   [X] {oid_str} vetado por filtro científico: {analisis_magallanes}.", current_survey)
                             continue 
                             
                         if "Candidata" not in analisis_magallanes and ("SN" in clase_ia_final.upper() or "SUPERNOVA" in clase_ia_final.upper()):
                             registrar_log(f"   [⚠️] RECLASIFICADO: De '{clase_ia_final}' a '{analisis_magallanes}'", current_survey)
-
-                        # ====================================================
                         
                         det = det.sort_values(by='mjd')
                         salto_maximo = 0
@@ -487,7 +514,6 @@ def main():
                             salto_maximo = mediana_historica - mag_anoche
                                 
                         constelacion = get_constellation(coordenadas)
-                        nombre_real, distancia_real, tipo_real, metalicidad_real = obtener_datos_astronomicos(coordenadas)
                         
                         det['fecha_humana'] = Time(det['mjd'].values, format='mjd').to_datetime()
                         ultima_fecha = det.iloc[-1]['fecha_humana']
@@ -532,19 +558,15 @@ def main():
                             f"ID Alerta: {fila['oid']}\n"
                             f"Distancia/Redshift: {distancia_real}\n"
                             f"Metalicidad (Fe/H): {metalicidad_real}\n"
-                            f"Aumento Ref: {salto_maximo:.2f} mag\n"
+                            f"Aumento Ref: {salto_luminosidad_delta:.2f} mag\n"
                             f"Fecha (UTC): {ultima_fecha.strftime('%Y-%m-%d %H:%M')}\n"
                             "------------------------\n"
                             f"Validación IA: {clase_ia_final} ({probabilidad*100:.1f}%)\n"
                             f"Estación Magallanes: {analisis_magallanes}"
                         )
                         
-                        # NUEVO ANCLAJE: Fuera del área de coordenadas (hacia la derecha) para no tapar la estrella
                         ax2.text(1.05, 1.0, info_text, transform=ax2.transAxes, fontsize=10, verticalalignment='top', horizontalalignment='left', color='white', bbox=dict(boxstyle='round,pad=0.6', facecolor='#2a2a2a', alpha=0.9, edgecolor='#555555'))
-
-                        # Ajustar márgenes para darle espacio al cuadro de texto a la derecha
                         plt.tight_layout(rect=[0, 0.05, 0.82, 0.92])
-                        
                         plt.suptitle(f"Reporte Astronómico: {tipo_evento_final.upper()}", fontsize=20, color='white', fontweight='bold', y=0.98)
                         fig.text(0.5, 0.01, f"Estación Magallanes | Analizado el {datetime.now(timezone.utc).strftime('%Y-%m-%d')} | Red {current_survey}", ha='center', color='gray', fontsize=11)
                         
@@ -557,7 +579,9 @@ REPORTE DE ALERTA ({tipo_evento_final.upper()})
 ======================================================================
 ID de Alerta: {fila['oid']}
 Coordenadas (RA / Dec): {coordenadas.ra.deg:.5f} / {coordenadas.dec.deg:.5f}
-Catálogo SIMBAD: {nombre_real}
+Catálogo SIMBAD/GAIA: {nombre_real}
+Distancia Estimada: {distancia_real}
+Metalicidad (Fe/H): {metalicidad_real}
 Clasificación IA (ALeRCE): {clase_ia_final} (Confianza: {probabilidad*100:.1f}%)
 Reclasificación (Análisis Estación Magallanes): {analisis_magallanes}
 Edad de Evento Histórico: {edad_dias:.1f} días
@@ -568,7 +592,7 @@ Red de Origen: {current_survey}
                         
                         with open(f"data/REPORTE_ALERTA_{fila['oid']}.txt", "w", encoding="utf-8") as f: f.write(texto_reporte)
                             
-                        ejecutar_pipeline_magallanes(coordenadas.ra.deg, coordenadas.dec.deg, fila['oid'], tipo_evento_final)
+                        ejecutar_pipeline_magallanes(coordenadas.ra.deg, coordenadas.dec.deg, fila['oid'], tipo_evento_final, distancia_real)
                         
                         registrar_log(f"Candidato {fila['oid']} procesado exitosamente ({analisis_magallanes}).", current_survey)
 
