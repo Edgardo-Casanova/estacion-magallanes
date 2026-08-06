@@ -1,20 +1,37 @@
-# Entornos y caché
+# ==========================================
+# 1. Entornos, Caché y Credenciales
+# ==========================================
 venv/
 .env
 __pycache__/
 
-# Carpetas de datos locales (Resultados generados)
+# ==========================================
+# 2. Carpetas de Datos Locales (Resultados)
+# ==========================================
 alertas/
 alertas_comunidad/
+bitacoras/
 data/
 
-# Estado y memoria local (Cada entorno mantiene el suyo)
-bitacora_*.log
+# ==========================================
+# 3. Memoria, Estado y Bases de Datos
+# ==========================================
+catalogo_maestro.json
 memoria_tns.txt
 tracker_mjd.txt
+*.log
 
-# Documentos y scripts de prueba
-Guia_Transitorios_Estelares.pdf
-Manual_General.pdf
+# ==========================================
+# 4. Scripts de Ensayo y Pruebas (No Producción)
+# ==========================================
+prueba_*.py
+explorar_lsst.py
+generar_json.py
 simulador.py
 verificar_distancia.py
+
+# ==========================================
+# 5. Documentación Local
+# ==========================================
+Guia_Transitorios_Estelares.pdf
+Manual_General.pdf
