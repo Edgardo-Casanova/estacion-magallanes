@@ -38,6 +38,7 @@ st.markdown("<style>.stApp { background-color: #0e1117; color: #c9d1d9; }</style
 # =====================================================================
 # FUNCIONES PUENTE (LECTURA DE NUBE/LOCAL)
 # =====================================================================
+@st.cache_data(ttl=300)
 def leer_catalogo_maestro():
     catalogo = []
     if MODO_LOCAL:
@@ -53,6 +54,7 @@ def leer_catalogo_maestro():
                 except Exception: pass
     return catalogo
 
+@st.cache_data(ttl=300)
 def leer_archivo_texto(ruta):
     if MODO_LOCAL:
         if os.path.exists(ruta):
