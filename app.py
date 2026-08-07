@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : app.py (Visor Web Institucional / Panel de Control)
-VERSIÓN    : 17.0 (MJD CRONOLÓGICO, UX DINÁMICO Y FIX STREAMLIT WIDTH)
+VERSIÓN    : 17.1 (FIX CLOUD HTTP - CARGA INSTANTÁNEA)
 =============================================================================
 """
 
@@ -14,29 +14,22 @@ from datetime import datetime, timedelta, timezone
 import plotly.graph_objects as go
 from astropy.time import Time
 from dotenv import load_dotenv
+import urllib.request
 
 load_dotenv()
 
 # =====================================================================
-# CONFIGURACIÓN DEL ENTORNO (INTERRUPTOR HÍBRIDO)
+# CONFIGURACIÓN DEL ENTORNO
 # =====================================================================
-MODO_LOCAL = False  # <--- CAMBIAR A False ANTES DE SUBIR A GOOGLE CLOUD
+MODO_LOCAL = False  # <--- FALSE PARA GOOGLE CLOUD VM
 
 BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "estacion-magallanes-bucket")
-bucket = None
-
-if not MODO_LOCAL:
-    try:
-        from google.cloud import storage
-        storage_client = storage.Client()
-        bucket = storage_client.bucket(BUCKET_NAME)
-    except Exception as e: pass
 
 st.set_page_config(page_title="Estación Magallanes", layout="wide", page_icon="🔭")
 st.markdown("<style>.stApp { background-color: #0e1117; color: #c9d1d9; }</style>", unsafe_allow_html=True)
 
 # =====================================================================
-# FUNCIONES PUENTE (LECTURA DE NUBE/LOCAL)
+# FUNCIONES PUENTE (LECTURA VÍA HTTP PÚBLICO - SIN BLOQUEOS)
 # =====================================================================
 @st.cache_data(ttl=300)
 def leer_catalogo_maestro():
@@ -47,11 +40,11 @@ def leer_catalogo_maestro():
                 with open("catalogo_maestro.json", "r", encoding="utf-8") as f: catalogo = json.load(f)
             except Exception: pass
     else:
-        if bucket:
-            blob = bucket.blob("catalogo_maestro.json")
-            if blob.exists():
-                try: catalogo = json.loads(blob.download_as_text())
-                except Exception: pass
+        try:
+            url = f"https://storage.googleapis.com/{BUCKET_NAME}/catalogo_maestro.json"
+            req = urllib.request.urlopen(url, timeout=5)
+            catalogo = json.loads(req.read().decode('utf-8'))
+        except Exception: pass
     return catalogo
 
 @st.cache_data(ttl=300)
@@ -60,9 +53,11 @@ def leer_archivo_texto(ruta):
         if os.path.exists(ruta):
             with open(ruta, 'r', encoding='utf-8') as f: return f.read()
     else:
-        if bucket:
-            blob = bucket.blob(ruta)
-            if blob.exists(): return blob.download_as_text()
+        try:
+            url = f"https://storage.googleapis.com/{BUCKET_NAME}/{ruta}"
+            req = urllib.request.urlopen(url, timeout=5)
+            return req.read().decode('utf-8')
+        except Exception: pass
     return None
 
 def obtener_estado_red(ruta_log):
@@ -101,7 +96,6 @@ vista = st.sidebar.selectbox("Selecciona una vista:", [
 ])
 
 st.sidebar.divider()
-# Ajuste de Zona Horaria (UTC-3 para Punta Arenas)
 hora_magallanes = datetime.now(timezone.utc) - timedelta(hours=3)
 fecha_seleccionada = st.sidebar.date_input("📅 Filtro de Fecha (Local - Magallanes):", hora_magallanes.date())
 
@@ -220,7 +214,7 @@ if vista == "Dashboard Principal (Telemetría)":
         st.plotly_chart(fig, width="stretch")
 
 # =====================================================================
-# VISTA 2: FEED DE ALERTAS (CORREGIDO CRONOLOGÍA Y SELECTOR GRÁFICO)
+# VISTA 2: FEED DE ALERTAS
 # =====================================================================
 elif vista == "Feed de Alertas y Circulares":
     st.title("📋 Terminal de Resoluciones Científicas")
@@ -283,14 +277,23 @@ elif vista == "Feed de Alertas y Circulares":
             ruta_grafico = f"data/curva_luz_{oid_limpio}.png"
             ruta_halfa = f"data/quimica_halfa_{oid_limpio}.png"
             
+            url_grafico = f"https://storage.googleapis.com/{BUCKET_NAME}/{ruta_grafico}"
+            url_halfa = f"https://storage.googleapis.com/{BUCKET_NAME}/{ruta_halfa}"
+            
             opciones_evidencia = []
             
             if MODO_LOCAL:
                 if os.path.exists(ruta_grafico): opciones_evidencia.append("Curva de Luz")
                 if os.path.exists(ruta_halfa): opciones_evidencia.append("Espectro (Química H-alfa)")
             else:
-                if bucket and bucket.blob(ruta_grafico).exists(): opciones_evidencia.append("Curva de Luz")
-                if bucket and bucket.blob(ruta_halfa).exists(): opciones_evidencia.append("Espectro (Química H-alfa)")
+                # Aprovechamos que hunter ya comprobó si la imagen de la curva existe en el Bucket
+                if evento_actual.get("img_url"): opciones_evidencia.append("Curva de Luz")
+                
+                # Check rápido HTTP para H-alfa
+                try:
+                    if urllib.request.urlopen(urllib.request.Request(url_halfa, method='HEAD'), timeout=2).status == 200:
+                        opciones_evidencia.append("Espectro (Química H-alfa)")
+                except Exception: pass
                 
             if not opciones_evidencia:
                 st.warning("Gráfica fotométrica reservada o no disponible en la red de origen.")
@@ -299,17 +302,17 @@ elif vista == "Feed de Alertas y Circulares":
                 
                 if seleccion_evidencia == "Curva de Luz":
                     if MODO_LOCAL: st.image(ruta_grafico, width="stretch")
-                    else: st.image(bucket.blob(ruta_grafico).download_as_bytes(), width="stretch")
+                    else: st.image(url_grafico, width="stretch")
                         
                 elif seleccion_evidencia == "Espectro (Química H-alfa)":
                     if MODO_LOCAL: st.image(ruta_halfa, width="stretch")
-                    else: st.image(bucket.blob(ruta_halfa).download_as_bytes(), width="stretch")
+                    else: st.image(url_halfa, width="stretch")
                     
     else:
         st.info("El catálogo maestro está vacío. Esperando la primera detección del cazador.")
 
 # =====================================================================
-# VISTA 3: BITÁCORAS DEL SISTEMA (CONVERSIÓN DE ZONA HORARIA)
+# VISTA 3: BITÁCORAS DEL SISTEMA
 # =====================================================================
 elif vista == "Bitácoras del Sistema":
     st.title("📜 Monitoreo de Operaciones en Tiempo Real")
@@ -420,7 +423,7 @@ elif vista == "Mantenimiento del Sistema":
     password = st.text_input("Código de Autorización:", type="password")
     
     if password == os.getenv("ADMIN_PASSWORD", "admin123") and password != "":
-        st.success(f"Autorización confirmada. Conectado en MODO: {'LOCAL (Disco Duro)' if MODO_LOCAL else 'CLOUD (Bucket GCS)'}")
+        st.success(f"Autorización confirmada. Conectado en MODO: {'LOCAL (Disco Duro)' if MODO_LOCAL else 'CLOUD (HTTP)'}")
         if st.button("🚨 PURGAR TODO EL HISTORIAL (RESET DE FÁBRICA)", type="primary", width="stretch"):
             if MODO_LOCAL:
                 for carpeta in ["alertas", "data", "alertas_comunidad", "bitacoras"]:
@@ -428,14 +431,11 @@ elif vista == "Mantenimiento del Sistema":
                         for arch in os.listdir(carpeta):
                             if "memoria_tns" not in arch: os.remove(os.path.join(carpeta, arch))
                 if os.path.exists("catalogo_maestro.json"): os.remove("catalogo_maestro.json")
+                st.success("¡Base de datos formateada con éxito!")
+                time.sleep(2)
+                st.rerun()
             else:
-                if bucket:
-                    blobs = bucket.list_blobs()
-                    for blob in blobs:
-                        if "memoria_tns" not in blob.name: blob.delete()
-            st.success("¡Base de datos formateada con éxito!")
-            time.sleep(2)
-            st.rerun()
+                st.error("Para proteger el Bucket público, la purga remota debe ejecutarse por seguridad directamente vía consola SSH.")
 
 # =====================================================================
 # VISTA 5: ACERCA DE
@@ -443,7 +443,6 @@ elif vista == "Mantenimiento del Sistema":
 elif vista == "Acerca del Observatorio":
     st.title("🔭 Estación Magallanes")
     st.subheader("Laboratorio de Astrofísica y Ciencia Ciudadana")
-    
     st.divider()
     
     st.header("Explorando el Universo Dinámico desde el Fin del Mundo")
@@ -452,7 +451,6 @@ elif vista == "Acerca del Observatorio":
     
     Nuestro motor principal es un algoritmo de minería de datos que actúa como un **Broker Astrofísico local**. Integrando modelos de Inteligencia Artificial de frontera (como ALeRCE), procesamos "ríos de datos" masivos para interceptar alertas astronómicas en tiempo real, cazando eventos cósmicos catastróficos y transitorios milisegundos después de ser detectados, antes de que se desvanezcan en el cielo nocturno.
     """)
-    
     st.divider()
     
     st.header("Nuestros Objetivos Científicos")
@@ -462,7 +460,6 @@ elif vista == "Acerca del Observatorio":
     * **Astrofísica de Altas Energías (Agujeros Negros Supermasivos):** Monitoreamos los confines del universo observable detectando variabilidad en Núcleos Galácticos Activos (AGN). Nuestro algoritmo aísla y clasifica Cuásares hiperluminosos y Blazares, eventos extremos donde agujeros negros supermasivos devoran materia y emiten chorros de radiación relativista que apuntan directamente hacia la Tierra.
     * **Democratización de Datos y Ciencia Ciudadana:** Más allá de la observación pura, nuestro objetivo es actuar como un **Broker Astrofísico local**. Utilizamos Inteligencia Artificial para filtrar el "ruido cósmico", transformando terabytes de datos crudos de observatorios profesionales en conocimiento accesible para astrónomos aficionados, educadores y la comunidad científica independiente.
     """)
-    
     st.divider()
     
     st.header("Arquitectura del Flujo de Datos")
@@ -474,7 +471,6 @@ elif vista == "Acerca del Observatorio":
     * **Observatorio Vera C. Rubin (LSST):** En preparación para el aluvión de datos astronómicos más grande de la historia humana (Cerro Pachón, Chile).
     """)
     st.info("*Este sistema de automatización de código abierto fue construido para tender un puente sólido entre la ciencia de frontera y la observación independiente. Si deseas integrar nuestra telemetría a tu observatorio o colaborar en el análisis espectroscópico de nuestros candidatos, la puerta está abierta.*")
-    
     st.divider()
     
     st.header("Glosario Taxonómico: Clasificación de Alertas")
