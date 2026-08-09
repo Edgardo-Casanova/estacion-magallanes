@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 21.0 (FASE 4: BUZÓN TNS - LECTURA DIRECTA DE BOLETÍN)
+VERSIÓN    : 22.0 (FASE 4: LECTURA AISLADA LÍNEA 3 Y AUTOPURGA)
 =============================================================================
 """
 
@@ -234,24 +234,31 @@ def consultar_tns_sur(client, catalogo_dict):
         registrar_log("[!] No se encontró el archivo de boletín (boletin_tns.txt).", log_file)
         return
         
-    # Leer el boletín y buscar el patrón (4 números + letras, ignorando mayúsculas)
     with open(ARCHIVO_BOLETIN, 'r', encoding='utf-8') as f:
         contenido = f.read()
         
     lineas = contenido.split('\n')
-    if len(lineas) <= 1:
-        registrar_log("[-] El boletín está vacío o en reposo (ESTADO: ESPERANDO).", log_file)
+    
+    # REGLA 1: Aborta si el archivo solo tiene el encabezado y el salto de línea.
+    if len(lineas) <= 2:
+        registrar_log("[-] El boletín está vacío o en reposo (Línea 3 vacía). Omitiendo búsqueda.", log_file)
         return
         
+    # REGLA 2: Aislamiento de texto desde la línea 3 hacia abajo.
+    texto_a_analizar = '\n'.join(lineas[2:])
+    if not texto_a_analizar.strip():
+        registrar_log("[-] No hay texto válido desde la línea 3. Omitiendo búsqueda.", log_file)
+        return
+
     # Expresión regular para encontrar supernovas (ej. 2026wyz, 2026sun)
     patron = r'\b202\d[a-zA-Z]{1,4}\b'
-    extraccion = re.findall(patron, contenido.lower())
+    extraccion = re.findall(patron, texto_a_analizar.lower())
     
     # Limpiar duplicados y formatear
     supernovas_a_buscar = list(set([obj.lower() for obj in extraccion]))
     
     if not supernovas_a_buscar:
-        registrar_log("[-] No se encontraron códigos de supernovas en el boletín.", log_file)
+        registrar_log("[-] No se encontraron códigos de supernovas válidos en el texto de la línea 3 en adelante.", log_file)
     else:
         registrar_log(f"[+] Boletín leído. Se encontraron {len(supernovas_a_buscar)} eventos para procesar: {supernovas_a_buscar}", log_file)
         
@@ -353,17 +360,17 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
                 
             time.sleep(2.5)
 
-    # Limpiar el archivo para no volver a descargar los mismos en el próximo ciclo
+    # REGLA 3: Purgar dejando solo la primera línea y el salto, listo para GitHub y el siguiente ciclo.
     with open(ARCHIVO_BOLETIN, "w", encoding="utf-8") as f:
-        f.write("Listado de confirmaciones oficiales TNS\n")
-    registrar_log("[+] Procesamiento TNS finalizado. Archivo de boletín purgado.", log_file)
+        f.write("Listado de confirmaciones oficiales TNS\n\n")
+    registrar_log("[+] Procesamiento TNS finalizado. Archivo de boletín purgado desde la línea 3.", log_file)
 
 
 # =====================================================================
 # BUCLE PRINCIPAL (MAIN)
 # =====================================================================
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 21.0 - ZTF AUTÓNOMO + TNS A DEMANDA) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.0 - ZTF AUTÓNOMO + TNS A DEMANDA) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     url_tap = "https://tap.alerce.online/tap"
