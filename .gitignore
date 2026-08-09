@@ -1,0 +1,8 @@
+# 1. Credenciales y Caché (¡NUNCA SUBIR!)
+.env
+__pycache__/
+
+# 2. Archivos exclusivos de la consola local (Memoria y registros)
+boletin_tns.txt
+cron_log.txt
+tracker_mjd.txt
