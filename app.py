@@ -389,7 +389,7 @@ elif vista == "Mantenimiento del Sistema":
     st.markdown("⚠️ **Área Restringida:** Autorización requerida.")
     password = st.text_input("Código de Autorización:", type="password")
     
-    if password == os.getenv("ADMIN_PASSWORD", "admin123") and password != "":
+    if password == st.secrets["ADMIN_PASSWORD"] and password != "":
         st.success("Autorización confirmada. Conectado en MODO: LOCAL (Sincronización GitHub)")
 
         # ==========================================
