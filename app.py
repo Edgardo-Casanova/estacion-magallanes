@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : app.py (Visor Web Institucional / Panel de Control)
-VERSIÓN    : 18.0 (FASE 4: BUZÓN TNS INCORPORADO)
+VERSIÓN    : 19.0 (FASE 5: INTERFAZ LIMPIA)
 =============================================================================
 """
 
@@ -74,7 +74,6 @@ vista = st.sidebar.selectbox("Selecciona una vista:", [
     "Dashboard Principal (Telemetría)", 
     "Feed de Alertas y Circulares", 
     "Bitácoras del Sistema", 
-    "Mantenimiento del Sistema",
     "Acerca del Observatorio"
 ])
 
@@ -382,51 +381,7 @@ elif vista == "Bitácoras del Sistema":
         st.warning(f"El observatorio no registró patrullajes para tu fecha local ({fecha_str_busqueda}).")
 
 # =====================================================================
-# VISTA 4: MANTENIMIENTO DEL SISTEMA
-# =====================================================================
-elif vista == "Mantenimiento del Sistema":
-    st.title("⚙️ Mantenimiento y Purga")
-    st.markdown("⚠️ **Área Restringida:** Autorización requerida.")
-    password = st.text_input("Código de Autorización:", type="password")
-    
-    if password == st.secrets["ADMIN_PASSWORD"] and password != "":
-        st.success("Autorización confirmada. Conectado en MODO: LOCAL (Sincronización GitHub)")
-
-        # ==========================================
-        # MÓDULO: CARGA DE BOLETÍN TNS (IAU)
-        # ==========================================
-        st.markdown("---")
-        st.subheader("📡 Ingreso de Boletín Oficial TNS")
-        st.info("Pega aquí el texto del correo diario para que el motor busque las confirmaciones oficiales.")
-        
-        boletin_texto = st.text_area("Contenido del correo TNS:", height=250)
-        
-        if st.button("Guardar Boletín"):
-            if boletin_texto.strip() == "":
-                st.warning("⚠️ No has pegado ningún texto.")
-            else:
-                try:
-                    # Guardamos el archivo con la línea ancla obligatoria
-                    with open("boletin_tns.txt", "w", encoding="utf-8") as f:
-                        f.write("Listado de confirmaciones oficiales TNS\n")
-                        f.write(boletin_texto + "\n")
-                    st.success("✅ Boletín guardado correctamente. El cazador lo leerá en el próximo ciclo.")
-                except Exception as e:
-                    st.error(f"❌ Error al guardar el archivo: {e}")
-        st.markdown("---")
-
-        if st.button("🚨 PURGAR TODO EL HISTORIAL DE LA INTERFAZ", type="primary", width="stretch"):
-            for carpeta in ["alertas", "data", "alertas_comunidad", "bitacoras"]:
-                if os.path.exists(carpeta):
-                    for arch in os.listdir(carpeta):
-                        if "memoria_tns" not in arch: os.remove(os.path.join(carpeta, arch))
-            if os.path.exists("catalogo_maestro.json"): os.remove("catalogo_maestro.json")
-            st.success("¡Formatio de memoria volátil ejecutado con éxito!")
-            time.sleep(2)
-            st.rerun()
-
-# =====================================================================
-# VISTA 5: ACERCA DE
+# VISTA 4: ACERCA DE
 # =====================================================================
 elif vista == "Acerca del Observatorio":
     st.title("🔭 Estación Magallanes")
