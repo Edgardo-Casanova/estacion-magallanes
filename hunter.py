@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 22.0 (FASE 4: LECTURA AISLADA LÍNEA 3 Y AUTOPURGA)
+VERSIÓN    : 22.1 (FASE 4: LECTURA AISLADA LÍNEA 3, AUTOPURGA Y TASAS DUALES)
 =============================================================================
 """
 
@@ -370,7 +370,7 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
 # BUCLE PRINCIPAL (MAIN)
 # =====================================================================
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.0 - ZTF AUTÓNOMO + TNS A DEMANDA) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.1 - ZTF AUTÓNOMO + TASAS DUALES) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     url_tap = "https://tap.alerce.online/tap"
@@ -458,25 +458,42 @@ def main():
 
                             latitud_b, en_plano, es_viejo = coordenadas.galactic.b.degree, abs(coordenadas.galactic.b.degree) <= 10.0, edad_dias > 400
 
+                            # --- ANÁLISIS CINÉTICO (HISTÓRICO VS RECIENTE) ---
                             salto_luminosidad_delta = amplitud_mag
+                            tasa_acel_reciente = tasa_acel # Asume la histórica por defecto para eventos jóvenes
+                            
                             if edad_dias > 30:
                                 recientes, antiguas = det[det['mjd'] >= mjd_max - 30], det[det['mjd'] < mjd_max - 30]
-                                if not recientes.empty and not antiguas.empty: salto_luminosidad_delta = antiguas['magpsf'].median() - recientes['magpsf'].min()
+                                if not recientes.empty and not antiguas.empty: 
+                                    salto_luminosidad_delta = antiguas['magpsf'].median() - recientes['magpsf'].min()
+                                    
+                                    # Extraer la tasa de aceleración de la ventana de 30 días
+                                    mjd_pico_reciente = recientes.loc[recientes['magpsf'].idxmin(), 'mjd']
+                                    mjd_inicio_reciente = recientes['mjd'].min()
+                                    dias_al_pico_rec = mjd_pico_reciente - mjd_inicio_reciente
+                                    
+                                    if dias_al_pico_rec <= 0: dias_al_pico_rec = 1.0 # Evita división por cero
+                                    
+                                    if salto_luminosidad_delta > 0:
+                                        tasa_acel_reciente = salto_luminosidad_delta / dias_al_pico_rec
+                                    else:
+                                        tasa_acel_reciente = 0.0
 
                             veto_ia_cv = ("CV" in clase_ia_final.upper() or "NOVA" in clase_ia_final.upper()) and probabilidad > 0.90
                             analisis_magallanes, tipo_evento_final = "DESCONOCIDO", "descarte"
 
+                            # --- CLASIFICACIÓN FÍSICA BASADA EN TASA RECIENTE ---
                             if es_cuasar_cat or (es_viejo and not en_plano and not veto_ia_cv and not es_estrella_cat):
                                 if salto_luminosidad_delta > 0.5:
-                                    if tasa_acel > 0.05: analisis_magallanes, tipo_evento_final = "Blazar (Chorro relativista - Alta aceleración)", "blazar"
+                                    if tasa_acel_reciente > 0.05: analisis_magallanes, tipo_evento_final = "Blazar (Chorro relativista - Alta aceleración)", "blazar"
                                     else: analisis_magallanes, tipo_evento_final = "AGN / Cuásar (Acreción térmica - Lenta)", "agn"
                                 else: analisis_magallanes, tipo_evento_final = "Variabilidad rutinaria", "descarte"
                             elif es_estrella_cat or (en_plano or veto_ia_cv):
                                 if salto_luminosidad_delta > 0.5: analisis_magallanes, tipo_evento_final = "Variable Cataclísmica / Nova (Erupción activa)", "nova"
-                                elif edad_dias < 3.0 and tasa_acel > 1.0: analisis_magallanes, tipo_evento_final = "Flare (Enana M)", "flare"
+                                elif edad_dias < 3.0 and tasa_acel_reciente > 1.0: analisis_magallanes, tipo_evento_final = "Flare (Enana M)", "flare"
                                 else: analisis_magallanes, tipo_evento_final = "Variabilidad rutinaria", "descarte"
                             else:
-                                if edad_dias < 3.0 and tasa_acel > 1.0: analisis_magallanes, tipo_evento_final = "Flare (Enana M)", "flare"
+                                if edad_dias < 3.0 and tasa_acel_reciente > 1.0: analisis_magallanes, tipo_evento_final = "Flare (Enana M)", "flare"
                                 elif salto_luminosidad_delta >= 0.5: analisis_magallanes, tipo_evento_final = "Candidata (Esperando confirmación TNS)", "supernova"
                                 else: analisis_magallanes, tipo_evento_final = "Ruido / Artefacto", "descarte"
 
@@ -487,13 +504,14 @@ def main():
 
                             texto_reporte = f"""
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)  : {clase_ia_final} (Confianza: {probabilidad*100:.1f}%)
-    RECLASIFICACIÓN    : {analisis_magallanes}
-    EDAD HISTÓRICA     : {edad_dias:.1f} días
-    SALTO LUMINOSIDAD  : {salto_luminosidad_delta:.2f} magnitudes
-    TASA ACELERACIÓN   : {tasa_acel:.3f} mag/día
-    RED DE ORIGEN      : {current_survey}
-    MJD ÚLTIMA DETEC.  : {mjd_alerta_actual:.4f}
+    CLASE IA (ALeRCE)    : {clase_ia_final} (Confianza: {probabilidad*100:.1f}%)
+    RECLASIFICACIÓN      : {analisis_magallanes}
+    EDAD HISTÓRICA       : {edad_dias:.1f} días
+    SALTO LUMINOSIDAD    : {salto_luminosidad_delta:.2f} magnitudes
+    TASA ACEL. HISTÓRICA : {tasa_acel:.3f} mag/día
+    TASA ACEL. RECIENTE  : {tasa_acel_reciente:.3f} mag/día
+    RED DE ORIGEN        : {current_survey}
+    MJD ÚLTIMA DETEC.    : {mjd_alerta_actual:.4f}
 """                     
                             # EXTRACCIÓN DE DATOS PARA EL FILTRO ANTI-SPAM
                             datos_cineticos_para_filtro = {
