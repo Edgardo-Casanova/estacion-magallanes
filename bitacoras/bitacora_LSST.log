@@ -46,3 +46,8 @@
 [2026-08-10 15:30:26] APUNTANDO TELESCOPIO A RED: LSST
 [2026-08-10 16:30:31] ==================================================
 [2026-08-10 16:30:31] APUNTANDO TELESCOPIO A RED: LSST
+[2026-08-10 17:40:14] ==================================================
+[2026-08-10 17:40:14] APUNTANDO TELESCOPIO A RED: LSST
+[2026-08-10 17:46:26] Error TAP ADQL: Field query: could not connect to server "alerce_production"
+DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection timed out
+	Is the server running on that host and accepting TCP/IP connections?
