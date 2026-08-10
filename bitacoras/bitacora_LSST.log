@@ -51,3 +51,6 @@
 [2026-08-10 17:46:26] Error TAP ADQL: Field query: could not connect to server "alerce_production"
 DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection timed out
 	Is the server running on that host and accepting TCP/IP connections?
+[2026-08-10 18:40:04] ==================================================
+[2026-08-10 18:40:04] APUNTANDO TELESCOPIO A RED: LSST
+[2026-08-10 18:50:04] Error TAP ADQL: 504 Server Error: Gateway Time-out for url: https://tap.alerce.online/tap/sync
