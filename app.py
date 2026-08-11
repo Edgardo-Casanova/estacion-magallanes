@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : app.py (Visor Web Institucional / Panel de Control)
-VERSIÓN    : 19.0 (FASE 5: INTERFAZ LIMPIA)
+VERSIÓN    : 19.1 (FASE 5: INTERFAZ LIMPIA + FILTRO DE FECHA CORREGIDO)
 =============================================================================
 """
 
@@ -60,7 +60,7 @@ def obtener_estado_red(ruta_log):
     return "En reposo", "🟡"
 
 # =====================================================================
-# BARRA LATERAL DE NAVEGACIÓN
+# BARRA LATERAL DE NAVEGACIÓN Y FILTRO DE FECHA
 # =====================================================================
 st.sidebar.image("logo.jpeg", width="stretch")
 st.sidebar.markdown("[⬅️ Volver a la Estación Magallanes](https://www.estacionmagallanes.org)")
@@ -83,6 +83,20 @@ fecha_seleccionada = st.sidebar.date_input("📅 Filtro de Fecha (Local - Magall
 
 catalogo_datos = leer_catalogo_maestro()
 
+# --- LÓGICA DE FILTRADO POR FECHA ---
+catalogo_filtrado = []
+for ev in catalogo_datos:
+    mjd_val = ev.get('mjd_deteccion')
+    if mjd_val:
+        try:
+            # Convertir MJD a fecha local (Magallanes UTC-3) para compararlo con el calendario
+            dt_utc = Time(float(mjd_val), format='mjd').to_datetime()
+            dt_local = dt_utc - timedelta(hours=3)
+            if dt_local.date() == fecha_seleccionada:
+                catalogo_filtrado.append(ev)
+        except Exception:
+            pass
+
 # =====================================================================
 # VISTA 1: DASHBOARD PRINCIPAL Y MAPA ESTELAR
 # =====================================================================
@@ -98,13 +112,14 @@ if vista == "Dashboard Principal (Telemetría)":
     
     st.divider()
     
-    total_tns = sum(1 for e in catalogo_datos if e.get("survey") == "TNS_GLOBAL")
-    total_ztf_cand = sum(1 for e in catalogo_datos if e.get("survey") != "TNS_GLOBAL" and "supernova" in e.get("tipo", "").lower())
-    total_novas = sum(1 for e in catalogo_datos if e.get("tipo") == "nova")
-    total_agn = sum(1 for e in catalogo_datos if e.get("tipo") in ["agn", "blazar"])
-    total_flares = sum(1 for e in catalogo_datos if e.get("tipo") == "flare" and e.get("vip", False))
+    # Ahora los contadores usan el catalogo_filtrado
+    total_tns = sum(1 for e in catalogo_filtrado if e.get("survey") == "TNS_GLOBAL")
+    total_ztf_cand = sum(1 for e in catalogo_filtrado if e.get("survey") != "TNS_GLOBAL" and "supernova" in e.get("tipo", "").lower())
+    total_novas = sum(1 for e in catalogo_filtrado if e.get("tipo") == "nova")
+    total_agn = sum(1 for e in catalogo_filtrado if e.get("tipo") in ["agn", "blazar"])
+    total_flares = sum(1 for e in catalogo_filtrado if e.get("tipo") == "flare" and e.get("vip", False))
     
-    st.subheader("📊 Resumen del Catálogo Activo")
+    st.subheader(f"📊 Resumen del Catálogo Activo ({fecha_seleccionada.strftime('%Y-%m-%d')})")
     col_det1, col_det2, col_det3, col_det4, col_det5 = st.columns(5)
     col_det1.metric("✅ Supernovas Confirmadas (TNS)", str(total_tns), "Históricas", delta_color="normal")
     col_det2.metric("🚨 Supernovas Candidatas (ZTF)", str(total_ztf_cand), "Requiere ATel", delta_color="inverse")
@@ -138,7 +153,7 @@ if vista == "Dashboard Principal (Telemetría)":
             "🔥 Flares VIP"
         ], label_visibility="collapsed")
     
-    if catalogo_datos:
+    if catalogo_filtrado:
         datos_plotly = {
             "Confirmada TNS": {"ra": [], "dec": [], "text": [], "color": "#00FF00", "symbol": "star-diamond"},
             "Candidata ZTF (Acción)": {"ra": [], "dec": [], "text": [], "color": "#FF0000", "symbol": "cross"},
@@ -148,7 +163,8 @@ if vista == "Dashboard Principal (Telemetría)":
             "Flare (Enana M VIP)": {"ra": [], "dec": [], "text": [], "color": "#FF0055", "symbol": "hexagon"}
         }
 
-        for ev in catalogo_datos:
+        # Ahora iteramos sobre el catálogo filtrado
+        for ev in catalogo_filtrado:
             t, survey, vip = ev.get("tipo", ""), ev.get("survey", ""), ev.get("vip", False)
             cat = None
             
@@ -194,6 +210,8 @@ if vista == "Dashboard Principal (Telemetría)":
             margin=dict(l=40, r=40, t=40, b=40), hovermode='closest'
         )
         st.plotly_chart(fig, width="stretch")
+    else:
+        st.info(f"No hay eventos astronómicos registrados en el mapa para la fecha {fecha_seleccionada.strftime('%Y-%m-%d')}.")
 
 # =====================================================================
 # VISTA 2: FEED DE ALERTAS
@@ -201,8 +219,9 @@ if vista == "Dashboard Principal (Telemetría)":
 elif vista == "Feed de Alertas y Circulares":
     st.title("📋 Terminal de Resoluciones Científicas")
     
-    if catalogo_datos:
-        catalogo_ordenado = sorted(catalogo_datos, key=lambda x: float(x.get('mjd_deteccion', 0)), reverse=True)
+    # También usamos el catalogo_filtrado aquí
+    if catalogo_filtrado:
+        catalogo_ordenado = sorted(catalogo_filtrado, key=lambda x: float(x.get('mjd_deteccion', 0)), reverse=True)
         
         opciones = {}
         for e in catalogo_ordenado:
@@ -275,7 +294,7 @@ elif vista == "Feed de Alertas y Circulares":
                     st.image(ruta_halfa, width="stretch")
                     
     else:
-        st.info("El catálogo maestro está vacío. Esperando la primera detección del cazador.")
+        st.info(f"No hay alertas registradas ni procesadas para la fecha {fecha_seleccionada.strftime('%Y-%m-%d')}.")
 
 # =====================================================================
 # VISTA 3: BITÁCORAS DEL SISTEMA
