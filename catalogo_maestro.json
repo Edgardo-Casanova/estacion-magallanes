@@ -1065,5 +1065,71 @@
         "vip": false,
         "mjd_deteccion": 61264.27372690011,
         "img_url": "data/curva_luz_ZTF25aaqvqvq.png"
+    },
+    {
+        "oid": "ZTF18abvwscg",
+        "ra": 323.3675953753718,
+        "dec": -0.2983389112983821,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61264.31627310021,
+        "img_url": "data/curva_luz_ZTF18abvwscg.png"
+    },
+    {
+        "oid": "ZTF18aceihyy",
+        "ra": 328.5463752295814,
+        "dec": -9.02267386005941,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61264.315798600204,
+        "img_url": "data/curva_luz_ZTF18aceihyy.png"
+    },
+    {
+        "oid": "ZTF18aceiigk",
+        "ra": 332.2209326464227,
+        "dec": -13.326924303280414,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61264.315798600204,
+        "img_url": "data/curva_luz_ZTF18aceiigk.png"
+    },
+    {
+        "oid": "ZTF24aaupqvj",
+        "ra": 326.72618043591933,
+        "dec": -8.027311178640778,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61264.315798600204,
+        "img_url": "data/curva_luz_ZTF24aaupqvj.png"
+    },
+    {
+        "oid": "ZTF19aazcclj",
+        "ra": 334.3502760157931,
+        "dec": -19.664636503462827,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61264.3153241002,
+        "img_url": "data/curva_luz_ZTF19aazcclj.png"
+    },
+    {
+        "oid": "ZTF19aayiilt",
+        "ra": 322.91889309809346,
+        "dec": -15.946335373346997,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61264.31484950008,
+        "img_url": "data/curva_luz_ZTF19aayiilt.png"
     }
 ]
