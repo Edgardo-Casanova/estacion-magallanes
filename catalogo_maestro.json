@@ -1186,5 +1186,126 @@
         "vip": false,
         "mjd_deteccion": 61264.34555559978,
         "img_url": "data/curva_luz_ZTF18abvwpum.png"
+    },
+    {
+        "oid": "ZTF18accqtwe",
+        "ra": 348.7012001122494,
+        "dec": 2.1575306245358257,
+        "tipo": "blazar",
+        "survey": "ZTF",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61264.38170140004,
+        "img_url": "data/curva_luz_ZTF18accqtwe.png"
+    },
+    {
+        "oid": "ZTF26abgnjye",
+        "ra": 350.2628167797866,
+        "dec": 5.716410212305717,
+        "tipo": "supernova",
+        "survey": "ZTF",
+        "analisis": "Candidata (Esperando confirmación TNS)",
+        "vip": false,
+        "mjd_deteccion": 61264.38170140004,
+        "img_url": "data/curva_luz_ZTF26abgnjye.png"
+    },
+    {
+        "oid": "ZTF24abkkcly",
+        "ra": 357.17129848519625,
+        "dec": -5.143280591287272,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61264.381226900034,
+        "img_url": "data/curva_luz_ZTF24abkkcly.png"
+    },
+    {
+        "oid": "ZTF23abdokxu",
+        "ra": 352.34314095493517,
+        "dec": -13.3422420194772,
+        "tipo": "blazar",
+        "survey": "ZTF",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61264.3807639,
+        "img_url": "data/curva_luz_ZTF23abdokxu.png"
+    },
+    {
+        "oid": "ZTF25abamedy",
+        "ra": 354.0374246567112,
+        "dec": -12.421921267726242,
+        "tipo": "supernova",
+        "survey": "ZTF",
+        "analisis": "Candidata (Esperando confirmación TNS)",
+        "vip": false,
+        "mjd_deteccion": 61264.3807639,
+        "img_url": "data/curva_luz_ZTF25abamedy.png"
+    },
+    {
+        "oid": "ZTF18abwnkmi",
+        "ra": 341.78909303187976,
+        "dec": -7.452037436416686,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61264.3802894,
+        "img_url": "data/curva_luz_ZTF18abwnkmi.png"
+    },
+    {
+        "oid": "ZTF19abcehrc",
+        "ra": 342.2946760722339,
+        "dec": -13.000848087632702,
+        "tipo": "blazar",
+        "survey": "ZTF",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61264.3802894,
+        "img_url": "data/curva_luz_ZTF19abcehrc.png"
+    },
+    {
+        "oid": "ZTF23aapzwfn",
+        "ra": 343.9072001778584,
+        "dec": -12.610119613851717,
+        "tipo": "blazar",
+        "survey": "ZTF",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61264.3802894,
+        "img_url": "data/curva_luz_ZTF23aapzwfn.png"
+    },
+    {
+        "oid": "ZTF18abwnkqh",
+        "ra": 341.55238118796404,
+        "dec": -9.448000799849451,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61264.3802894,
+        "img_url": "data/curva_luz_ZTF18abwnkqh.png"
+    },
+    {
+        "oid": "ZTF18abvpojw",
+        "ra": 338.66636333822595,
+        "dec": 0.6909341137982687,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61264.379814799875,
+        "img_url": "data/curva_luz_ZTF18abvpojw.png"
+    },
+    {
+        "oid": "ZTF23aapwfcv",
+        "ra": 337.1832881417097,
+        "dec": -0.2100756792547268,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61264.379814799875,
+        "img_url": "data/curva_luz_ZTF23aapwfcv.png"
     }
 ]
