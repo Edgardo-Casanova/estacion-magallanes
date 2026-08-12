@@ -47,7 +47,7 @@ def extraer_valor(dato):
         return f"{float(numero):.2f}"
     except (ValueError, TypeError): return "Desconocido"
 
-def buscar_exoplanetas(coordenadas, radio_arcsec=60):
+def buscar_exoplanetas(coordenadas, tipo_evento="desconocido", radio_arcsec=60):
     print(f"\n[1/4] 📡 Consultando NASA Exoplanet Archive (Radio cinemático de {radio_arcsec}\")...")
     tiene_planetas, planetas_info = False, []
     NasaExoplanetArchive.TIMEOUT = 25  # BLINDAJE RED OPTIMIZADO
@@ -57,7 +57,10 @@ def buscar_exoplanetas(coordenadas, radio_arcsec=60):
             if 'default_flag' in resultado.colnames: resultado = resultado[resultado['default_flag'] == 1]
             if len(resultado) > 0:
                 tiene_planetas = True
-                print(f"   [!!!] ALERTA: {len(resultado)} planeta(s) confirmado(s) [!!!]")
+                if tipo_evento == "flare":
+                    print(f"   [!!!] ALERTA ESTELAR LOCAL: Fulguración afectando a {len(resultado)} exoplaneta(s) confirmado(s) [!!!]")
+                else:
+                    print(f"   [!!!] ALERTA: {len(resultado)} exoplaneta(s) confirmado(s) en la misma línea de visión ({radio_arcsec}\") [!!!]")
                 for planeta in resultado:
                     nombre, masa, periodo = planeta['pl_name'], extraer_valor(planeta['pl_bmasse']), extraer_valor(planeta['pl_orbper'])
                     planetas_info.append({'nombre': nombre, 'masa': masa, 'periodo': periodo})
@@ -283,7 +286,7 @@ def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_
         id_limpio = id_evento.replace(' ', '_').replace('/', '-')
 
         if tipo_evento in ["flare", "nova"]:
-            tiene_planetas, planetas_info = buscar_exoplanetas(coordenadas)
+            tiene_planetas, planetas_info = buscar_exoplanetas(coordenadas, tipo_evento)
             es_enana_roja = buscar_espectro_y_fotometria(coordenadas, id_limpio)
             emision_activa, valor_ew, fuente_espectro, estado_eso = analizar_espectroscopia_activa(coordenadas, id_limpio)
             
