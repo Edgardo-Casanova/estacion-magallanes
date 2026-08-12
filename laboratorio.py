@@ -225,15 +225,15 @@ DISTANCIA        : {distancia}
 
     contenido += "\n[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)\n"
     
-    # 2. CORRECCIÓN INTELIGENTE DE PRIORIDADES Y TELESCOPIOS
+    # 2. CORRECCIÓN INTELIGENTE DE PRIORIDADES Y TELESCOPIOS (Adiós ELT)
     if tipo_evento == "flare" and tiene_planetas is True:
-        contenido += "    PRIORIDAD   : MÁXIMA PRIORIDAD ESPACIAL (Riesgo de Habitabilidad)\n    INSTRUMENTO : Recomendado para Telescopios Espaciales (JWST).\n"
+        contenido += "    PRIORIDAD   : MÁXIMA PRIORIDAD ESPACIAL (Riesgo de Habitabilidad)\n    INSTRUMENTO : Recomendado para Telescopios Espaciales (JWST / HST) o VLT.\n"
     elif "nova" in tipo_evento.lower():
-        contenido += "    PRIORIDAD   : ALTA PRIORIDAD (Variable Cataclísmica)\n    INSTRUMENTO : Espectroscopía Terrestre (VLT / SOAR / Magallanes).\n"
+        contenido += "    PRIORIDAD   : ALTA PRIORIDAD (Variable Cataclísmica)\n    INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).\n"
     elif es_enana_roja is True:
-        contenido += "    PRIORIDAD   : PRIORIDAD MODERADA (Actividad Estelar Base)\n    INSTRUMENTO : Telescopios terrestres (Fotometría).\n"
+        contenido += "    PRIORIDAD   : PRIORIDAD MODERADA (Actividad Estelar Base)\n    INSTRUMENTO : Telescopios terrestres (Fotometría de seguimiento).\n"
     else:
-        contenido += "    PRIORIDAD   : PRIORIDAD ESTÁNDAR DE MONITOREO\n    INSTRUMENTO : Telescopios terrestres (Fotometría).\n"
+        contenido += "    PRIORIDAD   : PRIORIDAD ESTÁNDAR DE MONITOREO\n    INSTRUMENTO : Telescopios terrestres (Fotometría de seguimiento).\n"
     
     if reporte_matematico:
         contenido += reporte_matematico
