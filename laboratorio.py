@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : laboratorio.py (Centro de Análisis Científico Profundo)
-VERSIÓN    : 17.4 (FASE 3: 100% LOCAL - SIN GOOGLE CLOUD STORAGE)
+VERSIÓN    : 17.5 (FASE 3: 100% LOCAL - SIN GOOGLE CLOUD STORAGE + RIGOR ASTROFÍSICO)
 =============================================================================
 """
 
@@ -57,10 +57,13 @@ def buscar_exoplanetas(coordenadas, tipo_evento="desconocido", radio_arcsec=60):
             if 'default_flag' in resultado.colnames: resultado = resultado[resultado['default_flag'] == 1]
             if len(resultado) > 0:
                 tiene_planetas = True
+                
+                # CONDICIONAL INTELIGENTE DE RIGOR ASTROFÍSICO
                 if tipo_evento == "flare":
                     print(f"   [!!!] ALERTA ESTELAR LOCAL: Fulguración afectando a {len(resultado)} exoplaneta(s) confirmado(s) [!!!]")
                 else:
                     print(f"   [!!!] ALERTA: {len(resultado)} exoplaneta(s) confirmado(s) en la misma línea de visión ({radio_arcsec}\") [!!!]")
+                
                 for planeta in resultado:
                     nombre, masa, periodo = planeta['pl_name'], extraer_valor(planeta['pl_bmasse']), extraer_valor(planeta['pl_orbper'])
                     planetas_info.append({'nombre': nombre, 'masa': masa, 'periodo': periodo})
@@ -199,9 +202,16 @@ DISTANCIA        : {distancia}
 
 [1] ESTADO DEL SISTEMA PLANETARIO
 """
-    if tiene_planetas is True and planetas_info: contenido += f"    SISTEMA CONFIRMADO: {len(planetas_info)} exoplaneta(s) en órbita.\n"
-    elif tiene_planetas is False: contenido += "    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).\n"
-    else: contenido += "    ESTADO DESCONOCIDO: NASA Exoplanet Archive inaccesible (Timeout de red).\n"
+    # 1. CORRECCIÓN DE RIGOR CIENTÍFICO EN EL TEXTO PLANETARIO
+    if tiene_planetas is True and planetas_info: 
+        if tipo_evento == "flare":
+            contenido += f"    SISTEMA IMPACTADO: {len(planetas_info)} exoplaneta(s) confirmado(s) en órbita local.\n"
+        else:
+            contenido += f"    ALINEACIÓN ÓPTICA: {len(planetas_info)} exoplaneta(s) confirmado(s) en la misma línea de visión (60 arcsec).\n"
+    elif tiene_planetas is False: 
+        contenido += "    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).\n"
+    else: 
+        contenido += "    ESTADO DESCONOCIDO: NASA Exoplanet Archive inaccesible (Timeout de red).\n"
         
     contenido += "\n[2] EVALUACIÓN TERMODINÁMICA (SED QUIESCENTE)\n"
     if es_enana_roja is True: contenido += "    FIRMA TÉRMICA: Sistema Frío / Activo (Emisión Infrarroja Dominante en reposo).\n"
@@ -214,8 +224,14 @@ DISTANCIA        : {distancia}
     else: contenido += f"    ESTADO QUÍMICO: Carencia de datos públicos 1D. Radar ESO indica: {estado_eso}\n"
 
     contenido += "\n[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)\n"
-    if es_enana_roja is True or "nova" in tipo_evento.lower() or tiene_planetas is True:
-        contenido += "    PRIORIDAD   : MÁXIMA PRIORIDAD ESPACIAL\n    INSTRUMENTO : Recomendado para JWST, ELT o VLT.\n"
+    
+    # 2. CORRECCIÓN INTELIGENTE DE PRIORIDADES Y TELESCOPIOS
+    if tipo_evento == "flare" and tiene_planetas is True:
+        contenido += "    PRIORIDAD   : MÁXIMA PRIORIDAD ESPACIAL (Riesgo de Habitabilidad)\n    INSTRUMENTO : Recomendado para Telescopios Espaciales (JWST).\n"
+    elif "nova" in tipo_evento.lower():
+        contenido += "    PRIORIDAD   : ALTA PRIORIDAD (Variable Cataclísmica)\n    INSTRUMENTO : Espectroscopía Terrestre (VLT / SOAR / Magallanes).\n"
+    elif es_enana_roja is True:
+        contenido += "    PRIORIDAD   : PRIORIDAD MODERADA (Actividad Estelar Base)\n    INSTRUMENTO : Telescopios terrestres (Fotometría).\n"
     else:
         contenido += "    PRIORIDAD   : PRIORIDAD ESTÁNDAR DE MONITOREO\n    INSTRUMENTO : Telescopios terrestres (Fotometría).\n"
     
