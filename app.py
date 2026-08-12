@@ -240,14 +240,16 @@ elif vista == "Feed de Alertas y Circulares":
             elif survey_origen == 'LSST': prefijo = "🚨 [LSST]"
             else: prefijo = f"🚨 [{survey_origen}]"
                 
-            clave = f"[{hora_str}] {prefijo} {e.get('oid')} - {e.get('tipo').upper()}"
+            clave = f"[Captura: {hora_str}] {prefijo} {e.get('oid')} - {e.get('tipo').upper()}"
             opciones[clave] = e
             
-        seleccion = st.selectbox("Selecciona un evento del catálogo:", list(opciones.keys()))
+        seleccion = st.selectbox("Selecciona un evento (Ordenado por hora de captura en el telescopio):", list(opciones.keys()))
         evento_actual = opciones[seleccion]
         
         oid_limpio = str(evento_actual.get('oid')).replace(' ', '_').replace('/', '-')
         survey = evento_actual.get('survey')
+        
+        st.info("💡 **Nota sobre sincronización temporal:** La hora mostrada en el catálogo superior corresponde al instante exacto en que la luz del evento impactó el espejo del observatorio (tiempo de captura original). Debido al procesamiento de IA y tiempos de red, las bitácoras de la Estación Magallanes siempre reflejarán un lógico desfase correspondiente a la hora de procesamiento local.")
         
         ruta_circular = f"alertas/CIRCULAR_{oid_limpio}.txt"
         ruta_atel = f"alertas_comunidad/ALERTA_ATEL_{oid_limpio}.txt"
