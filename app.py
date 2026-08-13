@@ -142,7 +142,7 @@ if vista == "Dashboard Principal (Telemetría)":
         """)
     
     col_map1, col_map2 = st.columns([2, 1])
-    with col_map1: st.subheader("🌌 Mapa Celeste de Impactos")
+    with col_map1: st.subheader("🌌 Mapa Celeste de Detecciones")
     with col_map2:
         cat_mapa = st.selectbox("Filtrar Mapa:", [
             "👁️ Ver Todo", 
