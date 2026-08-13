@@ -492,3 +492,6 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-08-13 16:53:20] -> Procesando evento de interés: ZTF19acuciko (nova)
 [2026-08-13 16:54:29] -> Procesando evento de interés: ZTF17aadiqwv (nova)
 [2026-08-13 16:56:11] -> Procesando evento de interés: ZTF19aatqgjm (nova)
+[2026-08-13 17:30:12] ==================================================
+[2026-08-13 17:30:12] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-08-13 17:31:12] Error TAP ADQL: 504 Server Error: Gateway Time-out for url: https://tap.alerce.online/tap/sync
