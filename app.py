@@ -217,7 +217,7 @@ if vista == "Dashboard Principal (Telemetría)":
 # VISTA 2: FEED DE ALERTAS
 # =====================================================================
 elif vista == "Feed de Alertas y Circulares":
-    st.title("📋 Terminal de Resoluciones Científicas")
+    st.title("📋 Alertas y Circulares de Detecciones")
     
     # También usamos el catalogo_filtrado aquí
     if catalogo_filtrado:
