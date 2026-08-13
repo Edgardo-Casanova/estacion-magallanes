@@ -495,3 +495,31 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-08-13 17:30:12] ==================================================
 [2026-08-13 17:30:12] APUNTANDO TELESCOPIO A RED: ZTF
 [2026-08-13 17:31:12] Error TAP ADQL: 504 Server Error: Gateway Time-out for url: https://tap.alerce.online/tap/sync
+[2026-08-13 18:30:13] ==================================================
+[2026-08-13 18:30:13] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-08-13 18:30:42] -> Procesando evento de interés: ZTF18abxvthz (nova)
+[2026-08-13 18:32:34] -> Procesando evento de interés: ZTF20aafecss (nova)
+[2026-08-13 18:34:05] -> Procesando evento de interés: ZTF19acifjfu (nova)
+[2026-08-13 18:34:23] -> Procesando evento de interés: ZTF22abxaewq (nova)
+[2026-08-13 18:36:16] -> Procesando evento de interés: ZTF17aadtidu (nova)
+[2026-08-13 18:39:54] -> Procesando evento de interés: ZTF17aadsvqd (nova)
+[2026-08-13 18:42:02] -> Procesando evento de interés: ZTF17aabgohw (nova)
+[2026-08-13 18:42:54] -> Procesando evento de interés: ZTF18acemmrs (nova)
+[2026-08-13 18:43:09] -> Procesando evento de interés: ZTF18aablprf (nova)
+[2026-08-13 18:44:42] -> Procesando evento de interés: ZTF18aaaelvk (nova)
+[2026-08-13 18:45:39] -> Procesando evento de interés: ZTF18acccueb (nova)
+[2026-08-13 18:47:21] -> Procesando evento de interés: ZTF18abuqjns (nova)
+[2026-08-13 18:48:13] -> Procesando evento de interés: ZTF17aacbtbg (nova)
+[2026-08-13 18:48:27] -> Procesando evento de interés: ZTF18abzdgrc (nova)
+[2026-08-13 18:49:00] -> Procesando evento de interés: ZTF17aadcbci (nova)
+[2026-08-13 18:49:42] -> Procesando evento de interés: ZTF18aabrxmh (nova)
+[2026-08-13 18:49:53] -> Procesando evento de interés: ZTF20aaqkars (nova)
+[2026-08-13 18:50:00] -> Procesando evento de interés: ZTF18aaaeycy (nova)
+[2026-08-13 18:50:08] -> Procesando evento de interés: ZTF22abpudhm (blazar)
+[2026-08-13 18:50:17] -> Procesando evento de interés: ZTF17aadkyns (nova)
+[2026-08-13 18:51:52] -> Procesando evento de interés: ZTF17aabwcno (nova)
+[2026-08-13 18:52:28] -> Procesando evento de interés: ZTF18adfoggw (nova)
+[2026-08-13 18:52:53] -> Procesando evento de interés: ZTF18abuagnt (blazar)
+[2026-08-13 18:54:09] -> Procesando evento de interés: ZTF17aadiqwv (nova)
+[2026-08-13 18:54:44] -> Procesando evento de interés: ZTF19acuciko (nova)
+[2026-08-13 18:55:19] -> Procesando evento de interés: ZTF19aatqgjm (nova)
