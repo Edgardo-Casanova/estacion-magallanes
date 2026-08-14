@@ -2,12 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : operaciones_too.py (Megáfono Comunitario y ATel)
-VERSIÓN    : 17.4 (FASE 3: 100% LOCAL - SIN GOOGLE CLOUD STORAGE)
-
-DESCRIPCIÓN:
-Redacta reportes bilingües oficiales (AAVSO y Astronomer's Telegram) 
-exclusivamente para hallazgos frescos (ZTF/LSST) filtrados por el 
-pipeline de la Estación Magallanes. 
+VERSIÓN    : 17.5 (FASE 3: INCLUSIÓN PROTOCOLO TDE)
 =============================================================================
 """
 
@@ -32,25 +27,19 @@ def generar_alerta_comunidad(nombre_evento, ra, dec, tipo_evento="flare", extra_
         
     print(f"\n[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA {nombre_evento} ({tipo_evento.upper()})")
     
-    # =====================================================================
-    # EXTRACCIÓN DE DATOS PARA FILTRO ANTI-SPAM
-    # =====================================================================
     es_vip = extra_data.get("es_vip", False)
     salto = extra_data.get("salto_luminosidad", 0.0)
     edad = extra_data.get("edad_dias", 999.0)
 
-    # REGLAS DE EXCEPCIONALIDAD (LA COMPUERTA LÓGICA)
     es_mega_flare = (tipo_evento == "flare" and salto > 1.5)
     es_primicia_supernova = (tipo_evento in ["supernova", "nova"] and edad < 3.0)
-    es_nucleo_activo = (tipo_evento in ["agn", "blazar"]) # Eventos extragalácticos raros
+    # TDE AGREGADO AL FILTRO DE PERMISOS
+    es_nucleo_activo = (tipo_evento in ["agn", "blazar", "tde"]) 
 
     if not (es_vip or es_mega_flare or es_primicia_supernova or es_nucleo_activo):
         print(f"   [-] Evento rutinario (Edad: {edad:.1f}d | Salto: {salto:.2f}m). Megáfono silenciado para evitar fatiga de alertas.")
-        return None # 🛑 Se bloquea la generación del archivo público
+        return None 
         
-    # =====================================================================
-    # REDACCIÓN DEL TELEGRAMA (Solo se ejecuta si pasó el filtro)
-    # =====================================================================
     nombre_archivo = nombre_evento.replace(' ', '_').replace('/', '-')
     distancia = extra_data.get("distancia", "Desconocida")
     mjd_obs = extra_data.get("mjd_deteccion")
@@ -65,7 +54,7 @@ def generar_alerta_comunidad(nombre_evento, ra, dec, tipo_evento="flare", extra_
 
     if tipo_evento == "flare":
         ew_halfa = extra_data.get("ew_halfa", 0.0)
-        tiene_planetas = extra_data.get("tiene_planetas", False) # Puede ser True, False, o None
+        tiene_planetas = extra_data.get("tiene_planetas", False) 
         es_enana_roja = extra_data.get("es_enana_roja", None)
         fuente_espectro = extra_data.get("fuente_espectro", "Desconocida")
         
@@ -76,7 +65,6 @@ def generar_alerta_comunidad(nombre_evento, ra, dec, tipo_evento="flare", extra_
             tipo_estrella_es = "Estrella Activa (Subtipo espectral por confirmar)"
             tipo_estrella_en = "Active Star (Spectral subtype pending confirmation)"
             
-        # LÓGICA BLINDADA PARA NASA EXOPLANET
         if tiene_planetas is True:
             planetas_es = "Sí (Posible impacto en atmósferas exoplanetarias)"
             planetas_en = "Yes (Potential impact on exoplanetary atmospheres)"
@@ -141,7 +129,8 @@ Magallanes Station Automated Pipeline | AAVSO Observer Code: ECDA
 ======================================================================"""
         ruta_txt = f"alertas_comunidad/ALERTA_AAVSO_{nombre_archivo}.txt"
 
-    elif tipo_evento in ["supernova", "nova", "agn", "blazar"]:
+    # TDE AGREGADO A LA PLANTILLA DEL TELEGRAMA
+    elif tipo_evento in ["supernova", "nova", "agn", "blazar", "tde"]:
         galaxia = extra_data.get("galaxia", "Desconocida")
         redshift = extra_data.get("redshift", None)
         
@@ -159,6 +148,9 @@ Magallanes Station Automated Pipeline | AAVSO Observer Code: ECDA
         elif tipo_evento == "agn":
             goal_es = "Confirmar fluctuación de AGN (Cuásar) y medir dinámica de acreción."
             goal_en = "Confirm AGN (Quasar) fluctuation and measure accretion dynamics."
+        elif tipo_evento == "tde":
+            goal_es = "Confirmar evento de disrupción de marea (TDE) y medir tasa de acreción de los restos estelares cayendo al agujero negro supermasivo."
+            goal_en = "Confirm Tidal Disruption Event (TDE) and measure accretion rate of stellar debris falling into the supermassive black hole."
         else:
             goal_es = "Obtener espectro profundo para confirmar subtipo exacto de explosión termonuclear/colapso."
             goal_en = "Obtain deep spectra to confirm exact thermonuclear/core-collapse explosion subtype."
