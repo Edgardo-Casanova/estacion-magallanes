@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : app.py (Visor Web Institucional / Panel de Control)
-VERSIÓN    : 19.1 (FASE 5: INTERFAZ LIMPIA + FILTRO DE FECHA CORREGIDO)
+VERSIÓN    : 19.2 (FASE 5: TDE INTEGRADO AL DASHBOARD Y MAPA)
 =============================================================================
 """
 
@@ -89,7 +89,6 @@ for ev in catalogo_datos:
     mjd_val = ev.get('mjd_deteccion')
     if mjd_val:
         try:
-            # Convertir MJD a fecha local (Magallanes UTC-3) para compararlo con el calendario
             dt_utc = Time(float(mjd_val), format='mjd').to_datetime()
             dt_local = dt_utc - timedelta(hours=3)
             if dt_local.date() == fecha_seleccionada:
@@ -112,20 +111,21 @@ if vista == "Dashboard Principal (Telemetría)":
     
     st.divider()
     
-    # Ahora los contadores usan el catalogo_filtrado
-    total_tns = sum(1 for e in catalogo_filtrado if e.get("survey") == "TNS_GLOBAL")
+    total_tns = sum(1 for e in catalogo_filtrado if e.get("survey") == "TNS_GLOBAL" and e.get("tipo") != "tde")
     total_ztf_cand = sum(1 for e in catalogo_filtrado if e.get("survey") != "TNS_GLOBAL" and "supernova" in e.get("tipo", "").lower())
     total_novas = sum(1 for e in catalogo_filtrado if e.get("tipo") == "nova")
     total_agn = sum(1 for e in catalogo_filtrado if e.get("tipo") in ["agn", "blazar"])
+    total_tdes = sum(1 for e in catalogo_filtrado if e.get("tipo") == "tde")
     total_flares = sum(1 for e in catalogo_filtrado if e.get("tipo") == "flare" and e.get("vip", False))
     
     st.subheader(f"📊 Resumen del Catálogo Activo ({fecha_seleccionada.strftime('%Y-%m-%d')})")
-    col_det1, col_det2, col_det3, col_det4, col_det5 = st.columns(5)
-    col_det1.metric("✅ Supernovas Confirmadas (TNS)", str(total_tns), "Históricas", delta_color="normal")
-    col_det2.metric("🚨 Supernovas Candidatas (ZTF)", str(total_ztf_cand), "Requiere ATel", delta_color="inverse")
+    col_det1, col_det2, col_det3, col_det4, col_det5, col_det6 = st.columns(6)
+    col_det1.metric("✅ Supernovas (TNS)", str(total_tns), "Históricas", delta_color="normal")
+    col_det2.metric("🚨 Candidatas (ZTF)", str(total_ztf_cand), "Requiere ATel", delta_color="inverse")
     col_det3.metric("💥 Novas", str(total_novas), "Erupción", delta_color="normal")
-    col_det4.metric("🕳️ AGN/Blazares", str(total_agn), "Extragaláctico", delta_color="normal")
-    col_det5.metric("🔥 Flares VIP", str(total_flares), "Estelar", delta_color="normal")
+    col_det4.metric("🕳️ AGN/Blazar", str(total_agn), "Extragaláctico", delta_color="normal")
+    col_det5.metric("🌀 Agujeros Negros", str(total_tdes), "Disrupción TDE", delta_color="normal")
+    col_det6.metric("🔥 Flares VIP", str(total_flares), "Estelar", delta_color="normal")
     
     with st.expander("📖 Glosario de Terminología Astrofísica"):
         st.markdown("""
@@ -133,12 +133,11 @@ if vista == "Dashboard Principal (Telemetría)":
         * **ZTF (Zwicky Transient Facility):** Observatorio robótico en el hemisferio norte (Palomar).
         * **LSST (Legacy Survey of Space and Time):** Observatorio Vera C. Rubin (hemisferio sur).
         * **SN (Supernova):** Explosión termonuclear o colapso de núcleo de una estrella.
+        * **TDE (Tidal Disruption Event):** Evento de disrupción de marea donde un agujero negro supermasivo destroza y devora una estrella.
         * **AGN (Active Galactic Nucleus) / Cuásar:** Núcleo galáctico activo alimentado por un agujero negro supermasivo.
         * **Blazar:** Tipo de AGN cuyo chorro relativista apunta directamente hacia la Tierra.
         * **Nova / CV (Variable Cataclísmica):** Erupción superficial en una enana blanca por acreción de materia.
         * **Flare VIP (Enana M):** Erupción estelar violenta en estrellas frías y pequeñas (Alta prioridad local).
-        * **MJD (Modified Julian Date):** Sistema de cronometraje continuo usado en astronomía.
-        * **ATel (Astronomer's Telegram):** Boletín rápido para alertar a la comunidad sobre nuevos eventos.
         """)
     
     col_map1, col_map2 = st.columns([2, 1])
@@ -150,6 +149,7 @@ if vista == "Dashboard Principal (Telemetría)":
             "🚨 Supernovas Candidatas (ZTF)", 
             "💥 Novas", 
             "🕳️ AGN/Blazares", 
+            "🌀 Agujeros Negros (TDE)",
             "🔥 Flares VIP"
         ], label_visibility="collapsed")
     
@@ -159,16 +159,17 @@ if vista == "Dashboard Principal (Telemetría)":
             "Candidata ZTF (Acción)": {"ra": [], "dec": [], "text": [], "color": "#FF0000", "symbol": "cross"},
             "Blazar (Chorro)": {"ra": [], "dec": [], "text": [], "color": "#FF00FF", "symbol": "triangle-down"},
             "AGN (Cuásar)": {"ra": [], "dec": [], "text": [], "color": "#FF9900", "symbol": "triangle-up"},
+            "Agujero Negro (TDE)": {"ra": [], "dec": [], "text": [], "color": "#FFD700", "symbol": "x"},
             "Nova / Cataclísmica": {"ra": [], "dec": [], "text": [], "color": "#00BFFF", "symbol": "star"},
             "Flare (Enana M VIP)": {"ra": [], "dec": [], "text": [], "color": "#FF0055", "symbol": "hexagon"}
         }
 
-        # Ahora iteramos sobre el catálogo filtrado
         for ev in catalogo_filtrado:
             t, survey, vip = ev.get("tipo", ""), ev.get("survey", ""), ev.get("vip", False)
             cat = None
             
-            if survey == "TNS_GLOBAL": cat = "Confirmada TNS"
+            if t == "tde": cat = "Agujero Negro (TDE)"
+            elif survey == "TNS_GLOBAL": cat = "Confirmada TNS"
             elif t == "supernova": cat = "Candidata ZTF (Acción)"
             elif t == "blazar": cat = "Blazar (Chorro)"
             elif t == "agn": cat = "AGN (Cuásar)"
@@ -181,6 +182,7 @@ if vista == "Dashboard Principal (Telemetría)":
             if cat_mapa == "🚨 Supernovas Candidatas (ZTF)" and cat != "Candidata ZTF (Acción)": continue
             if cat_mapa == "💥 Novas" and cat != "Nova / Cataclísmica": continue
             if cat_mapa == "🕳️ AGN/Blazares" and cat not in ["Blazar (Chorro)", "AGN (Cuásar)"]: continue
+            if cat_mapa == "🌀 Agujeros Negros (TDE)" and cat != "Agujero Negro (TDE)": continue
             if cat_mapa == "🔥 Flares VIP" and cat != "Flare (Enana M VIP)": continue
             
             mjd_val = ev.get('mjd_deteccion')
@@ -199,7 +201,7 @@ if vista == "Dashboard Principal (Telemetría)":
                 fig.add_trace(go.Scatter(
                     x=datos["ra"], y=datos["dec"], mode='markers', name=nombre_cat,
                     text=datos["text"], hoverinfo='text',
-                    marker=dict(symbol=datos["symbol"], size=16 if "Candidata" in nombre_cat else 12, color=datos["color"], opacity=0.8, line=dict(width=1, color='white'))
+                    marker=dict(symbol=datos["symbol"], size=16 if "Candidata" in nombre_cat or "TDE" in nombre_cat else 12, color=datos["color"], opacity=0.8, line=dict(width=1, color='white'))
                 ))
 
         fig.update_layout(
@@ -219,7 +221,6 @@ if vista == "Dashboard Principal (Telemetría)":
 elif vista == "Feed de Alertas y Circulares":
     st.title("📋 Alertas y Circulares de Detecciones")
     
-    # También usamos el catalogo_filtrado aquí
     if catalogo_filtrado:
         catalogo_ordenado = sorted(catalogo_filtrado, key=lambda x: float(x.get('mjd_deteccion', 0)), reverse=True)
         
@@ -453,6 +454,7 @@ elif vista == "Acerca del Observatorio":
         * **SN Ia (Supernova Tipo Ia):** La explosión termonuclear completa de una enana blanca. Son fundamentales en cosmología como "candelas estándar" para medir la expansión del universo.
         * **SN II / SN Ibc (Supernovas de Colapso de Núcleo):** La muerte violenta de estrellas supermasivas que agotan su combustible, colapsando bajo su propia gravedad.
         * **SLSN (Supernova Superluminosa):** Explosiones estelares extremadamente raras y energéticas, hasta 100 veces más brillantes que una supernova normal.
+        * **TDE (Tidal Disruption Event):** Evento donde un agujero negro supermasivo destroza y devora una estrella por fuerzas de marea.
         """)
     with col3:
         st.subheader("Núcleos Galácticos Activos")
