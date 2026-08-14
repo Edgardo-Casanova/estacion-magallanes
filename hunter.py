@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 22.1 (FASE 4: LECTURA AISLADA LÍNEA 3, AUTOPURGA Y TASAS DUALES)
+VERSIÓN    : 22.2 (FASE 4: TDE NATIVO Y ASCENSO DE CANDIDATAS)
 =============================================================================
 """
 
@@ -180,7 +180,7 @@ def graficar_curva(det, id_evento, red_descubridora, ra_float, dec_float, tipo_e
     ax1.set_facecolor('#1a1a1a')
     ax2.set_facecolor('#1a1a1a')
     
-    color_destaque = '#ff00ff' if es_vip else ('cyan' if tipo_evento_final in ["supernova", "agn", "blazar"] else 'yellow')
+    color_destaque = '#ff00ff' if es_vip else ('cyan' if tipo_evento_final in ["supernova", "agn", "blazar", "tde"] else 'yellow')
     
     if det is not None and not det.empty:
         if 'fecha_humana' not in det.columns: det['fecha_humana'] = Time(det['mjd'].values, format='mjd').to_datetime()
@@ -239,22 +239,17 @@ def consultar_tns_sur(client, catalogo_dict):
         
     lineas = contenido.split('\n')
     
-    # REGLA 1: Aborta si el archivo solo tiene el encabezado y el salto de línea.
     if len(lineas) <= 2:
         registrar_log("[-] El boletín está vacío o en reposo (Línea 3 vacía). Omitiendo búsqueda.", log_file)
         return
         
-    # REGLA 2: Aislamiento de texto desde la línea 3 hacia abajo.
     texto_a_analizar = '\n'.join(lineas[2:])
     if not texto_a_analizar.strip():
         registrar_log("[-] No hay texto válido desde la línea 3. Omitiendo búsqueda.", log_file)
         return
 
-    # Expresión regular para encontrar supernovas (ej. 2026wyz, 2026sun)
     patron = r'\b202\d[a-zA-Z]{1,4}\b'
     extraccion = re.findall(patron, texto_a_analizar.lower())
-    
-    # Limpiar duplicados y formatear
     supernovas_a_buscar = list(set([obj.lower() for obj in extraccion]))
     
     if not supernovas_a_buscar:
@@ -271,8 +266,11 @@ def consultar_tns_sur(client, catalogo_dict):
             
             # Verificar si ya está en el catálogo maestro
             if id_evento in catalogo_dict:
-                registrar_log(f"[-] {id_evento} ya está en el catálogo, saltando...", log_file)
-                continue
+                if catalogo_dict[id_evento].get("survey") == "TNS_GLOBAL":
+                    registrar_log(f"[-] {id_evento} ya está confirmado por TNS, saltando...", log_file)
+                    continue
+                else:
+                    registrar_log(f"[*] {id_evento} cazado previamente. ¡ASCENDIENDO a Confirmada TNS!", log_file)
                 
             registrar_log(f"Descargando ficha técnica oficial para {id_evento}...", log_file)
             print(f"    [+] Procesando orden oficial de IAU: {id_evento}")
@@ -340,11 +338,14 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
                     mjd_obs = det['mjd'].max() if det is not None and not det.empty else Time(datetime.utcnow()).mjd
 
                     try:
+                        # CLASIFICACIÓN INTELIGENTE TDE vs SN
+                        tipo_evento_tns = "tde" if "TDE" in clasificacion.upper() else "supernova"
+
                         catalogo_dict[id_evento] = {
                             "oid": id_evento,
                             "ra": float(ra_float),
                             "dec": float(dec_float),
-                            "tipo": "supernova",
+                            "tipo": tipo_evento_tns,
                             "survey": "TNS_GLOBAL",
                             "analisis": clasificacion,
                             "vip": False,
@@ -360,17 +361,15 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
                 
             time.sleep(2.5)
 
-    # REGLA 3: Purgar dejando solo la primera línea y el salto, listo para GitHub y el siguiente ciclo.
     with open(ARCHIVO_BOLETIN, "w", encoding="utf-8") as f:
         f.write("Listado de confirmaciones oficiales TNS\n\n")
     registrar_log("[+] Procesamiento TNS finalizado. Archivo de boletín purgado desde la línea 3.", log_file)
-
 
 # =====================================================================
 # BUCLE PRINCIPAL (MAIN)
 # =====================================================================
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.1 - ZTF AUTÓNOMO + TASAS DUALES) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.2 - TDE NATIVO + TASAS DUALES) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     url_tap = "https://tap.alerce.online/tap"
@@ -423,7 +422,6 @@ def main():
                 
             print(f"   ({len(candidatos)} objetos capturados. Iniciando análisis por paquetes de a 50 para proteger RAM...)")
             
-            # --- SISTEMA DE PAQUETES (CHUNKS DE 50) PARA PROTECCIÓN DE RAM ---
             tamano_paquete = 50
             for i in range(0, len(candidatos), tamano_paquete):
                 paquete = candidatos.iloc[i:i+tamano_paquete]
@@ -458,22 +456,17 @@ def main():
 
                             latitud_b, en_plano, es_viejo = coordenadas.galactic.b.degree, abs(coordenadas.galactic.b.degree) <= 10.0, edad_dias > 400
 
-                            # --- ANÁLISIS CINÉTICO (HISTÓRICO VS RECIENTE) ---
                             salto_luminosidad_delta = amplitud_mag
-                            tasa_acel_reciente = tasa_acel # Asume la histórica por defecto para eventos jóvenes
+                            tasa_acel_reciente = tasa_acel
                             
                             if edad_dias > 30:
                                 recientes, antiguas = det[det['mjd'] >= mjd_max - 30], det[det['mjd'] < mjd_max - 30]
                                 if not recientes.empty and not antiguas.empty: 
                                     salto_luminosidad_delta = antiguas['magpsf'].median() - recientes['magpsf'].min()
-                                    
-                                    # Extraer la tasa de aceleración de la ventana de 30 días
                                     mjd_pico_reciente = recientes.loc[recientes['magpsf'].idxmin(), 'mjd']
                                     mjd_inicio_reciente = recientes['mjd'].min()
                                     dias_al_pico_rec = mjd_pico_reciente - mjd_inicio_reciente
-                                    
-                                    if dias_al_pico_rec <= 0: dias_al_pico_rec = 1.0 # Evita división por cero
-                                    
+                                    if dias_al_pico_rec <= 0: dias_al_pico_rec = 1.0 
                                     if salto_luminosidad_delta > 0:
                                         tasa_acel_reciente = salto_luminosidad_delta / dias_al_pico_rec
                                     else:
@@ -482,7 +475,6 @@ def main():
                             veto_ia_cv = ("CV" in clase_ia_final.upper() or "NOVA" in clase_ia_final.upper()) and probabilidad > 0.90
                             analisis_magallanes, tipo_evento_final = "DESCONOCIDO", "descarte"
 
-                            # --- CLASIFICACIÓN FÍSICA BASADA EN TASA RECIENTE ---
                             if es_cuasar_cat or (es_viejo and not en_plano and not veto_ia_cv and not es_estrella_cat):
                                 if salto_luminosidad_delta > 0.5:
                                     if tasa_acel_reciente > 0.05: analisis_magallanes, tipo_evento_final = "Blazar (Chorro relativista - Alta aceleración)", "blazar"
@@ -513,7 +505,6 @@ def main():
     RED DE ORIGEN        : {current_survey}
     MJD ÚLTIMA DETEC.    : {mjd_alerta_actual:.4f}
 """                     
-                            # EXTRACCIÓN DE DATOS PARA EL FILTRO ANTI-SPAM
                             datos_cineticos_para_filtro = {
                                 "es_vip": es_vip,
                                 "edad_dias": edad_dias,
@@ -546,8 +537,7 @@ def main():
                             except Exception as e:
                                 registrar_log(f"[!] Error al inyectar {oid} al catálogo JSON: {e}", log_file)
 
-                    except Exception as e: 
-                        pass 
+                    except Exception as e: pass 
         except Exception as e:
             print(f"   [!] Error en exploración TAP: {e}")
             registrar_log(f"Error TAP ADQL: {e}", log_file)
