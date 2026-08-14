@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : laboratorio.py (Centro de Análisis Científico Profundo)
-VERSIÓN    : 17.5 (FASE 3: 100% LOCAL - SIN GOOGLE CLOUD STORAGE + RIGOR ASTROFÍSICO)
+VERSIÓN    : 17.6 (FASE 3: INCLUSIÓN DE TDE)
 =============================================================================
 """
 
@@ -50,20 +50,17 @@ def extraer_valor(dato):
 def buscar_exoplanetas(coordenadas, tipo_evento="desconocido", radio_arcsec=60):
     print(f"\n[1/4] 📡 Consultando NASA Exoplanet Archive (Radio cinemático de {radio_arcsec}\")...")
     tiene_planetas, planetas_info = False, []
-    NasaExoplanetArchive.TIMEOUT = 25  # BLINDAJE RED OPTIMIZADO
+    NasaExoplanetArchive.TIMEOUT = 25
     try:
         resultado = NasaExoplanetArchive.query_region(table="ps", coordinates=coordenadas, radius=radio_arcsec*u.arcsec)
         if resultado and len(resultado) > 0:
             if 'default_flag' in resultado.colnames: resultado = resultado[resultado['default_flag'] == 1]
             if len(resultado) > 0:
                 tiene_planetas = True
-                
-                # CONDICIONAL INTELIGENTE DE RIGOR ASTROFÍSICO
                 if tipo_evento == "flare":
                     print(f"   [!!!] ALERTA ESTELAR LOCAL: Fulguración afectando a {len(resultado)} exoplaneta(s) confirmado(s) [!!!]")
                 else:
                     print(f"   [!!!] ALERTA: {len(resultado)} exoplaneta(s) confirmado(s) en la misma línea de visión ({radio_arcsec}\") [!!!]")
-                
                 for planeta in resultado:
                     nombre, masa, periodo = planeta['pl_name'], extraer_valor(planeta['pl_bmasse']), extraer_valor(planeta['pl_orbper'])
                     planetas_info.append({'nombre': nombre, 'masa': masa, 'periodo': periodo})
@@ -82,7 +79,7 @@ def analizar_espectroscopia_activa(coordenadas, id_evento):
 
     if dec > -20.0:
         print("   [+] Coordenada en Hemisferio Norte/Ecuatorial. Consultando SDSS...")
-        SDSS.TIMEOUT = 45  # BLINDAJE RED (Base pesada)
+        SDSS.TIMEOUT = 45
         try:
             xid = SDSS.query_region(coordenadas, radius=5*u.arcsec, spectro=True)
             if xid is not None and len(xid) > 0:
@@ -111,34 +108,34 @@ def analizar_espectroscopia_activa(coordenadas, id_evento):
                     guardar_grafico_memoria(fig, f"data/quimica_halfa_{id_evento}.png")
                     return hay_emision, ew_halfa, fuente_espectro, estado_radar_eso
             else: print("   [-] SDSS no tiene espectro. Pasando a respaldo global...")
-        except Exception: print("   [-] Fallo en conexión SDSS (Timeout o red). Pasando a respaldo...")
+        except Exception: print("   [-] Fallo en conexión SDSS. Pasando a respaldo...")
 
     if fuente_espectro == "Ninguna":
-        print("   [+] Buscando abundancias químicas en cielos del sur (VizieR: GALAH/RAVE)...")
+        print("   [+] Buscando abundancias químicas en cielos del sur (VizieR: GALAH)...")
         try:
             v = Vizier(columns=['*'], catalog="J/MNRAS/506/150")
-            v.TIMEOUT = 45  # BLINDAJE RED (Base pesada)
+            v.TIMEOUT = 45 
             res_galah = v.query_region(coordenadas, radius=5*u.arcsec)
             if len(res_galah) > 0:
                 print("   [+] Objetivo encontrado en GALAH DR3.")
                 fuente_espectro = "GALAH (VizieR)"
                 hay_emision, ew_halfa = True, -2.5 
-        except Exception: print("   [-] Fallo en VizieR/GALAH (Timeout o red).")
+        except Exception: print("   [-] Fallo en VizieR/GALAH.")
 
     if fuente_espectro == "Ninguna":
-        print("   [+] Activando Radar ESO (European Southern Observatory)...")
+        print("   [+] Activando Radar ESO...")
         try:
-            Eso.TIMEOUT = 45  # BLINDAJE RED (Base pesada)
+            Eso.TIMEOUT = 45
             res_eso = Eso.query_region(coordenadas, radius=5*u.arcsec)
             if res_eso and len(res_eso) > 0:
-                print("   [!!!] ORO ASTRONÓMICO: Espectros profundos disponibles en Archivo ESO.")
-                estado_radar_eso = "ESPECTRO ENCONTRADO EN ESO (Requiere extracción manual)"
+                print("   [!!!] ORO ASTRONÓMICO: Espectros en Archivo ESO.")
+                estado_radar_eso = "ESPECTRO ENCONTRADO EN ESO"
             else:
                 estado_radar_eso = "Sin datos en archivo ESO"
                 print("   [-] Sin datos en archivo público ESO.")
         except Exception: 
             estado_radar_eso = "Radar ESO Inaccesible"
-            print("   [-] Fallo en Radar ESO (Timeout o red).")
+            print("   [-] Fallo en Radar ESO.")
 
     return hay_emision, ew_halfa, fuente_espectro, estado_radar_eso
 
@@ -149,7 +146,7 @@ def buscar_espectro_y_fotometria(coordenadas, id_evento):
 
     try:
         custom_simbad = Simbad()
-        custom_simbad.TIMEOUT = 25  # BLINDAJE RED OPTIMIZADO
+        custom_simbad.TIMEOUT = 25 
         custom_simbad.add_votable_fields('flux(V)', 'flux(R)', 'flux(J)', 'flux(H)', 'flux(K)')
         resultado = custom_simbad.query_region(coordenadas, radius=5*u.arcsec)
 
@@ -202,7 +199,6 @@ DISTANCIA        : {distancia}
 
 [1] ESTADO DEL SISTEMA PLANETARIO
 """
-    # 1. CORRECCIÓN DE RIGOR CIENTÍFICO EN EL TEXTO PLANETARIO
     if tiene_planetas is True and planetas_info: 
         if tipo_evento == "flare":
             contenido += f"    SISTEMA IMPACTADO: {len(planetas_info)} exoplaneta(s) confirmado(s) en órbita local.\n"
@@ -225,7 +221,6 @@ DISTANCIA        : {distancia}
 
     contenido += "\n[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)\n"
     
-    # 2. CORRECCIÓN INTELIGENTE DE PRIORIDADES Y TELESCOPIOS (Adiós ELT)
     if tipo_evento == "flare" and tiene_planetas is True:
         contenido += "    PRIORIDAD   : MÁXIMA PRIORIDAD ESPACIAL (Riesgo de Habitabilidad)\n    INSTRUMENTO : Recomendado para Telescopios Espaciales (JWST / HST) o VLT.\n"
     elif "nova" in tipo_evento.lower():
@@ -246,7 +241,7 @@ def buscar_galaxia_anfitriona(coordenadas):
     galaxia, redshift = "Desconocida (Intergaláctica / Muy lejana)", "Desconocido"
     try:
         custom_simbad = Simbad()
-        custom_simbad.TIMEOUT = 25  # BLINDAJE RED OPTIMIZADO
+        custom_simbad.TIMEOUT = 25 
         custom_simbad.add_votable_fields('z_value', 'otype')
         resultado = custom_simbad.query_region(coordenadas, radius=120*u.arcsec)
         
@@ -309,7 +304,6 @@ def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_
             generar_circular_estelar_local(ra_deg, dec_deg, id_limpio, tiene_planetas, es_enana_roja, planetas_info, emision_activa, valor_ew, fuente_espectro, estado_eso, tipo_evento, distancia_real, reporte_matematico)
             
             try:
-                # Fusión de los datos recopilados aquí más los matemáticos de hunter
                 datos_para_megafono = {
                     "ew_halfa": valor_ew, 
                     "tiene_planetas": tiene_planetas, 
@@ -318,12 +312,13 @@ def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_
                     "es_enana_roja": es_enana_roja,
                     "fuente_espectro": fuente_espectro
                 }
-                datos_para_megafono.update(extra_datos_hunter) # Inyectamos salto_luminosidad y edad_dias
+                datos_para_megafono.update(extra_datos_hunter) 
                 
                 generar_alerta_comunidad(id_limpio, ra_deg, dec_deg, tipo_evento=tipo_evento, extra_data=datos_para_megafono)
             except TypeError: pass
                 
-        elif tipo_evento in ["supernova", "agn", "blazar"]:
+        # AQUÍ ESTÁ EL CAMBIO CRUCIAL: TDE AGREGADO
+        elif tipo_evento in ["supernova", "agn", "blazar", "tde"]:
             galaxia, redshift = buscar_galaxia_anfitriona(coordenadas)
             _ = buscar_espectro_y_fotometria(coordenadas, id_limpio)
             
@@ -353,7 +348,7 @@ if __name__ == "__main__":
     try:
         ra_input = float(input("\n➤ Ascensión Recta (RA) : "))
         dec_input = float(input("➤ Declinación (Dec)    : "))
-        tipo_input = input("➤ Tipo (flare/nova/supernova/agn/blazar): ").strip().lower()
-        if tipo_input not in ["flare", "nova", "supernova", "agn", "blazar"]: tipo_input = "flare"
+        tipo_input = input("➤ Tipo (flare/nova/supernova/agn/blazar/tde): ").strip().lower()
+        if tipo_input not in ["flare", "nova", "supernova", "agn", "blazar", "tde"]: tipo_input = "flare"
         ejecutar_pipeline_magallanes(ra_input, dec_input, f"Manual_{tipo_input.upper()}", tipo_evento=tipo_input)
     except ValueError: print("\n[!] Error: Formato inválido.")
