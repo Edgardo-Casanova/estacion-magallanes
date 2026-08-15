@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 22.3 (FASE 4: TDE NATIVO, ASCENSO DE CANDIDATAS Y TAXONOMÍA GENÉRICA)
+VERSIÓN    : 22.4 (RESTAURACIÓN SÓLIDA DEL NÚCLEO V22.1 + TDE NATIVO)
 =============================================================================
 """
 
@@ -39,10 +39,10 @@ ARCHIVO_MJD = "tracker_mjd.txt"
 ARCHIVO_BOLETIN = "boletin_tns.txt"
 CATALOGO_JSON = "catalogo_maestro.json"
 
-# [MODIFICACIÓN 1 APLICADA] - Inclusión de categorías genéricas (SN, AGN) y TDE
+# NÚCLEO SANO RESTAURADO: Solo categorías maduras + TDE (Sin genéricos SN/AGN)
 diccionario_categorias = {
-    "ZTF": ["SNIa", "SNIbc", "SNII", "SLSN", "CV/Nova", "QSO", "Blazar", "AGN", "SN", "TDE"],
-    "LSST": ["SNIa", "SNIbc", "SNII", "SLSN", "Nova", "Mdwarf-flare", "AGN", "SN", "TDE"]
+    "ZTF": ["SNIa", "SNIbc", "SNII", "SLSN", "CV/Nova", "QSO", "Blazar", "TDE"],
+    "LSST": ["SNIa", "SNIbc", "SNII", "SLSN", "Nova", "Mdwarf-flare", "TDE"]
 }
 
 for directorio in ["alertas", "data", "alertas_comunidad", "bitacoras"]:
@@ -265,6 +265,7 @@ def consultar_tns_sur(client, catalogo_dict):
         for objname in supernovas_a_buscar:
             id_evento = f"SN {objname}"
             
+            # Verificar si ya está en el catálogo maestro
             if id_evento in catalogo_dict:
                 if catalogo_dict[id_evento].get("survey") == "TNS_GLOBAL":
                     registrar_log(f"[-] {id_evento} ya está confirmado por TNS, saltando...", log_file)
@@ -338,6 +339,7 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
                     mjd_obs = det['mjd'].max() if det is not None and not det.empty else Time(datetime.utcnow()).mjd
 
                     try:
+                        # CLASIFICACIÓN INTELIGENTE TDE vs SN
                         tipo_evento_tns = "tde" if "TDE" in clasificacion.upper() else "supernova"
 
                         catalogo_dict[id_evento] = {
@@ -368,7 +370,7 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
 # BUCLE PRINCIPAL (MAIN)
 # =====================================================================
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.3 - TDE NATIVO + TASAS DUALES) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.4 - NÚCLEO V22.1 + TDE NATIVO) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     url_tap = "https://tap.alerce.online/tap"
@@ -474,7 +476,7 @@ def main():
                             veto_ia_cv = ("CV" in clase_ia_final.upper() or "NOVA" in clase_ia_final.upper()) and probabilidad > 0.90
                             analisis_magallanes, tipo_evento_final = "DESCONOCIDO", "descarte"
 
-                            # [MODIFICACIÓN 2 APLICADA] - Clasificación segura del TDE
+                            # --- CLASIFICACIÓN FÍSICA BASADA EN TASA RECIENTE (V22.1 RESTAURADA + TDE) ---
                             if es_cuasar_cat or (es_viejo and not en_plano and not veto_ia_cv and not es_estrella_cat):
                                 if salto_luminosidad_delta > 0.5:
                                     if tasa_acel_reciente > 0.05: analisis_magallanes, tipo_evento_final = "Blazar (Chorro relativista - Alta aceleración)", "blazar"
@@ -484,8 +486,13 @@ def main():
                                 if salto_luminosidad_delta > 0.5: analisis_magallanes, tipo_evento_final = "Variable Cataclísmica / Nova (Erupción activa)", "nova"
                                 elif edad_dias < 3.0 and tasa_acel_reciente > 1.0: analisis_magallanes, tipo_evento_final = "Flare (Enana M)", "flare"
                                 else: analisis_magallanes, tipo_evento_final = "Variabilidad rutinaria", "descarte"
-                            elif clase_ia_final == "TDE" and salto_luminosidad_delta >= 0.5:
-                                analisis_magallanes, tipo_evento_final = "Disrupción de Marea (Agujero Negro activo)", "tde"
+                            
+                            # ---> INSERCIÓN QUIRÚRGICA: FILTRO EXCLUSIVO PARA TDE <---
+                            elif clase_ia_final == "TDE":
+                                if salto_luminosidad_delta > 0.5: analisis_magallanes, tipo_evento_final = "Disrupción de Marea (Agujero Negro activo)", "tde"
+                                else: analisis_magallanes, tipo_evento_final = "Variabilidad rutinaria", "descarte"
+                            # ---------------------------------------------------------
+                            
                             else:
                                 if edad_dias < 3.0 and tasa_acel_reciente > 1.0: analisis_magallanes, tipo_evento_final = "Flare (Enana M)", "flare"
                                 elif salto_luminosidad_delta >= 0.5: analisis_magallanes, tipo_evento_final = "Candidata (Esperando confirmación TNS)", "supernova"
