@@ -2495,5 +2495,16 @@
         "vip": false,
         "mjd_deteccion": 61266.021300389744,
         "img_url": "data/curva_luz_SN_2026yos.png"
+    },
+    {
+        "oid": "SN 2026yum",
+        "ra": 6.36294,
+        "dec": 20.23492,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN II",
+        "vip": false,
+        "mjd_deteccion": 61267.02122477336,
+        "img_url": "data/curva_luz_SN_2026yum.png"
     }
 ]
