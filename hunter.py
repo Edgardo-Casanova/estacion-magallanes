@@ -268,8 +268,8 @@ def consultar_tns_sur(client, catalogo_dict):
             # Verificar si ya está en el catálogo maestro
             if id_evento in catalogo_dict:
                 if catalogo_dict[id_evento].get("survey") == "TNS_GLOBAL":
-                    registrar_log(f"[-] {id_evento} ya está confirmado por TNS, saltando...", log_file)
-                    continue
+                    registrar_log(f"[*] {id_evento} ya existe. Descargando datos para actualizar posible reclasificación...", log_file)
+                    # Eliminamos el 'continue' para permitir que sobreescriba los datos con la info más fresca
                 else:
                     registrar_log(f"[*] {id_evento} cazado previamente. ¡ASCENDIENDO a Confirmada TNS!", log_file)
                 
@@ -339,8 +339,11 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
                     mjd_obs = det['mjd'].max() if det is not None and not det.empty else Time(datetime.utcnow()).mjd
 
                     try:
-                        # CLASIFICACIÓN INTELIGENTE TDE vs SN
-                        tipo_evento_tns = "tde" if "TDE" in clasificacion.upper() else "supernova"
+                        # CLASIFICACIÓN INTELIGENTE TNS (TDE vs NOVA vs SN)
+                        clase_upper = clasificacion.upper()
+                        if "TDE" in clase_upper: tipo_evento_tns = "tde"
+                        elif "CV" in clase_upper or "NOVA" in clase_upper: tipo_evento_tns = "nova"
+                        else: tipo_evento_tns = "supernova"
 
                         catalogo_dict[id_evento] = {
                             "oid": id_evento,
