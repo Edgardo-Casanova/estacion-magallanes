@@ -1167,13 +1167,13 @@
     },
     {
         "oid": "ZTF23abcsaiz",
-        "ra": 318.5699761550456,
-        "dec": -16.017772123355094,
+        "ra": 318.56997695919506,
+        "dec": -16.01777308285255,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61264.34601850016,
+        "mjd_deteccion": 61268.30478010001,
         "img_url": "data/curva_luz_ZTF23abcsaiz.png"
     },
     {
@@ -3012,5 +3012,60 @@
         "vip": false,
         "mjd_deteccion": 61268.27813659981,
         "img_url": "data/curva_luz_ZTF17aaadouq.png"
+    },
+    {
+        "oid": "ZTF21abbtzon",
+        "ra": 309.3930606124885,
+        "dec": -19.70894908737798,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61268.30525460001,
+        "img_url": "data/curva_luz_ZTF21abbtzon.png"
+    },
+    {
+        "oid": "ZTF18abwuper",
+        "ra": 314.82262963387313,
+        "dec": -20.002888605674368,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61268.30525460001,
+        "img_url": "data/curva_luz_ZTF18abwuper.png"
+    },
+    {
+        "oid": "ZTF18abvcdga",
+        "ra": 314.8213851229051,
+        "dec": -18.13404123852819,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61268.30525460001,
+        "img_url": "data/curva_luz_ZTF18abvcdga.png"
+    },
+    {
+        "oid": "ZTF18abvcdtl",
+        "ra": 313.53413443335614,
+        "dec": -19.674137724358967,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61268.30525460001,
+        "img_url": "data/curva_luz_ZTF18abvcdtl.png"
+    },
+    {
+        "oid": "ZTF26aaxnkkb",
+        "ra": 311.93981065564213,
+        "dec": -19.89067637599545,
+        "tipo": "supernova",
+        "survey": "ZTF",
+        "analisis": "Candidata (Esperando confirmación TNS)",
+        "vip": false,
+        "mjd_deteccion": 61268.30525460001,
+        "img_url": "data/curva_luz_ZTF26aaxnkkb.png"
     }
 ]
