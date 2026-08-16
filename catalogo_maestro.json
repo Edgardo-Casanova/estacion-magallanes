@@ -2550,5 +2550,71 @@
         "vip": false,
         "mjd_deteccion": 61267.51339119999,
         "img_url": "data/curva_luz_ZTF18aaeejyv.png"
+    },
+    {
+        "oid": "SN 2026pyl",
+        "ra": 284.452551063,
+        "dec": 56.5371481376,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61268.02124014486,
+        "img_url": "data/curva_luz_SN_2026pyl.png"
+    },
+    {
+        "oid": "SN 2026xks",
+        "ra": 359.457118549,
+        "dec": -17.5625588782,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61268.021286359086,
+        "img_url": "data/curva_luz_SN_2026xks.png"
+    },
+    {
+        "oid": "SN 2026xzt",
+        "ra": 331.690390054,
+        "dec": 25.9074833711,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61268.02133264758,
+        "img_url": "data/curva_luz_SN_2026xzt.png"
+    },
+    {
+        "oid": "SN 2023aegg",
+        "ra": 327.122620124,
+        "dec": -13.4771993207,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61268.02137833573,
+        "img_url": "data/curva_luz_SN_2023aegg.png"
+    },
+    {
+        "oid": "SN 2026yiz",
+        "ra": 60.8722761,
+        "dec": 26.3628248,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61268.02142389179,
+        "img_url": "data/curva_luz_SN_2026yiz.png"
+    },
+    {
+        "oid": "SN 2026xzu",
+        "ra": 232.56925,
+        "dec": 37.565011,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61268.0214693166,
+        "img_url": "data/curva_luz_SN_2026xzu.png"
     }
 ]
