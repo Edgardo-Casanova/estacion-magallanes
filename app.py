@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : app.py (Visor Web Institucional / Panel de Control)
-VERSIÓN    : 19.2 (FASE 5: TDE INTEGRADO AL DASHBOARD Y MAPA)
+VERSIÓN    : 19.3 (FASE 5: TDE INTEGRADO + FILTRO EN CASCADA PARA EVENTOS)
 =============================================================================
 """
 
@@ -216,86 +216,132 @@ if vista == "Dashboard Principal (Telemetría)":
         st.info(f"No hay eventos astronómicos registrados en el mapa para la fecha {fecha_seleccionada.strftime('%Y-%m-%d')}.")
 
 # =====================================================================
-# VISTA 2: FEED DE ALERTAS
+# VISTA 2: FEED DE ALERTAS CON FILTRO EN CASCADA
 # =====================================================================
 elif vista == "Feed de Alertas y Circulares":
     st.title("📋 Alertas y Circulares de Detecciones")
     
     if catalogo_filtrado:
+        # Ordenamos los eventos por tiempo
         catalogo_ordenado = sorted(catalogo_filtrado, key=lambda x: float(x.get('mjd_deteccion', 0)), reverse=True)
         
-        opciones = {}
-        for e in catalogo_ordenado:
-            survey_origen = e.get('survey', 'Desconocido')
-            mjd_val = e.get('mjd_deteccion', 0)
+        # --- INICIO LÓGICA FILTRO EN CASCADA ---
+        st.markdown("### 🔍 Filtrar Transitorios")
+        col_filtro, _ = st.columns([1, 1])
+        
+        with col_filtro:
+            filtro_clase = st.selectbox(
+                "Filtro por Clasificación Astrofísica:", 
+                [
+                    "👁️ Todos los eventos", 
+                    "🚨 Supernovas Candidatas (ZTF)", 
+                    "✅ Supernovas Confirmadas (TNS)", 
+                    "💥 Novas", 
+                    "🚀 Blazares", 
+                    "🕳️ AGN (Cuásar)", 
+                    "🌀 Agujeros Negros (TDE)", 
+                    "🔥 Flares VIP"
+                ]
+            )
+        
+        eventos_a_mostrar = []
+        for ev in catalogo_ordenado:
+            t = ev.get("tipo", "")
+            survey = ev.get("survey", "")
+            vip = ev.get("vip", False)
+            cat_evento = None
             
-            try:
-                dt_utc = Time(float(mjd_val), format='mjd').to_datetime()
-                dt_local = dt_utc - timedelta(hours=3)
-                hora_str = dt_local.strftime("%H:%M Local")
-            except Exception:
-                hora_str = "Hora desc."
+            # Clasificación interna mapeada al filtro
+            if t == "tde": cat_evento = "🌀 Agujeros Negros (TDE)"
+            elif survey == "TNS_GLOBAL": cat_evento = "✅ Supernovas Confirmadas (TNS)"
+            elif t == "supernova": cat_evento = "🚨 Supernovas Candidatas (ZTF)"
+            elif t == "blazar": cat_evento = "🚀 Blazares"
+            elif t == "agn": cat_evento = "🕳️ AGN (Cuásar)"
+            elif t == "nova": cat_evento = "💥 Novas"
+            elif t == "flare" and vip: cat_evento = "🔥 Flares VIP"
             
-            if survey_origen == 'TNS_GLOBAL': prefijo = "✅ [TNS]"
-            elif survey_origen == 'ZTF': prefijo = "🚨 [ZTF]"
-            elif survey_origen == 'LSST': prefijo = "🚨 [LSST]"
-            else: prefijo = f"🚨 [{survey_origen}]"
+            # Filtro lógico
+            if filtro_clase == "👁️ Todos los eventos" or filtro_clase == cat_evento:
+                eventos_a_mostrar.append(ev)
                 
-            clave = f"[Captura: {hora_str}] {prefijo} {e.get('oid')} - {e.get('tipo').upper()}"
-            opciones[clave] = e
-            
-        seleccion = st.selectbox("Selecciona un evento (Ordenado por hora de captura en el telescopio):", list(opciones.keys()))
-        evento_actual = opciones[seleccion]
-        
-        oid_limpio = str(evento_actual.get('oid')).replace(' ', '_').replace('/', '-')
-        survey = evento_actual.get('survey')
-        
-        st.info("💡 **Nota sobre sincronización temporal:** La hora mostrada en el catálogo superior corresponde al instante exacto en que la luz del evento impactó el espejo del observatorio (tiempo de captura original). Debido al procesamiento de IA y tiempos de red, las bitácoras de la Estación Magallanes siempre reflejarán un lógico desfase correspondiente a la hora de procesamiento local.")
-        
-        ruta_circular = f"alertas/CIRCULAR_{oid_limpio}.txt"
-        ruta_atel = f"alertas_comunidad/ALERTA_ATEL_{oid_limpio}.txt"
-        ruta_aavso = f"alertas_comunidad/ALERTA_AAVSO_{oid_limpio}.txt"
-        
-        col1, col2 = st.columns([1, 1])
-        
-        with col1:
-            st.subheader("📄 Documentación y Telegramas")
-            if survey == "TNS_GLOBAL": tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "✅ Registro TNS (Informativo)"])
-            elif evento_actual.get('tipo') == "flare": tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "🚨 Alerta AAVSO (Solicitud)"])
-            else: tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "🚨 Borrador ATel (Urgente)"])
-            
-            with tab1:
-                cont_circ = leer_archivo_texto(ruta_circular)
-                if cont_circ: st.code(cont_circ, language="text")
-                else: st.warning("Circular en procesamiento...")
+        st.divider()
+        # --- FIN LÓGICA FILTRO EN CASCADA ---
+
+        if eventos_a_mostrar:
+            opciones = {}
+            for e in eventos_a_mostrar:
+                survey_origen = e.get('survey', 'Desconocido')
+                mjd_val = e.get('mjd_deteccion', 0)
+                
+                try:
+                    dt_utc = Time(float(mjd_val), format='mjd').to_datetime()
+                    dt_local = dt_utc - timedelta(hours=3)
+                    hora_str = dt_local.strftime("%H:%M Local")
+                except Exception:
+                    hora_str = "Hora desc."
+                
+                if survey_origen == 'TNS_GLOBAL': prefijo = "✅ [TNS]"
+                elif survey_origen == 'ZTF': prefijo = "🚨 [ZTF]"
+                elif survey_origen == 'LSST': prefijo = "🚨 [LSST]"
+                else: prefijo = f"🚨 [{survey_origen}]"
                     
-            with tab2:
-                ruta_alerta = ruta_aavso if evento_actual.get('tipo') == "flare" else ruta_atel
-                cont_alerta = leer_archivo_texto(ruta_alerta)
-                if cont_alerta: st.code(cont_alerta, language="text")
-                else: st.info("El borrador comunitario no aplica o no ha sido generado.")
-                    
-        with col2:
-            st.subheader("📊 Evidencia Fotométrica / Espectroscópica")
-            
-            ruta_grafico = f"data/curva_luz_{oid_limpio}.png"
-            ruta_halfa = f"data/quimica_halfa_{oid_limpio}.png"
-            
-            opciones_evidencia = []
-            if os.path.exists(ruta_grafico): opciones_evidencia.append("Curva de Luz")
-            if os.path.exists(ruta_halfa): opciones_evidencia.append("Espectro (Química H-alfa)")
+                clave = f"[Captura: {hora_str}] {prefijo} {e.get('oid')} - {e.get('tipo').upper()}"
+                opciones[clave] = e
                 
-            if not opciones_evidencia:
-                st.warning("Gráfica fotométrica reservada o no disponible en la red de origen.")
-            else:
-                seleccion_evidencia = st.selectbox("Selecciona evidencia a visualizar:", opciones_evidencia, label_visibility="collapsed")
+            seleccion = st.selectbox(f"Selecciona un evento ({len(opciones)} encontrados):", list(opciones.keys()))
+            evento_actual = opciones[seleccion]
+            
+            oid_limpio = str(evento_actual.get('oid')).replace(' ', '_').replace('/', '-')
+            survey = evento_actual.get('survey')
+            
+            st.info("💡 **Nota sobre sincronización temporal:** La hora mostrada en el catálogo superior corresponde al instante exacto en que la luz del evento impactó el espejo del observatorio (tiempo de captura original). Debido al procesamiento de IA y tiempos de red, las bitácoras de la Estación Magallanes siempre reflejarán un lógico desfase correspondiente a la hora de procesamiento local.")
+            
+            ruta_circular = f"alertas/CIRCULAR_{oid_limpio}.txt"
+            ruta_atel = f"alertas_comunidad/ALERTA_ATEL_{oid_limpio}.txt"
+            ruta_aavso = f"alertas_comunidad/ALERTA_AAVSO_{oid_limpio}.txt"
+            
+            col1, col2 = st.columns([1, 1])
+            
+            with col1:
+                st.subheader("📄 Documentación y Telegramas")
+                if survey == "TNS_GLOBAL": tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "✅ Registro TNS (Informativo)"])
+                elif evento_actual.get('tipo') == "flare": tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "🚨 Alerta AAVSO (Solicitud)"])
+                else: tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "🚨 Borrador ATel (Urgente)"])
                 
-                if seleccion_evidencia == "Curva de Luz":
-                    st.image(ruta_grafico, width="stretch")
+                with tab1:
+                    cont_circ = leer_archivo_texto(ruta_circular)
+                    if cont_circ: st.code(cont_circ, language="text")
+                    else: st.warning("Circular en procesamiento...")
                         
-                elif seleccion_evidencia == "Espectro (Química H-alfa)":
-                    st.image(ruta_halfa, width="stretch")
+                with tab2:
+                    ruta_alerta = ruta_aavso if evento_actual.get('tipo') == "flare" else ruta_atel
+                    cont_alerta = leer_archivo_texto(ruta_alerta)
+                    if cont_alerta: st.code(cont_alerta, language="text")
+                    else: st.info("El borrador comunitario no aplica o no ha sido generado.")
+                        
+            with col2:
+                st.subheader("📊 Evidencia Fotométrica / Espectroscópica")
+                
+                ruta_grafico = f"data/curva_luz_{oid_limpio}.png"
+                ruta_halfa = f"data/quimica_halfa_{oid_limpio}.png"
+                
+                opciones_evidencia = []
+                if os.path.exists(ruta_grafico): opciones_evidencia.append("Curva de Luz")
+                if os.path.exists(ruta_halfa): opciones_evidencia.append("Espectro (Química H-alfa)")
                     
+                if not opciones_evidencia:
+                    st.warning("Gráfica fotométrica reservada o no disponible en la red de origen.")
+                else:
+                    seleccion_evidencia = st.selectbox("Selecciona evidencia a visualizar:", opciones_evidencia, label_visibility="collapsed")
+                    
+                    if seleccion_evidencia == "Curva de Luz":
+                        st.image(ruta_grafico, width="stretch")
+                            
+                    elif seleccion_evidencia == "Espectro (Química H-alfa)":
+                        st.image(ruta_halfa, width="stretch")
+                        
+        else:
+            st.warning(f"No hay eventos registrados bajo la categoría **'{filtro_clase}'** para la fecha seleccionada.")
     else:
         st.info(f"No hay alertas registradas ni procesadas para la fecha {fecha_seleccionada.strftime('%Y-%m-%d')}.")
 
