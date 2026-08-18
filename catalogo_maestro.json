@@ -2179,13 +2179,13 @@
     },
     {
         "oid": "ZTF17aadsvqd",
-        "ra": 102.97456087112296,
-        "dec": 20.501311760320075,
+        "ra": 102.97456098922977,
+        "dec": 20.501311688589947,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61267.512881900184,
+        "mjd_deteccion": 61270.51650460018,
         "img_url": "data/curva_luz_ZTF17aadsvqd.png"
     },
     {
@@ -2212,13 +2212,13 @@
     },
     {
         "oid": "ZTF18acccueb",
-        "ra": 102.3127144718788,
-        "dec": 13.924600289769419,
+        "ra": 102.31271516402678,
+        "dec": 13.92460112774218,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61265.50951390015,
+        "mjd_deteccion": 61270.516030100174,
         "img_url": "data/curva_luz_ZTF18acccueb.png"
     },
     {
@@ -5666,8 +5666,8 @@
     },
     {
         "oid": "ZTF17aadstgc",
-        "ra": 103.11117001428602,
-        "dec": 20.744784830724562,
+        "ra": 103.11116992110156,
+        "dec": 20.74478484742375,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
@@ -5688,8 +5688,8 @@
     },
     {
         "oid": "ZTF17aaapkrn",
-        "ra": 104.411549122532,
-        "dec": 12.53039200058031,
+        "ra": 104.41154912494746,
+        "dec": 12.530392023219544,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
@@ -5707,5 +5707,16 @@
         "vip": false,
         "mjd_deteccion": 61270.51118060015,
         "img_url": "data/curva_luz_ZTF19acsaiqx.png"
+    },
+    {
+        "oid": "ZTF18aabpzzj",
+        "ra": 102.26562671764412,
+        "dec": 18.975413029411772,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61270.51650460018,
+        "img_url": "data/curva_luz_ZTF18aabpzzj.png"
     }
 ]
