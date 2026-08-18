@@ -1,17 +1,14 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-08-18 13:55:50 UTC
-OBJETO DETECTADO : ZTF20abjgexp (NOVA)
-COORDENADAS ICRS : RA 43.27235 | Dec 16.86157
+FECHA DE EMISIÓN : 2026-08-18 14:54:53 UTC
+OBJETO DETECTADO : ZTF19acsaiqx (NOVA)
+COORDENADAS ICRS : RA 98.74920 | Dec 18.45974
 DISTANCIA        : Desconocida
 -----------------------------------------------------------------
 
 [1] ESTADO DEL SISTEMA PLANETARIO
-    ALINEACIÓN ÓPTICA: 3 exoplaneta(s) confirmado(s) en la misma línea de visión (60 arcsec).
-       * Teegarden's Star d | Masa: 0.82 M_Tierra | Órbita: 26.13 días
-       * Teegarden's Star b | Masa: 1.16 M_Tierra | Órbita: 4.91 días
-       * Teegarden's Star c | Masa: 1.05 M_Tierra | Órbita: 11.42 días
+    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).
 
 [2] EVALUACIÓN TERMODINÁMICA (SED QUIESCENTE)
     FIRMA TÉRMICA: Datos insuficientes para evaluación térmica SED.
@@ -24,12 +21,12 @@ DISTANCIA        : Desconocida
     INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 99.6%)
+    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 80.0%)
     RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
-    EDAD HISTÓRICA       : 2222.0 días
-    SALTO LUMINOSIDAD    : 1.65 magnitudes
+    EDAD HISTÓRICA       : 2470.1 días
+    SALTO LUMINOSIDAD    : 0.82 magnitudes
     TASA ACEL. HISTÓRICA : 0.001 mag/día
-    TASA ACEL. RECIENTE  : 0.092 mag/día
+    TASA ACEL. RECIENTE  : 182.326 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61270.4678
+    MJD ÚLTIMA DETEC.    : 61270.5112
 =================================================================
