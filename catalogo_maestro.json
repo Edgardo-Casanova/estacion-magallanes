@@ -5454,5 +5454,38 @@
         "vip": false,
         "mjd_deteccion": 61270.30378470011,
         "img_url": "data/curva_luz_ZTF19aaxnqju.png"
+    },
+    {
+        "oid": "ZTF23abetdno",
+        "ra": 328.241443598985,
+        "dec": 0.9936177350079597,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61270.33619209984,
+        "img_url": "data/curva_luz_ZTF23abetdno.png"
+    },
+    {
+        "oid": "ZTF26abohdvv",
+        "ra": 324.134236707064,
+        "dec": -0.34627116840212513,
+        "tipo": "supernova",
+        "survey": "ZTF",
+        "analisis": "Candidata (Esperando confirmación TNS)",
+        "vip": false,
+        "mjd_deteccion": 61270.33571759984,
+        "img_url": "data/curva_luz_ZTF26abohdvv.png"
+    },
+    {
+        "oid": "ZTF26abflqjy",
+        "ra": 328.7224511411616,
+        "dec": -12.271184880165823,
+        "tipo": "supernova",
+        "survey": "ZTF",
+        "analisis": "Candidata (Esperando confirmación TNS)",
+        "vip": false,
+        "mjd_deteccion": 61270.335254599806,
+        "img_url": "data/curva_luz_ZTF26abflqjy.png"
     }
 ]
