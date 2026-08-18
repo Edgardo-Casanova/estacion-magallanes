@@ -3158,13 +3158,13 @@
     },
     {
         "oid": "ZTF26abetmwf",
-        "ra": 329.7918252747966,
-        "dec": 1.3628585550311347,
+        "ra": 329.7918252273713,
+        "dec": 1.362859609775227,
         "tipo": "supernova",
         "survey": "ZTF",
         "analisis": "Candidata (Esperando confirmación TNS)",
         "vip": false,
-        "mjd_deteccion": 61268.40075229993,
+        "mjd_deteccion": 61270.39969909983,
         "img_url": "data/curva_luz_ZTF26abetmwf.png"
     },
     {
@@ -5520,5 +5520,16 @@
         "vip": false,
         "mjd_deteccion": 61270.35866900021,
         "img_url": "data/curva_luz_ZTF20abphsqs.png"
+    },
+    {
+        "oid": "ZTF19aawfxpc",
+        "ra": 327.02274842583427,
+        "dec": 6.960759004621696,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61270.39969909983,
+        "img_url": "data/curva_luz_ZTF19aawfxpc.png"
     }
 ]
