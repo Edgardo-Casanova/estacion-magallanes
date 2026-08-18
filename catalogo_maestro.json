@@ -1189,24 +1189,24 @@
     },
     {
         "oid": "ZTF18accqtwe",
-        "ra": 348.7012001122494,
-        "dec": 2.1575306245358257,
+        "ra": 348.70119687688117,
+        "dec": 2.1575305130416838,
         "tipo": "blazar",
         "survey": "ZTF",
         "analisis": "Blazar (Chorro relativista - Alta aceleración)",
         "vip": false,
-        "mjd_deteccion": 61264.38170140004,
+        "mjd_deteccion": 61270.35725690005,
         "img_url": "data/curva_luz_ZTF18accqtwe.png"
     },
     {
         "oid": "ZTF26abgnjye",
-        "ra": 350.2628167797866,
-        "dec": 5.716410212305717,
+        "ra": 350.2628131108341,
+        "dec": 5.716401801005737,
         "tipo": "supernova",
         "survey": "ZTF",
         "analisis": "Candidata (Esperando confirmación TNS)",
         "vip": false,
-        "mjd_deteccion": 61264.38170140004,
+        "mjd_deteccion": 61270.35725690005,
         "img_url": "data/curva_luz_ZTF26abgnjye.png"
     },
     {
@@ -4214,46 +4214,46 @@
     },
     {
         "oid": "ZTF20abphsrx",
-        "ra": 351.83422637401225,
-        "dec": 11.024564181989485,
+        "ra": 351.83422642159604,
+        "dec": 11.024564196425782,
         "tipo": "blazar",
         "survey": "ZTF",
         "analisis": "Blazar (Chorro relativista - Alta aceleración)",
         "vip": false,
-        "mjd_deteccion": 61269.42478010012,
+        "mjd_deteccion": 61270.35866900021,
         "img_url": "data/curva_luz_ZTF20abphsrx.png"
     },
     {
         "oid": "ZTF20acccpzq",
-        "ra": 354.0378876351987,
-        "dec": 12.85710386452141,
+        "ra": 354.03788763857773,
+        "dec": 12.857103874317152,
         "tipo": "blazar",
         "survey": "ZTF",
         "analisis": "Blazar (Chorro relativista - Alta aceleración)",
         "vip": false,
-        "mjd_deteccion": 61269.42478010012,
+        "mjd_deteccion": 61270.35866900021,
         "img_url": "data/curva_luz_ZTF20acccpzq.png"
     },
     {
         "oid": "ZTF19abfrnff",
-        "ra": 353.72426641431593,
-        "dec": 14.537455025172642,
+        "ra": 353.7242664207404,
+        "dec": 14.537455025395538,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61269.42478010012,
+        "mjd_deteccion": 61270.35866900021,
         "img_url": "data/curva_luz_ZTF19abfrnff.png"
     },
     {
         "oid": "ZTF26abmripd",
-        "ra": 354.5185225144787,
-        "dec": 13.190350985847122,
+        "ra": 354.5185221217056,
+        "dec": 13.190351071817053,
         "tipo": "supernova",
         "survey": "ZTF",
         "analisis": "Candidata (Esperando confirmación TNS)",
         "vip": false,
-        "mjd_deteccion": 61269.42478010012,
+        "mjd_deteccion": 61270.35866900021,
         "img_url": "data/curva_luz_ZTF26abmripd.png"
     },
     {
@@ -5487,5 +5487,38 @@
         "vip": false,
         "mjd_deteccion": 61270.335254599806,
         "img_url": "data/curva_luz_ZTF26abflqjy.png"
+    },
+    {
+        "oid": "ZTF22aaqvbuh",
+        "ra": 3.89201313061284,
+        "dec": 0.8902242591507394,
+        "tipo": "supernova",
+        "survey": "ZTF",
+        "analisis": "Candidata (Esperando confirmación TNS)",
+        "vip": false,
+        "mjd_deteccion": 61270.367418999784,
+        "img_url": "data/curva_luz_ZTF22aaqvbuh.png"
+    },
+    {
+        "oid": "ZTF25abzqcri",
+        "ra": 358.42088089341144,
+        "dec": 10.990751688790125,
+        "tipo": "supernova",
+        "survey": "ZTF",
+        "analisis": "Candidata (Esperando confirmación TNS)",
+        "vip": false,
+        "mjd_deteccion": 61270.35866900021,
+        "img_url": "data/curva_luz_ZTF25abzqcri.png"
+    },
+    {
+        "oid": "ZTF20abphsqs",
+        "ra": 355.8978409417743,
+        "dec": 10.659610573834815,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61270.35866900021,
+        "img_url": "data/curva_luz_ZTF20abphsqs.png"
     }
 ]
