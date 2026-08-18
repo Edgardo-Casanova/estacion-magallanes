@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : app.py (Visor Web Institucional / Panel de Control)
-VERSIÓN    : 19.3 (FASE 5: TDE INTEGRADO + FILTRO EN CASCADA PARA EVENTOS)
+VERSIÓN    : 19.4 (FASE 6: VISIÓN DE RAYOS X Y EXTRACCIÓN DINÁMICA DE DISTANCIAS)
 =============================================================================
 """
 
@@ -10,6 +10,7 @@ import streamlit as st
 import os
 import json
 import time
+import re
 from datetime import datetime, timedelta, timezone
 import plotly.graph_objects as go
 from astropy.time import Time
@@ -189,7 +190,36 @@ if vista == "Dashboard Principal (Telemetría)":
             if mjd_val: mjd_str = f"MJD: {float(mjd_val):.4f}"
             else: mjd_str = "MJD: No disp."
 
-            hover_txt = f"<b>{ev.get('oid')}</b><br>{ev.get('analisis')}<br>RA: {ev.get('ra'):.4f}° | Dec: {ev.get('dec'):.4f}°<br>{mjd_str}"
+            # --- INYECCIÓN VISIÓN DE RAYOS X (Lectura dinámica de la Circular) ---
+            extra_info = ""
+            oid_limpio = str(ev.get('oid')).replace(' ', '_').replace('/', '-')
+            ruta_circular = f"alertas/CIRCULAR_{oid_limpio}.txt"
+            cont_circ = leer_archivo_texto(ruta_circular)
+            
+            if cont_circ:
+                match_z_lab = re.search(r'REDSHIFT \(z\)\s*:\s*(.*)', cont_circ)
+                match_z_tns = re.search(r'z = (.*?)\)', cont_circ)
+                
+                z_val = None
+                if match_z_lab and "Desconocido" not in match_z_lab.group(1): 
+                    z_val = match_z_lab.group(1).strip()
+                elif match_z_tns and "None" not in str(match_z_tns.group(1)): 
+                    z_val = match_z_tns.group(1).strip()
+
+                if z_val:
+                    extra_info += f"<br><b>z:</b> {z_val}"
+                
+                match_mpc = re.search(r'(Entre \d+\.\d+ y \d+\.\d+ Megaparsecs)', cont_circ)
+                match_dist_local = re.search(r'^DISTANCIA\s*:\s*(.*)', cont_circ, re.MULTILINE)
+                
+                if match_mpc:
+                    dist_limpia = match_mpc.group(1).replace('Megaparsecs', 'Mpc')
+                    extra_info += f"<br><b>D:</b> {dist_limpia}"
+                elif match_dist_local and "Desconocida" not in match_dist_local.group(1):
+                    extra_info += f"<br><b>D:</b> {match_dist_local.group(1).strip()}"
+            # ---------------------------------------------------------------------
+
+            hover_txt = f"<b>{ev.get('oid')}</b><br>{ev.get('analisis')}<br>RA: {ev.get('ra'):.4f}° | Dec: {ev.get('dec'):.4f}°<br>{mjd_str}{extra_info}"
             
             datos_plotly[cat]["ra"].append(ev.get("ra"))
             datos_plotly[cat]["dec"].append(ev.get("dec"))
