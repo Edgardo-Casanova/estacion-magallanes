@@ -31,14 +31,22 @@ def generar_alerta_comunidad(nombre_evento, ra, dec, tipo_evento="flare", extra_
     salto = extra_data.get("salto_luminosidad", 0.0)
     edad = extra_data.get("edad_dias", 999.0)
 
+    # --- MODIFICACIÓN DE TRIAGE ---
     es_mega_flare = (tipo_evento == "flare" and salto > 1.5)
-    es_primicia_supernova = (tipo_evento in ["supernova", "nova"] and edad < 3.0)
-    # TDE AGREGADO AL FILTRO DE PERMISOS
-    es_nucleo_activo = (tipo_evento in ["agn", "blazar", "tde"]) 
+    
+    # 1. Tolerancia ajustada para primicias (hasta 3.5 días)
+    es_primicia_supernova = (tipo_evento in ["supernova", "nova"] and edad <= 3.5)
+    
+    # 2. Los TDE son destructivos y rarísimos, siempre generan ATel
+    es_tde = (tipo_evento == "tde")
+    
+    # 3. Los AGN/Blazares solo generan ATel si el salto es extremo (>= 1.5 mag)
+    es_agn_extremo = (tipo_evento in ["agn", "blazar"] and salto >= 1.5)
 
-    if not (es_vip or es_mega_flare or es_primicia_supernova or es_nucleo_activo):
+    if not (es_vip or es_mega_flare or es_primicia_supernova or es_tde or es_agn_extremo):
         print(f"   [-] Evento rutinario (Edad: {edad:.1f}d | Salto: {salto:.2f}m). Megáfono silenciado para evitar fatiga de alertas.")
         return None 
+    # ------------------------------
         
     nombre_archivo = nombre_evento.replace(' ', '_').replace('/', '-')
     distancia = extra_data.get("distancia", "Desconocida")
