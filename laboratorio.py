@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : laboratorio.py (Centro de Análisis Científico Profundo)
-VERSIÓN    : 18.0 (FASE 4: INYECCIÓN DE DATOS ASTROBIOLÓGICOS DETALLADOS)
+VERSIÓN    : 18.5 (FASE 5: INYECCIÓN COSMOLÓGICA NED Y LEY DE HUBBLE)
 =============================================================================
 """
 
@@ -18,6 +18,7 @@ from astroquery.sdss import SDSS
 from astroquery.simbad import Simbad
 from astroquery.vizier import Vizier
 from astroquery.eso import Eso
+from astroquery.ipac.ned import Ned
 from dotenv import load_dotenv
 
 from operaciones_too import generar_alerta_comunidad
@@ -46,6 +47,19 @@ def extraer_valor(dato):
         if np.isnan(float(numero)): return "Desconocido"
         return f"{float(numero):.2f}"
     except (ValueError, TypeError): return "Desconocido"
+
+def calcular_distancia_hubble(z):
+    try:
+        if z is None or str(z).strip() == "": return "Desconocida", "N/A"
+        z_float = float(z)
+        if z_float <= 0: return "Desconocida", "N/A"
+        c = 299792.458 
+        H0_local, H0_temprano = 73.0, 67.4 
+        dist_min_mpc, dist_max_mpc = (c * z_float) / H0_local, (c * z_float) / H0_temprano
+        dist_min_mly, dist_max_mly = dist_min_mpc * 3.26156, dist_max_mpc * 3.26156
+        return f"Entre {dist_min_mpc:.2f} y {dist_max_mpc:.2f} Megaparsecs", f"(Aprox. {dist_min_mly:.2f} a {dist_max_mly:.2f} M Años luz)"
+    except (ValueError, TypeError):
+        return "Desconocida", "N/A"
 
 def buscar_exoplanetas(coordenadas, tipo_evento="desconocido", radio_arcsec=60):
     print(f"\n[1/4] 📡 Consultando NASA Exoplanet Archive (Radio cinemático de {radio_arcsec}\")...")
@@ -243,36 +257,37 @@ DISTANCIA        : {distancia}
     return guardar_archivo_texto(ruta_archivo, contenido)
 
 def buscar_galaxia_anfitriona(coordenadas):
-    print(f"\n[1/3] 🌌 Buscando Galaxia Anfitriona (120 arcsec)...")
+    print(f"\n[1/3] 🌌 Buscando Galaxia Anfitriona (NASA NED - 120 arcsec)...")
     galaxia, redshift = "Desconocida (Intergaláctica / Muy lejana)", "Desconocido"
     try:
-        custom_simbad = Simbad()
-        custom_simbad.TIMEOUT = 25 
-        custom_simbad.add_votable_fields('z_value', 'otype')
-        resultado = custom_simbad.query_region(coordenadas, radius=120*u.arcsec)
+        Ned.TIMEOUT = 25 
+        resultado = Ned.query_region(coordenadas, radius=120*u.arcsec)
         
         if resultado is not None and len(resultado) > 0:
-            col_otype = next((c for c in resultado.colnames if 'OTYPE' in c.upper()), None)
-            col_z = next((c for c in resultado.colnames if 'Z_VALUE' in c.upper()), None)
-            col_id = next((c for c in resultado.colnames if 'MAIN_ID' in c.upper()), resultado.colnames[0])
-
             for fila in resultado:
-                nombre_obj = fila[col_id].decode('utf-8') if hasattr(fila[col_id], 'decode') else str(fila[col_id])
-                otype = (fila[col_otype].decode('utf-8') if hasattr(fila[col_otype], 'decode') else str(fila[col_otype])) if col_otype else ""
-                tipo_upper, nombre_upper = otype.strip().upper(), nombre_obj.upper()
-                codigos_extragalacticos = ['G', 'GLC', 'GIG', 'IG', 'LSB', 'SBG', 'AGN', 'SY1', 'SY2', 'SY*', 'QSO', 'BLL', 'RG']
+                nombre_obj = fila['Object Name'].decode('utf-8') if hasattr(fila['Object Name'], 'decode') else str(fila['Object Name'])
+                otype = fila['Type'].decode('utf-8') if hasattr(fila['Type'], 'decode') else str(fila['Type'])
+                
+                tipo_upper = otype.strip().upper()
+                codigos_extragalacticos = ['G', 'GALAXY', 'QSO', 'AGN', 'BLAZAR', 'SY1', 'SY2']
                 
                 if galaxia == "Desconocida (Intergaláctica / Muy lejana)":
-                    if tipo_upper in codigos_extragalacticos or 'GALAXY' in tipo_upper or any(cat in nombre_upper for cat in ['NGC ', 'IC ', 'PGC ', 'UGC ', 'ESO ']):
+                    if any(cat in tipo_upper for cat in codigos_extragalacticos) or any(prefix in nombre_obj.upper() for prefix in ['NGC ', 'IC ', 'UGC ', 'ESO ', 'MCG ']):
                         galaxia = nombre_obj
-                        if col_z and not np.ma.is_masked(fila[col_z]): redshift = float(fila[col_z])
-                        print(f"   [+] Entidad identificada: {galaxia} (Tipo: {otype})")
-    except Exception: print("   [-] Fallo al buscar galaxia en Simbad (Timeout).")
+                        z_val = fila['Redshift']
+                        if not np.ma.is_masked(z_val) and z_val is not None and str(z_val).strip() != "":
+                            try:
+                                redshift = float(z_val)
+                            except ValueError: pass
+                        print(f"   [+] Entidad identificada (NED): {galaxia} (Tipo: {otype})")
+                        break
+    except Exception: print("   [-] Fallo al buscar galaxia en NASA NED (Timeout o error).")
     return galaxia, redshift
 
 def generar_circular_extragalactica(ra, dec, id_evento, galaxia, redshift, tipo_evento, reporte_matematico=""):
     ruta_archivo = f"alertas/CIRCULAR_{id_evento}.txt"
     z_str = f"{redshift:.5f}" if isinstance(redshift, float) else str(redshift)
+    rango_mpc, rango_mly = calcular_distancia_hubble(redshift)
     
     contenido = f"""=================================================================
  CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
@@ -285,6 +300,7 @@ COORDENADAS ICRS : RA {ra:.5f} | Dec {dec:.5f}
 [1] ENTORNO COSMOLÓGICO
     OBJETO CENTRAL / ANFITRIONA : {galaxia}
     REDSHIFT (z)                : {z_str}
+    DISTANCIA HUBBLE            : {rango_mpc} {rango_mly}
 
 [2] EVALUACIÓN MAGALLANES
     PRIORIDAD   : ALTA PRIORIDAD ESPECTROSCÓPICA
@@ -325,6 +341,13 @@ def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_
                 
         elif tipo_evento in ["supernova", "agn", "blazar", "tde"]:
             galaxia, redshift = buscar_galaxia_anfitriona(coordenadas)
+            
+            # --- INYECCIÓN COSMOLÓGICA NED ---
+            rango_mpc, rango_mly = calcular_distancia_hubble(redshift)
+            if rango_mpc != "Desconocida":
+                distancia_real = f"{rango_mpc} {rango_mly}"
+            # ---------------------------------
+            
             _ = buscar_espectro_y_fotometria(coordenadas, id_limpio)
             
             generar_circular_extragalactica(ra_deg, dec_deg, id_limpio, galaxia, redshift, tipo_evento, reporte_matematico)
