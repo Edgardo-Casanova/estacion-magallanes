@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : laboratorio.py (Centro de Análisis Científico Profundo)
-VERSIÓN    : 17.6 (FASE 3: INCLUSIÓN DE TDE)
+VERSIÓN    : 18.0 (FASE 4: INYECCIÓN DE DATOS ASTROBIOLÓGICOS DETALLADOS)
 =============================================================================
 """
 
@@ -204,6 +204,12 @@ DISTANCIA        : {distancia}
             contenido += f"    SISTEMA IMPACTADO: {len(planetas_info)} exoplaneta(s) confirmado(s) en órbita local.\n"
         else:
             contenido += f"    ALINEACIÓN ÓPTICA: {len(planetas_info)} exoplaneta(s) confirmado(s) en la misma línea de visión (60 arcsec).\n"
+            
+        # -- DESEMPAQUETADO DEL DETALLE PLANETARIO --
+        for p in planetas_info:
+            contenido += f"       * {p['nombre']} | Masa: {p['masa']} M_Tierra | Órbita: {p['periodo']} días\n"
+        # -------------------------------------------
+            
     elif tiene_planetas is False: 
         contenido += "    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).\n"
     else: 
@@ -317,7 +323,6 @@ def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_
                 generar_alerta_comunidad(id_limpio, ra_deg, dec_deg, tipo_evento=tipo_evento, extra_data=datos_para_megafono)
             except TypeError: pass
                 
-        # AQUÍ ESTÁ EL CAMBIO CRUCIAL: TDE AGREGADO
         elif tipo_evento in ["supernova", "agn", "blazar", "tde"]:
             galaxia, redshift = buscar_galaxia_anfitriona(coordenadas)
             _ = buscar_espectro_y_fotometria(coordenadas, id_limpio)
