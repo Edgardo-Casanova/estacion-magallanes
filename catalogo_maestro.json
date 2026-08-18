@@ -771,13 +771,13 @@
     },
     {
         "oid": "ZTF18adlzzsh",
-        "ra": 257.217018882026,
-        "dec": 1.448764616737101,
+        "ra": 257.21701895498666,
+        "dec": 1.448764592766677,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61264.2033218001,
+        "mjd_deteccion": 61270.17126160022,
         "img_url": "data/curva_luz_ZTF18adlzzsh.png"
     },
     {
@@ -793,24 +793,24 @@
     },
     {
         "oid": "ZTF18abetdmv",
-        "ra": 255.46515207061975,
-        "dec": 13.35834239692257,
+        "ra": 255.46515207159348,
+        "dec": 13.35834239948651,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61269.26174770016,
+        "mjd_deteccion": 61270.17173610022,
         "img_url": "data/curva_luz_ZTF18abetdmv.png"
     },
     {
         "oid": "ZTF18abetdej",
-        "ra": 256.54029112732417,
-        "dec": 14.581073585486276,
+        "ra": 256.5402911174037,
+        "dec": 14.581073568983832,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61269.26174770016,
+        "mjd_deteccion": 61270.17173610022,
         "img_url": "data/curva_luz_ZTF18abetdej.png"
     },
     {
@@ -4992,5 +4992,82 @@
         "vip": false,
         "mjd_deteccion": 61270.02154153268,
         "img_url": "data/curva_luz_SN_2026rfd.png"
+    },
+    {
+        "oid": "ZTF18adkhqlm",
+        "ra": 240.92473430206135,
+        "dec": 11.09689472051564,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61270.1731480998,
+        "img_url": "data/curva_luz_ZTF18adkhqlm.png"
+    },
+    {
+        "oid": "ZTF18adbaeyj",
+        "ra": 244.57199482070524,
+        "dec": 3.160059529511935,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61270.172673599795,
+        "img_url": "data/curva_luz_ZTF18adbaeyj.png"
+    },
+    {
+        "oid": "ZTF26aaqnqaj",
+        "ra": 243.59869317963324,
+        "dec": 2.242625309211567,
+        "tipo": "supernova",
+        "survey": "ZTF",
+        "analisis": "Candidata (Esperando confirmación TNS)",
+        "vip": false,
+        "mjd_deteccion": 61270.172673599795,
+        "img_url": "data/curva_luz_ZTF26aaqnqaj.png"
+    },
+    {
+        "oid": "ZTF21abawduv",
+        "ra": 257.2170153781628,
+        "dec": 1.4487643299417496,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61270.17219909979,
+        "img_url": "data/curva_luz_ZTF21abawduv.png"
+    },
+    {
+        "oid": "ZTF26abhpssk",
+        "ra": 255.8728293271594,
+        "dec": 1.9681055500177878,
+        "tipo": "supernova",
+        "survey": "ZTF",
+        "analisis": "Candidata (Esperando confirmación TNS)",
+        "vip": false,
+        "mjd_deteccion": 61270.17219909979,
+        "img_url": "data/curva_luz_ZTF26abhpssk.png"
+    },
+    {
+        "oid": "ZTF18ablrmbe",
+        "ra": 254.2414821573465,
+        "dec": 10.37189611567487,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61270.17173610022,
+        "img_url": "data/curva_luz_ZTF18ablrmbe.png"
+    },
+    {
+        "oid": "ZTF18adlzzpi",
+        "ra": 258.45964258248,
+        "dec": 7.12680126698949,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61270.17126160022,
+        "img_url": "data/curva_luz_ZTF18adlzzpi.png"
     }
 ]
