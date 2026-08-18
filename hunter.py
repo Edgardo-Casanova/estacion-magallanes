@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 22.4 (RESTAURACIÓN SÓLIDA DEL NÚCLEO V22.1 + TDE NATIVO)
+VERSIÓN    : 22.5 (INYECCIÓN ANTI-EMBARGO MAGALLANES)
 =============================================================================
 """
 
@@ -299,12 +299,15 @@ def consultar_tns_sur(client, catalogo_dict):
                     det = None
                     try:
                         if ra_float != 0.0 and dec_float != 0.0:
-                            candidatos_alerce = client.query_objects(ra=ra_float, dec=dec_float, radius=5, page_size=1)
-                            if candidatos_alerce:
-                                oid_tns = candidatos_alerce[0]['oid']
+                            # Inyección Anti-Embargo Magallanes (Búsqueda expandida a 20 arcsec)
+                            candidatos_alerce = client.query_objects(ra=ra_float, dec=dec_float, radius=20, format='pandas')
+                            if candidatos_alerce is not None and not candidatos_alerce.empty:
+                                candidatos_alerce = candidatos_alerce.sort_values(by='ndethist', ascending=False)
+                                oid_tns = candidatos_alerce.iloc[0]['oid']
                                 oid_tns = oid_tns.decode('utf-8') if isinstance(oid_tns, bytes) else oid_tns
                                 det = client.query_detections(oid=oid_tns, format='pandas')
-                    except Exception: pass
+                    except Exception as e: 
+                        registrar_log(f"   [-] Fallo menor en extracción fotométrica para {id_evento}: {e}", log_file)
                     
                     try:
                         graficar_curva(det, id_evento, descubridor, ra_float, dec_float)
@@ -373,7 +376,7 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
 # BUCLE PRINCIPAL (MAIN)
 # =====================================================================
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.4 - NÚCLEO V22.1 + TDE NATIVO) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.5 - INYECCIÓN ANTI-EMBARGO) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     url_tap = "https://tap.alerce.online/tap"
