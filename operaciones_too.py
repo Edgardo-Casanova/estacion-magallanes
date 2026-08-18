@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : operaciones_too.py (Megáfono Comunitario y ATel)
-VERSIÓN    : 17.5 (FASE 3: INCLUSIÓN PROTOCOLO TDE)
+VERSIÓN    : 18.5 (FASE 4: INTEGRACIÓN DE DISTANCIAS EXTRAGALÁCTICAS NED)
 =============================================================================
 """
 
@@ -172,8 +172,10 @@ Magallanes Station Automated Pipeline | AAVSO Observer Code: ECDA
             dist_param_en = f"* Est. Distance       : {distancia}"
         else:
             entorno_es, entorno_en = galaxia, galaxia
-            dist_param_es = f"* Redshift (z)        : {z_str_es}"
-            dist_param_en = f"* Redshift (z)        : {z_str_en}"
+            # --- INYECCIÓN EN EL ATEL EXTRAGALÁCTICO ---
+            dist_param_es = f"* Redshift (z)        : {z_str_es}\n* Distancia Hubble    : {distancia}"
+            dist_param_en = f"* Redshift (z)        : {z_str_en}\n* Hubble Distance     : {distancia}"
+            # -------------------------------------------
             
         texto_alerta = f"""======================================================================
 [ESPAÑOL] BORRADOR TELEGRAMA ASTRONÓMICO (ATel) - ESTACIÓN MAGALLANES
