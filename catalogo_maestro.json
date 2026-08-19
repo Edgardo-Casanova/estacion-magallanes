@@ -3752,13 +3752,13 @@
     },
     {
         "oid": "ZTF18abmdnao",
-        "ra": 275.67198645139865,
-        "dec": 12.185162125269065,
+        "ra": 275.6719864441285,
+        "dec": 12.185162105413466,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61271.23589120014,
+        "mjd_deteccion": 61271.28211810021,
         "img_url": "data/curva_luz_ZTF18abmdnao.png"
     },
     {
@@ -3939,13 +3939,13 @@
     },
     {
         "oid": "ZTF19abpuyms",
-        "ra": 268.29379024692855,
-        "dec": -1.0868880309678757,
+        "ra": 268.2937907482398,
+        "dec": -1.0868876326101755,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61269.326481500175,
+        "mjd_deteccion": 61271.28070600005,
         "img_url": "data/curva_luz_ZTF19abpuyms.png"
     },
     {
@@ -6103,5 +6103,60 @@
         "vip": false,
         "mjd_deteccion": 61271.23589120014,
         "img_url": "data/curva_luz_ZTF19acqxsqi.png"
+    },
+    {
+        "oid": "ZTF18abhoyix",
+        "ra": 275.820336874748,
+        "dec": 13.82751729416125,
+        "tipo": "blazar",
+        "survey": "ZTF",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61271.28211810021,
+        "img_url": "data/curva_luz_ZTF18abhoyix.png"
+    },
+    {
+        "oid": "ZTF18absmcyr",
+        "ra": 277.1940077134495,
+        "dec": 14.236543564769145,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61271.28211810021,
+        "img_url": "data/curva_luz_ZTF18absmcyr.png"
+    },
+    {
+        "oid": "ZTF18absreid",
+        "ra": 266.79417640165633,
+        "dec": -1.5914316197807858,
+        "tipo": "blazar",
+        "survey": "ZTF",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61271.28070600005,
+        "img_url": "data/curva_luz_ZTF18absreid.png"
+    },
+    {
+        "oid": "ZTF20abefmoe",
+        "ra": 272.2160158759909,
+        "dec": -12.442559315999999,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61271.280231500044,
+        "img_url": "data/curva_luz_ZTF20abefmoe.png"
+    },
+    {
+        "oid": "ZTF19aavncyt",
+        "ra": 281.7900649773783,
+        "dec": -2.003042063321403,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61271.27929400001,
+        "img_url": "data/curva_luz_ZTF19aavncyt.png"
     }
 ]
