@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : app.py (Visor Web Institucional / Panel de Control)
-VERSIÓN    : 19.5 (FASE 6: INTERFAZ VISUAL DEL ESCUDO ANTI-DUPLICIDAD TNS)
+VERSIÓN    : 19.6 (FASE 6: INTERFAZ VISUAL DEL ESCUDO - CORRECCIÓN CLASIFICACIÓN)
 =============================================================================
 """
 
@@ -112,12 +112,14 @@ if vista == "Dashboard Principal (Telemetría)":
     
     st.divider()
     
-    total_tns = sum(1 for e in catalogo_filtrado if e.get("survey") == "TNS_GLOBAL" and e.get("tipo") != "tde")
-    total_ztf_cand = sum(1 for e in catalogo_filtrado if e.get("survey") != "TNS_GLOBAL" and "supernova" in e.get("tipo", "").lower())
+    # --- CORRECCIÓN DE MÉTRICAS: SEPARACIÓN DE FÍSICA VS ORIGEN ---
+    total_tns = sum(1 for e in catalogo_filtrado if e.get("survey") == "TNS_GLOBAL" and e.get("tipo") == "supernova")
+    total_ztf_cand = sum(1 for e in catalogo_filtrado if e.get("survey") != "TNS_GLOBAL" and e.get("tipo") == "supernova")
     total_novas = sum(1 for e in catalogo_filtrado if e.get("tipo") == "nova")
     total_agn = sum(1 for e in catalogo_filtrado if e.get("tipo") in ["agn", "blazar"])
     total_tdes = sum(1 for e in catalogo_filtrado if e.get("tipo") == "tde")
     total_flares = sum(1 for e in catalogo_filtrado if e.get("tipo") == "flare" and e.get("vip", False))
+    # --------------------------------------------------------------
     
     st.subheader(f"📊 Resumen del Catálogo Activo ({fecha_seleccionada.strftime('%Y-%m-%d')})")
     col_det1, col_det2, col_det3, col_det4, col_det5, col_det6 = st.columns(6)
@@ -169,13 +171,15 @@ if vista == "Dashboard Principal (Telemetría)":
             t, survey, vip = ev.get("tipo", ""), ev.get("survey", ""), ev.get("vip", False)
             cat = None
             
+            # --- CORRECCIÓN DE MAPA: RESPETAR LA FÍSICA ---
             if t == "tde": cat = "Agujero Negro (TDE)"
-            elif survey == "TNS_GLOBAL": cat = "Confirmada TNS"
-            elif t == "supernova": cat = "Candidata ZTF (Acción)"
+            elif t == "nova": cat = "Nova / Cataclísmica"
             elif t == "blazar": cat = "Blazar (Chorro)"
             elif t == "agn": cat = "AGN (Cuásar)"
-            elif t == "nova": cat = "Nova / Cataclísmica"
             elif t == "flare": cat = "Flare (Enana M VIP)" if vip else None
+            elif t == "supernova" and survey == "TNS_GLOBAL": cat = "Confirmada TNS"
+            elif t == "supernova": cat = "Candidata ZTF (Acción)"
+            # ----------------------------------------------
             
             if not cat: continue
             
@@ -190,14 +194,12 @@ if vista == "Dashboard Principal (Telemetría)":
             if mjd_val: mjd_str = f"MJD: {float(mjd_val):.4f}"
             else: mjd_str = "MJD: No disp."
 
-            # --- INYECCIÓN VISIÓN DE RAYOS X Y ESCUDO TNS ---
             extra_info = ""
             oid_limpio = str(ev.get('oid')).replace(' ', '_').replace('/', '-')
             ruta_circular = f"alertas/CIRCULAR_{oid_limpio}.txt"
             cont_circ = leer_archivo_texto(ruta_circular)
             
             if cont_circ:
-                # 🛡️ Detección del Escudo TNS en el archivo de texto
                 match_escudo = re.search(r'Nombre Oficial Asignado\s*:\s*(.*)', cont_circ)
                 if match_escudo:
                     nombre_oficial = match_escudo.group(1).strip()
@@ -223,7 +225,6 @@ if vista == "Dashboard Principal (Telemetría)":
                     extra_info += f"<br><b>D:</b> {dist_limpia}"
                 elif match_dist_local and "Desconocida" not in match_dist_local.group(1):
                     extra_info += f"<br><b>D:</b> {match_dist_local.group(1).strip()}"
-            # ---------------------------------------------------------------------
 
             hover_txt = f"<b>{ev.get('oid')}</b><br>{ev.get('analisis')}<br>RA: {ev.get('ra'):.4f}° | Dec: {ev.get('dec'):.4f}°<br>{mjd_str}{extra_info}"
             
@@ -258,10 +259,8 @@ elif vista == "Feed de Alertas y Circulares":
     st.title("📋 Alertas y Circulares de Detecciones")
     
     if catalogo_filtrado:
-        # Ordenamos los eventos por tiempo
         catalogo_ordenado = sorted(catalogo_filtrado, key=lambda x: float(x.get('mjd_deteccion', 0)), reverse=True)
         
-        # --- INICIO LÓGICA FILTRO EN CASCADA ---
         st.markdown("### 🔍 Filtrar Transitorios")
         col_filtro, _ = st.columns([1, 1])
         
@@ -287,21 +286,20 @@ elif vista == "Feed de Alertas y Circulares":
             vip = ev.get("vip", False)
             cat_evento = None
             
-            # Clasificación interna mapeada al filtro
+            # --- CORRECCIÓN DE FILTRO: RESPETAR LA FÍSICA ---
             if t == "tde": cat_evento = "🌀 Agujeros Negros (TDE)"
-            elif survey == "TNS_GLOBAL": cat_evento = "✅ Supernovas Confirmadas (TNS)"
-            elif t == "supernova": cat_evento = "🚨 Supernovas Candidatas (ZTF)"
+            elif t == "nova": cat_evento = "💥 Novas"
             elif t == "blazar": cat_evento = "🚀 Blazares"
             elif t == "agn": cat_evento = "🕳️ AGN (Cuásar)"
-            elif t == "nova": cat_evento = "💥 Novas"
             elif t == "flare" and vip: cat_evento = "🔥 Flares VIP"
+            elif t == "supernova" and survey == "TNS_GLOBAL": cat_evento = "✅ Supernovas Confirmadas (TNS)"
+            elif t == "supernova": cat_evento = "🚨 Supernovas Candidatas (ZTF)"
+            # ------------------------------------------------
             
-            # Filtro lógico
             if filtro_clase == "👁️ Todos los eventos" or filtro_clase == cat_evento:
                 eventos_a_mostrar.append(ev)
                 
         st.divider()
-        # --- FIN LÓGICA FILTRO EN CASCADA ---
 
         if eventos_a_mostrar:
             opciones = {}
@@ -341,14 +339,20 @@ elif vista == "Feed de Alertas y Circulares":
             with col1:
                 st.subheader("📄 Documentación y Telegramas")
                 
-                # 🛡️ LECTURA DE INTERCEPCIÓN PARA EL BANNER ROJO
                 cont_circ_temp = leer_archivo_texto(ruta_circular)
                 if cont_circ_temp and "INTERVENCIÓN DEL ESCUDO TNS" in cont_circ_temp:
                     st.error("🛡️ **BLOQUEO ACTIVO:** El Escudo TNS detectó duplicidad astronómica y abortó automáticamente la emisión del Telegrama (ATel) para proteger la reputación de la Estación Magallanes.")
                 
-                if survey == "TNS_GLOBAL": tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "✅ Registro TNS (Informativo)"])
-                elif evento_actual.get('tipo') == "flare": tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "🚨 Alerta AAVSO (Solicitud)"])
-                else: tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "🚨 Borrador ATel (Urgente)"])
+                # --- CORRECCIÓN DE PESTAÑAS: TNS_GLOBAL PUEDE SER NOVA O TDE ---
+                # Ahora evaluamos por el tipo de evento real, independientemente de si vino o fue interceptado por TNS
+                if evento_actual.get('tipo') == "flare":
+                    tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "🚨 Alerta AAVSO (Solicitud)"])
+                elif survey == "TNS_GLOBAL" and evento_actual.get('tipo') == "supernova":
+                    # Solo las supernovas puras de TNS_GLOBAL llevan la etiqueta informativa de registro TNS
+                    tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "✅ Registro TNS (Informativo)"])
+                else:
+                    tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "🚨 Borrador ATel (Urgente)"])
+                # ---------------------------------------------------------------
                 
                 with tab1:
                     cont_circ = leer_archivo_texto(ruta_circular)
