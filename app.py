@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : app.py (Visor Web Institucional / Panel de Control)
-VERSIÓN    : 19.4 (FASE 6: VISIÓN DE RAYOS X Y EXTRACCIÓN DINÁMICA DE DISTANCIAS)
+VERSIÓN    : 19.5 (FASE 6: INTERFAZ VISUAL DEL ESCUDO ANTI-DUPLICIDAD TNS)
 =============================================================================
 """
 
@@ -190,13 +190,19 @@ if vista == "Dashboard Principal (Telemetría)":
             if mjd_val: mjd_str = f"MJD: {float(mjd_val):.4f}"
             else: mjd_str = "MJD: No disp."
 
-            # --- INYECCIÓN VISIÓN DE RAYOS X (Lectura dinámica de la Circular) ---
+            # --- INYECCIÓN VISIÓN DE RAYOS X Y ESCUDO TNS ---
             extra_info = ""
             oid_limpio = str(ev.get('oid')).replace(' ', '_').replace('/', '-')
             ruta_circular = f"alertas/CIRCULAR_{oid_limpio}.txt"
             cont_circ = leer_archivo_texto(ruta_circular)
             
             if cont_circ:
+                # 🛡️ Detección del Escudo TNS en el archivo de texto
+                match_escudo = re.search(r'Nombre Oficial Asignado\s*:\s*(.*)', cont_circ)
+                if match_escudo:
+                    nombre_oficial = match_escudo.group(1).strip()
+                    extra_info += f"<br><b style='color:#ff3333;'>🛡️ Escudo TNS: {nombre_oficial}</b>"
+                    
                 match_z_lab = re.search(r'REDSHIFT \(z\)\s*:\s*(.*)', cont_circ)
                 match_z_tns = re.search(r'z = (.*?)\)', cont_circ)
                 
@@ -334,6 +340,12 @@ elif vista == "Feed de Alertas y Circulares":
             
             with col1:
                 st.subheader("📄 Documentación y Telegramas")
+                
+                # 🛡️ LECTURA DE INTERCEPCIÓN PARA EL BANNER ROJO
+                cont_circ_temp = leer_archivo_texto(ruta_circular)
+                if cont_circ_temp and "INTERVENCIÓN DEL ESCUDO TNS" in cont_circ_temp:
+                    st.error("🛡️ **BLOQUEO ACTIVO:** El Escudo TNS detectó duplicidad astronómica y abortó automáticamente la emisión del Telegrama (ATel) para proteger la reputación de la Estación Magallanes.")
+                
                 if survey == "TNS_GLOBAL": tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "✅ Registro TNS (Informativo)"])
                 elif evento_actual.get('tipo') == "flare": tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "🚨 Alerta AAVSO (Solicitud)"])
                 else: tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "🚨 Borrador ATel (Urgente)"])
@@ -347,7 +359,7 @@ elif vista == "Feed de Alertas y Circulares":
                     ruta_alerta = ruta_aavso if evento_actual.get('tipo') == "flare" else ruta_atel
                     cont_alerta = leer_archivo_texto(ruta_alerta)
                     if cont_alerta: st.code(cont_alerta, language="text")
-                    else: st.info("El borrador comunitario no aplica o no ha sido generado.")
+                    else: st.info("El borrador comunitario no aplica o no ha sido generado debido a bloqueos del Escudo.")
                         
             with col2:
                 st.subheader("📊 Evidencia Fotométrica / Espectroscópica")
