@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : operaciones_too.py (Megáfono Comunitario y ATel)
-VERSIÓN    : 18.5 (FASE 4: INTEGRACIÓN DE DISTANCIAS EXTRAGALÁCTICAS NED)
+VERSIÓN    : 18.6 (FASE 6: ESCUDO ANTI-DUPLICIDAD TNS INTEGRADO)
 =============================================================================
 """
 
@@ -26,6 +26,15 @@ def generar_alerta_comunidad(nombre_evento, ra, dec, tipo_evento="flare", extra_
     if extra_data is None: extra_data = {}
         
     print(f"\n[🚀] INICIANDO PROTOCOLO DE ALERTA COMUNITARIA PARA {nombre_evento} ({tipo_evento.upper()})")
+    
+    # =====================================================================
+    # 🛡️ INTERCEPCIÓN ESCUDO TNS (CORTE DE ENERGÍA AL MEGÁFONO)
+    # =====================================================================
+    escudo_hit = extra_data.get("escudo_tns_hit")
+    if escudo_hit:
+        print(f"   [🛡️] ABORTO DE SISTEMA: El Escudo TNS bloqueó la alerta. El objeto ya es conocido como {escudo_hit}.")
+        return None
+    # =====================================================================
     
     es_vip = extra_data.get("es_vip", False)
     salto = extra_data.get("salto_luminosidad", 0.0)
