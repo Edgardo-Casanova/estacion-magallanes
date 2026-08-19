@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 22.6 (PARCHE DE MEDIANOCHE: ANTI-EMBARGO V2)
+VERSIÓN    : 22.7 (ESCUDO TNS - FASE 1: INTERCEPCIÓN)
 =============================================================================
 """
 
@@ -39,7 +39,6 @@ ARCHIVO_MJD = "tracker_mjd.txt"
 ARCHIVO_BOLETIN = "boletin_tns.txt"
 CATALOGO_JSON = "catalogo_maestro.json"
 
-# NÚCLEO SANO RESTAURADO: Solo categorías maduras + TDE (Sin genéricos SN/AGN)
 diccionario_categorias = {
     "ZTF": ["SNIa", "SNIbc", "SNII", "SLSN", "CV/Nova", "QSO", "Blazar", "TDE"],
     "LSST": ["SNIa", "SNIbc", "SNII", "SLSN", "Nova", "Mdwarf-flare", "TDE"]
@@ -47,6 +46,31 @@ diccionario_categorias = {
 
 for directorio in ["alertas", "data", "alertas_comunidad", "bitacoras"]:
     os.makedirs(directorio, exist_ok=True)
+
+# =====================================================================
+# 🛡️ ESCUDO TNS (PROTOTIPO LOCAL INTEGRADO)
+# =====================================================================
+def consultar_escudo_tns(nombre_interno):
+    TNS_BOT_ID = os.getenv("TNS_BOT_ID")
+    TNS_API_KEY = os.getenv("TNS_API_KEY")
+    if not TNS_BOT_ID or not TNS_API_KEY: return None
+    
+    headers = {'User-Agent': f'tns_marker{{"tns_id":{TNS_BOT_ID}, "type":"bot", "name":"Magallanes_Bot"}}'}
+    payload = {"api_key": TNS_API_KEY, "data": json.dumps({"internal_name": nombre_interno})}
+    
+    try:
+        respuesta = requests.post('https://www.wis-tns.org/api/get/search', headers=headers, data=payload, timeout=15)
+        if respuesta.status_code == 200:
+            datos = respuesta.json().get('data', {})
+            resultados = datos.get('reply', []) if isinstance(datos, dict) else (datos if isinstance(datos, list) else [])
+            
+            if resultados and isinstance(resultados, list) and isinstance(resultados[0], dict):
+                hit = resultados[0] 
+                prefijo = hit.get('prefix', 'AT')
+                nombre_oficial = hit.get('objname', '')
+                return f"{prefijo} {nombre_oficial}".strip()
+    except Exception: pass
+    return None
 
 # =====================================================================
 # FUNCIONES DE ALMACENAMIENTO LOCAL
@@ -63,9 +87,6 @@ def guardar_grafico_memoria(fig, ruta_relativa):
     fig.savefig(ruta_relativa, dpi=150, bbox_inches='tight')
     plt.close(fig)
 
-# =====================================================================
-# FUNCIONES DEL CATÁLOGO JSON LOCAL
-# =====================================================================
 def cargar_catalogo_maestro():
     if os.path.exists(CATALOGO_JSON):
         try:
@@ -80,9 +101,6 @@ def guardar_catalogo_maestro(catalogo_dict):
     with open(CATALOGO_JSON, "w", encoding="utf-8") as f:
         json.dump(list(catalogo_dict.values()), f, indent=4, ensure_ascii=False)
 
-# =====================================================================
-# FUNCIONES DE SISTEMA Y ASTROMETRÍA
-# =====================================================================
 def obtener_mjd_rastreo():
     if not os.path.exists(ARCHIVO_MJD):
         return round(Time(datetime.now(timezone.utc) - timedelta(days=2)).mjd, 1)
@@ -225,9 +243,6 @@ def graficar_curva(det, id_evento, red_descubridora, ra_float, dec_float, tipo_e
     ruta_grafico = f"data/curva_luz_{id_evento.replace(' ', '_')}.png"
     guardar_grafico_memoria(fig, ruta_grafico)
 
-# =====================================================================
-# RUTINA DE CAZA A DEMANDA: TNS (LECTURA DE BOLETÍN)
-# =====================================================================
 def consultar_tns_sur(client, catalogo_dict):
     log_file = "bitacoras/bitacora_TNS_GLOBAL.log"
     
@@ -265,11 +280,9 @@ def consultar_tns_sur(client, catalogo_dict):
         for objname in supernovas_a_buscar:
             id_evento = f"SN {objname}"
             
-            # Verificar si ya está en el catálogo maestro
             if id_evento in catalogo_dict:
                 if catalogo_dict[id_evento].get("survey") == "TNS_GLOBAL":
                     registrar_log(f"[*] {id_evento} ya existe. Descargando datos para actualizar posible reclasificación...", log_file)
-                    # Eliminamos el 'continue' para permitir que sobreescriba los datos con la info más fresca
                 else:
                     registrar_log(f"[*] {id_evento} cazado previamente. ¡ASCENDIENDO a Confirmada TNS!", log_file)
                 
@@ -299,17 +312,13 @@ def consultar_tns_sur(client, catalogo_dict):
                     det = None
                     try:
                         if ra_float != 0.0 and dec_float != 0.0:
-                            # Hack Anti-Embargo V2: Radio 10" y búsqueda por actividad reciente
                             candidatos_alerce = client.query_objects(ra=ra_float, dec=dec_float, radius=10, format='pandas')
-                            
                             if candidatos_alerce is not None and not candidatos_alerce.empty:
-                                # Filtro Astrofísico Correcto: El objeto que brilló más recientemente
                                 if 'lastmjd' in candidatos_alerce.columns:
                                     candidatos_alerce = candidatos_alerce.sort_values(by='lastmjd', ascending=False)
                                 
                                 oid_tns = candidatos_alerce.iloc[0]['oid']
                                 oid_tns = oid_tns.decode('utf-8') if isinstance(oid_tns, bytes) else oid_tns
-                                
                                 det = client.query_detections(oid=oid_tns, format='pandas')
                     except Exception as e: 
                         registrar_log(f"   [-] Fallo menor en extracción fotométrica para {id_evento}: {e}", log_file)
@@ -347,7 +356,6 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
                     mjd_obs = det['mjd'].max() if det is not None and not det.empty else Time(datetime.utcnow()).mjd
 
                     try:
-                        # CLASIFICACIÓN INTELIGENTE TNS (TDE vs NOVA vs SN)
                         clase_upper = clasificacion.upper()
                         if "TDE" in clase_upper: tipo_evento_tns = "tde"
                         elif "CV" in clase_upper or "NOVA" in clase_upper: tipo_evento_tns = "nova"
@@ -377,11 +385,8 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
         f.write("Listado de confirmaciones oficiales TNS\n\n")
     registrar_log("[+] Procesamiento TNS finalizado. Archivo de boletín purgado desde la línea 3.", log_file)
 
-# =====================================================================
-# BUCLE PRINCIPAL (MAIN)
-# =====================================================================
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.6 - PARCHE DE MEDIANOCHE) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.7 - ESCUDO TNS TOTAL) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     url_tap = "https://tap.alerce.online/tap"
@@ -451,6 +456,7 @@ def main():
                         
                         if clase_ia_final in target_classes and probabilidad > 0.60:
                             print(f"      [!] ALERTA AISLADA: {oid} | IA: {clase_ia_final} ({probabilidad*100:.1f}%)")
+                            
                             det = client.query_detections(oid=oid, format='pandas')
                             det = det.dropna(subset=['magpsf', 'mjd'])
                             if det.empty or len(det) < 2: continue 
@@ -487,7 +493,6 @@ def main():
                             veto_ia_cv = ("CV" in clase_ia_final.upper() or "NOVA" in clase_ia_final.upper()) and probabilidad > 0.90
                             analisis_magallanes, tipo_evento_final = "DESCONOCIDO", "descarte"
 
-                            # --- CLASIFICACIÓN FÍSICA BASADA EN TASA RECIENTE (V22.1 RESTAURADA + TDE) ---
                             if es_cuasar_cat or (es_viejo and not en_plano and not veto_ia_cv and not es_estrella_cat):
                                 if salto_luminosidad_delta > 0.5:
                                     if tasa_acel_reciente > 0.05: analisis_magallanes, tipo_evento_final = "Blazar (Chorro relativista - Alta aceleración)", "blazar"
@@ -497,13 +502,9 @@ def main():
                                 if salto_luminosidad_delta > 0.5: analisis_magallanes, tipo_evento_final = "Variable Cataclísmica / Nova (Erupción activa)", "nova"
                                 elif edad_dias < 3.0 and tasa_acel_reciente > 1.0: analisis_magallanes, tipo_evento_final = "Flare (Enana M)", "flare"
                                 else: analisis_magallanes, tipo_evento_final = "Variabilidad rutinaria", "descarte"
-                            
-                            # ---> INSERCIÓN QUIRÚRGICA: FILTRO EXCLUSIVO PARA TDE <---
                             elif clase_ia_final == "TDE":
                                 if salto_luminosidad_delta > 0.5: analisis_magallanes, tipo_evento_final = "Disrupción de Marea (Agujero Negro activo)", "tde"
                                 else: analisis_magallanes, tipo_evento_final = "Variabilidad rutinaria", "descarte"
-                            # ---------------------------------------------------------
-                            
                             else:
                                 if edad_dias < 3.0 and tasa_acel_reciente > 1.0: analisis_magallanes, tipo_evento_final = "Flare (Enana M)", "flare"
                                 elif salto_luminosidad_delta >= 0.5: analisis_magallanes, tipo_evento_final = "Candidata (Esperando confirmación TNS)", "supernova"
@@ -511,8 +512,22 @@ def main():
 
                             if tipo_evento_final == "descarte": continue 
                             
-                            registrar_log(f"-> Procesando evento de interés: {oid} ({tipo_evento_final})", log_file)
-                            graficar_curva(det, str(oid), current_survey, coordenadas.ra.deg, coordenadas.dec.deg, tipo_evento_final, es_vip)
+                            # =========================================================
+                            # 🛡️ INTERCEPCIÓN DEL ESCUDO TNS (PRIMERA LÍNEA)
+                            # =========================================================
+                            nombre_oficial_tns = consultar_escudo_tns(str(oid))
+                            if nombre_oficial_tns:
+                                registrar_log(f"      [🛡️] ALERTA ROJA TNS: {oid} interceptado. Ya es {nombre_oficial_tns}. Abortando ATel.", log_file)
+                                oid_para_laboratorio = nombre_oficial_tns
+                                survey_para_laboratorio = "TNS_GLOBAL"
+                                tipo_evento_final = "supernova"
+                            else:
+                                oid_para_laboratorio = str(oid)
+                                survey_para_laboratorio = current_survey
+                            # =========================================================
+                            
+                            registrar_log(f"-> Procesando evento de interés: {oid_para_laboratorio} ({tipo_evento_final})", log_file)
+                            graficar_curva(det, oid_para_laboratorio, survey_para_laboratorio, coordenadas.ra.deg, coordenadas.dec.deg, tipo_evento_final, es_vip)
 
                             texto_reporte = f"""
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
@@ -528,13 +543,14 @@ def main():
                             datos_cineticos_para_filtro = {
                                 "es_vip": es_vip,
                                 "edad_dias": edad_dias,
-                                "salto_luminosidad": salto_luminosidad_delta
+                                "salto_luminosidad": salto_luminosidad_delta,
+                                "escudo_tns_hit": nombre_oficial_tns # Pasa la etiqueta a la cascada
                             }
 
                             ejecutar_pipeline_magallanes(
                                 coordenadas.ra.deg, 
                                 coordenadas.dec.deg, 
-                                oid, 
+                                oid_para_laboratorio, 
                                 tipo_evento_final, 
                                 distancia_real, 
                                 mjd_alerta_actual,
@@ -543,19 +559,19 @@ def main():
                             )
                             
                             try:
-                                catalogo_dict[str(oid)] = {
-                                    "oid": str(oid),
+                                catalogo_dict[str(oid_para_laboratorio)] = {
+                                    "oid": str(oid_para_laboratorio),
                                     "ra": float(coordenadas.ra.deg),
                                     "dec": float(coordenadas.dec.deg),
                                     "tipo": tipo_evento_final,
-                                    "survey": current_survey,
-                                    "analisis": analisis_magallanes,
+                                    "survey": survey_para_laboratorio,
+                                    "analisis": analisis_magallanes + (" [Interceptado por TNS]" if nombre_oficial_tns else ""),
                                     "vip": es_vip,
                                     "mjd_deteccion": float(mjd_alerta_actual),
-                                    "img_url": f"data/curva_luz_{oid}.png" if os.path.exists(f"data/curva_luz_{oid}.png") else None
+                                    "img_url": f"data/curva_luz_{oid_para_laboratorio.replace(' ', '_')}.png" if os.path.exists(f"data/curva_luz_{oid_para_laboratorio.replace(' ', '_')}.png") else None
                                 }
                             except Exception as e:
-                                registrar_log(f"[!] Error al inyectar {oid} al catálogo JSON: {e}", log_file)
+                                registrar_log(f"[!] Error al inyectar {oid_para_laboratorio} al catálogo JSON: {e}", log_file)
 
                     except Exception as e: pass 
         except Exception as e:
