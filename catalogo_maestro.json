@@ -111,13 +111,13 @@
     },
     {
         "oid": "SN 2026wbs",
-        "ra": 332.898067318,
-        "dec": -18.3180062427,
+        "ra": 332.89806109230096,
+        "dec": -18.31798285503973,
         "tipo": "supernova",
         "survey": "TNS_GLOBAL",
-        "analisis": "SN IIb",
+        "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
         "vip": false,
-        "mjd_deteccion": 61263.02142845203,
+        "mjd_deteccion": 61271.43067129981,
         "img_url": "data/curva_luz_SN_2026wbs.png"
     },
     {
@@ -3664,13 +3664,13 @@
     },
     {
         "oid": "ZTF19abpnfnn",
-        "ra": 327.39252857242997,
-        "dec": -12.319050494642,
+        "ra": 327.39253080830906,
+        "dec": -12.319051889597613,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61269.239409700036,
+        "mjd_deteccion": 61271.43114579981,
         "img_url": "data/curva_luz_ZTF19abpnfnn.png"
     },
     {
