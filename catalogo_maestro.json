@@ -1299,13 +1299,13 @@
     },
     {
         "oid": "ZTF23aapwfcv",
-        "ra": 337.1832968691378,
-        "dec": -0.21007241702711704,
+        "ra": 337.18329551717255,
+        "dec": -0.2100725990113509,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61268.340173599776,
+        "mjd_deteccion": 61271.336678199936,
         "img_url": "data/curva_luz_ZTF23aapwfcv.png"
     },
     {
@@ -3092,35 +3092,35 @@
     },
     {
         "oid": "ZTF23aaozhdf",
-        "ra": 343.793361098308,
-        "dec": -3.639424361293727,
+        "ra": 343.7933614013565,
+        "dec": -3.6394236378742857,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61268.340173599776,
+        "mjd_deteccion": 61271.336678199936,
         "img_url": "data/curva_luz_ZTF23aaozhdf.png"
     },
     {
         "oid": "ZTF19aaauhyr",
-        "ra": 337.4394101447718,
-        "dec": -5.434251647626625,
+        "ra": 337.43940964272036,
+        "dec": -5.434251033915296,
         "tipo": "blazar",
         "survey": "ZTF",
         "analisis": "Blazar (Chorro relativista - Alta aceleración)",
         "vip": false,
-        "mjd_deteccion": 61268.340173599776,
+        "mjd_deteccion": 61271.336678199936,
         "img_url": "data/curva_luz_ZTF19aaauhyr.png"
     },
     {
         "oid": "ZTF21abqgqwg",
-        "ra": 343.81263468651355,
-        "dec": -3.223621666043767,
+        "ra": 343.81263453376823,
+        "dec": -3.2236211396340195,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61268.340173599776,
+        "mjd_deteccion": 61271.336678199936,
         "img_url": "data/curva_luz_ZTF21abqgqwg.png"
     },
     {
@@ -6169,5 +6169,71 @@
         "vip": false,
         "mjd_deteccion": 61271.314375000075,
         "img_url": "data/curva_luz_ZTF25abemxtb.png"
+    },
+    {
+        "oid": "ZTF26abhlybf",
+        "ra": 334.1548782621224,
+        "dec": 7.276730608159139,
+        "tipo": "supernova",
+        "survey": "ZTF",
+        "analisis": "Candidata (Esperando confirmación TNS)",
+        "vip": false,
+        "mjd_deteccion": 61271.33715280006,
+        "img_url": "data/curva_luz_ZTF26abhlybf.png"
+    },
+    {
+        "oid": "ZTF17aabwwgf",
+        "ra": 334.4256071817343,
+        "dec": 6.733199601320112,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61271.33715280006,
+        "img_url": "data/curva_luz_ZTF17aabwwgf.png"
+    },
+    {
+        "oid": "ZTF26abgboic",
+        "ra": 334.3364839450948,
+        "dec": 7.322255729947239,
+        "tipo": "supernova",
+        "survey": "ZTF",
+        "analisis": "Candidata (Esperando confirmación TNS)",
+        "vip": false,
+        "mjd_deteccion": 61271.33715280006,
+        "img_url": "data/curva_luz_ZTF26abgboic.png"
+    },
+    {
+        "oid": "ZTF22abnqsig",
+        "ra": 334.0550674334964,
+        "dec": 8.19364781580155,
+        "tipo": "blazar",
+        "survey": "ZTF",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61271.33715280006,
+        "img_url": "data/curva_luz_ZTF22abnqsig.png"
+    },
+    {
+        "oid": "ZTF21abneter",
+        "ra": 340.47471533488215,
+        "dec": -1.9079184973160574,
+        "tipo": "blazar",
+        "survey": "ZTF",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61271.336678199936,
+        "img_url": "data/curva_luz_ZTF21abneter.png"
+    },
+    {
+        "oid": "ZTF17aaeeusb",
+        "ra": 338.8931728699091,
+        "dec": -1.2406253586048512,
+        "tipo": "supernova",
+        "survey": "ZTF",
+        "analisis": "Candidata (Esperando confirmación TNS)",
+        "vip": false,
+        "mjd_deteccion": 61271.336678199936,
+        "img_url": "data/curva_luz_ZTF17aaeeusb.png"
     }
 ]
