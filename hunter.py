@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 22.8 (ESCUDO TNS - FASE 1: INTERCEPCIÓN INTELIGENTE)
+VERSIÓN    : 22.9 (MEMORIA HISTÓRICA PROFUNDA Y ESCUDO INTELIGENTE)
 =============================================================================
 """
 
@@ -386,7 +386,7 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
     registrar_log("[+] Procesamiento TNS finalizado. Archivo de boletín purgado desde la línea 3.", log_file)
 
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.9 - ESCUDO TNS INTELIGENTE) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 23.0 - MEMORIA HISTÓRICA PROFUNDA) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     url_tap = "https://tap.alerce.online/tap"
@@ -466,18 +466,25 @@ def main():
                             
                             nombre_real, distancia_real, tipo_real, metalicidad_real, es_cuasar_cat, es_estrella_cat, es_galaxia_cat, es_vip = obtener_datos_astronomicos(coordenadas, mjd_alerta_actual)
 
-                            mjd_min, mjd_max = det['mjd'].min(), det['mjd'].max()
-                            edad_dias, amplitud_mag = mjd_max - mjd_min, det['magpsf'].max() - det['magpsf'].min()
-                            dias_al_pico = det.loc[det['magpsf'].idxmin(), 'mjd'] - mjd_min
+                            # --- CORRECCIÓN DE AMNESIA TEMPORAL (Memoria Profunda ZTF/LSST) ---
+                            mjd_min_fotometria = det['mjd'].min()
+                            mjd_max = det['mjd'].max()
+                            mjd_historico = float(fila['firstmjd'])
+
+                            edad_dias = mjd_max - mjd_historico
+                            amplitud_mag = det['magpsf'].max() - det['magpsf'].min()
+
+                            dias_al_pico = det.loc[det['magpsf'].idxmin(), 'mjd'] - mjd_min_fotometria
                             if dias_al_pico <= 0: dias_al_pico = 1.0
                             tasa_acel = amplitud_mag / dias_al_pico 
+                            # ------------------------------------------------------------------
 
                             latitud_b, en_plano, es_viejo = coordenadas.galactic.b.degree, abs(coordenadas.galactic.b.degree) <= 10.0, edad_dias > 400
 
                             salto_luminosidad_delta = amplitud_mag
                             tasa_acel_reciente = tasa_acel
                             
-                            if edad_dias > 30:
+                            if (mjd_max - mjd_min_fotometria) > 30:
                                 recientes, antiguas = det[det['mjd'] >= mjd_max - 30], det[det['mjd'] < mjd_max - 30]
                                 if not recientes.empty and not antiguas.empty: 
                                     salto_luminosidad_delta = antiguas['magpsf'].median() - recientes['magpsf'].min()
