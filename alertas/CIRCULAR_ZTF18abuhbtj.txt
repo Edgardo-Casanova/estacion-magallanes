@@ -1,26 +1,27 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-08-12 11:50:48 UTC
-EVENTO DETECTADO : ZTF18abuhbtj (AGN)
+FECHA DE EMISIÓN : 2026-08-19 11:40:23 UTC
+EVENTO DETECTADO : ZTF18abuhbtj (BLAZAR)
 COORDENADAS ICRS : RA 33.22013 | Dec 22.74784
 -----------------------------------------------------------------
 
 [1] ENTORNO COSMOLÓGICO
-    OBJETO CENTRAL / ANFITRIONA : ICRF J021252.8+224452
-    REDSHIFT (z)                : Desconocido
+    OBJETO CENTRAL / ANFITRIONA : WISEA J021250.07+224525.7
+    REDSHIFT (z)                : 0.13042
+    DISTANCIA HUBBLE            : Entre 535.61 y 580.12 Megaparsecs (Aprox. 1746.94 a 1892.08 M Años luz)
 
 [2] EVALUACIÓN MAGALLANES
     PRIORIDAD   : ALTA PRIORIDAD ESPECTROSCÓPICA
     INSTRUMENTO : Observatorios masivos (VLT / Gemini).
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : Blazar (Confianza: 99.5%)
-    RECLASIFICACIÓN      : AGN / Cuásar (Acreción térmica - Lenta)
-    EDAD HISTÓRICA       : 2895.0 días
+    CLASE IA (ALeRCE)    : Blazar (Confianza: 99.4%)
+    RECLASIFICACIÓN      : Blazar (Chorro relativista - Alta aceleración)
+    EDAD HISTÓRICA       : 2902.0 días
     SALTO LUMINOSIDAD    : 0.67 magnitudes
     TASA ACEL. HISTÓRICA : 0.001 mag/día
-    TASA ACEL. RECIENTE  : 0.035 mag/día
+    TASA ACEL. RECIENTE  : 0.052 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61264.4047
+    MJD ÚLTIMA DETEC.    : 61271.4140
 =================================================================
