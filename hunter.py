@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 22.5 (INYECCIÓN ANTI-EMBARGO MAGALLANES)
+VERSIÓN    : 22.6 (PARCHE DE MEDIANOCHE: ANTI-EMBARGO V2)
 =============================================================================
 """
 
@@ -299,12 +299,17 @@ def consultar_tns_sur(client, catalogo_dict):
                     det = None
                     try:
                         if ra_float != 0.0 and dec_float != 0.0:
-                            # Inyección Anti-Embargo Magallanes (Búsqueda expandida a 20 arcsec)
-                            candidatos_alerce = client.query_objects(ra=ra_float, dec=dec_float, radius=20, format='pandas')
+                            # Hack Anti-Embargo V2: Radio 10" y búsqueda por actividad reciente
+                            candidatos_alerce = client.query_objects(ra=ra_float, dec=dec_float, radius=10, format='pandas')
+                            
                             if candidatos_alerce is not None and not candidatos_alerce.empty:
-                                candidatos_alerce = candidatos_alerce.sort_values(by='ndethist', ascending=False)
+                                # Filtro Astrofísico Correcto: El objeto que brilló más recientemente
+                                if 'lastmjd' in candidatos_alerce.columns:
+                                    candidatos_alerce = candidatos_alerce.sort_values(by='lastmjd', ascending=False)
+                                
                                 oid_tns = candidatos_alerce.iloc[0]['oid']
                                 oid_tns = oid_tns.decode('utf-8') if isinstance(oid_tns, bytes) else oid_tns
+                                
                                 det = client.query_detections(oid=oid_tns, format='pandas')
                     except Exception as e: 
                         registrar_log(f"   [-] Fallo menor en extracción fotométrica para {id_evento}: {e}", log_file)
@@ -376,7 +381,7 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
 # BUCLE PRINCIPAL (MAIN)
 # =====================================================================
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.5 - INYECCIÓN ANTI-EMBARGO) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.6 - PARCHE DE MEDIANOCHE) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     url_tap = "https://tap.alerce.online/tap"
