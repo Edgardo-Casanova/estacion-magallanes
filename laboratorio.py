@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : laboratorio.py (Centro de Análisis Científico Profundo)
-VERSIÓN    : 18.5 (FASE 5: INYECCIÓN COSMOLÓGICA NED Y LEY DE HUBBLE)
+VERSIÓN    : 18.6 (FASE 6: RECEPCIÓN DE ESCUDO TNS EN CASCADA)
 =============================================================================
 """
 
@@ -219,10 +219,8 @@ DISTANCIA        : {distancia}
         else:
             contenido += f"    ALINEACIÓN ÓPTICA: {len(planetas_info)} exoplaneta(s) confirmado(s) en la misma línea de visión (60 arcsec).\n"
             
-        # -- DESEMPAQUETADO DEL DETALLE PLANETARIO --
         for p in planetas_info:
-            contenido += f"       * {p['nombre']} | Masa: {p['masa']} M_Tierra | Órbita: {p['periodo']} días\n"
-        # -------------------------------------------
+            contenido += f"        * {p['nombre']} | Masa: {p['masa']} M_Tierra | Órbita: {p['periodo']} días\n"
             
     elif tiene_planetas is False: 
         contenido += "    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).\n"
@@ -312,8 +310,27 @@ COORDENADAS ICRS : RA {ra:.5f} | Dec {dec:.5f}
     contenido += "=================================================================\n"
     return guardar_archivo_texto(ruta_archivo, contenido)
 
-def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_evento="flare", distancia_real="Desconocida", mjd_deteccion=None, reporte_matematico="", extra_datos_hunter={}):
+def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_evento="flare", distancia_real="Desconocida", mjd_deteccion=None, reporte_matematico="", extra_datos_hunter=None):
+    if extra_datos_hunter is None: extra_datos_hunter = {}
     print(f"\n[ESTACIÓN MAGALLANES] Recibida alerta para laboratorio: {id_evento}")
+    
+    # =====================================================================
+    # 🛡️ RECEPCIÓN DEL ESCUDO TNS DESDE HUNTER
+    # =====================================================================
+    escudo_hit = extra_datos_hunter.get("escudo_tns_hit")
+    if escudo_hit:
+        print(f"   [🛡️] Escudo TNS detectado en la cascada. Inyectando marca de agua al reporte interno.")
+        aviso_escudo = f"""=================================================================
+🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
+=================================================================
+ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
+Nombre Oficial Asignado : {escudo_hit}
+URL de Confirmación     : https://www.wis-tns.org/object/{escudo_hit.split(' ')[-1] if ' ' in escudo_hit else escudo_hit}
+-> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
+=================================================================\n\n"""
+        reporte_matematico = aviso_escudo + reporte_matematico
+    # =====================================================================
+
     try:
         coordenadas = SkyCoord(ra=ra_deg*u.degree, dec=dec_deg*u.degree, frame='icrs')
         id_limpio = id_evento.replace(' ', '_').replace('/', '-')
@@ -335,7 +352,6 @@ def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_
                     "fuente_espectro": fuente_espectro
                 }
                 datos_para_megafono.update(extra_datos_hunter) 
-                
                 generar_alerta_comunidad(id_limpio, ra_deg, dec_deg, tipo_evento=tipo_evento, extra_data=datos_para_megafono)
             except TypeError: pass
                 
