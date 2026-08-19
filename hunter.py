@@ -520,7 +520,6 @@ def main():
                                 registrar_log(f"      [🛡️] ALERTA ROJA TNS: {oid} interceptado. Ya es {nombre_oficial_tns}. Abortando ATel.", log_file)
                                 oid_para_laboratorio = nombre_oficial_tns
                                 survey_para_laboratorio = "TNS_GLOBAL"
-                                tipo_evento_final = "supernova"
                             else:
                                 oid_para_laboratorio = str(oid)
                                 survey_para_laboratorio = current_survey
