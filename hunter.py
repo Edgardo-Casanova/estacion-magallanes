@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 22.7 (ESCUDO TNS - FASE 1: INTERCEPCIÓN)
+VERSIÓN    : 22.8 (ESCUDO TNS - FASE 1: INTERCEPCIÓN INTELIGENTE)
 =============================================================================
 """
 
@@ -53,7 +53,7 @@ for directorio in ["alertas", "data", "alertas_comunidad", "bitacoras"]:
 def consultar_escudo_tns(nombre_interno):
     TNS_BOT_ID = os.getenv("TNS_BOT_ID")
     TNS_API_KEY = os.getenv("TNS_API_KEY")
-    if not TNS_BOT_ID or not TNS_API_KEY: return None
+    if not TNS_BOT_ID or not TNS_API_KEY: return None, None
     
     headers = {'User-Agent': f'tns_marker{{"tns_id":{TNS_BOT_ID}, "type":"bot", "name":"Magallanes_Bot"}}'}
     payload = {"api_key": TNS_API_KEY, "data": json.dumps({"internal_name": nombre_interno})}
@@ -68,9 +68,9 @@ def consultar_escudo_tns(nombre_interno):
                 hit = resultados[0] 
                 prefijo = hit.get('prefix', 'AT')
                 nombre_oficial = hit.get('objname', '')
-                return f"{prefijo} {nombre_oficial}".strip()
+                return prefijo, f"{prefijo} {nombre_oficial}".strip()
     except Exception: pass
-    return None
+    return None, None
 
 # =====================================================================
 # FUNCIONES DE ALMACENAMIENTO LOCAL
@@ -386,7 +386,7 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
     registrar_log("[+] Procesamiento TNS finalizado. Archivo de boletín purgado desde la línea 3.", log_file)
 
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.7 - ESCUDO TNS TOTAL) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 22.9 - ESCUDO TNS INTELIGENTE) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     url_tap = "https://tap.alerce.online/tap"
@@ -513,13 +513,21 @@ def main():
                             if tipo_evento_final == "descarte": continue 
                             
                             # =========================================================
-                            # 🛡️ INTERCEPCIÓN DEL ESCUDO TNS (PRIMERA LÍNEA)
+                            # 🛡️ INTERCEPCIÓN DEL ESCUDO TNS (INTELIGENTE)
                             # =========================================================
-                            nombre_oficial_tns = consultar_escudo_tns(str(oid))
+                            prefijo_tns, nombre_oficial_tns = consultar_escudo_tns(str(oid))
+                            
                             if nombre_oficial_tns:
-                                registrar_log(f"      [🛡️] ALERTA ROJA TNS: {oid} interceptado. Ya es {nombre_oficial_tns}. Abortando ATel.", log_file)
+                                registrar_log(f"      [🛡️] ALERTA TNS: {oid} interceptado. Ya es {nombre_oficial_tns}.", log_file)
                                 oid_para_laboratorio = nombre_oficial_tns
-                                survey_para_laboratorio = "TNS_GLOBAL"
+                                
+                                if prefijo_tns == "SN":
+                                    tipo_evento_final = "supernova" 
+                                    survey_para_laboratorio = "TNS_GLOBAL"
+                                    registrar_log("      -> [!] TNS Confirma: Espectroscopía detectada. Magallanes acata la clasificación IAU.", log_file)
+                                else:
+                                    survey_para_laboratorio = current_survey
+                                    registrar_log(f"      -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción de IA: {tipo_evento_final}.", log_file)
                             else:
                                 oid_para_laboratorio = str(oid)
                                 survey_para_laboratorio = current_survey
