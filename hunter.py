@@ -14,7 +14,6 @@ import numpy as np
 import requests
 import json
 import re
-import matplotlib.subplots as plt_sub
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from alerce.core import Alerce
@@ -200,7 +199,7 @@ def obtener_datos_astronomicos(coordenadas, mjd_alerta):
 
 def graficar_curva(det, id_evento, red_descubridora, ra_float, dec_float, tipo_evento_final="supernova", es_vip=False):
     plt.style.use('dark_background')
-    fig, (ax1, ax2) = plt_sub.subplots(1, 2, figsize=(16, 7))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 7))
     fig.patch.set_facecolor('#0f0f0f') 
     ax1.set_facecolor('#1a1a1a')
     ax2.set_facecolor('#1a1a1a')
