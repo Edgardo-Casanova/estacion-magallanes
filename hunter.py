@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 22.9 (MEMORIA HISTÓRICA PROFUNDA Y ESCUDO INTELIGENTE)
+VERSIÓN    : 23.2 (SEPARACIÓN DE CANALES, GUILLOTINA Y TNS EXPANDIDO)
 =============================================================================
 """
 
@@ -48,12 +48,12 @@ for directorio in ["alertas", "data", "alertas_comunidad", "bitacoras"]:
     os.makedirs(directorio, exist_ok=True)
 
 # =====================================================================
-# 🛡️ ESCUDO TNS (PROTOTIPO LOCAL INTEGRADO)
+# 🛡️ ESCUDO TNS (PROTOTIPO LOCAL INTEGRADO Y EXPANDIDO)
 # =====================================================================
 def consultar_escudo_tns(nombre_interno):
     TNS_BOT_ID = os.getenv("TNS_BOT_ID")
     TNS_API_KEY = os.getenv("TNS_API_KEY")
-    if not TNS_BOT_ID or not TNS_API_KEY: return None, None
+    if not TNS_BOT_ID or not TNS_API_KEY: return None, None, None
     
     headers = {'User-Agent': f'tns_marker{{"tns_id":{TNS_BOT_ID}, "type":"bot", "name":"Magallanes_Bot"}}'}
     payload = {"api_key": TNS_API_KEY, "data": json.dumps({"internal_name": nombre_interno})}
@@ -68,9 +68,14 @@ def consultar_escudo_tns(nombre_interno):
                 hit = resultados[0] 
                 prefijo = hit.get('prefix', 'AT')
                 nombre_oficial = hit.get('objname', '')
-                return prefijo, f"{prefijo} {nombre_oficial}".strip()
+                
+                # --- HEREDAR TAXONOMÍA EXÓTICA ---
+                obj_type = hit.get('object_type', {})
+                tipo_tns = obj_type.get('name', '') if isinstance(obj_type, dict) else ''
+                
+                return prefijo, f"{prefijo} {nombre_oficial}".strip(), tipo_tns
     except Exception: pass
-    return None, None
+    return None, None, None
 
 # =====================================================================
 # FUNCIONES DE ALMACENAMIENTO LOCAL
@@ -386,7 +391,7 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
     registrar_log("[+] Procesamiento TNS finalizado. Archivo de boletín purgado desde la línea 3.", log_file)
 
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 23.0 - MEMORIA HISTÓRICA PROFUNDA) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 23.2 - CANALES, GUILLOTINA Y TNS EXPANDIDO) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     url_tap = "https://tap.alerce.online/tap"
@@ -460,43 +465,67 @@ def main():
                             det = client.query_detections(oid=oid, format='pandas')
                             det = det.dropna(subset=['magpsf', 'mjd'])
                             if det.empty or len(det) < 2: continue 
+
+                            # --- 🗡️ GUILLOTINA FOTOMÉTRICA ---
+                            if det['magpsf'].min() > 18.5:
+                                registrar_log(f"      [-] Purgado: {oid} es demasiado tenue (Pico mag: {det['magpsf'].min():.2f} > 18.5).", log_file)
+                                continue
+                            # --------------------------------
                                 
                             coordenadas = SkyCoord(ra=fila['meanra']*u.degree, dec=fila['meandec']*u.degree, frame='icrs')
                             mjd_alerta_actual = det['mjd'].max()
                             
                             nombre_real, distancia_real, tipo_real, metalicidad_real, es_cuasar_cat, es_estrella_cat, es_galaxia_cat, es_vip = obtener_datos_astronomicos(coordenadas, mjd_alerta_actual)
 
-                            # --- CORRECCIÓN DE AMNESIA TEMPORAL (Memoria Profunda ZTF/LSST) ---
-                            mjd_min_fotometria = det['mjd'].min()
-                            mjd_max = det['mjd'].max()
+                            # --- 📊 ESTABILIZACIÓN FÍSICA: SEPARACIÓN DE CANALES ---
+                            det_g = det[det['fid'] == 1].copy()
+                            det_r = det[det['fid'] == 2].copy()
+
+                            def calcular_tasas_por_banda(df_banda):
+                                if df_banda.empty or len(df_banda) < 2:
+                                    return 0.0, 0.0, 0.0
+                                
+                                mjd_min = df_banda['mjd'].min()
+                                mjd_max = df_banda['mjd'].max()
+                                mag_max = df_banda['magpsf'].max()
+                                mag_min = df_banda['magpsf'].min()
+                                
+                                salto_hist = mag_max - mag_min
+                                idx_pico = df_banda['magpsf'].idxmin()
+                                mjd_pico = df_banda.loc[idx_pico, 'mjd']
+                                dias_al_pico = mjd_pico - mjd_min
+                                tasa_hist = salto_hist / dias_al_pico if dias_al_pico > 0 else 0.0
+                                
+                                tasa_rec = tasa_hist
+                                salto_rec = salto_hist
+                                
+                                if (mjd_max - mjd_min) > 30:
+                                    recientes = df_banda[df_banda['mjd'] >= mjd_max - 30]
+                                    antiguas = df_banda[df_banda['mjd'] < mjd_max - 30]
+                                    
+                                    if not recientes.empty and not antiguas.empty:
+                                        salto_rec = antiguas['magpsf'].median() - recientes['magpsf'].min()
+                                        idx_pico_rec = recientes['magpsf'].idxmin()
+                                        mjd_pico_rec = recientes.loc[idx_pico_rec, 'mjd']
+                                        mjd_ini_rec = recientes['mjd'].min()
+                                        dias_al_pico_rec = mjd_pico_rec - mjd_ini_rec
+                                        tasa_rec = salto_rec / dias_al_pico_rec if (salto_rec > 0 and dias_al_pico_rec > 0) else 0.0
+                                            
+                                return tasa_hist, tasa_rec, salto_rec
+
+                            tasa_hist_g, tasa_rec_g, salto_rec_g = calcular_tasas_por_banda(det_g)
+                            tasa_hist_r, tasa_rec_r, salto_rec_r = calcular_tasas_por_banda(det_r)
+
+                            tasa_acel = max(tasa_hist_g, tasa_hist_r)
+                            tasa_acel_reciente = max(tasa_rec_g, tasa_rec_r)
+                            salto_luminosidad_delta = max(salto_rec_g, salto_rec_r)
+                            
                             mjd_historico = float(fila['firstmjd'])
-
-                            edad_dias = mjd_max - mjd_historico
-                            amplitud_mag = det['magpsf'].max() - det['magpsf'].min()
-
-                            dias_al_pico = det.loc[det['magpsf'].idxmin(), 'mjd'] - mjd_min_fotometria
-                            if dias_al_pico <= 0: dias_al_pico = 1.0
-                            tasa_acel = amplitud_mag / dias_al_pico 
-                            # ------------------------------------------------------------------
+                            edad_dias = mjd_alerta_actual - mjd_historico
+                            # ---------------------------------------------------------
 
                             latitud_b, en_plano, es_viejo = coordenadas.galactic.b.degree, abs(coordenadas.galactic.b.degree) <= 10.0, edad_dias > 400
-
-                            salto_luminosidad_delta = amplitud_mag
-                            tasa_acel_reciente = tasa_acel
                             
-                            if (mjd_max - mjd_min_fotometria) > 30:
-                                recientes, antiguas = det[det['mjd'] >= mjd_max - 30], det[det['mjd'] < mjd_max - 30]
-                                if not recientes.empty and not antiguas.empty: 
-                                    salto_luminosidad_delta = antiguas['magpsf'].median() - recientes['magpsf'].min()
-                                    mjd_pico_reciente = recientes.loc[recientes['magpsf'].idxmin(), 'mjd']
-                                    mjd_inicio_reciente = recientes['mjd'].min()
-                                    dias_al_pico_rec = mjd_pico_reciente - mjd_inicio_reciente
-                                    if dias_al_pico_rec <= 0: dias_al_pico_rec = 1.0 
-                                    if salto_luminosidad_delta > 0:
-                                        tasa_acel_reciente = salto_luminosidad_delta / dias_al_pico_rec
-                                    else:
-                                        tasa_acel_reciente = 0.0
-
                             veto_ia_cv = ("CV" in clase_ia_final.upper() or "NOVA" in clase_ia_final.upper()) and probabilidad > 0.90
                             analisis_magallanes, tipo_evento_final = "DESCONOCIDO", "descarte"
 
@@ -520,17 +549,35 @@ def main():
                             if tipo_evento_final == "descarte": continue 
                             
                             # =========================================================
-                            # 🛡️ INTERCEPCIÓN DEL ESCUDO TNS (INTELIGENTE)
+                            # 🛡️ INTERCEPCIÓN DEL ESCUDO TNS (EXPANDIDO)
                             # =========================================================
-                            prefijo_tns, nombre_oficial_tns = consultar_escudo_tns(str(oid))
+                            prefijo_tns, nombre_oficial_tns, clasificacion_tns = consultar_escudo_tns(str(oid))
                             
                             if nombre_oficial_tns:
-                                registrar_log(f"      [🛡️] ALERTA TNS: {oid} interceptado. Ya es {nombre_oficial_tns}.", log_file)
+                                registrar_log(f"      [🛡️] ALERTA TNS: {oid} interceptado. Ya es {nombre_oficial_tns} ({clasificacion_tns}).", log_file)
                                 oid_para_laboratorio = nombre_oficial_tns
                                 
-                                if prefijo_tns == "SN":
+                                # --- HEREDAR TAXONOMÍA EXÓTICA DEL TNS ---
+                                if clasificacion_tns:
+                                    clase_tns_upper = clasificacion_tns.upper()
+                                    if "TDE" in clase_tns_upper:
+                                        tipo_evento_final = "tde"
+                                        analisis_magallanes = f"Disrupción de Marea (Confirmado IAU: {clasificacion_tns})"
+                                    elif "SLSN" in clase_tns_upper:
+                                        tipo_evento_final = "supernova"
+                                        analisis_magallanes = f"Supernova Superluminosa (Confirmado IAU: {clasificacion_tns})"
+                                    elif "CV" in clase_tns_upper or "NOVA" in clase_tns_upper:
+                                        tipo_evento_final = "nova"
+                                        analisis_magallanes = f"Variable Cataclísmica (Confirmado IAU: {clasificacion_tns})"
+                                    else:
+                                        tipo_evento_final = "supernova"
+                                        analisis_magallanes = f"Supernova (Confirmado IAU: {clasificacion_tns})"
+                                    survey_para_laboratorio = "TNS_GLOBAL"
+                                    registrar_log(f"      -> [!] TNS Confirma: Magallanes hereda taxonomía oficial ({tipo_evento_final.upper()}).", log_file)
+                                elif prefijo_tns == "SN":
                                     tipo_evento_final = "supernova" 
                                     survey_para_laboratorio = "TNS_GLOBAL"
+                                    analisis_magallanes = "Supernova (Confirmado IAU: Tipo pendiente)"
                                     registrar_log("      -> [!] TNS Confirma: Espectroscopía detectada. Magallanes acata la clasificación IAU.", log_file)
                                 else:
                                     survey_para_laboratorio = current_survey
