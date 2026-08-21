@@ -1,0 +1,41 @@
+=================================================================
+ CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
+=================================================================
+FECHA DE EMISIÓN : 2026-08-21 07:39:03 UTC
+OBJETO DETECTADO : AT_2019rdn (NOVA)
+COORDENADAS ICRS : RA 294.26347 | Dec -24.54842
+DISTANCIA        : Desconocida
+-----------------------------------------------------------------
+
+[1] ESTADO DEL SISTEMA PLANETARIO
+    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).
+
+[2] EVALUACIÓN TERMODINÁMICA (SED QUIESCENTE)
+    FIRMA TÉRMICA: Datos insuficientes para evaluación térmica SED.
+
+[3] ACTIVIDAD CROMOSFÉRICA / QUÍMICA (Fuente: Ninguna)
+    ESTADO QUÍMICO: Carencia de datos públicos 1D. Radar ESO indica: Radar ESO Inaccesible
+
+[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
+    PRIORIDAD   : ALTA PRIORIDAD (Variable Cataclísmica)
+    INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).
+=================================================================
+🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
+=================================================================
+ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
+Nombre Oficial Asignado : AT 2019rdn
+URL de Confirmación     : https://www.wis-tns.org/object/2019rdn
+-> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
+=================================================================
+
+
+[5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
+    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 95.3%)
+    RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
+    EDAD HISTÓRICA       : 2525.1 días
+    SALTO LUMINOSIDAD    : 2.71 magnitudes
+    TASA ACEL. HISTÓRICA : 0.001 mag/día
+    TASA ACEL. RECIENTE  : 0.444 mag/día
+    RED DE ORIGEN        : ZTF
+    MJD ÚLTIMA DETEC.    : 61273.3017
+=================================================================
