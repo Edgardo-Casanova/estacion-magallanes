@@ -1453,3 +1453,20 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-08-21 08:53:50] -> Procesando evento de interés: ZTF19abpnfnn (nova)
 [2026-08-21 08:54:07] -> Procesando evento de interés: ZTF18abwwdpy (nova)
 [2026-08-21 08:54:21] -> Procesando evento de interés: ZTF18aceiigk (nova)
+[2026-08-21 09:30:03] ==================================================
+[2026-08-21 09:30:03] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-08-21 09:35:14] -> Procesando evento de interés: ZTF18abqdzco (nova)
+[2026-08-21 09:39:00] -> Procesando evento de interés: ZTF22aaqwfnt (blazar)
+[2026-08-21 09:41:09] -> Procesando evento de interés: ZTF17aabvfpp (nova)
+[2026-08-21 09:42:33] -> Procesando evento de interés: ZTF18acejdkm (agn)
+[2026-08-21 09:44:08] -> Procesando evento de interés: ZTF18abosdsa (nova)
+[2026-08-21 09:47:05] -> Procesando evento de interés: ZTF19abdkcvf (agn)
+[2026-08-21 09:47:31] -> Procesando evento de interés: ZTF18abraeev (nova)
+[2026-08-21 09:47:51] -> Procesando evento de interés: ZTF20abnnnkk (agn)
+[2026-08-21 09:48:09] -> Procesando evento de interés: ZTF19abcevpk (agn)
+[2026-08-21 09:49:57] -> Procesando evento de interés: ZTF20abmcwjp (agn)
+[2026-08-21 09:52:02] -> Procesando evento de interés: ZTF19abcejkv (agn)
+[2026-08-21 09:52:39]       [🛡️] ALERTA TNS: ZTF19abcehtc interceptado. Ya es AT 2020tni.
+[2026-08-21 09:52:39]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción de IA: agn.
+[2026-08-21 09:52:39] -> Procesando evento de interés: AT 2020tni (agn)
+[2026-08-21 09:54:13] -> Procesando evento de interés: ZTF19aaahdae (blazar)
