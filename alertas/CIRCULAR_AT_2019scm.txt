@@ -1,9 +1,9 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-08-21 14:15:24 UTC
-OBJETO DETECTADO : ZTF18aaaecsr (NOVA)
-COORDENADAS ICRS : RA 80.10204 | Dec 48.86139
+FECHA DE EMISIÓN : 2026-08-21 14:05:09 UTC
+OBJETO DETECTADO : AT_2019scm (NOVA)
+COORDENADAS ICRS : RA 87.01041 | Dec -2.36966
 DISTANCIA        : Desconocida
 -----------------------------------------------------------------
 
@@ -19,14 +19,23 @@ DISTANCIA        : Desconocida
 [4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
     PRIORIDAD   : ALTA PRIORIDAD (Variable Cataclísmica)
     INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).
+=================================================================
+🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
+=================================================================
+ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
+Nombre Oficial Asignado : AT 2019scm
+URL de Confirmación     : https://www.wis-tns.org/object/2019scm
+-> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
+=================================================================
+
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 98.2%)
+    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 92.9%)
     RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
-    EDAD HISTÓRICA       : 2907.0 días
-    SALTO LUMINOSIDAD    : 3.35 magnitudes
-    TASA ACEL. HISTÓRICA : 0.001 mag/día
-    TASA ACEL. RECIENTE  : 0.156 mag/día
+    EDAD HISTÓRICA       : 2786.3 días
+    SALTO LUMINOSIDAD    : 2.42 magnitudes
+    TASA ACEL. HISTÓRICA : 2.419 mag/día
+    TASA ACEL. RECIENTE  : 0.000 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61273.4998
+    MJD ÚLTIMA DETEC.    : 61273.5017
 =================================================================
