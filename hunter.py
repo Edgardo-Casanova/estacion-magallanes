@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 23.9 (BASE DORADA RESTAURADA + FÍSICA DE PRECISIÓN)
+VERSIÓN    : 24.0 (NÚCLEO DEFINITIVO + VETO QSO)
 =============================================================================
 """
 
@@ -386,7 +386,7 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
     registrar_log("[+] Procesamiento TNS finalizado. Archivo de boletín purgado desde la línea 3.", log_file)
 
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 23.9 - BASE DORADA RESTAURADA + FÍSICA) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 24.0 - NÚCLEO DEFINITIVO + VETO QSO) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     url_tap = "https://tap.alerce.online/tap"
@@ -534,10 +534,14 @@ def main():
                                 if not recientes.empty and not antiguas.empty: 
                                     pass # (Lógica absorbida en el nuevo bloque de bandas superior)
 
+                            # =========================================================
+                            # 🛡️ BLOQUE CORREGIDO: VETO QSO E INTELIGENCIA
+                            # =========================================================
                             veto_ia_cv = ("CV" in clase_ia_final.upper() or "NOVA" in clase_ia_final.upper()) and probabilidad > 0.90
+                            veto_ia_qso = any(x in clase_ia_final.upper() for x in ["QSO", "AGN", "BLAZAR"]) and probabilidad > 0.85
                             analisis_magallanes, tipo_evento_final = "DESCONOCIDO", "descarte"
 
-                            if es_cuasar_cat or (es_viejo and not en_plano and not veto_ia_cv and not es_estrella_cat):
+                            if es_cuasar_cat or veto_ia_qso or (es_viejo and not en_plano and not veto_ia_cv and not es_estrella_cat):
                                 if salto_luminosidad_delta > 0.5:
                                     if tasa_acel_reciente > 0.05: analisis_magallanes, tipo_evento_final = "Blazar (Chorro relativista - Alta aceleración)", "blazar"
                                     else: analisis_magallanes, tipo_evento_final = "AGN / Cuásar (Acreción térmica - Lenta)", "agn"
