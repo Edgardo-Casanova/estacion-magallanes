@@ -5311,5 +5311,16 @@
         "vip": false,
         "mjd_deteccion": 61273.509664400015,
         "img_url": "data/curva_luz_ZTF18accuwsw.png"
+    },
+    {
+        "oid": "AT 2019qct",
+        "ra": 109.85037126769411,
+        "dec": 29.394989771701614,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa) [Interceptado por TNS]",
+        "vip": false,
+        "mjd_deteccion": 61273.512280100025,
+        "img_url": "data/curva_luz_AT_2019qct.png"
     }
 ]

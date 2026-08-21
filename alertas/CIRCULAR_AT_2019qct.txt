@@ -1,10 +1,10 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-08-21 15:58:40 UTC
-OBJETO DETECTADO : ZTF18accuwsw (NOVA)
-COORDENADAS ICRS : RA 112.12381 | Dec 19.55526
-DISTANCIA        : ~9895.5 Años Luz
+FECHA DE EMISIÓN : 2026-08-21 15:50:58 UTC
+OBJETO DETECTADO : AT_2019qct (NOVA)
+COORDENADAS ICRS : RA 109.85037 | Dec 29.39499
+DISTANCIA        : Desconocida
 -----------------------------------------------------------------
 
 [1] ESTADO DEL SISTEMA PLANETARIO
@@ -19,14 +19,23 @@ DISTANCIA        : ~9895.5 Años Luz
 [4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
     PRIORIDAD   : ALTA PRIORIDAD (Variable Cataclísmica)
     INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).
+=================================================================
+🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
+=================================================================
+ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
+Nombre Oficial Asignado : AT 2019qct
+URL de Confirmación     : https://www.wis-tns.org/object/2019qct
+-> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
+=================================================================
+
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : QSO (Confianza: 79.2%)
+    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 99.9%)
     RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
-    EDAD HISTÓRICA       : 2847.1 días
-    SALTO LUMINOSIDAD    : 1.93 magnitudes
-    TASA ACEL. HISTÓRICA : 0.001 mag/día
-    TASA ACEL. RECIENTE  : 0.020 mag/día
+    EDAD HISTÓRICA       : 2913.0 días
+    SALTO LUMINOSIDAD    : 4.33 magnitudes
+    TASA ACEL. HISTÓRICA : 0.002 mag/día
+    TASA ACEL. RECIENTE  : 0.054 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61273.5097
+    MJD ÚLTIMA DETEC.    : 61273.5123
 =================================================================
