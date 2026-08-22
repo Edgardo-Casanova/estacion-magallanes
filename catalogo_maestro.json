@@ -4401,13 +4401,13 @@
     },
     {
         "oid": "SN 2026zec",
-        "ra": 40.2837924,
-        "dec": 8.2163155,
+        "ra": 40.28378021920613,
+        "dec": 8.216318407580586,
         "tipo": "supernova",
         "survey": "TNS_GLOBAL",
-        "analisis": "SN Ia",
+        "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
         "vip": false,
-        "mjd_deteccion": 61271.415416699834,
+        "mjd_deteccion": 61274.47741900012,
         "img_url": "data/curva_luz_SN_2026zec.png"
     },
     {
@@ -4786,13 +4786,13 @@
     },
     {
         "oid": "ZTF19acdgrxk",
-        "ra": 39.14883368342426,
-        "dec": 1.9957009415357385,
+        "ra": 39.14883358066537,
+        "dec": 1.9957017305409064,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61273.460706000216,
+        "mjd_deteccion": 61274.479305599816,
         "img_url": "data/curva_luz_ZTF19acdgrxk.png"
     },
     {
@@ -5905,5 +5905,93 @@
         "vip": false,
         "mjd_deteccion": 61274.445428200066,
         "img_url": "data/curva_luz_ZTF18adnjlvc.png"
+    },
+    {
+        "oid": "ZTF18abqotyz",
+        "ra": 23.779421925041962,
+        "dec": 16.037961001850615,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61274.481932899915,
+        "img_url": "data/curva_luz_ZTF18abqotyz.png"
+    },
+    {
+        "oid": "ZTF17aacpvmc",
+        "ra": 23.33001906945103,
+        "dec": 8.623722964480223,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61274.48145829979,
+        "img_url": "data/curva_luz_ZTF17aacpvmc.png"
+    },
+    {
+        "oid": "ZTF18abqqdwa",
+        "ra": 21.112222453062415,
+        "dec": 8.69849869383365,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61274.48145829979,
+        "img_url": "data/curva_luz_ZTF18abqqdwa.png"
+    },
+    {
+        "oid": "ZTF18abqtxot",
+        "ra": 22.076557515255967,
+        "dec": -5.800392323413259,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61274.48097220017,
+        "img_url": "data/curva_luz_ZTF18abqtxot.png"
+    },
+    {
+        "oid": "ZTF17aaebkbu",
+        "ra": 37.977724243332005,
+        "dec": 1.9480315921742306,
+        "tipo": "supernova",
+        "survey": "ZTF",
+        "analisis": "Candidata (Esperando confirmación TNS)",
+        "vip": false,
+        "mjd_deteccion": 61274.479305599816,
+        "img_url": "data/curva_luz_ZTF17aaebkbu.png"
+    },
+    {
+        "oid": "ZTF18adataqc",
+        "ra": 49.05301744423977,
+        "dec": 9.0787522672168,
+        "tipo": "blazar",
+        "survey": "ZTF",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61274.476956000086,
+        "img_url": "data/curva_luz_ZTF18adataqc.png"
+    },
+    {
+        "oid": "ZTF18abychez",
+        "ra": 52.9840936678664,
+        "dec": 10.141264968193981,
+        "tipo": "blazar",
+        "survey": "ZTF",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61274.476956000086,
+        "img_url": "data/curva_luz_ZTF18abychez.png"
+    },
+    {
+        "oid": "ZTF17aadeyyl",
+        "ra": 57.86512064833178,
+        "dec": 15.360763796431032,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61274.475532399956,
+        "img_url": "data/curva_luz_ZTF17aadeyyl.png"
     }
 ]
