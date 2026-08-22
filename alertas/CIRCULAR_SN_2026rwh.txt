@@ -1,14 +1,36 @@
-======================================================================
-[REGISTRO OFICIAL TNS] - EVENTO CONFIRMADO (RECUPERADO POR SANADOR)
-======================================================================
-ID de Evento          : SN 2026rwh
-Clasificación Oficial : SUPERNOVA
-Coordenadas (ICRS)    : RA 329.79183 | Dec 1.36286
+=================================================================
+ CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
+=================================================================
+FECHA DE EMISIÓN : 2026-08-22 10:32:46 UTC
+EVENTO DETECTADO : SN_2026rwh (SUPERNOVA)
+COORDENADAS ICRS : RA 329.79183 | Dec 1.36286
+-----------------------------------------------------------------
 
-======================================================================
-🔗 ENLACE OFICIAL DEL TRANSIENT NAME SERVER:
-https://www.wis-tns.org/object/2026rwh
-======================================================================
-* NOTA: Este evento ya está confirmado por la IAU. Rescatado del 
-  purgatorio por el sanador histórico de Magallanes.
-======================================================================
+[1] ENTORNO COSMOLÓGICO
+    OBJETO CENTRAL / ANFITRIONA : WISEA J215904.62+012228.5
+    REDSHIFT (z)                : Desconocido
+    DISTANCIA HUBBLE            : Desconocida N/A
+
+[2] EVALUACIÓN MAGALLANES
+    PRIORIDAD   : ALTA PRIORIDAD ESPECTROSCÓPICA
+    INSTRUMENTO : Observatorios masivos (VLT / Gemini).
+=================================================================
+🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
+=================================================================
+ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
+Nombre Oficial Asignado : SN 2026rwh
+URL de Confirmación     : https://www.wis-tns.org/object/2026rwh
+-> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
+=================================================================
+
+
+[5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
+    CLASE IA (ALeRCE)    : SNIa (Confianza: 99.3%)
+    RECLASIFICACIÓN      : Candidata (Esperando confirmación TNS)
+    EDAD HISTÓRICA       : 51.0 días
+    SALTO LUMINOSIDAD    : 2.38 magnitudes
+    TASA ACEL. HISTÓRICA : 0.140 mag/día
+    TASA ACEL. RECIENTE  : 0.292 mag/día
+    RED DE ORIGEN        : ZTF
+    MJD ÚLTIMA DETEC.    : 61274.3817
+=================================================================
