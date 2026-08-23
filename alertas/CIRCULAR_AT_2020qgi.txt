@@ -1,13 +1,13 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-08-23 12:56:16 UTC
-EVENTO DETECTADO : SN_2026wfn (SUPERNOVA)
-COORDENADAS ICRS : RA 353.63253 | Dec -13.59677
+FECHA DE EMISIÓN : 2026-08-23 13:02:46 UTC
+EVENTO DETECTADO : AT_2020qgi (BLAZAR)
+COORDENADAS ICRS : RA 351.33435 | Dec -20.20356
 -----------------------------------------------------------------
 
 [1] ENTORNO COSMOLÓGICO
-    OBJETO CENTRAL / ANFITRIONA : WISEA J233431.78-133549.3
+    OBJETO CENTRAL / ANFITRIONA : WISEA J232514.70-201119.6
     REDSHIFT (z)                : Desconocido
     DISTANCIA HUBBLE            : Desconocida N/A
 
@@ -18,19 +18,19 @@ COORDENADAS ICRS : RA 353.63253 | Dec -13.59677
 🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
 =================================================================
 ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
-Nombre Oficial Asignado : SN 2026wfn
-URL de Confirmación     : https://www.wis-tns.org/object/2026wfn
+Nombre Oficial Asignado : AT 2020qgi
+URL de Confirmación     : https://www.wis-tns.org/object/2020qgi
 -> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
 =================================================================
 
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : SNIa (Confianza: 94.9%)
-    RECLASIFICACIÓN      : Candidata (Esperando confirmación TNS)
-    EDAD HISTÓRICA       : 30.0 días
-    SALTO LUMINOSIDAD    : 2.17 magnitudes
-    TASA ACEL. HISTÓRICA : 0.094 mag/día
-    TASA ACEL. RECIENTE  : 0.094 mag/día
+    CLASE IA (ALeRCE)    : Blazar (Confianza: 92.6%)
+    RECLASIFICACIÓN      : Blazar (Chorro relativista - Alta aceleración)
+    EDAD HISTÓRICA       : 2515.1 días
+    SALTO LUMINOSIDAD    : 1.62 magnitudes
+    TASA ACEL. HISTÓRICA : 0.001 mag/día
+    TASA ACEL. RECIENTE  : 0.199 mag/día
     RED DE ORIGEN        : ZTF
     MJD ÚLTIMA DETEC.    : 61275.4171
 =================================================================
