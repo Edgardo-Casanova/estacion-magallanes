@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : operaciones_too.py (Megáfono Comunitario y ATel)
-VERSIÓN    : 18.7 (FASE 7: INYECCIÓN DE FIRMA QUÍMICA EN TELEGRAMAS)
+VERSIÓN    : 18.8 (FASE 8: TRIAGE ASTROFÍSICO Y BLOQUEO DE EVENTOS HISTÓRICOS)
 =============================================================================
 """
 
@@ -39,23 +39,30 @@ def generar_alerta_comunidad(nombre_evento, ra, dec, tipo_evento="flare", extra_
     es_vip = extra_data.get("es_vip", False)
     salto = extra_data.get("salto_luminosidad", 0.0)
     edad = extra_data.get("edad_dias", 999.0)
+    
+    # Extraemos la tasa reciente calculada por hunter.py (asumimos 0.0 si no existe)
+    tasa_reciente = float(extra_data.get("tasa_acel_reciente", extra_data.get("aceleracion_reciente", 0.0)))
 
-    # --- MODIFICACIÓN DE TRIAGE ---
+    # =====================================================================
+    # 🧠 TRIAGE MAGALLANES (VERSIÓN 18.8 - FILTRO ASTROFÍSICO ESTRICTO)
+    # =====================================================================
+    # 1. Flares Estelares (Enanas M): Duran horas/minutos, evaluamos solo el salto súbito.
     es_mega_flare = (tipo_evento == "flare" and salto > 1.5)
     
-    # 1. Tolerancia ajustada para primicias (hasta 3.5 días)
+    # 2. Supernovas y Novas: Ventana crítica de 3.5 días para Espectroscopía Flash.
     es_primicia_supernova = (tipo_evento in ["supernova", "nova"] and edad <= 3.5)
     
-    # 2. Los TDE son destructivos y rarísimos, siempre generan ATel
-    es_tde = (tipo_evento == "tde")
+    # 3. Disrupción de Marea (TDE): Tiempo de ascenso típico antes del pico térmico.
+    es_tde = (tipo_evento == "tde" and edad <= 40.0)
     
-    # 3. Los AGN/Blazares solo generan ATel si el salto es extremo (>= 1.5 mag)
-    es_agn_extremo = (tipo_evento in ["agn", "blazar"] and salto >= 1.5)
+    # 4. AGN y Blazares: Descartamos el salto histórico de años. Exigimos un "outburst" 
+    # actual (Tasa de aceleración reciente violenta, ej: >= 0.1 mag/día).
+    es_agn_extremo = (tipo_evento in ["agn", "blazar"] and tasa_reciente >= 0.1)
 
     if not (es_vip or es_mega_flare or es_primicia_supernova or es_tde or es_agn_extremo):
-        print(f"   [-] Evento rutinario (Edad: {edad:.1f}d | Salto: {salto:.2f}m). Megáfono silenciado para evitar fatiga de alertas.")
+        print(f"   [-] Evento rutinario o histórico (Edad: {edad:.1f}d | Salto: {salto:.2f}m | Acel: {tasa_reciente:.3f}). Megáfono silenciado para evitar fatiga de alertas.")
         return None 
-    # ------------------------------
+    # =====================================================================
         
     nombre_archivo = nombre_evento.replace(' ', '_').replace('/', '-')
     distancia = extra_data.get("distancia", "Desconocida")
