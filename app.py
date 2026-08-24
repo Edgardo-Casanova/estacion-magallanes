@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : app.py (Visor Web Institucional / Panel de Control)
-VERSIÓN    : 19.6 (FASE 6: INTERFAZ VISUAL DEL ESCUDO - CORRECCIÓN CLASIFICACIÓN)
+VERSIÓN    : 19.7 (FASE 7: ESPECTROSCOPÍA TAXONÓMICA INTEGRADA)
 =============================================================================
 """
 
@@ -373,7 +373,7 @@ elif vista == "Feed de Alertas y Circulares":
                 
                 opciones_evidencia = []
                 if os.path.exists(ruta_grafico): opciones_evidencia.append("Curva de Luz")
-                if os.path.exists(ruta_halfa): opciones_evidencia.append("Espectro (Química H-alfa)")
+                if os.path.exists(ruta_halfa): opciones_evidencia.append("Espectroscopía Taxonómica")
                     
                 if not opciones_evidencia:
                     st.warning("Gráfica fotométrica reservada o no disponible en la red de origen.")
@@ -383,7 +383,7 @@ elif vista == "Feed de Alertas y Circulares":
                     if seleccion_evidencia == "Curva de Luz":
                         st.image(ruta_grafico, width="stretch")
                             
-                    elif seleccion_evidencia == "Espectro (Química H-alfa)":
+                    elif seleccion_evidencia == "Espectroscopía Taxonómica":
                         st.image(ruta_halfa, width="stretch")
                         
         else:

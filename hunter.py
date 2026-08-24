@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 24.0 (NÚCLEO DEFINITIVO + VETO QSO)
+VERSIÓN    : 24.1 (NÚCLEO DEFINITIVO + VETO TNS + FILTRO AGN)
 =============================================================================
 """
 
@@ -40,7 +40,7 @@ ARCHIVO_BOLETIN = "boletin_tns.txt"
 CATALOGO_JSON = "catalogo_maestro.json"
 
 diccionario_categorias = {
-    "ZTF": ["SNIa", "SNIbc", "SNII", "SLSN", "CV/Nova", "QSO", "Blazar", "TDE"],
+    "ZTF": ["SNIa", "SNIbc", "SNII", "SLSN", "CV/Nova", "QSO", "Blazar", "TDE", "AGN"],
     "LSST": ["SNIa", "SNIbc", "SNII", "SLSN", "Nova", "Mdwarf-flare", "TDE"]
 }
 
@@ -570,12 +570,16 @@ def main():
                                 oid_para_laboratorio = nombre_oficial_tns
                                 
                                 if prefijo_tns == "SN":
-                                    tipo_evento_final = "supernova" 
                                     survey_para_laboratorio = "TNS_GLOBAL"
-                                    registrar_log("      -> [!] TNS Confirma: Espectroscopía detectada. Magallanes acata la clasificación IAU.", log_file)
+                                    # VETO MAGALLANES: Solo acepta "supernova" si la física no detectó una anomalía
+                                    if tipo_evento_final in ["supernova", "descarte"]:
+                                        tipo_evento_final = "supernova" 
+                                        registrar_log("      -> [!] TNS Confirma: Magallanes acata la clasificación IAU.", log_file)
+                                    else:
+                                        registrar_log(f"      -> [!] VETO ACTIVO: TNS dice SN, pero la física impone {tipo_evento_final.upper()}.", log_file)
                                 else:
                                     survey_para_laboratorio = current_survey
-                                    registrar_log(f"      -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción de IA: {tipo_evento_final}.", log_file)
+                                    registrar_log(f"      -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: {tipo_evento_final}.", log_file)
                             else:
                                 oid_para_laboratorio = str(oid)
                                 survey_para_laboratorio = current_survey

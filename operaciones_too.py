@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : operaciones_too.py (Megáfono Comunitario y ATel)
-VERSIÓN    : 18.6 (FASE 6: ESCUDO ANTI-DUPLICIDAD TNS INTEGRADO)
+VERSIÓN    : 18.7 (FASE 7: INYECCIÓN DE FIRMA QUÍMICA EN TELEGRAMAS)
 =============================================================================
 """
 
@@ -108,7 +108,7 @@ debido a la detección automatizada de alta actividad cromosférica (posible meg
 
 [2] JUSTIFICACIÓN ASTROFÍSICA (Análisis Estación Magallanes)
 * Tipo de Estrella      : {tipo_estrella_es}
-* Actividad Cromosférica: Confirmada vía {fuente_espectro} (Ancho Equivalente H-alfa/CaII aprox: {ew_halfa:.2f})
+* Actividad Cromosférica: Confirmada vía {fuente_espectro} (Ancho Equivalente local aprox: {ew_halfa:.2f})
 * Sistema Planetario    : {planetas_es}
 
 [3] SOLICITUD DE OBSERVACIÓN
@@ -134,7 +134,7 @@ due to the automated detection of high chromospheric activity (potential mega-fl
 
 [2] ASTROPHYSICAL JUSTIFICATION (Magallanes Station Analysis)
 * Star Type             : {tipo_estrella_en}
-* Chromospheric Activity: Confirmed via {fuente_espectro} (Equivalent Width H-alpha/CaII approx: {ew_halfa:.2f})
+* Chromospheric Activity: Confirmed via {fuente_espectro} (Equivalent Width local approx: {ew_halfa:.2f})
 * Planetary System      : {planetas_en}
 
 [3] OBSERVATIONAL REQUEST
@@ -150,6 +150,10 @@ Magallanes Station Automated Pipeline | AAVSO Observer Code: ECDA
     elif tipo_evento in ["supernova", "nova", "agn", "blazar", "tde"]:
         galaxia = extra_data.get("galaxia", "Desconocida")
         redshift = extra_data.get("redshift", None)
+        
+        # ---> NUEVO: CAPTURA DE LA QUÍMICA EXTRAGALÁCTICA <---
+        fuente_espectro = extra_data.get("fuente_espectro", "Desconocida")
+        ew_halfa = extra_data.get("ew_halfa", 0.0)
         
         if redshift is None or redshift == 0.0 or redshift == "Desconocido":
             z_str_es = "Pendiente de seguimiento espectroscópico"
@@ -201,6 +205,7 @@ ubicado en la entidad anfitriona {entorno_es}.
 * Momento de Detección  : {tiempo_texto_es}
 * Entidad Anfitriona    : {entorno_es}
 {dist_param_es}
+* Archivo Espectral (1D): {fuente_espectro} (Ancho equivalente local: {ew_halfa:.2f})
 
 [2] SOLICITUD DE OBSERVACIÓN
 * Acción Requerida      : SEGUIMIENTO ESPECTROSCÓPICO URGENTE
@@ -223,6 +228,7 @@ located in the host entity {entorno_en}.
 * Detection Time (Peak) : {tiempo_texto_en}
 * Host Entity           : {entorno_en}
 {dist_param_en}
+* Spectral Archive (1D) : {fuente_espectro} (Local Equivalent Width: {ew_halfa:.2f})
 
 [2] OBSERVATIONAL REQUEST
 * Requested Action      : URGENT SPECTROSCOPIC FOLLOW-UP
