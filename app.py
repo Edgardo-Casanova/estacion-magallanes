@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : app.py (Visor Web Institucional / Panel de Control)
-VERSIÓN    : 19.7 (FASE 7: ESPECTROSCOPÍA TAXONÓMICA INTEGRADA)
+VERSIÓN    : 19.8 (FASE 7: INDICADORES VISUALES DE ESPECTROS)
 =============================================================================
 """
 
@@ -307,6 +307,9 @@ elif vista == "Feed de Alertas y Circulares":
                 survey_origen = e.get('survey', 'Desconocido')
                 mjd_val = e.get('mjd_deteccion', 0)
                 
+                # Limpiamos el ID temporalmente para buscar si tiene espectro
+                oid_para_check = str(e.get('oid')).replace(' ', '_').replace('/', '-')
+                
                 try:
                     dt_utc = Time(float(mjd_val), format='mjd').to_datetime()
                     dt_local = dt_utc - timedelta(hours=3)
@@ -318,8 +321,12 @@ elif vista == "Feed de Alertas y Circulares":
                 elif survey_origen == 'ZTF': prefijo = "🚨 [ZTF]"
                 elif survey_origen == 'LSST': prefijo = "🚨 [LSST]"
                 else: prefijo = f"🚨 [{survey_origen}]"
+                
+                # --- NUEVO: INDICADOR VISUAL DE ESPECTRO ---
+                ruta_espectro_check = f"data/quimica_halfa_{oid_para_check}.png"
+                indicador_espectro = " 🌈 [Espectro]" if os.path.exists(ruta_espectro_check) else ""
                     
-                clave = f"[Captura: {hora_str}] {prefijo} {e.get('oid')} - {e.get('tipo').upper()}"
+                clave = f"[Captura: {hora_str}] {prefijo} {e.get('oid')} - {e.get('tipo').upper()}{indicador_espectro}"
                 opciones[clave] = e
                 
             seleccion = st.selectbox(f"Selecciona un evento ({len(opciones)} encontrados):", list(opciones.keys()))
