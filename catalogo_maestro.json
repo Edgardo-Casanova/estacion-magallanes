@@ -641,9 +641,9 @@
         "oid": "AT 2019eqj",
         "ra": 265.48649713122785,
         "dec": 2.06974557425342,
-        "tipo": "supernova",
+        "tipo": "agn",
         "survey": "TNS_GLOBAL",
-        "analisis": "Supernova (Confirmado IAU: Tipo pendiente)",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: AGN",
         "vip": false,
         "mjd_deteccion": 61264.23585649999,
         "img_url": "data/curva_luz_AT_2019eqj.png"
@@ -1048,9 +1048,9 @@
         "oid": "AT 2020abey",
         "ra": 352.3585972751988,
         "dec": -16.276307629491587,
-        "tipo": "supernova",
+        "tipo": "agn",
         "survey": "TNS_GLOBAL",
-        "analisis": "Supernova (Confirmado IAU: Tipo pendiente)",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: AGN",
         "vip": false,
         "mjd_deteccion": 61269.39002310019,
         "img_url": "data/curva_luz_AT_2020abey.png"
@@ -1686,9 +1686,9 @@
         "oid": "SN 2023aegg",
         "ra": 327.122620124,
         "dec": -13.4771993207,
-        "tipo": "supernova",
+        "tipo": "artefacto",
         "survey": "TNS_GLOBAL",
-        "analisis": "SN Ia",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: ARTEFACTO",
         "vip": false,
         "mjd_deteccion": 61268.02137833573,
         "img_url": "data/curva_luz_SN_2023aegg.png"
@@ -1741,9 +1741,9 @@
         "oid": "AT 2019aanv",
         "ra": 263.5274200017233,
         "dec": -12.513031540224013,
-        "tipo": "supernova",
+        "tipo": "agn",
         "survey": "TNS_GLOBAL",
-        "analisis": "Supernova (Confirmado IAU: Tipo pendiente)",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: AGN",
         "vip": false,
         "mjd_deteccion": 61268.17016200023,
         "img_url": "data/curva_luz_AT_2019aanv.png"
@@ -2172,7 +2172,7 @@
         "dec": 1.3628597073746265,
         "tipo": "supernova",
         "survey": "TNS_GLOBAL",
-        "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
+        "analisis": "SN Ia",
         "vip": false,
         "mjd_deteccion": 61275.40055559995,
         "img_url": "data/curva_luz_SN_2026rwh.png"
@@ -2192,9 +2192,9 @@
         "oid": "AT 2019lwt",
         "ra": 323.63478800738216,
         "dec": -1.3445866034015783,
-        "tipo": "supernova",
+        "tipo": "agn",
         "survey": "TNS_GLOBAL",
-        "analisis": "Supernova (Confirmado IAU: Tipo pendiente)",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: AGN",
         "vip": false,
         "mjd_deteccion": 61268.400289400015,
         "img_url": "data/curva_luz_AT_2019lwt.png"
@@ -2271,7 +2271,7 @@
         "dec": 3.9738858777713575,
         "tipo": "supernova",
         "survey": "TNS_GLOBAL",
-        "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
+        "analisis": "SN Ia",
         "vip": false,
         "mjd_deteccion": 61276.16616899986,
         "img_url": "data/curva_luz_SN_2026web.png"
@@ -2654,9 +2654,9 @@
         "oid": "AT 2019fyr",
         "ra": 270.61613064200924,
         "dec": 8.109600821150918,
-        "tipo": "supernova",
+        "tipo": "agn",
         "survey": "TNS_GLOBAL",
-        "analisis": "Supernova (Confirmado IAU: Tipo pendiente)",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: AGN",
         "vip": false,
         "mjd_deteccion": 61269.2626852002,
         "img_url": "data/curva_luz_AT_2019fyr.png"
@@ -2909,7 +2909,7 @@
         "dec": -13.596768255158775,
         "tipo": "supernova",
         "survey": "TNS_GLOBAL",
-        "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
+        "analisis": "SN Ia",
         "vip": false,
         "mjd_deteccion": 61275.417083300184,
         "img_url": "data/curva_luz_SN_2026wfn.png"
@@ -3514,7 +3514,7 @@
         "dec": -1.9150863303358792,
         "tipo": "nova",
         "survey": "ZTF",
-        "analisis": "Variable Cataclísmica / Nova (Erupción activa) [Interceptado por TNS]",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: NOVA",
         "vip": false,
         "mjd_deteccion": 61276.2628008998,
         "img_url": "data/curva_luz_AT_2017dpy.png"
@@ -3580,7 +3580,7 @@
         "dec": -17.62324669762545,
         "tipo": "blazar",
         "survey": "ZTF",
-        "analisis": "Blazar (Chorro relativista - Alta aceleración) [Interceptado por TNS]",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: BLAZAR",
         "vip": false,
         "mjd_deteccion": 61274.28523149993,
         "img_url": "data/curva_luz_AT_2020pws.png"
@@ -4139,9 +4139,9 @@
         "oid": "AT 2026wht",
         "ra": 276.47857615435163,
         "dec": 8.817874896143886,
-        "tipo": "nova",
+        "tipo": "supernova",
         "survey": "ZTF",
-        "analisis": "Variable Cataclísmica / Nova (Erupción activa) [Interceptado por TNS]",
+        "analisis": "Candidata (Esperando confirmación espectral TNS)",
         "vip": false,
         "mjd_deteccion": 61271.23589120014,
         "img_url": "data/curva_luz_AT_2026wht.png"
@@ -4405,7 +4405,7 @@
         "dec": 8.216318616066193,
         "tipo": "supernova",
         "survey": "TNS_GLOBAL",
-        "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
+        "analisis": "SN Ia",
         "vip": false,
         "mjd_deteccion": 61275.381585599855,
         "img_url": "data/curva_luz_SN_2026zec.png"
@@ -4449,7 +4449,7 @@
         "dec": -24.548424455621095,
         "tipo": "nova",
         "survey": "ZTF",
-        "analisis": "Variable Cataclísmica / Nova (Erupción activa) [Interceptado por TNS]",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: NOVA",
         "vip": false,
         "mjd_deteccion": 61273.30172450002,
         "img_url": "data/curva_luz_AT_2019rdn.png"
@@ -4636,7 +4636,7 @@
         "dec": -12.537377051921593,
         "tipo": "agn",
         "survey": "ZTF",
-        "analisis": "AGN / Cuásar (Acreción térmica - Lenta) [Interceptado por TNS]",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: AGN",
         "vip": false,
         "mjd_deteccion": 61273.36025460018,
         "img_url": "data/curva_luz_AT_2020tni.png"
@@ -4777,9 +4777,9 @@
         "oid": "SN 2018hhr",
         "ra": 43.95389638298484,
         "dec": 1.0784880100610246,
-        "tipo": "supernova",
+        "tipo": "agn",
         "survey": "TNS_GLOBAL",
-        "analisis": "AGN / Cuásar (Acreción térmica - Lenta) [Interceptado por TNS]",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: AGN",
         "vip": false,
         "mjd_deteccion": 61273.461168999784,
         "img_url": "data/curva_luz_SN_2018hhr.png"
@@ -4999,7 +4999,7 @@
         "dec": -2.3696645838707346,
         "tipo": "nova",
         "survey": "ZTF",
-        "analisis": "Variable Cataclísmica / Nova (Erupción activa) [Interceptado por TNS]",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: NOVA",
         "vip": false,
         "mjd_deteccion": 61273.50173609983,
         "img_url": "data/curva_luz_AT_2019scm.png"
@@ -5318,7 +5318,7 @@
         "dec": 29.394989771701614,
         "tipo": "nova",
         "survey": "ZTF",
-        "analisis": "Variable Cataclísmica / Nova (Erupción activa) [Interceptado por TNS]",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: NOVA",
         "vip": false,
         "mjd_deteccion": 61273.512280100025,
         "img_url": "data/curva_luz_AT_2019qct.png"
@@ -5351,7 +5351,7 @@
         "dec": 4.376864743893709,
         "tipo": "supernova",
         "survey": "TNS_GLOBAL",
-        "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
+        "analisis": "SN Ia",
         "vip": false,
         "mjd_deteccion": 61275.17410880001,
         "img_url": "data/curva_luz_SN_2026pir.png"
@@ -5417,7 +5417,7 @@
         "dec": -5.575534042112862,
         "tipo": "nova",
         "survey": "ZTF",
-        "analisis": "Variable Cataclísmica / Nova (Erupción activa) [Interceptado por TNS]",
+        "analisis": "Nova",
         "vip": false,
         "mjd_deteccion": 61276.23609950021,
         "img_url": "data/curva_luz_AT_2026stb.png"
@@ -6143,7 +6143,7 @@
         "dec": 11.392047397216471,
         "tipo": "agn",
         "survey": "ZTF",
-        "analisis": "AGN / Cuásar (Acreción térmica - Lenta) [Interceptado por TNS]",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: AGN",
         "vip": false,
         "mjd_deteccion": 61275.206249999814,
         "img_url": "data/curva_luz_AT_2019qcv.png"
@@ -6946,7 +6946,7 @@
         "dec": 5.080790291522954,
         "tipo": "supernova",
         "survey": "TNS_GLOBAL",
-        "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
+        "analisis": "SN Ia",
         "vip": false,
         "mjd_deteccion": 61275.400080999825,
         "img_url": "data/curva_luz_SN_2026lda.png"
@@ -7001,7 +7001,7 @@
         "dec": -20.203561747080055,
         "tipo": "blazar",
         "survey": "ZTF",
-        "analisis": "Blazar (Chorro relativista - Alta aceleración) [Interceptado por TNS]",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: BLAZAR",
         "vip": false,
         "mjd_deteccion": 61275.417083300184,
         "img_url": "data/curva_luz_AT_2020qgi.png"
@@ -7012,7 +7012,7 @@
         "dec": 28.488024090731503,
         "tipo": "agn",
         "survey": "ZTF",
-        "analisis": "AGN / Cuásar (Acreción térmica - Lenta) [Interceptado por TNS]",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: AGN",
         "vip": false,
         "mjd_deteccion": 61275.47333330009,
         "img_url": "data/curva_luz_AT_2022nsg.png"
@@ -7111,7 +7111,7 @@
         "dec": 33.3284551,
         "tipo": "supernova",
         "survey": "ZTF",
-        "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
+        "analisis": "Candidata (Esperando confirmación espectral TNS)",
         "vip": false,
         "mjd_deteccion": 61275.51497690007,
         "img_url": "data/curva_luz_AT_2026yyt.png"
@@ -7441,7 +7441,7 @@
         "dec": -4.35380825065775,
         "tipo": "supernova",
         "survey": "TNS_GLOBAL",
-        "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
+        "analisis": "SN Ia",
         "vip": false,
         "mjd_deteccion": 61276.1656944002,
         "img_url": "data/curva_luz_SN_2026uyf.png"
@@ -7463,7 +7463,7 @@
         "dec": -9.48915586027069,
         "tipo": "supernova",
         "survey": "TNS_GLOBAL",
-        "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
+        "analisis": "SN II",
         "vip": false,
         "mjd_deteccion": 61276.1652199002,
         "img_url": "data/curva_luz_SN_2026adf.png"
@@ -7595,7 +7595,7 @@
         "dec": 0.8815543396135992,
         "tipo": "nova",
         "survey": "ZTF",
-        "analisis": "Variable Cataclísmica / Nova (Erupción activa) [Interceptado por TNS]",
+        "analisis": "CV",
         "vip": false,
         "mjd_deteccion": 61276.238240700215,
         "img_url": "data/curva_luz_AT_2018efg.png"
@@ -7703,9 +7703,9 @@
         "oid": "AT 2026zbo",
         "ra": 321.44704790569074,
         "dec": 5.65479060837032,
-        "tipo": "nova",
+        "tipo": "supernova",
         "survey": "ZTF",
-        "analisis": "Variable Cataclísmica / Nova (Erupción activa) [Interceptado por TNS]",
+        "analisis": "Candidata (Esperando confirmación espectral TNS)",
         "vip": false,
         "mjd_deteccion": 61276.27405089978,
         "img_url": "data/curva_luz_AT_2026zbo.png"
@@ -7824,9 +7824,9 @@
         "oid": "SN 2018eog",
         "ra": 307.05020162306204,
         "dec": -3.136310166502063,
-        "tipo": "supernova",
+        "tipo": "agn",
         "survey": "TNS_GLOBAL",
-        "analisis": "AGN / Cuásar (Acreción térmica - Lenta) [Interceptado por TNS]",
+        "analisis": "Reclasificación manual tras auditoría fotométrica: AGN",
         "vip": false,
         "mjd_deteccion": 61276.35826390004,
         "img_url": "data/curva_luz_SN_2018eog.png"
