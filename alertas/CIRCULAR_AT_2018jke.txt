@@ -1,15 +1,15 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-08-25 08:32:38 UTC
-EVENTO DETECTADO : SN_2026rwh (SUPERNOVA)
-COORDENADAS ICRS : RA 329.79183 | Dec 1.36286
+FECHA DE EMISIÓN : 2026-08-25 08:50:32 UTC
+EVENTO DETECTADO : AT_2018jke (BLAZAR)
+COORDENADAS ICRS : RA 340.79590 | Dec 3.46801
 -----------------------------------------------------------------
 
 [1] ENTORNO COSMOLÓGICO
-    OBJETO CENTRAL / ANFITRIONA : WISEA J215904.62+012228.5
-    REDSHIFT (z)                : Desconocido
-    DISTANCIA HUBBLE            : Desconocida N/A
+    OBJETO CENTRAL / ANFITRIONA : CGCG 378-018
+    REDSHIFT (z)                : 0.03913
+    DISTANCIA HUBBLE            : Entre 160.71 y 174.07 Megaparsecs (Aprox. 524.18 a 567.73 M Años luz)
 
 [2] EVALUACIÓN MAGALLANES
     PRIORIDAD   : ALTA PRIORIDAD ESPECTROSCÓPICA
@@ -18,19 +18,19 @@ COORDENADAS ICRS : RA 329.79183 | Dec 1.36286
 🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
 =================================================================
 ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
-Nombre Oficial Asignado : SN 2026rwh
-URL de Confirmación     : https://www.wis-tns.org/object/2026rwh
+Nombre Oficial Asignado : AT 2018jke
+URL de Confirmación     : https://www.wis-tns.org/object/2018jke
 -> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
 =================================================================
 
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : SNIa (Confianza: 99.2%)
-    RECLASIFICACIÓN      : Candidata (Esperando confirmación TNS)
-    EDAD HISTÓRICA       : 53.9 días
-    SALTO LUMINOSIDAD    : 2.52 magnitudes
-    TASA ACEL. HISTÓRICA : 0.148 mag/día
-    TASA ACEL. RECIENTE  : 0.116 mag/día
+    CLASE IA (ALeRCE)    : AGN (Confianza: 100.0%)
+    RECLASIFICACIÓN      : Blazar (Chorro relativista - Alta aceleración)
+    EDAD HISTÓRICA       : 2915.0 días
+    SALTO LUMINOSIDAD    : 3.08 magnitudes
+    TASA ACEL. HISTÓRICA : 0.005 mag/día
+    TASA ACEL. RECIENTE  : 0.124 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61277.2959
+    MJD ÚLTIMA DETEC.    : 61277.2730
 =================================================================
