@@ -175,7 +175,7 @@ def analizar_espectroscopia_activa(coordenadas, id_evento, tipo_evento="desconoc
                     mascara_continuo = ((long_onda_halfa > centro_halfa - 60) & (long_onda_halfa < centro_halfa - 20)) | ((long_onda_halfa > centro_halfa + 40) & (long_onda_halfa < centro_halfa + 80))
                     flujo_continuo = np.mean(flujo_halfa[mascara_continuo])
                     if flujo_continuo > 0:
-                        ew_halfa = np.trapz(1 - (flujo_halfa / flujo_continuo), dx=np.mean(np.gradient(long_onda_halfa)))
+                        ew_halfa = np.trapezoid(1 - (flujo_halfa / flujo_continuo), dx=np.mean(np.gradient(long_onda_halfa)))
                         hay_emision = ew_halfa < -1.0 
                 
                 fuente_espectro = "SDSS"
