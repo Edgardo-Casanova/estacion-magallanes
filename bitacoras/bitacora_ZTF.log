@@ -2844,3 +2844,36 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-08-25 17:51:57] -> Procesando evento de interés: ZTF18aaafuxz (nova)
 [2026-08-25 17:52:20] -> Procesando evento de interés: ZTF17aacempk (nova)
 [2026-08-25 17:52:40] -> Procesando evento de interés: ZTF25aafhzey (agn)
+[2026-08-25 18:30:08] ==================================================
+[2026-08-25 18:30:08] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-08-25 18:30:40] -> Procesando evento de interés: ZTF19aaeueky (nova)
+[2026-08-25 18:32:12] -> Procesando evento de interés: ZTF18abtslci (agn)
+[2026-08-25 18:33:57]       [🛡️] ALERTA TNS: ZTF26abpbqtk interceptado. Ya es SN 2026zec.
+[2026-08-25 18:33:57]       -> [!] TNS Confirma: Magallanes acata la clasificación IAU.
+[2026-08-25 18:33:57] -> Procesando evento de interés: SN 2026zec (supernova)
+[2026-08-25 18:37:58] -> Procesando evento de interés: ZTF17aaaffzx (nova)
+[2026-08-25 18:39:32] -> Procesando evento de interés: ZTF20aafqswc (blazar)
+[2026-08-25 18:40:34]       [🛡️] ALERTA TNS: ZTF18abvtcpk interceptado. Ya es AT 2018iqq.
+[2026-08-25 18:40:34]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: blazar.
+[2026-08-25 18:40:34] -> Procesando evento de interés: AT 2018iqq (blazar)
+[2026-08-25 18:43:29] -> Procesando evento de interés: ZTF18acgqyev (nova)
+[2026-08-25 18:43:45] -> Procesando evento de interés: ZTF17aacvfmz (nova)
+[2026-08-25 18:44:03] -> Procesando evento de interés: ZTF17aadpeif (nova)
+[2026-08-25 18:44:20] -> Procesando evento de interés: ZTF17aadpdlr (nova)
+[2026-08-25 18:44:41] -> Procesando evento de interés: ZTF18aacxjtv (nova)
+[2026-08-25 18:45:01] -> Procesando evento de interés: ZTF18aabmxaa (nova)
+[2026-08-25 18:45:14]       [🛡️] ALERTA TNS: ZTF18acytxmx interceptado. Ya es AT 2018lxf.
+[2026-08-25 18:45:14]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-08-25 18:45:14] -> Procesando evento de interés: AT 2018lxf (agn)
+[2026-08-25 18:45:23] -> Procesando evento de interés: ZTF17aabyrpg (nova)
+[2026-08-25 18:45:36] -> Procesando evento de interés: ZTF17aabnzdk (nova)
+[2026-08-25 18:48:26] -> Procesando evento de interés: ZTF18aagpyca (nova)
+[2026-08-25 18:48:38] -> Procesando evento de interés: ZTF19aacsqxq (blazar)
+[2026-08-25 18:49:32] -> Procesando evento de interés: ZTF17aaatjsh (blazar)
+[2026-08-25 18:50:28] -> Procesando evento de interés: ZTF18abuxyxl (nova)
+[2026-08-25 18:50:44] -> Procesando evento de interés: ZTF17aadewid (nova)
+[2026-08-25 18:51:10] -> Procesando evento de interés: ZTF18abztpda (nova)
+[2026-08-25 18:51:49] -> Procesando evento de interés: ZTF18aaafuxz (nova)
+[2026-08-25 18:52:20] -> Procesando evento de interés: ZTF18aaeghpm (nova)
+[2026-08-25 18:52:31] -> Procesando evento de interés: ZTF18aaaxlfa (nova)
+[2026-08-25 18:53:06] -> Procesando evento de interés: ZTF17aacempk (nova)
