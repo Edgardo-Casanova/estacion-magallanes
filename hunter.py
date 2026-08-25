@@ -386,7 +386,7 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
     registrar_log("[+] Procesamiento TNS finalizado. Archivo de boletín purgado desde la línea 3.", log_file)
 
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (VERSIÓN 24.0 - NÚCLEO DEFINITIVO + VETO QSO) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (24.1 - NÚCLEO DEFINITIVO + VETO TNS + FILTRO AGN) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     url_tap = "https://tap.alerce.online/tap"
