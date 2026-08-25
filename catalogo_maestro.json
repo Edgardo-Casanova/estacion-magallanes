@@ -7107,13 +7107,13 @@
     },
     {
         "oid": "AT 2026yyt",
-        "ra": 114.89882408420887,
-        "dec": 33.3284551,
+        "ra": 114.89881507916311,
+        "dec": 33.328452275000004,
         "tipo": "supernova",
         "survey": "ZTF",
-        "analisis": "Candidata (Esperando confirmación espectral TNS)",
+        "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
         "vip": false,
-        "mjd_deteccion": 61275.51497690007,
+        "mjd_deteccion": 61277.51598379994,
         "img_url": "data/curva_luz_AT_2026yyt.png"
     },
     {
