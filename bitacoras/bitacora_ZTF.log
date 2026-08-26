@@ -3163,3 +3163,18 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-08-26 15:46:34] -> Procesando evento de interés: ZTF18aaclvpw (agn)
 [2026-08-26 15:48:00] -> Procesando evento de interés: ZTF18aaclptk (blazar)
 [2026-08-26 15:48:59] -> Procesando evento de interés: ZTF23aahkhxi (blazar)
+[2026-08-26 16:30:03] ==================================================
+[2026-08-26 16:30:03] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-08-26 16:30:57] -> Procesando evento de interés: ZTF18abppdvg (agn)
+[2026-08-26 16:33:13] -> Procesando evento de interés: ZTF17aabnzdk (nova)
+[2026-08-26 16:33:52] -> Procesando evento de interés: ZTF18aabmxaa (nova)
+[2026-08-26 16:40:59] -> Procesando evento de interés: ZTF19aacsqxq (blazar)
+[2026-08-26 16:44:41] -> Procesando evento de interés: ZTF17aaadhjr (agn)
+[2026-08-26 16:45:08] -> Procesando evento de interés: ZTF18abztpda (nova)
+[2026-08-26 16:46:49] -> Procesando evento de interés: ZTF18aaeojzo (nova)
+[2026-08-26 16:47:29] -> Procesando evento de interés: ZTF18aaclvpw (agn)
+[2026-08-26 16:48:16] -> Procesando evento de interés: ZTF23aahkhxi (blazar)
+[2026-08-26 16:50:05] -> Procesando evento de interés: ZTF18aaclptk (blazar)
+[2026-08-26 16:50:47]       [🛡️] ALERTA TNS: ZTF26aboleez interceptado. Ya es AT 2026yyt.
+[2026-08-26 16:50:47]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: supernova.
+[2026-08-26 16:50:47] -> Procesando evento de interés: AT 2026yyt (supernova)
