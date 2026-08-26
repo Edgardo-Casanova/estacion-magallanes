@@ -3060,3 +3060,25 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-08-26 11:07:01] -> Procesando evento de interés: ZTF18abxphkx (agn)
 [2026-08-26 11:08:18] -> Procesando evento de interés: ZTF18abnusiy (agn)
 [2026-08-26 11:09:52] -> Procesando evento de interés: ZTF19aczaccu (nova)
+[2026-08-26 11:30:03] ==================================================
+[2026-08-26 11:30:03] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-08-26 11:33:50] -> Procesando evento de interés: ZTF18adccscf (agn)
+[2026-08-26 11:34:29] -> Procesando evento de interés: ZTF18actzyzv (agn)
+[2026-08-26 11:36:54] -> Procesando evento de interés: ZTF17aabupfv (nova)
+[2026-08-26 11:38:24] -> Procesando evento de interés: ZTF18abuylaz (nova)
+[2026-08-26 11:39:45] -> Procesando evento de interés: ZTF18abtsumi (agn)
+[2026-08-26 11:41:05] -> Procesando evento de interés: ZTF18abtsuqv (agn)
+[2026-08-26 11:44:13] -> Procesando evento de interés: ZTF17aabulig (nova)
+[2026-08-26 11:47:08] -> Procesando evento de interés: ZTF17aacoobq (nova)
+[2026-08-26 11:48:21] -> Procesando evento de interés: ZTF21accxirs (blazar)
+[2026-08-26 11:51:32] -> Procesando evento de interés: ZTF22aaagwoy (blazar)
+[2026-08-26 11:58:11] -> Procesando evento de interés: ZTF20aafqswc (blazar)
+[2026-08-26 12:00:35]       [🛡️] ALERTA TNS: ZTF22abjhfxe interceptado. Ya es SN 2026rop.
+[2026-08-26 12:00:35]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone AGN.
+[2026-08-26 12:00:35] -> Procesando evento de interés: SN 2026rop (agn)
+[2026-08-26 12:01:34] -> Procesando evento de interés: ZTF17aaaffzx (nova)
+[2026-08-26 12:03:21] -> Procesando evento de interés: ZTF18acvbqtc (agn)
+[2026-08-26 12:08:49] -> Procesando evento de interés: ZTF19aaaapzc (agn)
+[2026-08-26 12:09:33] -> Procesando evento de interés: ZTF17aaafglk (nova)
+[2026-08-26 12:10:16] -> Procesando evento de interés: ZTF18abtgwwh (blazar)
+[2026-08-26 12:15:00] -> Procesando evento de interés: ZTF19aclnwwc (nova)
