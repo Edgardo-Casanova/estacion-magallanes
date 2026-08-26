@@ -1,15 +1,15 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-08-26 09:38:28 UTC
-EVENTO DETECTADO : SN_2026wfn (SUPERNOVA)
-COORDENADAS ICRS : RA 353.63253 | Dec -13.59677
+FECHA DE EMISIÓN : 2026-08-26 09:51:10 UTC
+EVENTO DETECTADO : AT_2020tvi (AGN)
+COORDENADAS ICRS : RA 341.29036 | Dec -5.97157
 -----------------------------------------------------------------
 
 [1] ENTORNO COSMOLÓGICO
-    OBJETO CENTRAL / ANFITRIONA : WISEA J233431.78-133549.3
-    REDSHIFT (z)                : Desconocido
-    DISTANCIA HUBBLE            : Desconocida N/A
+    OBJETO CENTRAL / ANFITRIONA : WISEA J224509.69-055817.6
+    REDSHIFT (z)                : 2.17000
+    DISTANCIA HUBBLE            : Entre 8911.64 y 9652.07 Megaparsecs (Aprox. 29065.84 a 31480.81 M Años luz)
 
 [2] EVALUACIÓN MAGALLANES
     PRIORIDAD   : ALTA PRIORIDAD ESPECTROSCÓPICA
@@ -18,19 +18,19 @@ COORDENADAS ICRS : RA 353.63253 | Dec -13.59677
 🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
 =================================================================
 ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
-Nombre Oficial Asignado : SN 2026wfn
-URL de Confirmación     : https://www.wis-tns.org/object/2026wfn
+Nombre Oficial Asignado : AT 2020tvi
+URL de Confirmación     : https://www.wis-tns.org/object/2020tvi
 -> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
 =================================================================
 
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : SNIa (Confianza: 98.0%)
-    RECLASIFICACIÓN      : Candidata (Esperando confirmación TNS)
-    EDAD HISTÓRICA       : 32.9 días
-    SALTO LUMINOSIDAD    : 2.17 magnitudes
-    TASA ACEL. HISTÓRICA : 0.094 mag/día
-    TASA ACEL. RECIENTE  : 0.108 mag/día
+    CLASE IA (ALeRCE)    : AGN (Confianza: 100.0%)
+    RECLASIFICACIÓN      : AGN / Cuásar (Acreción térmica - Lenta)
+    EDAD HISTÓRICA       : 2904.1 días
+    SALTO LUMINOSIDAD    : 1.71 magnitudes
+    TASA ACEL. HISTÓRICA : 0.001 mag/día
+    TASA ACEL. RECIENTE  : 0.009 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61278.3482
+    MJD ÚLTIMA DETEC.    : 61278.3463
 =================================================================
