@@ -9524,5 +9524,27 @@
         "vip": false,
         "mjd_deteccion": 61277.51598379994,
         "img_url": "data/curva_luz_ZTF19aaufqeh.png"
+    },
+    {
+        "oid": "SN 2026yzt",
+        "ra": 255.3716507,
+        "dec": 30.1679512,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61278.021266216354,
+        "img_url": "data/curva_luz_SN_2026yzt.png"
+    },
+    {
+        "oid": "SN 2026zfl",
+        "ra": 336.3976705,
+        "dec": -27.8762161,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61277.38318290003,
+        "img_url": "data/curva_luz_SN_2026zfl.png"
     }
 ]
