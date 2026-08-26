@@ -527,7 +527,7 @@ def main():
                             amplitud_mag = mejor_salto
                             # =================================================================
 
-                            latitud_b, en_plano, es_viejo = coordenadas.galactic.b.degree, abs(coordenadas.galactic.b.degree) <= 10.0, edad_dias > 400
+                            latitud_b, en_plano, es_viejo = coordenadas.galactic.b.degree, abs(coordenadas.galactic.b.degree) <= 10.0, edad_dias > 150
 
                             if (mjd_max - mjd_min_fotometria) > 30:
                                 recientes, antiguas = det[det['mjd'] >= mjd_max - 30], det[det['mjd'] < mjd_max - 30]
@@ -538,7 +538,7 @@ def main():
                             # 🛡️ BLOQUE CORREGIDO: VETO QSO E INTELIGENCIA
                             # =========================================================
                             veto_ia_cv = ("CV" in clase_ia_final.upper() or "NOVA" in clase_ia_final.upper()) and probabilidad > 0.90
-                            veto_ia_qso = any(x in clase_ia_final.upper() for x in ["QSO", "AGN", "BLAZAR"]) and probabilidad > 0.85
+                            veto_ia_qso = any(x in clase_ia_final.upper() for x in ["QSO", "AGN", "BLAZAR"]) and probabilidad > 0.60
                             analisis_magallanes, tipo_evento_final = "DESCONOCIDO", "descarte"
 
                             if es_cuasar_cat or veto_ia_qso or (es_viejo and not en_plano and not veto_ia_cv and not es_estrella_cat):
