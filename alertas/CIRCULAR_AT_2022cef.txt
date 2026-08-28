@@ -1,15 +1,15 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-08-28 12:38:36 UTC
-EVENTO DETECTADO : AT_2018iev (AGN)
-COORDENADAS ICRS : RA 21.49192 | Dec 15.30378
+FECHA DE EMISIÓN : 2026-08-28 12:31:32 UTC
+EVENTO DETECTADO : AT_2022cef (AGN)
+COORDENADAS ICRS : RA 40.28217 | Dec -20.00774
 -----------------------------------------------------------------
 
 [1] ENTORNO COSMOLÓGICO
-    OBJETO CENTRAL / ANFITRIONA : WISEA J012551.57+151833.6
-    REDSHIFT (z)                : Desconocido
-    DISTANCIA HUBBLE            : Desconocida N/A
+    OBJETO CENTRAL / ANFITRIONA : WISEA J024107.72-200027.7
+    REDSHIFT (z)                : 0.12545
+    DISTANCIA HUBBLE            : Entre 515.19 y 557.99 Megaparsecs (Aprox. 1680.31 a 1819.92 M Años luz)
 
 [2] EVALUACIÓN MAGALLANES
     PRIORIDAD   : ALTA PRIORIDAD ESPECTROSCÓPICA
@@ -18,19 +18,19 @@ COORDENADAS ICRS : RA 21.49192 | Dec 15.30378
 🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
 =================================================================
 ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
-Nombre Oficial Asignado : AT 2018iev
-URL de Confirmación     : https://www.wis-tns.org/object/2018iev
+Nombre Oficial Asignado : AT 2022cef
+URL de Confirmación     : https://www.wis-tns.org/object/2022cef
 -> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
 =================================================================
 
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : AGN (Confianza: 100.0%)
+    CLASE IA (ALeRCE)    : AGN (Confianza: 98.8%)
     RECLASIFICACIÓN      : AGN / Cuásar (Acreción térmica - Lenta)
-    EDAD HISTÓRICA       : 2909.1 días
-    SALTO LUMINOSIDAD    : 3.59 magnitudes
-    TASA ACEL. HISTÓRICA : 0.038 mag/día
-    TASA ACEL. RECIENTE  : 0.007 mag/día
+    EDAD HISTÓRICA       : 2852.2 días
+    SALTO LUMINOSIDAD    : 2.33 magnitudes
+    TASA ACEL. HISTÓRICA : 0.003 mag/día
+    TASA ACEL. RECIENTE  : 0.000 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61280.4285
+    MJD ÚLTIMA DETEC.    : 61280.4427
 =================================================================
