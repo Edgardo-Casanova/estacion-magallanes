@@ -1,15 +1,15 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-08-28 13:50:03 UTC
-EVENTO DETECTADO : AT_2018hve (AGN)
-COORDENADAS ICRS : RA 38.34315 | Dec 27.93704
+FECHA DE EMISIÓN : 2026-08-28 13:47:00 UTC
+EVENTO DETECTADO : SN_2020aafb (AGN)
+COORDENADAS ICRS : RA 27.87066 | Dec 22.82894
 -----------------------------------------------------------------
 
 [1] ENTORNO COSMOLÓGICO
-    OBJETO CENTRAL / ANFITRIONA : MRK 1179
-    REDSHIFT (z)                : 0.03760
-    DISTANCIA HUBBLE            : Entre 154.41 y 167.24 Megaparsecs (Aprox. 503.62 a 545.46 M Años luz)
+    OBJETO CENTRAL / ANFITRIONA : WISEA J015128.98+224947.2
+    REDSHIFT (z)                : Desconocido
+    DISTANCIA HUBBLE            : Desconocida N/A
 
 [2] EVALUACIÓN MAGALLANES
     PRIORIDAD   : ALTA PRIORIDAD ESPECTROSCÓPICA
@@ -18,19 +18,19 @@ COORDENADAS ICRS : RA 38.34315 | Dec 27.93704
 🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
 =================================================================
 ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
-Nombre Oficial Asignado : AT 2018hve
-URL de Confirmación     : https://www.wis-tns.org/object/2018hve
+Nombre Oficial Asignado : SN 2020aafb
+URL de Confirmación     : https://www.wis-tns.org/object/2020aafb
 -> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
 =================================================================
 
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : AGN (Confianza: 96.3%)
+    CLASE IA (ALeRCE)    : SNII (Confianza: 97.5%)
     RECLASIFICACIÓN      : AGN / Cuásar (Acreción térmica - Lenta)
-    EDAD HISTÓRICA       : 2902.0 días
-    SALTO LUMINOSIDAD    : 3.19 magnitudes
-    TASA ACEL. HISTÓRICA : 0.001 mag/día
-    TASA ACEL. RECIENTE  : 0.019 mag/día
+    EDAD HISTÓRICA       : 2112.2 días
+    SALTO LUMINOSIDAD    : 2.19 magnitudes
+    TASA ACEL. HISTÓRICA : 0.121 mag/día
+    TASA ACEL. RECIENTE  : 0.000 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61280.4642
+    MJD ÚLTIMA DETEC.    : 61280.4647
 =================================================================
