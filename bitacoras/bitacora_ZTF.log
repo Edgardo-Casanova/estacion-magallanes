@@ -3372,3 +3372,25 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-08-28 10:54:03] -> Procesando evento de interés: ZTF18acsjhdn (nova)
 [2026-08-28 10:56:36] -> Procesando evento de interés: ZTF18acctfor (nova)
 [2026-08-28 10:56:55] -> Procesando evento de interés: ZTF17aadpdlr (nova)
+[2026-08-28 11:30:16] ==================================================
+[2026-08-28 11:30:16] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-08-28 11:32:11] -> Procesando evento de interés: ZTF19acdgrxk (nova)
+[2026-08-28 11:32:46] -> Procesando evento de interés: ZTF18acmwzeo (agn)
+[2026-08-28 11:35:32] -> Procesando evento de interés: ZTF23abuiwzm (agn)
+[2026-08-28 11:36:32] -> Procesando evento de interés: ZTF19aaaapzc (agn)
+[2026-08-28 11:37:46] -> Procesando evento de interés: ZTF17aaafglk (nova)
+[2026-08-28 11:38:24] -> Procesando evento de interés: ZTF19abmtuxt (nova)
+[2026-08-28 11:41:01] -> Procesando evento de interés: ZTF18acvbqtc (agn)
+[2026-08-28 11:42:58]       [🛡️] ALERTA TNS: ZTF18abvtcpk interceptado. Ya es AT 2018iqq.
+[2026-08-28 11:42:58]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: blazar.
+[2026-08-28 11:42:58] -> Procesando evento de interés: AT 2018iqq (blazar)
+[2026-08-28 11:44:07]       [🛡️] ALERTA TNS: ZTF22abjhfxe interceptado. Ya es SN 2026rop.
+[2026-08-28 11:44:07]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone AGN.
+[2026-08-28 11:44:07] -> Procesando evento de interés: SN 2026rop (agn)
+[2026-08-28 11:44:25] -> Procesando evento de interés: ZTF20aafqswc (blazar)
+[2026-08-28 11:44:51] -> Procesando evento de interés: ZTF18abtgdxy (agn)
+[2026-08-28 11:45:11] -> Procesando evento de interés: ZTF18abwrwnj (blazar)
+[2026-08-28 11:45:28] -> Procesando evento de interés: ZTF18abotajm (nova)
+[2026-08-28 11:47:01] -> Procesando evento de interés: ZTF18abtsxpp (agn)
+[2026-08-28 11:48:10] -> Procesando evento de interés: ZTF18abtslci (agn)
+[2026-08-28 11:51:03] -> Procesando evento de interés: ZTF18abvrkys (nova)
