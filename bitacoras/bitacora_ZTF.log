@@ -3949,3 +3949,25 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-08-29 09:59:32]       [🛡️] ALERTA TNS: ZTF18abnuexr interceptado. Ya es SN 2018eog.
 [2026-08-29 09:59:32]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone AGN.
 [2026-08-29 09:59:32] -> Procesando evento de interés: SN 2018eog (agn)
+[2026-08-29 10:30:05] ==================================================
+[2026-08-29 10:30:05] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-08-29 10:30:47]       [🛡️] ALERTA TNS: ZTF26abqgbkd interceptado. Ya es AT 2026zuu.
+[2026-08-29 10:30:47]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: supernova.
+[2026-08-29 10:30:47] -> Procesando evento de interés: AT 2026zuu (supernova)
+[2026-08-29 10:31:02] -> Procesando evento de interés: ZTF22abvcujh (blazar)
+[2026-08-29 10:31:25] -> Procesando evento de interés: ZTF18acatmtd (nova)
+[2026-08-29 10:32:11] -> Procesando evento de interés: ZTF18abtouia (nova)
+[2026-08-29 10:35:02] -> Procesando evento de interés: ZTF18abvwpum (nova)
+[2026-08-29 10:36:23] -> Procesando evento de interés: ZTF19aaudams (blazar)
+[2026-08-29 10:36:45] -> Procesando evento de interés: ZTF18abwwflx (nova)
+[2026-08-29 10:40:30] -> Procesando evento de interés: ZTF18abtjmjm (agn)
+[2026-08-29 10:40:51] -> Procesando evento de interés: ZTF18adlocnj (nova)
+[2026-08-29 10:41:11] -> Procesando evento de interés: ZTF18abmmszc (agn)
+[2026-08-29 10:42:45] -> Procesando evento de interés: ZTF18admogwv (nova)
+[2026-08-29 10:43:22] -> Procesando evento de interés: ZTF18abudwyj (blazar)
+[2026-08-29 10:46:27]       [🛡️] ALERTA TNS: ZTF18abtjmns interceptado. Ya es SN 2018lsg.
+[2026-08-29 10:46:27]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone AGN.
+[2026-08-29 10:46:27] -> Procesando evento de interés: SN 2018lsg (agn)
+[2026-08-29 10:47:03] -> Procesando evento de interés: ZTF18abnufgu (nova)
+[2026-08-29 10:50:53] -> Procesando evento de interés: ZTF18abmfrmh (nova)
+[2026-08-29 10:51:25] -> Procesando evento de interés: ZTF18abcmthc (nova)
