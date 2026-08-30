@@ -1,10 +1,10 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-08-30 06:57:00 UTC
-OBJETO DETECTADO : AT_2019fyr (NOVA)
-COORDENADAS ICRS : RA 270.61613 | Dec 8.10960
-DISTANCIA        : Desconocida
+FECHA DE EMISIÓN : 2026-08-30 06:36:01 UTC
+OBJETO DETECTADO : ZTF20abgaoee (NOVA)
+COORDENADAS ICRS : RA 287.82223 | Dec 5.11799
+DISTANCIA        : ~2040.8 Años Luz
 -----------------------------------------------------------------
 
 [1] ESTADO DEL SISTEMA PLANETARIO
@@ -19,23 +19,14 @@ DISTANCIA        : Desconocida
 [4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
     PRIORIDAD   : ALTA PRIORIDAD (Variable Cataclísmica)
     INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).
-=================================================================
-🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
-=================================================================
-ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
-Nombre Oficial Asignado : AT 2019fyr
-URL de Confirmación     : https://www.wis-tns.org/object/2019fyr
--> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
-=================================================================
-
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 98.1%)
+    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 82.1%)
     RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
-    EDAD HISTÓRICA       : 2654.8 días
-    SALTO LUMINOSIDAD    : 5.03 magnitudes
-    TASA ACEL. HISTÓRICA : 0.003 mag/día
-    TASA ACEL. RECIENTE  : 0.053 mag/día
+    EDAD HISTÓRICA       : 1518.9 días
+    SALTO LUMINOSIDAD    : 2.07 magnitudes
+    TASA ACEL. HISTÓRICA : 2.067 mag/día
+    TASA ACEL. RECIENTE  : 0.002 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61282.1915
+    MJD ÚLTIMA DETEC.    : 61282.2105
 =================================================================
