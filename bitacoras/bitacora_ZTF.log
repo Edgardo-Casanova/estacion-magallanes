@@ -4226,3 +4226,26 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-08-30 08:59:51] -> Procesando evento de interés: ZTF18aczfcyc (agn)
 [2026-08-30 09:00:18] -> Procesando evento de interés: ZTF18abuftjy (agn)
 [2026-08-30 09:00:56] -> Procesando evento de interés: ZTF18acbblui (blazar)
+[2026-08-30 09:30:14] ==================================================
+[2026-08-30 09:30:14] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-08-30 09:31:48] -> Procesando evento de interés: ZTF19abbxsfy (blazar)
+[2026-08-30 09:32:56] -> Procesando evento de interés: ZTF18accwuzn (nova)
+[2026-08-30 09:39:17]       [🛡️] ALERTA TNS: ZTF18acehyzg interceptado. Ya es AT 2019ihq.
+[2026-08-30 09:39:17]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-08-30 09:39:17] -> Procesando evento de interés: AT 2019ihq (agn)
+[2026-08-30 09:42:26] -> Procesando evento de interés: ZTF19abcezre (blazar)
+[2026-08-30 09:42:56] -> Procesando evento de interés: ZTF18actwxbg (agn)
+[2026-08-30 09:43:10] -> Procesando evento de interés: ZTF19aayikft (agn)
+[2026-08-30 09:47:02]       [🛡️] ALERTA TNS: ZTF18absgmhg interceptado. Ya es AT 2018jke.
+[2026-08-30 09:47:02]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: blazar.
+[2026-08-30 09:47:02] -> Procesando evento de interés: AT 2018jke (blazar)
+[2026-08-30 09:47:23] -> Procesando evento de interés: ZTF18acaturv (agn)
+[2026-08-30 09:47:41] -> Procesando evento de interés: ZTF18abvpnyr (agn)
+[2026-08-30 09:48:47]       [🛡️] ALERTA TNS: ZTF18absyyig interceptado. Ya es SN 2018fqk.
+[2026-08-30 09:48:47]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone AGN.
+[2026-08-30 09:48:47] -> Procesando evento de interés: SN 2018fqk (agn)
+[2026-08-30 09:49:19] -> Procesando evento de interés: ZTF18aceiput (agn)
+[2026-08-30 09:50:52] -> Procesando evento de interés: ZTF18abwwfsu (blazar)
+[2026-08-30 09:54:08] -> Procesando evento de interés: ZTF18abyxjyc (blazar)
+[2026-08-30 09:54:22] -> Procesando evento de interés: ZTF19aaueksg (agn)
+[2026-08-30 09:54:41] -> Procesando evento de interés: ZTF18acswsyt (nova)
