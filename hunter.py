@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 24.1 (NÚCLEO DEFINITIVO + VETO TNS + FILTRO AGN)
+VERSIÓN    : 24.2 (NÚCLEO DEFINITIVO + VETO TNS + FILTRO AGN)
 =============================================================================
 """
 
@@ -147,10 +147,11 @@ def propagar_epoca_gaia(ra_gaia, dec_gaia, pm_ra, pm_dec, paralaje_mas, mjd_aler
 def obtener_datos_astronomicos(coordenadas, mjd_alerta):
     nombre, distancia, tipo, metalicidad = "No catalogada", "Desconocida", "Desconocido", "Desconocida"
     es_cuasar, es_estrella, es_galaxia, es_vip = False, False, False, False
+    redshift_simbad = 0.0
     try:
         custom_simbad = Simbad()
         custom_simbad.TIMEOUT = 25 
-        custom_simbad.add_votable_fields('plx', 'sp', 'fe_h', 'otype')
+        custom_simbad.add_votable_fields('plx', 'sp', 'fe_h', 'otype', 'rvz_redshift')
         resultado = custom_simbad.query_region(coordenadas, radius=3*u.arcsec)
         
         if resultado is not None and len(resultado) > 0:
@@ -163,6 +164,11 @@ def obtener_datos_astronomicos(coordenadas, mjd_alerta):
             if 'PLX_VALUE' in resultado.colnames:
                 plx = resultado['PLX_VALUE'][0]
                 if not np.ma.is_masked(plx) and not np.isnan(plx) and float(plx) > 0: distancia = f"~{(1000.0 / float(plx)) * 3.26156:.1f} Años Luz"
+            
+            if 'RVZ_REDSHIFT' in resultado.colnames:
+                raw_z = resultado['RVZ_REDSHIFT'][0]
+                if not np.ma.is_masked(raw_z) and not np.isnan(float(raw_z)):
+                    redshift_simbad = float(raw_z)
             
             tipo_upper = str(tipo).upper()
             es_cuasar = any(x in tipo_upper for x in ["QSO", "AGN", "BLAZAR", "BLLAC", "SEYFERT"])
@@ -190,7 +196,7 @@ def obtener_datos_astronomicos(coordenadas, mjd_alerta):
                             break
         except Exception: pass
         
-    return nombre, distancia, tipo, metalicidad, es_cuasar, es_estrella, es_galaxia, es_vip
+    return nombre, distancia, tipo, metalicidad, es_cuasar, es_estrella, es_galaxia, es_vip, redshift_simbad
 
 def graficar_curva(det, id_evento, red_descubridora, ra_float, dec_float, tipo_evento_final="supernova", es_vip=False):
     plt.style.use('dark_background')
@@ -464,7 +470,7 @@ def main():
                             coordenadas = SkyCoord(ra=fila['meanra']*u.degree, dec=fila['meandec']*u.degree, frame='icrs')
                             mjd_alerta_actual = det['mjd'].max()
                             
-                            nombre_real, distancia_real, tipo_real, metalicidad_real, es_cuasar_cat, es_estrella_cat, es_galaxia_cat, es_vip = obtener_datos_astronomicos(coordenadas, mjd_alerta_actual)
+                            nombre_real, distancia_real, tipo_real, metalicidad_real, es_cuasar_cat, es_estrella_cat, es_galaxia_cat, es_vip, redshift_cazado = obtener_datos_astronomicos(coordenadas, mjd_alerta_actual)
 
                             # =================================================================
                             # --- 1. GUILLOTINA FOTOMÉTRICA (Corte Estricto 18.5 mag) ---
@@ -603,7 +609,8 @@ def main():
                                 "es_vip": es_vip,
                                 "edad_dias": edad_dias,
                                 "salto_luminosidad": salto_luminosidad_delta,
-                                "escudo_tns_hit": nombre_oficial_tns # Pasa la etiqueta a la cascada
+                                "escudo_tns_hit": nombre_oficial_tns, # Pasa la etiqueta a la cascada
+                                "redshift_cazado": redshift_cazado
                             }
 
                             ejecutar_pipeline_magallanes(
