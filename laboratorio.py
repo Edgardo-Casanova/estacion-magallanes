@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : laboratorio.py (Centro de Análisis Científico Profundo)
-VERSIÓN    : 18.7 (FASE 7: MOTOR TAXONÓMICO Y ESPECTROS EXTRAGALÁCTICOS)
+VERSIÓN    : 18.8 (FASE 8: CASCADA DE REDSHIFT Y BLINDAJE ESPECTRAL)
 =============================================================================
 """
 
@@ -112,7 +112,7 @@ def extraer_valor(dato):
 
 def calcular_distancia_hubble(z):
     try:
-        if z is None or str(z).strip() == "": return "Desconocida", "N/A"
+        if z is None or str(z).strip() == "" or str(z) == "Desconocido": return "Desconocida", "N/A"
         z_float = float(z)
         if z_float <= 0: return "Desconocida", "N/A"
         c = 299792.458 
@@ -162,6 +162,15 @@ def analizar_espectroscopia_activa(coordenadas, id_evento, tipo_evento="desconoc
         try:
             xid = SDSS.query_region(coordenadas, radius=5*u.arcsec, spectro=True)
             if xid is not None and len(xid) > 0:
+                # --- RESCATE DE REDSHIFT ESPECTROSCÓPICO (El estándar de oro) ---
+                if 'z' in xid.colnames:
+                    raw_z = xid['z'][0]
+                    if not np.ma.is_masked(raw_z):
+                        try:
+                            redshift = float(raw_z)
+                        except Exception: pass
+                # -----------------------------------------------------------------
+                
                 espectros = SDSS.get_spectra(matches=xid)
                 datos = espectros[0][1].data
                 flujo, long_onda = datos['flux'], 10 ** datos['loglam']
@@ -204,7 +213,7 @@ def analizar_espectroscopia_activa(coordenadas, id_evento, tipo_evento="desconoc
                 plt.tight_layout()
                 
                 guardar_grafico_memoria(fig, f"data/quimica_halfa_{id_evento}.png")
-                return hay_emision, ew_halfa, fuente_espectro, estado_radar_eso
+                return hay_emision, ew_halfa, fuente_espectro, estado_radar_eso, redshift
             else: print("   [-] SDSS no tiene espectro. Pasando a respaldo global...")
         except Exception as e: print(f"   [-] Fallo en conexión SDSS: {e}. Pasando a respaldo...")
 
@@ -235,7 +244,7 @@ def analizar_espectroscopia_activa(coordenadas, id_evento, tipo_evento="desconoc
             estado_radar_eso = "Radar ESO Inaccesible"
             print("   [-] Fallo en Radar ESO.")
 
-    return hay_emision, ew_halfa, fuente_espectro, estado_radar_eso
+    return hay_emision, ew_halfa, fuente_espectro, estado_radar_eso, redshift
 
 def buscar_espectro_y_fotometria(coordenadas, id_evento):
     print(f"\n[2/X] 🌈 Iniciando análisis térmico SED Quiescente...")
@@ -324,13 +333,13 @@ DISTANCIA        : {distancia}
     contenido += "\n[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)\n"
     
     if tipo_evento == "flare" and tiene_planetas is True:
-        contenido += "    PRIORIDAD   : MÁXIMA PRIORIDAD ESPACIAL (Riesgo de Habitabilidad)\n    INSTRUMENTO : Recomendado para Telescopios Espaciales (JWST / HST) o VLT.\n"
+        contenido += "    PRIORIDAD    : MÁXIMA PRIORIDAD ESPACIAL (Riesgo de Habitabilidad)\n    INSTRUMENTO : Recomendado para Telescopios Espaciales (JWST / HST) o VLT.\n"
     elif "nova" in tipo_evento.lower():
-        contenido += "    PRIORIDAD   : ALTA PRIORIDAD (Variable Cataclísmica)\n    INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).\n"
+        contenido += "    PRIORIDAD    : ALTA PRIORIDAD (Variable Cataclísmica)\n    INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).\n"
     elif es_enana_roja is True:
-        contenido += "    PRIORIDAD   : PRIORIDAD MODERADA (Actividad Estelar Base)\n    INSTRUMENTO : Telescopios terrestres (Fotometría de seguimiento).\n"
+        contenido += "    PRIORIDAD    : PRIORIDAD MODERADA (Actividad Estelar Base)\n    INSTRUMENTO : Telescopios terrestres (Fotometría de seguimiento).\n"
     else:
-        contenido += "    PRIORIDAD   : PRIORIDAD ESTÁNDAR DE MONITOREO\n    INSTRUMENTO : Telescopios terrestres (Fotometría de seguimiento).\n"
+        contenido += "    PRIORIDAD    : PRIORIDAD ESTÁNDAR DE MONITOREO\n    INSTRUMENTO : Telescopios terrestres (Fotometría de seguimiento).\n"
     
     if reporte_matematico:
         contenido += reporte_matematico
@@ -385,7 +394,7 @@ COORDENADAS ICRS : RA {ra:.5f} | Dec {dec:.5f}
     DISTANCIA HUBBLE            : {rango_mpc} {rango_mly}
 
 [2] EVALUACIÓN MAGALLANES
-    PRIORIDAD   : ALTA PRIORIDAD ESPECTROSCÓPICA
+    PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
     INSTRUMENTO : Observatorios masivos (VLT / Gemini).
 """
     if reporte_matematico:
@@ -396,6 +405,10 @@ COORDENADAS ICRS : RA {ra:.5f} | Dec {dec:.5f}
 
 def ejecutar_pipeline_magallanes(ra_deg, dec_deg, id_evento="Desconocido", tipo_evento="flare", distancia_real="Desconocida", mjd_deteccion=None, reporte_matematico="", extra_datos_hunter=None):
     if extra_datos_hunter is None: extra_datos_hunter = {}
+    
+    # 🧳 Saneamiento de mochila: Extraer redshift y evitar contaminación al Megáfono
+    redshift_cazado = extra_datos_hunter.pop("redshift_cazado", "Desconocido")
+    
     print(f"\n[ESTACIÓN MAGALLANES] Recibida alerta para laboratorio: {id_evento}")
     
     # =====================================================================
@@ -422,7 +435,9 @@ URL de Confirmación     : https://www.wis-tns.org/object/{escudo_hit.split(' ')
         if tipo_evento in ["flare", "nova"]:
             tiene_planetas, planetas_info = buscar_exoplanetas(coordenadas, tipo_evento)
             es_enana_roja = buscar_espectro_y_fotometria(coordenadas, id_limpio)
-            emision_activa, valor_ew, fuente_espectro, estado_eso = analizar_espectroscopia_activa(coordenadas, id_limpio, tipo_evento, redshift=0.0)
+            
+            # Se usa _ para desempaquetar y descartar la variable de redshift en estrellas
+            emision_activa, valor_ew, fuente_espectro, estado_eso, _ = analizar_espectroscopia_activa(coordenadas, id_limpio, tipo_evento, redshift=0.0)
             
             generar_circular_estelar_local(ra_deg, dec_deg, id_limpio, tiene_planetas, es_enana_roja, planetas_info, emision_activa, valor_ew, fuente_espectro, estado_eso, tipo_evento, distancia_real, reporte_matematico)
             
@@ -440,33 +455,37 @@ URL de Confirmación     : https://www.wis-tns.org/object/{escudo_hit.split(' ')
             except TypeError: pass
                 
         elif tipo_evento in ["supernova", "agn", "blazar", "tde"]:
-            galaxia, redshift = buscar_galaxia_anfitriona(coordenadas)
+            galaxia, redshift_ned = buscar_galaxia_anfitriona(coordenadas)
             
-            # Asegurar redshift como float para el análisis espectral dinámico
-            z_float = 0.0
-            if redshift != "Desconocido":
-                try:
-                    z_float = float(redshift)
-                except ValueError:
-                    pass
+            # --- CASCADA DE REDSHIFT (NED -> Simbad -> 0.0) ---
+            redshift_base = redshift_ned if redshift_ned != "Desconocido" else redshift_cazado
             
-            # --- INYECCIÓN COSMOLÓGICA NED ---
-            rango_mpc, rango_mly = calcular_distancia_hubble(redshift)
-            if rango_mpc != "Desconocida":
-                distancia_real = f"{rango_mpc} {rango_mly}"
-            # ---------------------------------
+            # Protección estricta tipo Float para el motor químico
+            try:
+                z_float = float(redshift_base) if (redshift_base != "Desconocido" and redshift_base is not None) else 0.0
+            except ValueError:
+                z_float = 0.0
+            # --------------------------------------------------
             
             _ = buscar_espectro_y_fotometria(coordenadas, id_limpio)
             
-            # --- NUEVA LLAMADA: ESPECTROSCOPÍA EXTRAGALÁCTICA TAXONÓMICA ---
-            emision_activa, valor_ew, fuente_espectro, estado_eso = analizar_espectroscopia_activa(coordenadas, id_limpio, tipo_evento, redshift=z_float)
+            # --- NUEVA LLAMADA: Atrapando el z_final que podría rescatar SDSS ---
+            emision_activa, valor_ew, fuente_espectro, estado_eso, z_final = analizar_espectroscopia_activa(coordenadas, id_limpio, tipo_evento, redshift=z_float)
             
-            generar_circular_extragalactica(ra_deg, dec_deg, id_limpio, galaxia, redshift, tipo_evento, reporte_matematico)
+            # --- PARADOJA DEL TIEMPO RESUELTA: Cálculo de distancia Post-SDSS ---
+            redshift_reporte = "Desconocido" if z_final == 0.0 else z_final
+            
+            rango_mpc, rango_mly = calcular_distancia_hubble(redshift_reporte)
+            if rango_mpc != "Desconocida":
+                distancia_real = f"{rango_mpc} {rango_mly}"
+            # --------------------------------------------------------------------
+            
+            generar_circular_extragalactica(ra_deg, dec_deg, id_limpio, galaxia, redshift_reporte, tipo_evento, reporte_matematico)
             
             try:
                 datos_para_megafono = {
                     "galaxia": galaxia, 
-                    "redshift": redshift, 
+                    "redshift": redshift_reporte, # Sincronización exacta al Megáfono
                     "distancia": distancia_real,
                     "mjd_deteccion": mjd_deteccion,
                     "fuente_espectro": fuente_espectro,
