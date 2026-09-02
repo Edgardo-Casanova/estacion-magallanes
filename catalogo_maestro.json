@@ -1057,13 +1057,13 @@
     },
     {
         "oid": "ZTF18abzsaee",
-        "ra": 359.354729737313,
-        "dec": -1.8709709865057664,
+        "ra": 359.35472994899385,
+        "dec": -1.8709711003397105,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61280.469201399945,
+        "mjd_deteccion": 61285.30143520003,
         "img_url": "data/curva_luz_ZTF18abzsaee.png"
     },
     {
@@ -2982,13 +2982,13 @@
     },
     {
         "oid": "ZTF18aczovdc",
-        "ra": 1.0534611072864468,
-        "dec": -5.4411725291604345,
+        "ra": 1.0534606498369345,
+        "dec": -5.441171821272693,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61269.422280100174,
+        "mjd_deteccion": 61285.30143520003,
         "img_url": "data/curva_luz_ZTF18aczovdc.png"
     },
     {
@@ -3048,13 +3048,13 @@
     },
     {
         "oid": "ZTF22aarfdeo",
-        "ra": 357.4752828053604,
-        "dec": 3.501946957101751,
-        "tipo": "blazar",
+        "ra": 357.47528552748054,
+        "dec": 3.501946753916567,
+        "tipo": "agn",
         "survey": "ZTF",
-        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61269.46259259991,
+        "mjd_deteccion": 61285.301909700036,
         "img_url": "data/curva_luz_ZTF22aarfdeo.png"
     },
     {
@@ -6766,13 +6766,13 @@
     },
     {
         "oid": "ZTF18aceisrv",
-        "ra": 352.99331525395587,
-        "dec": -4.924108788381102,
+        "ra": 352.993312753286,
+        "dec": -4.924106946874035,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61275.355185199995,
+        "mjd_deteccion": 61285.30096059991,
         "img_url": "data/curva_luz_ZTF18aceisrv.png"
     },
     {
@@ -16509,5 +16509,60 @@
         "vip": false,
         "mjd_deteccion": 61285.262060199864,
         "img_url": "data/curva_luz_ZTF20aciwieh.png"
+    },
+    {
+        "oid": "ZTF22aarflgp",
+        "ra": 358.14104830110324,
+        "dec": 3.7021322794329774,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61285.301909700036,
+        "img_url": "data/curva_luz_ZTF22aarflgp.png"
+    },
+    {
+        "oid": "SN 2018fpi",
+        "ra": 356.1145468307947,
+        "dec": 5.663665153395804,
+        "tipo": "agn",
+        "survey": "TNS_GLOBAL",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta) [Interceptado por TNS]",
+        "vip": false,
+        "mjd_deteccion": 61285.301909700036,
+        "img_url": "data/curva_luz_SN_2018fpi.png"
+    },
+    {
+        "oid": "ZTF22aapjrzm",
+        "ra": 0.3411009374276319,
+        "dec": -0.057501136499941805,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61285.30143520003,
+        "img_url": "data/curva_luz_ZTF22aapjrzm.png"
+    },
+    {
+        "oid": "ZTF18abznvhg",
+        "ra": 352.63466271584804,
+        "dec": -2.462562344396225,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61285.30096059991,
+        "img_url": "data/curva_luz_ZTF18abznvhg.png"
+    },
+    {
+        "oid": "ZTF18abtkgyj",
+        "ra": 347.7335321123171,
+        "dec": 1.3231129016038987,
+        "tipo": "blazar",
+        "survey": "ZTF",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61285.300497699995,
+        "img_url": "data/curva_luz_ZTF18abtkgyj.png"
     }
 ]
