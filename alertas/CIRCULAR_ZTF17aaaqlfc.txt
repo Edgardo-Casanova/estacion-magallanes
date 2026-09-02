@@ -1,14 +1,14 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-08-12 15:57:54 UTC
+FECHA DE EMISIÓN : 2026-09-02 12:41:34 UTC
 OBJETO DETECTADO : ZTF17aaaqlfc (NOVA)
-COORDENADAS ICRS : RA 82.70760 | Dec 35.91236
+COORDENADAS ICRS : RA 82.70760 | Dec 35.91237
 DISTANCIA        : ~3882.8 Años Luz
 -----------------------------------------------------------------
 
 [1] ESTADO DEL SISTEMA PLANETARIO
-    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).
+    ESTADO DESCONOCIDO: NASA Exoplanet Archive inaccesible (Timeout de red).
 
 [2] EVALUACIÓN TERMODINÁMICA (SED QUIESCENTE)
     FIRMA TÉRMICA: Datos insuficientes para evaluación térmica SED.
@@ -17,16 +17,16 @@ DISTANCIA        : ~3882.8 Años Luz
     ESTADO QUÍMICO: Carencia de datos públicos 1D. Radar ESO indica: Radar ESO Inaccesible
 
 [4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
-    PRIORIDAD   : ALTA PRIORIDAD (Variable Cataclísmica)
+    PRIORIDAD    : ALTA PRIORIDAD (Variable Cataclísmica)
     INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
     CLASE IA (ALeRCE)    : CV/Nova (Confianza: 100.0%)
     RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
-    EDAD HISTÓRICA       : 2919.0 días
-    SALTO LUMINOSIDAD    : 1.50 magnitudes
+    EDAD HISTÓRICA       : 2939.9 días
+    SALTO LUMINOSIDAD    : 4.72 magnitudes
     TASA ACEL. HISTÓRICA : 0.225 mag/día
-    TASA ACEL. RECIENTE  : 0.116 mag/día
+    TASA ACEL. RECIENTE  : 1.222 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61264.4957
+    MJD ÚLTIMA DETEC.    : 61285.4306
 =================================================================
