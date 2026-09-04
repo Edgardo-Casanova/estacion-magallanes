@@ -5780,3 +5780,20 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-09-04 07:54:50] -> Procesando evento de interés: ZTF19aatvsho (nova)
 [2026-09-04 07:57:03] -> Procesando evento de interés: ZTF18abnpdqe (nova)
 [2026-09-04 07:58:18] -> Procesando evento de interés: ZTF18acbwlay (nova)
+[2026-09-04 08:30:12] ==================================================
+[2026-09-04 08:30:12] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-09-04 08:33:04] -> Procesando evento de interés: ZTF18absgnqy (nova)
+[2026-09-04 08:35:35] -> Procesando evento de interés: ZTF17aabwwgf (nova)
+[2026-09-04 08:37:17] -> Procesando evento de interés: ZTF17aabwwho (blazar)
+[2026-09-04 08:41:00] -> Procesando evento de interés: ZTF19aaudams (agn)
+[2026-09-04 08:42:02] -> Procesando evento de interés: ZTF19aayvpxl (blazar)
+[2026-09-04 08:42:56] -> Procesando evento de interés: ZTF19abssvho (agn)
+[2026-09-04 08:43:44]       [🛡️] ALERTA TNS: ZTF18abolvoh interceptado. Ya es SN 2018evc.
+[2026-09-04 08:43:44]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone AGN.
+[2026-09-04 08:43:44] -> Procesando evento de interés: SN 2018evc (agn)
+[2026-09-04 08:44:49] -> Procesando evento de interés: ZTF18abteeqy (nova)
+[2026-09-04 08:45:16] -> Procesando evento de interés: ZTF18acatiny (blazar)
+[2026-09-04 08:46:01] -> Procesando evento de interés: ZTF18abtkgyj (blazar)
+[2026-09-04 08:47:34] -> Procesando evento de interés: ZTF21abprnfw (agn)
+[2026-09-04 08:48:12] -> Procesando evento de interés: ZTF19aawgbtl (blazar)
+[2026-09-04 08:52:03] -> Procesando evento de interés: ZTF18abtkfvl (nova)
