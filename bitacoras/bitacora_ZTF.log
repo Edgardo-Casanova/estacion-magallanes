@@ -5797,3 +5797,16 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-09-04 08:47:34] -> Procesando evento de interés: ZTF21abprnfw (agn)
 [2026-09-04 08:48:12] -> Procesando evento de interés: ZTF19aawgbtl (blazar)
 [2026-09-04 08:52:03] -> Procesando evento de interés: ZTF18abtkfvl (nova)
+[2026-09-04 09:30:10] ==================================================
+[2026-09-04 09:30:10] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-09-04 09:30:34] -> Procesando evento de interés: ZTF18abtvgqh (agn)
+[2026-09-04 09:32:03] -> Procesando evento de interés: ZTF18acbxifb (blazar)
+[2026-09-04 09:33:28] -> Procesando evento de interés: ZTF18abuunmg (agn)
+[2026-09-04 09:34:24] -> Procesando evento de interés: ZTF19abkerhj (blazar)
+[2026-09-04 09:39:51] -> Procesando evento de interés: ZTF20abubztz (blazar)
+[2026-09-04 09:42:04] -> Procesando evento de interés: ZTF18abwpdxu (nova)
+[2026-09-04 09:44:16] -> Procesando evento de interés: ZTF19abkcnxs (agn)
+[2026-09-04 09:46:33] -> Procesando evento de interés: ZTF19abbnkwu (agn)
+[2026-09-04 09:51:57]       [🛡️] ALERTA TNS: ZTF20acqpkxj interceptado. Ya es AT 2020abey.
+[2026-09-04 09:51:57]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: nova.
+[2026-09-04 09:51:57] -> Procesando evento de interés: AT 2020abey (nova)
