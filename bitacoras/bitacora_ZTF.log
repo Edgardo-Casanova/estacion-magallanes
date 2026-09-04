@@ -5734,3 +5734,27 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-09-04 05:29:49] -> Procesando evento de interés: ZTF18abimokp (nova)
 [2026-09-04 05:31:28] -> Procesando evento de interés: ZTF19addindm (nova)
 [2026-09-04 05:32:00] -> Procesando evento de interés: ZTF18abobiqr (nova)
+[2026-09-04 06:30:15] ==================================================
+[2026-09-04 06:30:15] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-09-04 06:30:58] -> Procesando evento de interés: ZTF18abyluab (nova)
+[2026-09-04 06:32:33] -> Procesando evento de interés: ZTF18absdcuk (nova)
+[2026-09-04 06:33:32] -> Procesando evento de interés: ZTF18adkntdv (nova)
+[2026-09-04 06:34:40] -> Procesando evento de interés: ZTF18abgqckr (agn)
+[2026-09-04 06:36:05]       [🛡️] ALERTA TNS: ZTF18abcvvpx interceptado. Ya es AT 2022dsg.
+[2026-09-04 06:36:05]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-09-04 06:36:05] -> Procesando evento de interés: AT 2022dsg (agn)
+[2026-09-04 06:37:12] -> Procesando evento de interés: ZTF18abdjpbo (nova)
+[2026-09-04 06:37:30] -> Procesando evento de interés: ZTF23aabqszj (agn)
+[2026-09-04 06:38:31] -> Procesando evento de interés: ZTF18abffzxq (nova)
+[2026-09-04 06:40:18] -> Procesando evento de interés: ZTF26abqzsha (supernova)
+[2026-09-04 06:41:27]       [🛡️] ALERTA TNS: ZTF18abvnsmh interceptado. Ya es AT 2019bzm.
+[2026-09-04 06:41:27]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: blazar.
+[2026-09-04 06:41:27] -> Procesando evento de interés: AT 2019bzm (blazar)
+[2026-09-04 06:43:17] -> Procesando evento de interés: ZTF18abcyspx (blazar)
+[2026-09-04 06:45:20] -> Procesando evento de interés: ZTF19addaxfa (agn)
+[2026-09-04 06:47:14] -> Procesando evento de interés: ZTF20aazntjl (agn)
+[2026-09-04 06:48:02] -> Procesando evento de interés: ZTF18abucogq (blazar)
+[2026-09-04 06:49:13] -> Procesando evento de interés: ZTF18abmbdlz (nova)
+[2026-09-04 06:49:47] -> Procesando evento de interés: ZTF18abmpcgv (nova)
+[2026-09-04 06:58:40] -> Procesando evento de interés: ZTF18ablhpka (nova)
+[2026-09-04 06:59:06] -> Procesando evento de interés: ZTF18ablrmoj (blazar)
