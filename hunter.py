@@ -2,13 +2,14 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 24.2 (NÚCLEO DEFINITIVO + VETO TNS + FILTRO AGN)
+VERSIÓN    : 24.3 (NÚCLEO DEFINITIVO + VETO TNS + TIMEOUT ANTI-CUELGUE)
 =============================================================================
 """
 
 import os
 import io
 import time
+import signal # NUEVA IMPORTACIÓN: Herramienta de sistema para romper procesos pegados
 import pandas as pd
 import numpy as np
 import requests
@@ -33,7 +34,7 @@ warnings.filterwarnings('ignore')
 load_dotenv()
 
 # =====================================================================
-# CONFIGURACIÓN DEL ENTORNO LOCAL
+# CONFIGURACIÓN DEL ENTORNO LOCAL Y CONTROL DE TIMEOUT
 # =====================================================================
 ARCHIVO_MJD = "tracker_mjd.txt"
 ARCHIVO_BOLETIN = "boletin_tns.txt"
@@ -46,6 +47,12 @@ diccionario_categorias = {
 
 for directorio in ["alertas", "data", "alertas_comunidad", "bitacoras"]:
     os.makedirs(directorio, exist_ok=True)
+
+class TimeoutException(Exception):
+    pass
+
+def manejador_timeout(signum, frame):
+    raise TimeoutException("Timeout crítico: El servidor externo no respondió a tiempo.")
 
 # =====================================================================
 # 🛡️ ESCUDO TNS (PROTOTIPO LOCAL INTEGRADO)
@@ -318,6 +325,10 @@ def consultar_tns_sur(client, catalogo_dict):
                     det = None
                     try:
                         if ra_float != 0.0 and dec_float != 0.0:
+                            # --- CANDADO DE TIEMPO ANTI-ZOMBI ---
+                            signal.signal(signal.SIGALRM, manejador_timeout)
+                            signal.alarm(30) # 30 segundos máximo para responder
+                            
                             candidatos_alerce = client.query_objects(ra=ra_float, dec=dec_float, radius=10, format='pandas')
                             if candidatos_alerce is not None and not candidatos_alerce.empty:
                                 if 'lastmjd' in candidatos_alerce.columns:
@@ -326,6 +337,11 @@ def consultar_tns_sur(client, catalogo_dict):
                                 oid_tns = candidatos_alerce.iloc[0]['oid']
                                 oid_tns = oid_tns.decode('utf-8') if isinstance(oid_tns, bytes) else oid_tns
                                 det = client.query_detections(oid=oid_tns, format='pandas')
+                                
+                            signal.alarm(0) # Apaga la alarma si funcionó rápido
+                            # ------------------------------------
+                    except TimeoutException:
+                        registrar_log(f"   [-] Timeout: ALeRCE no entregó fotometría para {id_evento} a tiempo. Omitiendo curva.", log_file)
                     except Exception as e: 
                         registrar_log(f"   [-] Fallo menor en extracción fotométrica para {id_evento}: {e}", log_file)
                     
@@ -392,7 +408,7 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
     registrar_log("[+] Procesamiento TNS finalizado. Archivo de boletín purgado desde la línea 3.", log_file)
 
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (24.1 - NÚCLEO DEFINITIVO + VETO TNS + FILTRO AGN) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (24.3 - NÚCLEO DEFINITIVO + VETO TNS + TIMEOUT ANTI-CUELGUE) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     url_tap = "https://tap.alerce.online/tap"
@@ -454,8 +470,15 @@ def main():
                     oid = fila['oid'].decode('utf-8') if isinstance(fila['oid'], bytes) else fila['oid']
                     
                     try:
+                        # --- CANDADO DE TIEMPO ANTI-ZOMBI ---
+                        signal.signal(signal.SIGALRM, manejador_timeout)
+                        signal.alarm(35) # 35 segundos máximo para ALeRCE
+
                         probs = client.query_probabilities(oid=oid, format='pandas')
-                        if probs.empty: continue
+                        
+                        if probs.empty: 
+                            signal.alarm(0)
+                            continue
                             
                         mejor_prediccion = probs.loc[probs['probability'].idxmax()]
                         clase_ia_final, probabilidad = mejor_prediccion['class_name'], mejor_prediccion['probability']
@@ -465,10 +488,15 @@ def main():
                             
                             det = client.query_detections(oid=oid, format='pandas')
                             det = det.dropna(subset=['magpsf', 'mjd'])
-                            if det.empty or len(det) < 2: continue 
+                            if det.empty or len(det) < 2: 
+                                signal.alarm(0)
+                                continue 
                                 
                             coordenadas = SkyCoord(ra=fila['meanra']*u.degree, dec=fila['meandec']*u.degree, frame='icrs')
                             mjd_alerta_actual = det['mjd'].max()
+                            
+                            signal.alarm(0) # Apaga la alarma si logró descargar todo
+                            # ------------------------------------
                             
                             nombre_real, distancia_real, tipo_real, metalicidad_real, es_cuasar_cat, es_estrella_cat, es_galaxia_cat, es_vip, redshift_cazado = obtener_datos_astronomicos(coordenadas, mjd_alerta_actual)
 
@@ -639,7 +667,12 @@ def main():
                             except Exception as e:
                                 registrar_log(f"[!] Error al inyectar {oid_para_laboratorio} al catálogo JSON: {e}", log_file)
 
-                    except Exception as e: pass 
+                    except TimeoutException:
+                        print(f"      [!] Timeout: Servidor no respondió para {oid}. Omitiendo objeto por seguridad.")
+                        registrar_log(f"Timeout: El objeto {oid} provocó un atasco de red y fue omitido.", log_file)
+                    except Exception as e: 
+                        print(f"      [!] Error interno al analizar {oid}: {e}")
+                        
         except Exception as e:
             print(f"   [!] Error en exploración TAP: {e}")
             registrar_log(f"Error TAP ADQL: {e}", log_file)
