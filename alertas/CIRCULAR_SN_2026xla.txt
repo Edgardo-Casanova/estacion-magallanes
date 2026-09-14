@@ -1,20 +1,36 @@
-======================================================================
-[REGISTRO OFICIAL TNS] - EVENTO CONFIRMADO
-======================================================================
-ID de Evento          : SN 2026xla
-Clasificación Oficial : SN Ia
-Red de Descubrimiento : ZTF
-Coordenadas (ICRS)    : RA 25.64323 | Dec -2.82367
+=================================================================
+ CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
+=================================================================
+FECHA DE EMISIÓN : 2026-09-14 14:08:55 UTC
+EVENTO DETECTADO : SN_2026xla (SUPERNOVA)
+COORDENADAS ICRS : RA 25.64316 | Dec -2.82364
+-----------------------------------------------------------------
 
-[CÁLCULO DE DISTANCIA (Basado en z = 0.045)]
-Entre 184.80 y 200.16 Megaparsecs
-(Aprox. 602.75 a 652.83 M Años luz)
+[1] ENTORNO COSMOLÓGICO
+    OBJETO CENTRAL / ANFITRIONA : Desconocida (Intergaláctica / Muy lejana)
+    REDSHIFT (z)                : Desconocido
+    DISTANCIA HUBBLE            : Desconocida N/A
 
-======================================================================
-🔗 ENLACE OFICIAL DEL TRANSIENT NAME SERVER:
-https://www.wis-tns.org/object/2026xla
-======================================================================
-* NOTA: Este evento ya está confirmado por la IAU. No se requiere 
-  emisión de telegramas ni seguimiento de validación por parte 
-  de la Estación Magallanes.
-======================================================================
+[2] EVALUACIÓN MAGALLANES
+    PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
+    INSTRUMENTO : Observatorios masivos (VLT / Gemini).
+=================================================================
+🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
+=================================================================
+ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
+Nombre Oficial Asignado : SN 2026xla
+URL de Confirmación     : https://www.wis-tns.org/object/2026xla
+-> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
+=================================================================
+
+
+[5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
+    CLASE IA (ALeRCE)    : SNIa (Confianza: 99.5%)
+    RECLASIFICACIÓN      : Candidata (Esperando confirmación TNS)
+    EDAD HISTÓRICA       : 42.9 días
+    SALTO LUMINOSIDAD    : 2.11 magnitudes
+    TASA ACEL. HISTÓRICA : 0.141 mag/día
+    TASA ACEL. RECIENTE  : 0.067 mag/día
+    RED DE ORIGEN        : ZTF
+    MJD ÚLTIMA DETEC.    : 61297.3397
+=================================================================
