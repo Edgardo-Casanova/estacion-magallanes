@@ -20359,5 +20359,16 @@
         "vip": false,
         "mjd_deteccion": 61298.25584489992,
         "img_url": "data/curva_luz_ZTF18abudvhk.png"
+    },
+    {
+        "oid": "ZTF18acahikb",
+        "ra": 311.7263856258445,
+        "dec": -10.177816423585211,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61298.25584489992,
+        "img_url": "data/curva_luz_ZTF18acahikb.png"
     }
 ]
