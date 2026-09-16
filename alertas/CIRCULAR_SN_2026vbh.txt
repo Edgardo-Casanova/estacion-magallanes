@@ -1,15 +1,15 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-09-16 08:52:27 UTC
-EVENTO DETECTADO : SN_2018fop (AGN)
-COORDENADAS ICRS : RA 18.82542 | Dec -6.85906
+FECHA DE EMISIÓN : 2026-09-16 08:51:53 UTC
+EVENTO DETECTADO : SN_2026vbh (SUPERNOVA)
+COORDENADAS ICRS : RA 20.36599 | Dec -10.61808
 -----------------------------------------------------------------
 
 [1] ENTORNO COSMOLÓGICO
     OBJETO CENTRAL / ANFITRIONA : Desconocida (Intergaláctica / Muy lejana)
-    REDSHIFT (z)                : Desconocido
-    DISTANCIA HUBBLE            : Desconocida N/A
+    REDSHIFT (z)                : 0.01841
+    DISTANCIA HUBBLE            : Entre 75.60 y 81.88 Megaparsecs (Aprox. 246.57 a 267.05 M Años luz)
 
 [2] EVALUACIÓN MAGALLANES
     PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
@@ -18,19 +18,19 @@ COORDENADAS ICRS : RA 18.82542 | Dec -6.85906
 🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
 =================================================================
 ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
-Nombre Oficial Asignado : SN 2018fop
-URL de Confirmación     : https://www.wis-tns.org/object/2018fop
+Nombre Oficial Asignado : SN 2026vbh
+URL de Confirmación     : https://www.wis-tns.org/object/2026vbh
 -> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
 =================================================================
 
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : SNIa (Confianza: 97.0%)
-    RECLASIFICACIÓN      : AGN / Cuásar (Acreción térmica - Lenta)
-    EDAD HISTÓRICA       : 2931.9 días
-    SALTO LUMINOSIDAD    : 2.35 magnitudes
-    TASA ACEL. HISTÓRICA : 2.348 mag/día
-    TASA ACEL. RECIENTE  : 0.001 mag/día
+    CLASE IA (ALeRCE)    : SNIa (Confianza: 99.6%)
+    RECLASIFICACIÓN      : Candidata (Esperando confirmación TNS)
+    EDAD HISTÓRICA       : 54.9 días
+    SALTO LUMINOSIDAD    : 2.92 magnitudes
+    TASA ACEL. HISTÓRICA : 0.292 mag/día
+    TASA ACEL. RECIENTE  : 0.000 mag/día
     RED DE ORIGEN        : ZTF
     MJD ÚLTIMA DETEC.    : 61299.3119
 =================================================================
