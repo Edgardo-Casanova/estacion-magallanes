@@ -1,9 +1,9 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-09-16 10:40:41 UTC
-EVENTO DETECTADO : ZTF19aazlruf (AGN)
-COORDENADAS ICRS : RA 347.80192 | Dec -18.10372
+FECHA DE EMISIÓN : 2026-09-16 10:43:30 UTC
+EVENTO DETECTADO : AT_2019jye (AGN)
+COORDENADAS ICRS : RA 347.76375 | Dec -20.37250
 -----------------------------------------------------------------
 
 [1] ENTORNO COSMOLÓGICO
@@ -14,14 +14,23 @@ COORDENADAS ICRS : RA 347.80192 | Dec -18.10372
 [2] EVALUACIÓN MAGALLANES
     PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
     INSTRUMENTO : Observatorios masivos (VLT / Gemini).
+=================================================================
+🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
+=================================================================
+ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
+Nombre Oficial Asignado : AT 2019jye
+URL de Confirmación     : https://www.wis-tns.org/object/2019jye
+-> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
+=================================================================
+
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : AGN (Confianza: 99.7%)
+    CLASE IA (ALeRCE)    : AGN (Confianza: 100.0%)
     RECLASIFICACIÓN      : AGN / Cuásar (Acreción térmica - Lenta)
-    EDAD HISTÓRICA       : 2651.9 días
-    SALTO LUMINOSIDAD    : 1.84 magnitudes
+    EDAD HISTÓRICA       : 2928.0 días
+    SALTO LUMINOSIDAD    : 1.51 magnitudes
     TASA ACEL. HISTÓRICA : 0.001 mag/día
-    TASA ACEL. RECIENTE  : 0.006 mag/día
+    TASA ACEL. RECIENTE  : 0.000 mag/día
     RED DE ORIGEN        : ZTF
     MJD ÚLTIMA DETEC.    : 61299.3486
 =================================================================
