@@ -1,9 +1,9 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-09-18 15:02:37 UTC
-EVENTO DETECTADO : ZTF18abzbouu (AGN)
-COORDENADAS ICRS : RA 74.49436 | Dec 30.63820
+FECHA DE EMISIÓN : 2026-09-18 14:32:53 UTC
+EVENTO DETECTADO : AT_2021vfs (AGN)
+COORDENADAS ICRS : RA 47.52304 | Dec -19.48338
 -----------------------------------------------------------------
 
 [1] ENTORNO COSMOLÓGICO
@@ -14,14 +14,23 @@ COORDENADAS ICRS : RA 74.49436 | Dec 30.63820
 [2] EVALUACIÓN MAGALLANES
     PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
     INSTRUMENTO : Observatorios masivos (VLT / Gemini).
+=================================================================
+🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
+=================================================================
+ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
+Nombre Oficial Asignado : AT 2021vfs
+URL de Confirmación     : https://www.wis-tns.org/object/2021vfs
+-> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
+=================================================================
+
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : QSO (Confianza: 84.2%)
+    CLASE IA (ALeRCE)    : AGN (Confianza: 99.2%)
     RECLASIFICACIÓN      : AGN / Cuásar (Acreción térmica - Lenta)
-    EDAD HISTÓRICA       : 2607.0 días
-    SALTO LUMINOSIDAD    : 1.46 magnitudes
+    EDAD HISTÓRICA       : 2814.3 días
+    SALTO LUMINOSIDAD    : 2.08 magnitudes
     TASA ACEL. HISTÓRICA : 0.001 mag/día
-    TASA ACEL. RECIENTE  : 0.017 mag/día
+    TASA ACEL. RECIENTE  : 0.000 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61301.4286
+    MJD ÚLTIMA DETEC.    : 61301.4428
 =================================================================
