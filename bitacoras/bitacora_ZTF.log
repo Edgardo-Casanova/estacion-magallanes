@@ -8044,3 +8044,12 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-09-20 11:52:34] -> Procesando evento de interés: ZTF17aaboszk (agn)
 [2026-09-20 11:53:48] -> Procesando evento de interés: ZTF19abgmmih (blazar)
 [2026-09-20 11:54:35] -> Procesando evento de interés: ZTF18abteeqy (nova)
+[2026-09-20 12:30:13] ==================================================
+[2026-09-20 12:30:13] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-09-20 12:36:02] -> Procesando evento de interés: ZTF21abxcnao (nova)
+[2026-09-20 12:36:39] -> Procesando evento de interés: ZTF18acejdkm (agn)
+[2026-09-20 12:37:28]       [🛡️] ALERTA TNS: ZTF26abapcdo interceptado. Ya es SN 2026olk.
+[2026-09-20 12:37:28]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone AGN.
+[2026-09-20 12:37:28] -> Procesando evento de interés: SN 2026olk (agn)
+[2026-09-20 12:47:58] -> Procesando evento de interés: ZTF17aabvfpp (nova)
+[2026-09-20 12:49:04] -> Procesando evento de interés: ZTF18abxqxun (agn)
