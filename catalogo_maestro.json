@@ -16831,13 +16831,13 @@
     },
     {
         "oid": "ZTF19abriuoq",
-        "ra": 21.52861946389829,
-        "dec": -21.98885594405802,
-        "tipo": "blazar",
+        "ra": 21.528620371603633,
+        "dec": -21.988856639508136,
+        "tipo": "agn",
         "survey": "ZTF",
-        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61285.40287039988,
+        "mjd_deteccion": 61304.43405089993,
         "img_url": "data/curva_luz_ZTF19abriuoq.png"
     },
     {
@@ -24759,5 +24759,49 @@
         "vip": false,
         "mjd_deteccion": 61304.21284720022,
         "img_url": "data/curva_luz_ZTF18aazmwrx.png"
+    },
+    {
+        "oid": "ZTF22aazmyjd",
+        "ra": 31.857443803082624,
+        "dec": 11.603651810039777,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61304.43688660022,
+        "img_url": "data/curva_luz_ZTF22aazmyjd.png"
+    },
+    {
+        "oid": "ZTF18abomwsv",
+        "ra": 31.86879930097351,
+        "dec": 11.153795684677865,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61304.43688660022,
+        "img_url": "data/curva_luz_ZTF18abomwsv.png"
+    },
+    {
+        "oid": "ZTF19abpfnza",
+        "ra": 22.957523304468683,
+        "dec": -21.958884771514867,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61304.43405089993,
+        "img_url": "data/curva_luz_ZTF19abpfnza.png"
+    },
+    {
+        "oid": "ZTF18abwpsyj",
+        "ra": 22.219163091563647,
+        "dec": -23.66240439079753,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61304.43405089993,
+        "img_url": "data/curva_luz_ZTF18abwpsyj.png"
     }
 ]
