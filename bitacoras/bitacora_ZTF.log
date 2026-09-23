@@ -9010,3 +9010,31 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-09-23 05:59:26] -> Procesando evento de interés: ZTF18abnugzi (nova)
 [2026-09-23 06:01:41] -> Procesando evento de interés: ZTF19acbktxm (nova)
 [2026-09-23 06:02:21] -> Procesando evento de interés: ZTF18abtjkum (agn)
+[2026-09-23 06:30:16] ==================================================
+[2026-09-23 06:30:16] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-09-23 06:31:19] -> Procesando evento de interés: ZTF19aavpamx (agn)
+[2026-09-23 06:31:55]       [🛡️] ALERTA TNS: ZTF26abujvqh interceptado. Ya es AT 2026abti.
+[2026-09-23 06:31:55]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: supernova.
+[2026-09-23 06:31:55] -> Procesando evento de interés: AT 2026abti (supernova)
+[2026-09-23 06:37:47] -> Procesando evento de interés: ZTF18ablrmoj (blazar)
+[2026-09-23 06:38:51] -> Procesando evento de interés: ZTF18adlzzsh (nova)
+[2026-09-23 06:39:08] -> Procesando evento de interés: ZTF18adlzzpi (nova)
+[2026-09-23 06:39:53] -> Procesando evento de interés: ZTF20aazntjl (agn)
+[2026-09-23 06:41:25]       [🛡️] ALERTA TNS: ZTF18abvnsmh interceptado. Ya es AT 2019bzm.
+[2026-09-23 06:41:25]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-09-23 06:41:25] -> Procesando evento de interés: AT 2019bzm (agn)
+[2026-09-23 06:42:09] -> Procesando evento de interés: ZTF18abmbdlz (nova)
+[2026-09-23 06:46:33] -> Procesando evento de interés: ZTF18abmbdgo (nova)
+[2026-09-23 06:46:52] -> Procesando evento de interés: ZTF18absrquw (nova)
+[2026-09-23 06:47:04] -> Procesando evento de interés: ZTF18abpbojh (nova)
+[2026-09-23 06:49:57] -> Procesando evento de interés: ZTF19aadyuqw (nova)
+[2026-09-23 06:50:54] -> Procesando evento de interés: ZTF18ablwqok (nova)
+[2026-09-23 06:51:43] -> Procesando evento de interés: ZTF18ablwpym (nova)
+[2026-09-23 06:52:14] -> Procesando evento de interés: ZTF18abmbeqq (nova)
+[2026-09-23 06:52:47] -> Procesando evento de interés: ZTF18abdjpdm (nova)
+[2026-09-23 06:53:04] -> Procesando evento de interés: ZTF18aakzoph (nova)
+[2026-09-23 06:53:19] -> Procesando evento de interés: ZTF19aagewzv (agn)
+[2026-09-23 06:54:29] -> Procesando evento de interés: ZTF18abfabjh (nova)
+[2026-09-23 06:56:37] -> Procesando evento de interés: ZTF18aakgqto (blazar)
+[2026-09-23 06:59:47] -> Procesando evento de interés: ZTF18adkjwcf (agn)
+[2026-09-23 07:00:56] -> Procesando evento de interés: ZTF18abcmthc (nova)
