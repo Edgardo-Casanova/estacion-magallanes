@@ -1,9 +1,9 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-09-24 06:57:17 UTC
-OBJETO DETECTADO : ZTF19aalcqff (NOVA)
-COORDENADAS ICRS : RA 268.91957 | Dec -2.19648
+FECHA DE EMISIÓN : 2026-09-24 06:34:32 UTC
+OBJETO DETECTADO : AT_2018edc (NOVA)
+COORDENADAS ICRS : RA 266.15371 | Dec 8.77722
 DISTANCIA        : Desconocida
 -----------------------------------------------------------------
 
@@ -19,14 +19,23 @@ DISTANCIA        : Desconocida
 [4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
     PRIORIDAD    : ALTA PRIORIDAD (Variable Cataclísmica)
     INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).
+=================================================================
+🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
+=================================================================
+ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
+Nombre Oficial Asignado : AT 2018edc
+URL de Confirmación     : https://www.wis-tns.org/object/2018edc
+-> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
+=================================================================
+
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 97.0%)
+    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 99.6%)
     RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
-    EDAD HISTÓRICA       : 2766.7 días
-    SALTO LUMINOSIDAD    : 2.18 magnitudes
+    EDAD HISTÓRICA       : 2933.0 días
+    SALTO LUMINOSIDAD    : 2.97 magnitudes
     TASA ACEL. HISTÓRICA : 0.001 mag/día
-    TASA ACEL. RECIENTE  : 0.010 mag/día
+    TASA ACEL. RECIENTE  : 0.000 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61307.1969
+    MJD ÚLTIMA DETEC.    : 61307.1997
 =================================================================
