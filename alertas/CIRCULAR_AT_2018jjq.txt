@@ -1,9 +1,9 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-09-26 13:37:20 UTC
-EVENTO DETECTADO : ZTF17aaachjt (BLAZAR)
-COORDENADAS ICRS : RA 68.67080 | Dec 9.39688
+FECHA DE EMISIÓN : 2026-09-26 13:21:14 UTC
+EVENTO DETECTADO : AT_2018jjq (BLAZAR)
+COORDENADAS ICRS : RA 84.85495 | Dec -6.15003
 -----------------------------------------------------------------
 
 [1] ENTORNO COSMOLÓGICO
@@ -14,14 +14,23 @@ COORDENADAS ICRS : RA 68.67080 | Dec 9.39688
 [2] EVALUACIÓN MAGALLANES
     PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
     INSTRUMENTO : Observatorios masivos (VLT / Gemini).
+=================================================================
+🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
+=================================================================
+ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
+Nombre Oficial Asignado : AT 2018jjq
+URL de Confirmación     : https://www.wis-tns.org/object/2018jjq
+-> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
+=================================================================
+
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : Blazar (Confianza: 99.9%)
+    CLASE IA (ALeRCE)    : AGN (Confianza: 99.7%)
     RECLASIFICACIÓN      : Blazar (Chorro relativista - Alta aceleración)
-    EDAD HISTÓRICA       : 2878.0 días
-    SALTO LUMINOSIDAD    : 3.15 magnitudes
+    EDAD HISTÓRICA       : 2859.1 días
+    SALTO LUMINOSIDAD    : 3.53 magnitudes
     TASA ACEL. HISTÓRICA : 0.002 mag/día
-    TASA ACEL. RECIENTE  : 0.059 mag/día
+    TASA ACEL. RECIENTE  : 0.363 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61309.4597
+    MJD ÚLTIMA DETEC.    : 61309.4611
 =================================================================
