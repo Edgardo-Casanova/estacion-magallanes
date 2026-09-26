@@ -10273,3 +10273,35 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-09-26 05:56:56] -> Procesando evento de interés: ZTF18abefxyp (nova)
 [2026-09-26 05:57:26] -> Procesando evento de interés: ZTF18abubmwb (blazar)
 [2026-09-26 05:59:29] -> Procesando evento de interés: ZTF18abbnhmm (nova)
+[2026-09-26 06:30:13] ==================================================
+[2026-09-26 06:30:13] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-09-26 06:31:37]       [🛡️] ALERTA TNS: ZTF20acvgdxn interceptado. Ya es AT 2020lei.
+[2026-09-26 06:31:37]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: blazar.
+[2026-09-26 06:31:37] -> Procesando evento de interés: AT 2020lei (blazar)
+[2026-09-26 06:33:29] -> Procesando evento de interés: ZTF18abutcty (agn)
+[2026-09-26 06:34:07] -> Procesando evento de interés: ZTF18acxgxrh (nova)
+[2026-09-26 06:34:28] -> Procesando evento de interés: ZTF22abvcujh (agn)
+[2026-09-26 06:35:08] -> Procesando evento de interés: ZTF20abouxku (agn)
+[2026-09-26 06:35:53] -> Procesando evento de interés: ZTF19abjfsno (blazar)
+[2026-09-26 06:37:13] -> Procesando evento de interés: ZTF18abtouia (nova)
+[2026-09-26 06:37:34] -> Procesando evento de interés: ZTF18abccmvf (nova)
+[2026-09-26 06:39:19] -> Procesando evento de interés: ZTF18acdfati (nova)
+[2026-09-26 06:40:22] -> Procesando evento de interés: ZTF18abvvtdv (nova)
+[2026-09-26 06:40:42] -> Procesando evento de interés: ZTF18abnueps (blazar)
+[2026-09-26 06:41:29]       [🛡️] ALERTA TNS: ZTF18abtjmns interceptado. Ya es SN 2018lsg.
+[2026-09-26 06:41:29]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone AGN.
+[2026-09-26 06:41:29] -> Procesando evento de interés: SN 2018lsg (agn)
+[2026-09-26 06:46:40] -> Procesando evento de interés: ZTF18abtjmpx (nova)
+[2026-09-26 06:46:55] -> Procesando evento de interés: ZTF18abrymfz (nova)
+[2026-09-26 06:47:55] -> Procesando evento de interés: ZTF18admogwv (nova)
+[2026-09-26 06:48:19] -> Procesando evento de interés: ZTF18abudwyj (blazar)
+[2026-09-26 06:49:07] -> Procesando evento de interés: ZTF18abmmszc (agn)
+[2026-09-26 06:49:42] -> Procesando evento de interés: ZTF21abqnmny (agn)
+[2026-09-26 06:50:37] -> Procesando evento de interés: ZTF18acdwwfn (agn)
+[2026-09-26 06:51:17] -> Procesando evento de interés: ZTF19aaudams (agn)
+[2026-09-26 06:51:54] -> Procesando evento de interés: ZTF18abvwpum (nova)
+[2026-09-26 06:55:21] -> Procesando evento de interés: ZTF18acbblui (agn)
+[2026-09-26 06:56:21] -> Procesando evento de interés: ZTF19aayvpky (nova)
+[2026-09-26 07:00:27] -> Procesando evento de interés: ZTF18abvpluu (nova)
+[2026-09-26 07:00:42] -> Procesando evento de interés: ZTF18abtvgvn (nova)
+[2026-09-26 07:01:42] -> Procesando evento de interés: ZTF21aclkpmn (blazar)
