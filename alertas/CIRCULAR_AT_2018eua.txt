@@ -1,10 +1,10 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-09-29 05:36:21 UTC
-OBJETO DETECTADO : ZTF18abckdco (NOVA)
-COORDENADAS ICRS : RA 285.97579 | Dec -21.50969
-DISTANCIA        : ~3856.6 Años Luz
+FECHA DE EMISIÓN : 2026-09-29 05:36:52 UTC
+OBJETO DETECTADO : AT_2018eua (NOVA)
+COORDENADAS ICRS : RA 287.67488 | Dec -26.78268
+DISTANCIA        : Desconocida
 -----------------------------------------------------------------
 
 [1] ESTADO DEL SISTEMA PLANETARIO
@@ -19,14 +19,23 @@ DISTANCIA        : ~3856.6 Años Luz
 [4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
     PRIORIDAD    : ALTA PRIORIDAD (Variable Cataclísmica)
     INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).
+=================================================================
+🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
+=================================================================
+ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
+Nombre Oficial Asignado : AT 2018eua
+URL de Confirmación     : https://www.wis-tns.org/object/2018eua
+-> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
+=================================================================
+
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 99.6%)
+    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 97.8%)
     RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
-    EDAD HISTÓRICA       : 3022.8 días
-    SALTO LUMINOSIDAD    : 2.29 magnitudes
-    TASA ACEL. HISTÓRICA : 0.003 mag/día
-    TASA ACEL. RECIENTE  : 0.009 mag/día
+    EDAD HISTÓRICA       : 2977.9 días
+    SALTO LUMINOSIDAD    : 2.38 magnitudes
+    TASA ACEL. HISTÓRICA : 0.002 mag/día
+    TASA ACEL. RECIENTE  : 0.000 mag/día
     RED DE ORIGEN        : ZTF
     MJD ÚLTIMA DETEC.    : 61312.1898
 =================================================================
