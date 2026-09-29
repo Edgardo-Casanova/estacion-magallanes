@@ -1,9 +1,9 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-09-29 10:54:02 UTC
-EVENTO DETECTADO : AT_2019kkc (BLAZAR)
-COORDENADAS ICRS : RA 348.48808 | Dec -11.50514
+FECHA DE EMISIÓN : 2026-09-29 10:51:24 UTC
+EVENTO DETECTADO : SN_2026aajs (SUPERNOVA)
+COORDENADAS ICRS : RA 354.00085 | Dec -19.47133
 -----------------------------------------------------------------
 
 [1] ENTORNO COSMOLÓGICO
@@ -18,19 +18,19 @@ COORDENADAS ICRS : RA 348.48808 | Dec -11.50514
 🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
 =================================================================
 ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
-Nombre Oficial Asignado : AT 2019kkc
-URL de Confirmación     : https://www.wis-tns.org/object/2019kkc
+Nombre Oficial Asignado : SN 2026aajs
+URL de Confirmación     : https://www.wis-tns.org/object/2026aajs
 -> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
 =================================================================
 
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : AGN (Confianza: 99.7%)
-    RECLASIFICACIÓN      : Blazar (Chorro relativista - Alta aceleración)
-    EDAD HISTÓRICA       : 2883.1 días
-    SALTO LUMINOSIDAD    : 1.97 magnitudes
-    TASA ACEL. HISTÓRICA : 0.001 mag/día
-    TASA ACEL. RECIENTE  : 0.748 mag/día
+    CLASE IA (ALeRCE)    : SNIa (Confianza: 99.2%)
+    RECLASIFICACIÓN      : Candidata (Esperando confirmación TNS)
+    EDAD HISTÓRICA       : 26.1 días
+    SALTO LUMINOSIDAD    : 2.23 magnitudes
+    TASA ACEL. HISTÓRICA : 0.148 mag/día
+    TASA ACEL. RECIENTE  : 0.148 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61312.3412
+    MJD ÚLTIMA DETEC.    : 61312.3417
 =================================================================
