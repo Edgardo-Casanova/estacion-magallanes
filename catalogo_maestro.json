@@ -32657,5 +32657,16 @@
         "vip": false,
         "mjd_deteccion": 61313.54071759991,
         "img_url": "data/curva_luz_ZTF20acitxdz.png"
+    },
+    {
+        "oid": "ZTF23aacfgpn",
+        "ra": 149.07952978196232,
+        "dec": 16.831191188572525,
+        "tipo": "blazar",
+        "survey": "ZTF",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61313.52996530011,
+        "img_url": "data/curva_luz_ZTF23aacfgpn.png"
     }
 ]
