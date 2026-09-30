@@ -1,13 +1,13 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-09-30 08:52:29 UTC
-EVENTO DETECTADO : AT_2020tni (AGN)
-COORDENADAS ICRS : RA 357.90410 | Dec -12.53737
+FECHA DE EMISIÓN : 2026-09-30 08:44:50 UTC
+EVENTO DETECTADO : AT_2019mbl (BLAZAR)
+COORDENADAS ICRS : RA 359.42966 | Dec -24.84332
 -----------------------------------------------------------------
 
 [1] ENTORNO COSMOLÓGICO
-    OBJETO CENTRAL / ANFITRIONA : WISEA J235135.69-123054.9
+    OBJETO CENTRAL / ANFITRIONA : WISEA J235735.49-245042.7
     REDSHIFT (z)                : Desconocido
     DISTANCIA HUBBLE            : Desconocida N/A
 
@@ -18,19 +18,19 @@ COORDENADAS ICRS : RA 357.90410 | Dec -12.53737
 🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
 =================================================================
 ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
-Nombre Oficial Asignado : AT 2020tni
-URL de Confirmación     : https://www.wis-tns.org/object/2020tni
+Nombre Oficial Asignado : AT 2019mbl
+URL de Confirmación     : https://www.wis-tns.org/object/2019mbl
 -> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
 =================================================================
 
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : QSO (Confianza: 99.3%)
-    RECLASIFICACIÓN      : AGN / Cuásar (Acreción térmica - Lenta)
-    EDAD HISTÓRICA       : 2650.9 días
-    SALTO LUMINOSIDAD    : 1.53 magnitudes
+    CLASE IA (ALeRCE)    : AGN (Confianza: 97.8%)
+    RECLASIFICACIÓN      : Blazar (Chorro relativista - Alta aceleración)
+    EDAD HISTÓRICA       : 2619.9 días
+    SALTO LUMINOSIDAD    : 2.39 magnitudes
     TASA ACEL. HISTÓRICA : 0.001 mag/día
-    TASA ACEL. RECIENTE  : 0.000 mag/día
+    TASA ACEL. RECIENTE  : 0.339 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61313.2942
+    MJD ÚLTIMA DETEC.    : 61313.2932
 =================================================================
