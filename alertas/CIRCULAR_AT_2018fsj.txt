@@ -1,15 +1,15 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-10-02 05:02:29 UTC
-EVENTO DETECTADO : AT_2019bzm (AGN)
-COORDENADAS ICRS : RA 265.36716 | Dec 3.81435
+FECHA DE EMISIÓN : 2026-10-02 04:40:48 UTC
+EVENTO DETECTADO : AT_2018fsj (BLAZAR)
+COORDENADAS ICRS : RA 267.95679 | Dec 15.30787
 -----------------------------------------------------------------
 
 [1] ENTORNO COSMOLÓGICO
-    OBJETO CENTRAL / ANFITRIONA : 2MASX J17412808+0348514
-    REDSHIFT (z)                : 0.02300
-    DISTANCIA HUBBLE            : Entre 94.46 y 102.30 Megaparsecs (Aprox. 308.07 a 333.67 M Años luz)
+    OBJETO CENTRAL / ANFITRIONA : Desconocida (Intergaláctica / Muy lejana)
+    REDSHIFT (z)                : Desconocido
+    DISTANCIA HUBBLE            : Desconocida N/A
 
 [2] EVALUACIÓN MAGALLANES
     PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
@@ -18,19 +18,19 @@ COORDENADAS ICRS : RA 265.36716 | Dec 3.81435
 🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
 =================================================================
 ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
-Nombre Oficial Asignado : AT 2019bzm
-URL de Confirmación     : https://www.wis-tns.org/object/2019bzm
+Nombre Oficial Asignado : AT 2018fsj
+URL de Confirmación     : https://www.wis-tns.org/object/2018fsj
 -> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
 =================================================================
 
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : AGN (Confianza: 99.3%)
-    RECLASIFICACIÓN      : AGN / Cuásar (Acreción térmica - Lenta)
-    EDAD HISTÓRICA       : 2941.0 días
-    SALTO LUMINOSIDAD    : 2.50 magnitudes
-    TASA ACEL. HISTÓRICA : 0.001 mag/día
-    TASA ACEL. RECIENTE  : 0.029 mag/día
+    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 86.8%)
+    RECLASIFICACIÓN      : Blazar (Chorro relativista - Alta aceleración)
+    EDAD HISTÓRICA       : 2953.0 días
+    SALTO LUMINOSIDAD    : 1.91 magnitudes
+    TASA ACEL. HISTÓRICA : 0.002 mag/día
+    TASA ACEL. RECIENTE  : 0.488 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61315.1194
+    MJD ÚLTIMA DETEC.    : 61315.1199
 =================================================================
