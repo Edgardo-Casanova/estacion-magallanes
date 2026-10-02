@@ -13118,3 +13118,31 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-10-02 14:04:04] -> Procesando evento de interés: ZTF19abywqxg (blazar)
 [2026-10-02 14:05:38] -> Procesando evento de interés: ZTF22aaagwoy (blazar)
 [2026-10-02 14:07:14] -> Procesando evento de interés: ZTF18acpsfjd (nova)
+[2026-10-02 14:30:11] ==================================================
+[2026-10-02 14:30:11] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-10-02 14:32:20] -> Procesando evento de interés: ZTF17aabvfwo (blazar)
+[2026-10-02 14:33:21] -> Procesando evento de interés: ZTF19abydddz (agn)
+[2026-10-02 14:34:21] -> Procesando evento de interés: ZTF18abuhqfi (nova)
+[2026-10-02 14:35:12] -> Procesando evento de interés: ZTF18abuiywf (nova)
+[2026-10-02 14:35:45]       [🛡️] ALERTA TNS: ZTF20acufmte interceptado. Ya es SN 2020abdr.
+[2026-10-02 14:35:45]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone AGN.
+[2026-10-02 14:35:45] -> Procesando evento de interés: SN 2020abdr (agn)
+[2026-10-02 14:36:43] -> Procesando evento de interés: ZTF19acyodrd (nova)
+[2026-10-02 14:36:55] -> Procesando evento de interés: ZTF18abuykwv (nova)
+[2026-10-02 14:37:14] -> Procesando evento de interés: ZTF18abycuvk (nova)
+[2026-10-02 14:39:35] -> Procesando evento de interés: ZTF18abtywsw (nova)
+[2026-10-02 14:40:54] -> Procesando evento de interés: ZTF19aadbbct (agn)
+[2026-10-02 14:42:59] -> Procesando evento de interés: ZTF18admwrqw (blazar)
+[2026-10-02 14:46:34] -> Procesando evento de interés: ZTF17aaeaoem (supernova)
+[2026-10-02 14:47:40] -> Procesando evento de interés: ZTF18abqtxjd (agn)
+[2026-10-02 14:48:33] -> Procesando evento de interés: ZTF22aatkfrj (agn)
+[2026-10-02 14:49:43] -> Procesando evento de interés: ZTF18acvbqtc (blazar)
+[2026-10-02 14:51:56] -> Procesando evento de interés: ZTF18aabeyoj (nova)
+[2026-10-02 14:56:05]       [🛡️] ALERTA TNS: ZTF26abwqfcv interceptado. Ya es AT 2026acrr.
+[2026-10-02 14:56:05]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: supernova.
+[2026-10-02 14:56:05] -> Procesando evento de interés: AT 2026acrr (supernova)
+[2026-10-02 14:57:48] -> Procesando evento de interés: ZTF18acsldfi (agn)
+[2026-10-02 14:59:05] -> Procesando evento de interés: ZTF17aaafglk (nova)
+[2026-10-02 14:59:39] -> Procesando evento de interés: ZTF18abychez (blazar)
+[2026-10-02 15:00:15] -> Procesando evento de interés: ZTF18acgbhoy (nova)
+[2026-10-02 15:00:55] -> Procesando evento de interés: ZTF17aacqdpz (nova)
