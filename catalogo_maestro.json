@@ -2839,13 +2839,13 @@
     },
     {
         "oid": "ZTF19abjplxc",
-        "ra": 27.636388184589485,
-        "dec": 13.507955510346422,
+        "ra": 27.6363873687977,
+        "dec": 13.50795543425697,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61313.360671299975,
+        "mjd_deteccion": 61315.29998840019,
         "img_url": "data/curva_luz_ZTF19abjplxc.png"
     },
     {
@@ -6799,13 +6799,13 @@
     },
     {
         "oid": "ZTF19aadbbct",
-        "ra": 27.426134315256657,
-        "dec": 2.1938897785731606,
+        "ra": 27.426133337003414,
+        "dec": 2.1938904936007297,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61277.36780089978,
+        "mjd_deteccion": 61315.299050900154,
         "img_url": "data/curva_luz_ZTF19aadbbct.png"
     },
     {
@@ -6887,13 +6887,13 @@
     },
     {
         "oid": "ZTF18abtgljz",
-        "ra": 28.511521821971538,
-        "dec": 8.397529909396464,
+        "ra": 28.511521866405623,
+        "dec": 8.397529817721155,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61313.360671299975,
+        "mjd_deteccion": 61315.29998840019,
         "img_url": "data/curva_luz_ZTF18abtgljz.png"
     },
     {
@@ -9054,13 +9054,13 @@
     },
     {
         "oid": "ZTF18acvcgor",
-        "ra": 36.84654547896253,
-        "dec": 1.4019600389744131,
+        "ra": 36.84654597399082,
+        "dec": 1.4019601190460564,
         "tipo": "blazar",
         "survey": "ZTF",
         "analisis": "Blazar (Chorro relativista - Alta aceleración)",
         "vip": false,
-        "mjd_deteccion": 61305.32958329981,
+        "mjd_deteccion": 61315.29952549981,
         "img_url": "data/curva_luz_ZTF18acvcgor.png"
     },
     {
@@ -11595,13 +11595,13 @@
     },
     {
         "oid": "AT 2018isx",
-        "ra": 31.821998369100864,
-        "dec": 7.90276259667661,
+        "ra": 31.82199836425326,
+        "dec": 7.902762630801046,
         "tipo": "blazar",
         "survey": "ZTF",
         "analisis": "Blazar (Chorro relativista - Alta aceleración) [Interceptado por TNS]",
         "vip": false,
-        "mjd_deteccion": 61314.490335599985,
+        "mjd_deteccion": 61315.29952549981,
         "img_url": "data/curva_luz_AT_2018isx.png"
     },
     {
@@ -14235,13 +14235,13 @@
     },
     {
         "oid": "ZTF21achspij",
-        "ra": 34.02569700629931,
-        "dec": 1.6270090604415088,
+        "ra": 34.02569700629395,
+        "dec": 1.6270090810251026,
         "tipo": "blazar",
         "survey": "ZTF",
         "analisis": "Blazar (Chorro relativista - Alta aceleración)",
         "vip": false,
-        "mjd_deteccion": 61314.490335599985,
+        "mjd_deteccion": 61315.29952549981,
         "img_url": "data/curva_luz_ZTF21achspij.png"
     },
     {
@@ -26599,13 +26599,13 @@
     },
     {
         "oid": "ZTF20acwsdtd",
-        "ra": 30.564540812868586,
-        "dec": 5.650901141184135,
+        "ra": 30.564540827143542,
+        "dec": 5.650901193532439,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61314.490335599985,
+        "mjd_deteccion": 61315.29952549981,
         "img_url": "data/curva_luz_ZTF20acwsdtd.png"
     },
     {
@@ -34351,5 +34351,16 @@
         "vip": false,
         "mjd_deteccion": 61315.27256939979,
         "img_url": "data/curva_luz_ZTF22abqxnzp.png"
+    },
+    {
+        "oid": "ZTF17aaboyok",
+        "ra": 31.91604411252182,
+        "dec": 5.421348909374233,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61315.29952549981,
+        "img_url": "data/curva_luz_ZTF17aaboyok.png"
     }
 ]
