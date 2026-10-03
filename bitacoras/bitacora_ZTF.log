@@ -13288,3 +13288,24 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-10-03 01:30:16] APUNTANDO TELESCOPIO A RED: ZTF
 [2026-10-03 02:30:17] ==================================================
 [2026-10-03 02:30:17] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-10-03 03:30:12] ==================================================
+[2026-10-03 03:30:12] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-10-03 03:31:35] -> Procesando evento de interés: ZTF18adqkvsh (blazar)
+[2026-10-03 03:32:34] -> Procesando evento de interés: ZTF18abmbdfi (agn)
+[2026-10-03 03:33:30] -> Procesando evento de interés: ZTF18abfzzuo (nova)
+[2026-10-03 03:33:48] -> Procesando evento de interés: ZTF19aasibed (agn)
+[2026-10-03 03:35:10] -> Procesando evento de interés: ZTF18abdjpdm (nova)
+[2026-10-03 03:36:06] -> Procesando evento de interés: ZTF18ablwqok (nova)
+[2026-10-03 03:36:38] -> Procesando evento de interés: ZTF18abcmthc (nova)
+[2026-10-03 03:39:01] -> Procesando evento de interés: ZTF18adkjwcf (blazar)
+[2026-10-03 03:40:51] -> Procesando evento de interés: ZTF18abmbdlz (nova)
+[2026-10-03 03:46:36]       [🛡️] ALERTA TNS: ZTF18abvnsmh interceptado. Ya es AT 2019bzm.
+[2026-10-03 03:46:36]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-10-03 03:46:36] -> Procesando evento de interés: AT 2019bzm (agn)
+[2026-10-03 03:47:20]       [🛡️] ALERTA TNS: ZTF19aavmutb interceptado. Ya es AT 2019gcz.
+[2026-10-03 03:47:20]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: blazar.
+[2026-10-03 03:47:20] -> Procesando evento de interés: AT 2019gcz (blazar)
+[2026-10-03 03:49:17] -> Procesando evento de interés: ZTF19aaesoxc (agn)
+[2026-10-03 03:50:01] -> Procesando evento de interés: ZTF18abffzxq (nova)
+[2026-10-03 03:54:59] -> Procesando evento de interés: ZTF19aaejtut (blazar)
+[2026-10-03 03:56:36] -> Procesando evento de interés: ZTF19aagiqoh (agn)
