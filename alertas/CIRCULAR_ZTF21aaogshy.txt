@@ -1,16 +1,14 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-10-03 06:01:25 UTC
-OBJETO DETECTADO : ZTF18abrymfz (NOVA)
-COORDENADAS ICRS : RA 316.99221 | Dec -5.29486
-DISTANCIA        : ~623.0 Años Luz
+FECHA DE EMISIÓN : 2026-10-03 05:43:29 UTC
+OBJETO DETECTADO : ZTF21aaogshy (NOVA)
+COORDENADAS ICRS : RA 308.70328 | Dec 0.94979
+DISTANCIA        : Desconocida
 -----------------------------------------------------------------
 
 [1] ESTADO DEL SISTEMA PLANETARIO
-    ALINEACIÓN ÓPTICA: 2 exoplaneta(s) confirmado(s) en la misma línea de visión (60 arcsec).
-        * HU Aqr AB b | Masa: 1875.20 M_Tierra | Órbita: 2390.00 días
-        * HU Aqr AB c | Masa: 1430.23 M_Tierra | Órbita: 4368.00 días
+    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).
 
 [2] EVALUACIÓN TERMODINÁMICA (SED QUIESCENTE)
     FIRMA TÉRMICA: Datos insuficientes para evaluación térmica SED.
@@ -23,12 +21,12 @@ DISTANCIA        : ~623.0 Años Luz
     INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 99.5%)
+    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 97.6%)
     RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
-    EDAD HISTÓRICA       : 2955.8 días
-    SALTO LUMINOSIDAD    : 4.42 magnitudes
-    TASA ACEL. HISTÓRICA : 0.007 mag/día
-    TASA ACEL. RECIENTE  : 0.015 mag/día
+    EDAD HISTÓRICA       : 2037.6 días
+    SALTO LUMINOSIDAD    : 2.30 magnitudes
+    TASA ACEL. HISTÓRICA : 0.002 mag/día
+    TASA ACEL. RECIENTE  : 0.063 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61316.1496
+    MJD ÚLTIMA DETEC.    : 61316.1515
 =================================================================
