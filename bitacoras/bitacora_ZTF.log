@@ -13713,3 +13713,28 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-10-04 06:57:47] -> Procesando evento de interés: ZTF18abvbezk (blazar)
 [2026-10-04 06:58:25] -> Procesando evento de interés: ZTF18absigwe (nova)
 [2026-10-04 06:59:14] -> Procesando evento de interés: ZTF18abnpbnx (nova)
+[2026-10-04 07:30:13] ==================================================
+[2026-10-04 07:30:13] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-10-04 07:32:13] -> Procesando evento de interés: ZTF19aaimxzf (agn)
+[2026-10-04 07:32:52] -> Procesando evento de interés: ZTF18abqdzco (nova)
+[2026-10-04 07:33:27] -> Procesando evento de interés: ZTF18abtdwwx (agn)
+[2026-10-04 07:34:28] -> Procesando evento de interés: ZTF18abnutyc (agn)
+[2026-10-04 07:35:53] -> Procesando evento de interés: ZTF18abtlvxf (nova)
+[2026-10-04 07:36:12] -> Procesando evento de interés: ZTF18acsxkgl (agn)
+[2026-10-04 07:36:56]       [🛡️] ALERTA TNS: ZTF18absgnio interceptado. Ya es SN 2018fuu.
+[2026-10-04 07:36:56]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone BLAZAR.
+[2026-10-04 07:36:56] -> Procesando evento de interés: SN 2018fuu (blazar)
+[2026-10-04 07:37:32] -> Procesando evento de interés: ZTF19abfrnff (blazar)
+[2026-10-04 07:37:50] -> Procesando evento de interés: ZTF18accbfgx (agn)
+[2026-10-04 07:38:38] -> Procesando evento de interés: ZTF18adcbsoy (agn)
+[2026-10-04 07:39:06] -> Procesando evento de interés: ZTF19abtqsri (agn)
+[2026-10-04 07:43:09] -> Procesando evento de interés: ZTF18abtxkgh (nova)
+[2026-10-04 07:43:24] -> Procesando evento de interés: ZTF20acqjvxc (agn)
+[2026-10-04 07:45:17]       [🛡️] ALERTA TNS: ZTF18abomklq interceptado. Ya es SN 2018fpi.
+[2026-10-04 07:45:17]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone AGN.
+[2026-10-04 07:45:17] -> Procesando evento de interés: SN 2018fpi (agn)
+[2026-10-04 07:52:18] -> Procesando evento de interés: ZTF18abpnppk (blazar)
+[2026-10-04 07:55:43] -> Procesando evento de interés: ZTF18admqdpq (nova)
+[2026-10-04 07:56:46] -> Procesando evento de interés: ZTF18abteeil (agn)
+[2026-10-04 07:58:46] -> Procesando evento de interés: ZTF22aavhvea (agn)
+[2026-10-04 07:59:38] -> Procesando evento de interés: ZTF19aayrjbb (agn)
