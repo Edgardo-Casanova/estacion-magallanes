@@ -14825,3 +14825,32 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-10-06 12:54:37] -> Procesando evento de interés: ZTF24abfojgu (nova)
 [2026-10-06 12:57:11] -> Procesando evento de interés: ZTF17aadptwh (agn)
 [2026-10-06 12:58:21] -> Procesando evento de interés: ZTF17aadigug (nova)
+[2026-10-06 13:30:13] ==================================================
+[2026-10-06 13:30:13] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-10-06 13:36:14] -> Procesando evento de interés: ZTF18abtgdxy (agn)
+[2026-10-06 13:37:26] -> Procesando evento de interés: ZTF20abpywkj (agn)
+[2026-10-06 13:38:43] -> Procesando evento de interés: ZTF18adomypa (blazar)
+[2026-10-06 13:39:30] -> Procesando evento de interés: ZTF18acslfue (agn)
+[2026-10-06 13:40:27] -> Procesando evento de interés: ZTF19aadwfur (nova)
+[2026-10-06 13:41:07]       [🛡️] ALERTA TNS: ZTF22abovhzu interceptado. Ya es SN 2026aars.
+[2026-10-06 13:41:07]       -> [!] TNS Confirma: Magallanes acata la clasificación IAU.
+[2026-10-06 13:41:07] -> Procesando evento de interés: SN 2026aars (supernova)
+[2026-10-06 13:41:53] -> Procesando evento de interés: ZTF18acsjhdn (nova)
+[2026-10-06 13:42:35]       [🛡️] ALERTA TNS: ZTF26abmgyka interceptado. Ya es SN 2026yiz.
+[2026-10-06 13:42:35]       -> [!] TNS Confirma: Magallanes acata la clasificación IAU.
+[2026-10-06 13:42:35] -> Procesando evento de interés: SN 2026yiz (supernova)
+[2026-10-06 13:43:12] -> Procesando evento de interés: ZTF18achudph (nova)
+[2026-10-06 13:47:58] -> Procesando evento de interés: ZTF18aaaduvz (nova)
+[2026-10-06 13:51:57] -> Procesando evento de interés: ZTF18aaaefef (nova)
+[2026-10-06 13:53:47] -> Procesando evento de interés: ZTF19aaptiyd (agn)
+[2026-10-06 13:55:05] -> Procesando evento de interés: ZTF18acsjgpm (blazar)
+[2026-10-06 13:55:28]       [🛡️] ALERTA TNS: ZTF26aaskzvj interceptado. Ya es SN 2026jrc.
+[2026-10-06 13:55:28]       -> [!] TNS Confirma: Magallanes acata la clasificación IAU.
+[2026-10-06 13:55:28] -> Procesando evento de interés: SN 2026jrc (supernova)
+[2026-10-06 13:56:31] -> Procesando evento de interés: ZTF18achqqfp (nova)
+[2026-10-06 13:56:53] -> Procesando evento de interés: ZTF17aacmkme (agn)
+[2026-10-06 13:57:49]       [🛡️] ALERTA TNS: ZTF18acrtwlx interceptado. Ya es SN 2018hhr.
+[2026-10-06 13:57:49]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone AGN.
+[2026-10-06 13:57:49] -> Procesando evento de interés: SN 2018hhr (agn)
+[2026-10-06 13:59:13] -> Procesando evento de interés: ZTF18acmibqr (agn)
+[2026-10-06 14:00:16] -> Procesando evento de interés: ZTF18actzyzv (agn)
