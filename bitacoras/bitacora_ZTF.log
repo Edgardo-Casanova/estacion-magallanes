@@ -15528,3 +15528,22 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-10-08 05:53:48] -> Procesando evento de interés: ZTF18abtkgyj (blazar)
 [2026-10-08 05:56:51] -> Procesando evento de interés: ZTF20abpddrh (agn)
 [2026-10-08 05:59:25] -> Procesando evento de interés: ZTF19aazdeyg (agn)
+[2026-10-08 06:30:10] ==================================================
+[2026-10-08 06:30:10] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-10-08 06:34:43]       [🛡️] ALERTA TNS: ZTF18acevgdk interceptado. Ya es AT 2021yjt.
+[2026-10-08 06:34:43]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-10-08 06:34:43] -> Procesando evento de interés: AT 2021yjt (agn)
+[2026-10-08 06:41:20] -> Procesando evento de interés: ZTF18abnckcm (nova)
+[2026-10-08 06:42:35] -> Procesando evento de interés: ZTF18adnlabx (agn)
+[2026-10-08 06:44:53] -> Procesando evento de interés: ZTF18aborhxq (agn)
+[2026-10-08 06:46:07] -> Procesando evento de interés: ZTF18abnutyc (agn)
+[2026-10-08 06:46:48] -> Procesando evento de interés: ZTF18abspnfw (nova)
+[2026-10-08 06:47:14] -> Procesando evento de interés: ZTF18accboxe (agn)
+[2026-10-08 06:47:50] -> Procesando evento de interés: ZTF19aayikjo (agn)
+[2026-10-08 06:49:19] -> Procesando evento de interés: ZTF18abqdzco (nova)
+[2026-10-08 06:50:53] -> Procesando evento de interés: ZTF18abtdwwx (blazar)
+[2026-10-08 06:52:45] -> Procesando evento de interés: ZTF19accvnsd (agn)
+[2026-10-08 06:55:26] -> Procesando evento de interés: ZTF23abslkpu (agn)
+[2026-10-08 06:56:44]       [🛡️] ALERTA TNS: ZTF18acafgbb interceptado. Ya es AT 2019hxy.
+[2026-10-08 06:56:44]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-10-08 06:56:44] -> Procesando evento de interés: AT 2019hxy (agn)
