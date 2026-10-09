@@ -15990,3 +15990,22 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-10-09 04:54:47] -> Procesando evento de interés: ZTF18abvbgyw (nova)
 [2026-10-09 04:55:18] -> Procesando evento de interés: ZTF18abnjzsf (agn)
 [2026-10-09 04:56:31] -> Procesando evento de interés: ZTF18absjryd (nova)
+[2026-10-09 05:30:11] ==================================================
+[2026-10-09 05:30:11] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-10-09 05:31:48]       [🛡️] ALERTA TNS: ZTF18abnueif interceptado. Ya es AT 2019hbe.
+[2026-10-09 05:31:48]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: nova.
+[2026-10-09 05:31:48] -> Procesando evento de interés: AT 2019hbe (nova)
+[2026-10-09 05:32:32] -> Procesando evento de interés: ZTF18absvfav (nova)
+[2026-10-09 05:33:25] -> Procesando evento de interés: ZTF18abmqtvq (agn)
+[2026-10-09 05:34:36] -> Procesando evento de interés: ZTF18abnmtvc (nova)
+[2026-10-09 05:35:49] -> Procesando evento de interés: ZTF18abudvqs (nova)
+[2026-10-09 05:36:53] -> Procesando evento de interés: ZTF18abuduye (nova)
+[2026-10-09 05:37:31] -> Procesando evento de interés: ZTF19aaauhyr (agn)
+[2026-10-09 05:44:07] -> Procesando evento de interés: ZTF18acatiny (agn)
+[2026-10-09 05:46:16] -> Procesando evento de interés: ZTF19aawgbtl (agn)
+[2026-10-09 05:46:58] -> Procesando evento de interés: ZTF17aaboszk (agn)
+[2026-10-09 05:47:36]       [🛡️] ALERTA TNS: ZTF18abolvoh interceptado. Ya es SN 2018evc.
+[2026-10-09 05:47:36]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone AGN.
+[2026-10-09 05:47:36] -> Procesando evento de interés: SN 2018evc (agn)
+[2026-10-09 05:48:42] -> Procesando evento de interés: ZTF18aceiput (agn)
+[2026-10-09 05:53:27] -> Procesando evento de interés: ZTF18abvpnyr (blazar)
