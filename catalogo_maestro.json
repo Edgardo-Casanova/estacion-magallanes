@@ -42381,5 +42381,16 @@
         "vip": false,
         "mjd_deteccion": 59253.24510420021,
         "img_url": "data/curva_luz_SN_2026acwx.png"
+    },
+    {
+        "oid": "ZTF19abhacdw",
+        "ra": 33.82281261974032,
+        "dec": 17.886616903919546,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61327.43368060002,
+        "img_url": "data/curva_luz_ZTF19abhacdw.png"
     }
 ]

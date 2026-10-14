@@ -17093,3 +17093,48 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-10-14 12:09:32] -> Procesando evento de interés: ZTF19aaeueky (nova)
 [2026-10-14 12:12:03] -> Procesando evento de interés: ZTF25aawtuxu (blazar)
 [2026-10-14 12:14:41] -> Procesando evento de interés: ZTF18abtslci (agn)
+[2026-10-14 12:30:14] ==================================================
+[2026-10-14 12:30:14] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-10-14 12:31:33] -> Procesando evento de interés: ZTF19acmsdrt (agn)
+[2026-10-14 12:31:59] -> Procesando evento de interés: ZTF18aaadrxo (nova)
+[2026-10-14 12:33:49] -> Procesando evento de interés: ZTF19acmwtoo (nova)
+[2026-10-14 12:34:16] -> Procesando evento de interés: ZTF21abieyke (agn)
+[2026-10-14 12:34:48] -> Procesando evento de interés: ZTF18acsyrzw (nova)
+[2026-10-14 12:35:04] -> Procesando evento de interés: ZTF19abovkny (agn)
+[2026-10-14 12:35:54] -> Procesando evento de interés: ZTF19aaqfrhs (agn)
+[2026-10-14 12:36:58] -> Procesando evento de interés: ZTF18acsjgrx (nova)
+[2026-10-14 12:37:44] -> Procesando evento de interés: ZTF18aaadyjs (nova)
+[2026-10-14 12:38:19]       [🛡️] ALERTA TNS: ZTF18acwugwx interceptado. Ya es AT 2018kfx.
+[2026-10-14 12:38:19]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-10-14 12:38:19] -> Procesando evento de interés: AT 2018kfx (agn)
+[2026-10-14 12:38:52] -> Procesando evento de interés: ZTF18acuyexz (nova)
+[2026-10-14 12:39:05] -> Procesando evento de interés: ZTF24aaqwqii (agn)
+[2026-10-14 12:39:46] -> Procesando evento de interés: ZTF18abvmdpk (agn)
+[2026-10-14 12:41:18] -> Procesando evento de interés: ZTF19acwkuze (agn)
+[2026-10-14 12:41:40] -> Procesando evento de interés: ZTF19aaccdgz (agn)
+[2026-10-14 12:42:37] -> Procesando evento de interés: ZTF19aabkyan (nova)
+[2026-10-14 12:42:55] -> Procesando evento de interés: ZTF18abtsxpp (agn)
+[2026-10-14 12:43:34] -> Procesando evento de interés: ZTF19actbnwx (agn)
+[2026-10-14 12:44:30] -> Procesando evento de interés: ZTF19abrnekq (nova)
+[2026-10-14 12:45:57] -> Procesando evento de interés: ZTF18acvcmqy (blazar)
+[2026-10-14 12:46:51] -> Procesando evento de interés: ZTF18actygnj (agn)
+[2026-10-14 12:47:51]       [🛡️] ALERTA TNS: ZTF22abovhzu interceptado. Ya es SN 2026aars.
+[2026-10-14 12:47:51]       -> [!] TNS Confirma: Magallanes acata la clasificación IAU.
+[2026-10-14 12:47:51] -> Procesando evento de interés: SN 2026aars (supernova)
+[2026-10-14 12:48:27] -> Procesando evento de interés: ZTF19abegshb (agn)
+[2026-10-14 12:49:09]       [🛡️] ALERTA TNS: ZTF18aaadtdc interceptado. Ya es AT 2018hve.
+[2026-10-14 12:49:09]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-10-14 12:49:09] -> Procesando evento de interés: AT 2018hve (agn)
+[2026-10-14 12:49:57] -> Procesando evento de interés: ZTF18abtgdxy (agn)
+[2026-10-14 12:50:45] -> Procesando evento de interés: ZTF18adomypa (blazar)
+[2026-10-14 12:53:04] -> Procesando evento de interés: ZTF21aaohphw (blazar)
+[2026-10-14 12:53:44] -> Procesando evento de interés: ZTF18acrcorr (nova)
+[2026-10-14 12:56:02] -> Procesando evento de interés: ZTF18acmzyhj (blazar)
+[2026-10-14 12:57:52] -> Procesando evento de interés: ZTF19aaaapzc (agn)
+[2026-10-14 12:58:31] -> Procesando evento de interés: ZTF17aaafglk (nova)
+[2026-10-14 12:59:46] -> Procesando evento de interés: ZTF18acalpex (nova)
+[2026-10-14 13:02:01] -> Procesando evento de interés: ZTF25aawtuxu (blazar)
+[2026-10-14 13:03:48] -> Procesando evento de interés: ZTF19aaeueky (nova)
+[2026-10-14 13:04:07] -> Procesando evento de interés: ZTF19abhacdw (nova)
+[2026-10-14 13:04:26] -> Procesando evento de interés: ZTF18aaadqwp (agn)
+[2026-10-14 13:05:03] -> Procesando evento de interés: ZTF18abtslci (agn)
