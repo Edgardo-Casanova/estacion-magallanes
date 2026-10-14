@@ -16863,3 +16863,52 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-10-14 05:59:57] -> Procesando evento de interés: AT 2019aalb (agn)
 [2026-10-14 06:01:14] -> Procesando evento de interés: ZTF20abpddrh (agn)
 [2026-10-14 06:02:58] -> Procesando evento de interés: ZTF19aaycngx (agn)
+[2026-10-14 06:30:14] ==================================================
+[2026-10-14 06:30:14] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-10-14 06:31:10] Timeout: El objeto ZTF26acbdosg provocó un atasco de red y fue omitido.
+[2026-10-14 06:31:45] Timeout: El objeto ZTF26acbdors provocó un atasco de red y fue omitido.
+[2026-10-14 06:32:20] Timeout: El objeto ZTF26acbdosf provocó un atasco de red y fue omitido.
+[2026-10-14 06:32:55] Timeout: El objeto ZTF26acbdorx provocó un atasco de red y fue omitido.
+[2026-10-14 06:33:30] Timeout: El objeto ZTF26acbdorz provocó un atasco de red y fue omitido.
+[2026-10-14 06:34:08] Timeout: El objeto ZTF18abzrwpc provocó un atasco de red y fue omitido.
+[2026-10-14 06:34:48] Timeout: El objeto ZTF20aadzwil provocó un atasco de red y fue omitido.
+[2026-10-14 06:35:23] Timeout: El objeto ZTF18absyvdf provocó un atasco de red y fue omitido.
+[2026-10-14 06:35:34] -> Procesando evento de interés: ZTF18acaturv (agn)
+[2026-10-14 06:36:23] Timeout: El objeto ZTF17aabukon provocó un atasco de red y fue omitido.
+[2026-10-14 06:37:10] Timeout: El objeto ZTF18acafstu provocó un atasco de red y fue omitido.
+[2026-10-14 06:38:22] Timeout: El objeto ZTF20abvhlxi provocó un atasco de red y fue omitido.
+[2026-10-14 06:38:58] Timeout: El objeto ZTF26acbdomm provocó un atasco de red y fue omitido.
+[2026-10-14 06:39:49] -> Procesando evento de interés: ZTF18abuehxo (agn)
+[2026-10-14 06:40:45] Timeout: El objeto ZTF26aaygohm provocó un atasco de red y fue omitido.
+[2026-10-14 06:41:57] -> Procesando evento de interés: ZTF18abutcty (agn)
+[2026-10-14 06:42:43] -> Procesando evento de interés: ZTF18absvepf (agn)
+[2026-10-14 06:43:16] -> Procesando evento de interés: ZTF19abdctkh (blazar)
+[2026-10-14 06:45:28] -> Procesando evento de interés: ZTF18adodsfg (nova)
+[2026-10-14 06:46:59] -> Procesando evento de interés: ZTF18adlocnj (nova)
+[2026-10-14 06:47:16] -> Procesando evento de interés: ZTF18abudwyj (agn)
+[2026-10-14 06:50:01] -> Procesando evento de interés: ZTF19aayryzm (agn)
+[2026-10-14 06:50:34] -> Procesando evento de interés: ZTF18aceiijw (blazar)
+[2026-10-14 06:51:06] -> Procesando evento de interés: ZTF22aaqkjgl (agn)
+[2026-10-14 06:53:21] -> Procesando evento de interés: ZTF22acaapur (nova)
+[2026-10-14 06:55:29]       [🛡️] ALERTA TNS: ZTF18acehyzg interceptado. Ya es AT 2019ihq.
+[2026-10-14 06:55:29]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-10-14 06:55:29] -> Procesando evento de interés: AT 2019ihq (agn)
+[2026-10-14 06:55:47] -> Procesando evento de interés: ZTF20accpnxr (blazar)
+[2026-10-14 06:57:47] -> Procesando evento de interés: ZTF18acdxcam (nova)
+[2026-10-14 06:59:51] -> Procesando evento de interés: ZTF23aaaadbn (nova)
+[2026-10-14 07:00:33] Timeout: El objeto ZTF23aaxrmmu provocó un atasco de red y fue omitido.
+[2026-10-14 07:01:25] -> Procesando evento de interés: ZTF20abnlqjd (nova)
+[2026-10-14 07:02:25] -> Procesando evento de interés: ZTF22aavufkm (blazar)
+[2026-10-14 07:03:14]       [🛡️] ALERTA TNS: ZTF18abxyyiv interceptado. Ya es AT 2019hxo.
+[2026-10-14 07:03:14]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-10-14 07:03:14] -> Procesando evento de interés: AT 2019hxo (agn)
+[2026-10-14 07:03:50]       [🛡️] ALERTA TNS: ZTF19acfwuxh interceptado. Ya es AT 2019aalb.
+[2026-10-14 07:03:50]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-10-14 07:03:50] -> Procesando evento de interés: AT 2019aalb (agn)
+[2026-10-14 07:05:14] -> Procesando evento de interés: ZTF18abvpkml (agn)
+[2026-10-14 07:08:10] -> Procesando evento de interés: ZTF19adcycje (agn)
+[2026-10-14 07:08:34] -> Procesando evento de interés: ZTF18adpodlb (nova)
+[2026-10-14 07:11:20] -> Procesando evento de interés: ZTF18acetwar (nova)
+[2026-10-14 07:11:38] -> Procesando evento de interés: ZTF20ablausu (agn)
+[2026-10-14 07:12:11] -> Procesando evento de interés: ZTF23abkkerw (nova)
+[2026-10-14 07:13:35] -> Procesando evento de interés: ZTF18acbxifb (blazar)
