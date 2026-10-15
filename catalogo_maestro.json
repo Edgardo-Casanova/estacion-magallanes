@@ -40,7 +40,7 @@
         "survey": "TNS_GLOBAL",
         "analisis": "SN Ia",
         "vip": false,
-        "mjd_deteccion": 61262.021313293204,
+        "mjd_deteccion": 61328.646523192314,
         "img_url": "data/curva_luz_SN_2026xkx.png"
     },
     {
@@ -260,7 +260,7 @@
         "survey": "TNS_GLOBAL",
         "analisis": "SN Ia",
         "vip": false,
-        "mjd_deteccion": 61264.02138794214,
+        "mjd_deteccion": 61328.64617761644,
         "img_url": "data/curva_luz_SN_2026xca.png"
     },
     {
@@ -29932,13 +29932,13 @@
     },
     {
         "oid": "SN 2026aajs",
-        "ra": 354.0008504834468,
-        "dec": -19.471331242336777,
+        "ra": 354.00089997522,
+        "dec": -19.471333778474,
         "tipo": "supernova",
         "survey": "TNS_GLOBAL",
-        "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
+        "analisis": "SN Ia",
         "vip": false,
-        "mjd_deteccion": 61312.34165510023,
+        "mjd_deteccion": 61327.27317130007,
         "img_url": "data/curva_luz_SN_2026aajs.png"
     },
     {
@@ -42087,11 +42087,11 @@
     },
     {
         "oid": "SN 2026aacj",
-        "ra": 28.360249430344417,
-        "dec": 10.123567739537183,
+        "ra": 28.360254191156,
+        "dec": 10.123556221898,
         "tipo": "supernova",
         "survey": "TNS_GLOBAL",
-        "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
+        "analisis": "SN Ia",
         "vip": false,
         "mjd_deteccion": 61327.422268500086,
         "img_url": "data/curva_luz_SN_2026aacj.png"
@@ -42313,7 +42313,7 @@
         "survey": "TNS_GLOBAL",
         "analisis": "SN Ia",
         "vip": false,
-        "mjd_deteccion": 61328.56466603454,
+        "mjd_deteccion": 61328.648283964816,
         "img_url": "data/curva_luz_SN_2026aaiv.png"
     },
     {
@@ -43281,7 +43281,7 @@
         "survey": "TNS_GLOBAL",
         "analisis": "SN Ic",
         "vip": false,
-        "mjd_deteccion": 61328.563168054134,
+        "mjd_deteccion": 61328.64807678826,
         "img_url": "data/curva_luz_SN_2026ziq.png"
     },
     {
@@ -43347,7 +43347,7 @@
         "survey": "TNS_GLOBAL",
         "analisis": "SN Ia",
         "vip": false,
-        "mjd_deteccion": 61328.5636425112,
+        "mjd_deteccion": 61328.6464328317,
         "img_url": "data/curva_luz_SN_2026yid.png"
     },
     {
@@ -44119,5 +44119,401 @@
         "vip": false,
         "mjd_deteccion": 61292.42072919989,
         "img_url": "data/curva_luz_SN_2026wet.png"
+    },
+    {
+        "oid": "SN 2026vgn",
+        "ra": 59.291352978322,
+        "dec": -18.77628020596,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN II",
+        "vip": false,
+        "mjd_deteccion": 61316.45622690022,
+        "img_url": "data/curva_luz_SN_2026vgn.png"
+    },
+    {
+        "oid": "SN 2026aajq",
+        "ra": 10.421610128528,
+        "dec": 21.348113204714,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia-91T-like",
+        "vip": false,
+        "mjd_deteccion": 61328.64608799949,
+        "img_url": "data/curva_luz_SN_2026aajq.png"
+    },
+    {
+        "oid": "SN 2026aabz",
+        "ra": 220.987715714,
+        "dec": -18.4816142857,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN II",
+        "vip": false,
+        "mjd_deteccion": 61328.64613239053,
+        "img_url": "data/curva_luz_SN_2026aabz.png"
+    },
+    {
+        "oid": "SN 2026aadx",
+        "ra": 55.56588664014,
+        "dec": -4.73118454847,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN IIP",
+        "vip": false,
+        "mjd_deteccion": 61314.39385419991,
+        "img_url": "data/curva_luz_SN_2026aadx.png"
+    },
+    {
+        "oid": "SN 2026wyz",
+        "ra": 208.1477143,
+        "dec": 19.1320521,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61328.64627771493,
+        "img_url": "data/curva_luz_SN_2026wyz.png"
+    },
+    {
+        "oid": "SN 2026wep",
+        "ra": 310.4083768,
+        "dec": -18.5837767,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61296.25527779991,
+        "img_url": "data/curva_luz_SN_2026wep.png"
+    },
+    {
+        "oid": "SN 2026zgr",
+        "ra": 330.1430286,
+        "dec": -27.6732693,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61288.367928199936,
+        "img_url": "data/curva_luz_SN_2026zgr.png"
+    },
+    {
+        "oid": "SN 2026xku",
+        "ra": 249.717378042,
+        "dec": 32.558313222,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61328.64647768301,
+        "img_url": "data/curva_luz_SN_2026xku.png"
+    },
+    {
+        "oid": "SN 2026wgm",
+        "ra": 181.711489091,
+        "dec": -36.2685190909,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61328.64657004988,
+        "img_url": "data/curva_luz_SN_2026wgm.png"
+    },
+    {
+        "oid": "SN 2026wts",
+        "ra": 10.8838845,
+        "dec": 31.1874399,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61328.646614890604,
+        "img_url": "data/curva_luz_SN_2026wts.png"
+    },
+    {
+        "oid": "SN 2026yef",
+        "ra": 354.9810423,
+        "dec": 21.3270885,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 59094.36054399982,
+        "img_url": "data/curva_luz_SN_2026yef.png"
+    },
+    {
+        "oid": "SN 2026zwh",
+        "ra": 248.756976697,
+        "dec": 33.1136738623,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61328.64671449578,
+        "img_url": "data/curva_luz_SN_2026zwh.png"
+    },
+    {
+        "oid": "SN 2026zzt",
+        "ra": 234.7218823,
+        "dec": 6.5823565,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61328.64675960847,
+        "img_url": "data/curva_luz_SN_2026zzt.png"
+    },
+    {
+        "oid": "SN 2026aafw",
+        "ra": 342.73694901754,
+        "dec": -31.609731111529,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61328.64685874507,
+        "img_url": "data/curva_luz_SN_2026aafw.png"
+    },
+    {
+        "oid": "SN 2026wjs",
+        "ra": 356.962078889,
+        "dec": 49.4804655556,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61328.64690411626,
+        "img_url": "data/curva_luz_SN_2026wjs.png"
+    },
+    {
+        "oid": "SN 2026wbq",
+        "ra": 328.553308816,
+        "dec": -20.1693027404,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN II",
+        "vip": false,
+        "mjd_deteccion": 61322.1260532001,
+        "img_url": "data/curva_luz_SN_2026wbq.png"
+    },
+    {
+        "oid": "SN 2026vsg",
+        "ra": 344.440467632,
+        "dec": 0.974228152632,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN IIn",
+        "vip": false,
+        "mjd_deteccion": 61327.28350690007,
+        "img_url": "data/curva_luz_SN_2026vsg.png"
+    },
+    {
+        "oid": "SN 2026pwu",
+        "ra": 46.7855321,
+        "dec": 23.3826117,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia-pec",
+        "vip": false,
+        "mjd_deteccion": 61246.45512730023,
+        "img_url": "data/curva_luz_SN_2026pwu.png"
+    },
+    {
+        "oid": "SN 2026zbq",
+        "ra": 19.592363395858,
+        "dec": -15.933501850593,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN II",
+        "vip": false,
+        "mjd_deteccion": 61327.29074069997,
+        "img_url": "data/curva_luz_SN_2026zbq.png"
+    },
+    {
+        "oid": "SN 2026aacp",
+        "ra": 229.3269526,
+        "dec": 55.4551458,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61328.64723433195,
+        "img_url": "data/curva_luz_SN_2026aacp.png"
+    },
+    {
+        "oid": "SN 2026zck",
+        "ra": 352.21319,
+        "dec": -13.5052604,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61284.337835600134,
+        "img_url": "data/curva_luz_SN_2026zck.png"
+    },
+    {
+        "oid": "SN 2026zwj",
+        "ra": 32.36168697909,
+        "dec": 37.261296748539,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN IIP",
+        "vip": false,
+        "mjd_deteccion": 58759.367361099925,
+        "img_url": "data/curva_luz_SN_2026zwj.png"
+    },
+    {
+        "oid": "SN 2026xby",
+        "ra": 9.71410824385,
+        "dec": -16.1089638817,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN I",
+        "vip": false,
+        "mjd_deteccion": 61260.439919000026,
+        "img_url": "data/curva_luz_SN_2026xby.png"
+    },
+    {
+        "oid": "SN 2026wjd",
+        "ra": 354.1655261,
+        "dec": 47.2887449,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61328.64749822535,
+        "img_url": "data/curva_luz_SN_2026wjd.png"
+    },
+    {
+        "oid": "SN 2026zct",
+        "ra": 4.9481365395142,
+        "dec": -7.4991191581474,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61301.360451399814,
+        "img_url": "data/curva_luz_SN_2026zct.png"
+    },
+    {
+        "oid": "SN 2026zsx",
+        "ra": 247.29341288698,
+        "dec": 50.289708016109,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia-91T-like",
+        "vip": false,
+        "mjd_deteccion": 61328.647696285785,
+        "img_url": "data/curva_luz_SN_2026zsx.png"
+    },
+    {
+        "oid": "SN 2026uyc",
+        "ra": 298.67435,
+        "dec": -12.8516385,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61274.274386600126,
+        "img_url": "data/curva_luz_SN_2026uyc.png"
+    },
+    {
+        "oid": "SN 2026sun",
+        "ra": 60.8629257143,
+        "dec": -57.7297657143,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN II",
+        "vip": false,
+        "mjd_deteccion": 61328.647804747845,
+        "img_url": "data/curva_luz_SN_2026sun.png"
+    },
+    {
+        "oid": "SN 2026wih",
+        "ra": 65.832593333383,
+        "dec": -12.115661357562,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61321.40542820003,
+        "img_url": "data/curva_luz_SN_2026wih.png"
+    },
+    {
+        "oid": "SN 2026zwr",
+        "ra": 358.19603208271,
+        "dec": 19.796690866984,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 59783.40925930021,
+        "img_url": "data/curva_luz_SN_2026zwr.png"
+    },
+    {
+        "oid": "SN 2026aari",
+        "ra": 46.276154883333,
+        "dec": 23.585897533333,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61321.40259259986,
+        "img_url": "data/curva_luz_SN_2026aari.png"
+    },
+    {
+        "oid": "SN 2026znj",
+        "ra": 19.596827588555,
+        "dec": 13.37989536996,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61303.34932869999,
+        "img_url": "data/curva_luz_SN_2026znj.png"
+    },
+    {
+        "oid": "SN 2026xqu",
+        "ra": 48.0544488,
+        "dec": -10.4832819,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia-pec",
+        "vip": false,
+        "mjd_deteccion": 61321.36322919978,
+        "img_url": "data/curva_luz_SN_2026xqu.png"
+    },
+    {
+        "oid": "SN 2026vba",
+        "ra": 200.6600802,
+        "dec": -6.8838579,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN I",
+        "vip": false,
+        "mjd_deteccion": 61249.1782176001,
+        "img_url": "data/curva_luz_SN_2026vba.png"
+    },
+    {
+        "oid": "SN 2026zsj",
+        "ra": 45.2337233,
+        "dec": 6.2571337,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61288.42025459977,
+        "img_url": "data/curva_luz_SN_2026zsj.png"
+    },
+    {
+        "oid": "SN 2026aaag",
+        "ra": 102.0513077,
+        "dec": 51.2356696,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN II",
+        "vip": false,
+        "mjd_deteccion": 61328.64832893184,
+        "img_url": "data/curva_luz_SN_2026aaag.png"
     }
 ]
