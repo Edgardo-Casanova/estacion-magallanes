@@ -1,36 +1,20 @@
-=================================================================
- CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
-=================================================================
-FECHA DE EMISIÓN : 2026-10-14 08:37:55 UTC
-EVENTO DETECTADO : SN_2026weo (SUPERNOVA)
-COORDENADAS ICRS : RA 17.59173 | Dec -9.56892
------------------------------------------------------------------
+======================================================================
+[REGISTRO OFICIAL TNS] - EVENTO CONFIRMADO
+======================================================================
+ID de Evento          : SN 2026weo
+Clasificación Oficial : SN Ia
+Red de Descubrimiento : ZTF
+Coordenadas (ICRS)    : RA 17.59175 | Dec -9.56896
 
-[1] ENTORNO COSMOLÓGICO
-    OBJETO CENTRAL / ANFITRIONA : Desconocida (Intergaláctica / Muy lejana)
-    REDSHIFT (z)                : Desconocido
-    DISTANCIA HUBBLE            : Desconocida N/A
+[CÁLCULO DE DISTANCIA (Basado en z = 0.02372)]
+Entre 97.41 y 105.51 Megaparsecs
+(Aprox. 317.72 a 344.11 M Años luz)
 
-[2] EVALUACIÓN MAGALLANES
-    PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
-    INSTRUMENTO : Observatorios masivos (VLT / Gemini).
-=================================================================
-🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
-=================================================================
-ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
-Nombre Oficial Asignado : SN 2026weo
-URL de Confirmación     : https://www.wis-tns.org/object/2026weo
--> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
-=================================================================
-
-
-[5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : SNIa (Confianza: 98.9%)
-    RECLASIFICACIÓN      : Candidata (Esperando confirmación TNS)
-    EDAD HISTÓRICA       : 81.9 días
-    SALTO LUMINOSIDAD    : 4.77 magnitudes
-    TASA ACEL. HISTÓRICA : 0.252 mag/día
-    TASA ACEL. RECIENTE  : 0.000 mag/día
-    RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61327.3451
-=================================================================
+======================================================================
+🔗 ENLACE OFICIAL DEL TRANSIENT NAME SERVER:
+https://www.wis-tns.org/object/2026weo
+======================================================================
+* NOTA: Este evento ya está confirmado por la IAU. No se requiere 
+  emisión de telegramas ni seguimiento de validación por parte 
+  de la Estación Magallanes.
+======================================================================
