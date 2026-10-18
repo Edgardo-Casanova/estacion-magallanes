@@ -6018,13 +6018,13 @@
     },
     {
         "oid": "ZTF17aabnzdk",
-        "ra": 120.77910977077931,
-        "dec": 28.8155486039294,
+        "ra": 120.77910655428319,
+        "dec": 28.8155482389062,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61285.52171299979,
+        "mjd_deteccion": 61331.472870400175,
         "img_url": "data/curva_luz_ZTF17aabnzdk.png"
     },
     {
@@ -11793,13 +11793,13 @@
     },
     {
         "oid": "ZTF17aaakuhr",
-        "ra": 123.23697424150397,
-        "dec": 19.199235073894986,
+        "ra": 123.23697510162665,
+        "dec": 19.199235233216147,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61305.51877309987,
+        "mjd_deteccion": 61331.47240740014,
         "img_url": "data/curva_luz_ZTF17aaakuhr.png"
     },
     {
@@ -11815,13 +11815,13 @@
     },
     {
         "oid": "ZTF17aaaipza",
-        "ra": 120.76623788959711,
-        "dec": 25.2741336386393,
+        "ra": 120.76623879961123,
+        "dec": 25.274134119973194,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61280.52063659998,
+        "mjd_deteccion": 61331.472870400175,
         "img_url": "data/curva_luz_ZTF17aaaipza.png"
     },
     {
@@ -11892,13 +11892,13 @@
     },
     {
         "oid": "ZTF17aabrxfg",
-        "ra": 125.66541320501966,
-        "dec": 25.98872560158392,
+        "ra": 125.66541533620634,
+        "dec": 25.98872420721043,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61304.519895799924,
+        "mjd_deteccion": 61331.47334490018,
         "img_url": "data/curva_luz_ZTF17aabrxfg.png"
     },
     {
@@ -26005,13 +26005,13 @@
     },
     {
         "oid": "AT 2018gkr",
-        "ra": 124.3600571611361,
-        "dec": 10.202798582977763,
-        "tipo": "agn",
+        "ra": 124.360054562886,
+        "dec": 10.2027934793349,
+        "tipo": "blazar",
         "survey": "ZTF",
-        "analisis": "AGN / Cuásar (Acreción térmica - Lenta) [Interceptado por TNS]",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración) [Interceptado por TNS]",
         "vip": false,
-        "mjd_deteccion": 61305.51975690015,
+        "mjd_deteccion": 61331.47193290014,
         "img_url": "data/curva_luz_AT_2018gkr.png"
     },
     {
@@ -28150,13 +28150,13 @@
     },
     {
         "oid": "ZTF18abxbniv",
-        "ra": 127.82635811199815,
-        "dec": 26.506998764822555,
+        "ra": 127.82635816051321,
+        "dec": 26.50699936446823,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61308.51843750011,
+        "mjd_deteccion": 61331.47334490018,
         "img_url": "data/curva_luz_ZTF18abxbniv.png"
     },
     {
@@ -47012,5 +47012,137 @@
         "vip": false,
         "mjd_deteccion": 61331.43336809985,
         "img_url": "data/curva_luz_ZTF20aafecss.png"
+    },
+    {
+        "oid": "ZTF18abxbmks",
+        "ra": 125.2133663332403,
+        "dec": 23.895905356075016,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61331.47334490018,
+        "img_url": "data/curva_luz_ZTF18abxbmks.png"
+    },
+    {
+        "oid": "ZTF18aallxzh",
+        "ra": 119.90365040437015,
+        "dec": 29.586284813764916,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61331.472870400175,
+        "img_url": "data/curva_luz_ZTF18aallxzh.png"
+    },
+    {
+        "oid": "AT 2023aclf",
+        "ra": 117.08170002937757,
+        "dec": 28.26498646846089,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta) [Interceptado por TNS]",
+        "vip": false,
+        "mjd_deteccion": 61331.472870400175,
+        "img_url": "data/curva_luz_AT_2023aclf.png"
+    },
+    {
+        "oid": "ZTF18aaasgau",
+        "ra": 124.86380328383848,
+        "dec": 22.638795932530154,
+        "tipo": "blazar",
+        "survey": "ZTF",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61331.472870400175,
+        "img_url": "data/curva_luz_ZTF18aaasgau.png"
+    },
+    {
+        "oid": "ZTF20acxylbi",
+        "ra": 120.15296744609276,
+        "dec": 15.684050262887455,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61331.47240740014,
+        "img_url": "data/curva_luz_ZTF20acxylbi.png"
+    },
+    {
+        "oid": "AT 2018gqq",
+        "ra": 123.15244684843323,
+        "dec": 16.329185807762425,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa) [Interceptado por TNS]",
+        "vip": false,
+        "mjd_deteccion": 61331.47240740014,
+        "img_url": "data/curva_luz_AT_2018gqq.png"
+    },
+    {
+        "oid": "ZTF18adgdnjr",
+        "ra": 120.1410516052387,
+        "dec": 19.40462496594606,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61331.47240740014,
+        "img_url": "data/curva_luz_ZTF18adgdnjr.png"
+    },
+    {
+        "oid": "ZTF18aafumxr",
+        "ra": 125.61613393630321,
+        "dec": 15.791920295559601,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61331.47240740014,
+        "img_url": "data/curva_luz_ZTF18aafumxr.png"
+    },
+    {
+        "oid": "AT 2019pya",
+        "ra": 120.38053006242237,
+        "dec": 19.98082271658049,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta) [Interceptado por TNS]",
+        "vip": false,
+        "mjd_deteccion": 61331.47240740014,
+        "img_url": "data/curva_luz_AT_2019pya.png"
+    },
+    {
+        "oid": "ZTF18aaafzlz",
+        "ra": 120.59586287362912,
+        "dec": 9.197300777059779,
+        "tipo": "nova",
+        "survey": "ZTF",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61331.47193290014,
+        "img_url": "data/curva_luz_ZTF18aaafzlz.png"
+    },
+    {
+        "oid": "ZTF18aagfjja",
+        "ra": 120.8641040058767,
+        "dec": 8.697843770977292,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61331.47193290014,
+        "img_url": "data/curva_luz_ZTF18aagfjja.png"
+    },
+    {
+        "oid": "SN 2020abtf",
+        "ra": 119.89367385822482,
+        "dec": 15.29999648283338,
+        "tipo": "agn",
+        "survey": "TNS_GLOBAL",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta) [Interceptado por TNS]",
+        "vip": false,
+        "mjd_deteccion": 61331.47193290014,
+        "img_url": "data/curva_luz_SN_2020abtf.png"
     }
 ]
