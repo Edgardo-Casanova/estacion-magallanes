@@ -18041,3 +18041,25 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-10-18 07:00:35] -> Procesando evento de interés: ZTF18abwnmnc (agn)
 [2026-10-18 07:01:05] -> Procesando evento de interés: ZTF18abvpgxm (nova)
 [2026-10-18 07:02:21] -> Procesando evento de interés: ZTF19aavprpp (agn)
+[2026-10-18 07:30:14] ==================================================
+[2026-10-18 07:30:14] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-10-18 07:31:14] -> Procesando evento de interés: ZTF19acjweyl (agn)
+[2026-10-18 07:33:35] -> Procesando evento de interés: ZTF18acafgfq (nova)
+[2026-10-18 07:35:08] -> Procesando evento de interés: ZTF22aavhvea (agn)
+[2026-10-18 07:37:06] -> Procesando evento de interés: ZTF18abqdzco (nova)
+[2026-10-18 07:38:25] -> Procesando evento de interés: ZTF19abfrnff (blazar)
+[2026-10-18 07:43:17] -> Procesando evento de interés: ZTF18absgnqy (nova)
+[2026-10-18 07:45:28] -> Procesando evento de interés: ZTF26aawxrrm (agn)
+[2026-10-18 07:45:55] -> Procesando evento de interés: ZTF19aazdeyg (blazar)
+[2026-10-18 07:47:12] -> Procesando evento de interés: ZTF18abzweqf (agn)
+[2026-10-18 07:49:08] -> Procesando evento de interés: ZTF18acatiny (agn)
+[2026-10-18 07:49:48] -> Procesando evento de interés: ZTF21abprnfw (agn)
+[2026-10-18 07:50:20] -> Procesando evento de interés: ZTF19acvwiws (nova)
+[2026-10-18 07:51:37] -> Procesando evento de interés: ZTF18admqdpq (nova)
+[2026-10-18 07:51:51]       [🛡️] ALERTA TNS: ZTF18abolvoh interceptado. Ya es SN 2018evc.
+[2026-10-18 07:51:51]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone AGN.
+[2026-10-18 07:51:51] -> Procesando evento de interés: SN 2018evc (agn)
+[2026-10-18 07:54:12] -> Procesando evento de interés: ZTF19acgkvud (agn)
+[2026-10-18 07:54:32] -> Procesando evento de interés: ZTF18abvpnyr (blazar)
+[2026-10-18 07:55:04] -> Procesando evento de interés: ZTF22aapphol (blazar)
+[2026-10-18 07:56:28] -> Procesando evento de interés: ZTF18acaturv (agn)
