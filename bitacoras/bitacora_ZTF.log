@@ -18884,3 +18884,18 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-10-20 06:43:33]       -> [!] TNS Confirma: Magallanes acata la clasificación IAU.
 [2026-10-20 06:43:33] -> Procesando evento de interés: SN 2026aaft (supernova)
 [2026-10-20 06:57:09] -> Procesando evento de interés: ZTF20abrxvww (blazar)
+[2026-10-20 07:30:19] ==================================================
+[2026-10-20 07:30:19] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-10-20 07:33:49] -> Procesando evento de interés: ZTF18acvbqtc (agn)
+[2026-10-20 07:35:31] -> Procesando evento de interés: ZTF20acxcqlb (agn)
+[2026-10-20 07:37:52]       [🛡️] ALERTA TNS: ZTF18aaadtdc interceptado. Ya es AT 2018hve.
+[2026-10-20 07:37:52]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-10-20 07:37:52] -> Procesando evento de interés: AT 2018hve (agn)
+[2026-10-20 07:38:38] -> Procesando evento de interés: ZTF18acvcmqy (agn)
+[2026-10-20 07:41:16] -> Procesando evento de interés: ZTF18abtsxpp (agn)
+[2026-10-20 07:46:44] -> Procesando evento de interés: ZTF18acalpex (nova)
+[2026-10-20 07:47:12] -> Procesando evento de interés: ZTF18abtslci (agn)
+[2026-10-20 07:53:57]       [🛡️] ALERTA TNS: ZTF18abwkczr interceptado. Ya es SN 2018grc.
+[2026-10-20 07:53:57]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone NOVA.
+[2026-10-20 07:53:57] -> Procesando evento de interés: SN 2018grc (nova)
+[2026-10-20 07:54:25] -> Procesando evento de interés: ZTF18acgpdgn (nova)
