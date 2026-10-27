@@ -3345,13 +3345,13 @@
     },
     {
         "oid": "SN 2026xcs",
-        "ra": 5.079282992673569,
-        "dec": -9.970549248922222,
+        "ra": 5.079283634325005,
+        "dec": -9.970549492665011,
         "tipo": "supernova",
         "survey": "TNS_GLOBAL",
         "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
         "vip": false,
-        "mjd_deteccion": 61333.24120370019,
+        "mjd_deteccion": 61340.30420139991,
         "img_url": "data/curva_luz_SN_2026xcs.png"
     },
     {
@@ -7228,13 +7228,13 @@
     },
     {
         "oid": "ZTF18abtmeie",
-        "ra": 10.554500831341343,
-        "dec": 7.527216125634946,
+        "ra": 10.554502696152623,
+        "dec": 7.5272161374915205,
         "tipo": "nova",
         "survey": "ZTF",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61329.326226899866,
+        "mjd_deteccion": 61340.30326389987,
         "img_url": "data/curva_luz_ZTF18abtmeie.png"
     },
     {
@@ -9120,13 +9120,13 @@
     },
     {
         "oid": "ZTF21abjzmpz",
-        "ra": 1.7073190447199749,
-        "dec": -7.797464388129112,
+        "ra": 1.7073179320978653,
+        "dec": -7.797465226494754,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61333.3234490999,
+        "mjd_deteccion": 61340.30420139991,
         "img_url": "data/curva_luz_ZTF21abjzmpz.png"
     },
     {
@@ -23981,13 +23981,13 @@
     },
     {
         "oid": "ZTF18abqdzeg",
-        "ra": 6.762128488854039,
-        "dec": -2.8630855944823654,
+        "ra": 6.762131085456431,
+        "dec": -2.863098175614407,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61323.27454859996,
+        "mjd_deteccion": 61340.3037268999,
         "img_url": "data/curva_luz_ZTF18abqdzeg.png"
     },
     {
@@ -45090,13 +45090,13 @@
     },
     {
         "oid": "ZTF18abtyoco",
-        "ra": 10.837965855959839,
-        "dec": -12.389353422375795,
+        "ra": 10.837965872952513,
+        "dec": -12.38935358376651,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61334.30090280017,
+        "mjd_deteccion": 61340.305138899945,
         "img_url": "data/curva_luz_ZTF18abtyoco.png"
     },
     {
