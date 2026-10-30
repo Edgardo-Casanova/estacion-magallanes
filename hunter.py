@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 24.3 (NÚCLEO DEFINITIVO + VETO TNS + TIMEOUT ANTI-CUELGUE)
+VERSIÓN    : 24.4 (NÚCLEO DEFINITIVO + INTEGRACIÓN LSST/RUBIN BETA)
 =============================================================================
 """
 
@@ -42,7 +42,7 @@ CATALOGO_JSON = "catalogo_maestro.json"
 
 diccionario_categorias = {
     "ZTF": ["SNIa", "SNIbc", "SNII", "SLSN", "CV/Nova", "QSO", "Blazar", "TDE", "AGN"],
-    "LSST": ["SNIa", "SNIbc", "SNII", "SLSN", "Nova", "Mdwarf-flare", "TDE"]
+    "LSST": ["SN", "AGN", "VS"] # Diccionario oficial Stamp Classifier Rubin Beta 20260421
 }
 
 for directorio in ["alertas", "data", "alertas_comunidad", "bitacoras"]:
@@ -335,7 +335,7 @@ def consultar_tns_sur(client, catalogo_dict):
                                     candidatos_alerce = candidatos_alerce.sort_values(by='lastmjd', ascending=False)
                                 
                                 oid_tns = candidatos_alerce.iloc[0]['oid']
-                                oid_tns = oid_tns.decode('utf-8') if isinstance(oid_tns, bytes) else oid_tns
+                                oid_tns = oid_tns.decode('utf-8') if isinstance(oid_tns, bytes) else str(oid_tns)
                                 det = client.query_detections(oid=oid_tns, format='pandas')
                                 
                             signal.alarm(0) # Apaga la alarma si funcionó rápido
@@ -367,7 +367,7 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
 🔗 ENLACE OFICIAL DEL TRANSIENT NAME SERVER:
 {url_tns}
 ======================================================================
-* NOTA: Este evento ya está confirmado por la IAU. No se requiere 
+- NOTA: Este evento ya está confirmado por la IAU. No se requiere 
   emisión de telegramas ni seguimiento de validación por parte 
   de la Estación Magallanes.
 ======================================================================"""
@@ -408,7 +408,7 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
     registrar_log("[+] Procesamiento TNS finalizado. Archivo de boletín purgado desde la línea 3.", log_file)
 
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (24.3 - NÚCLEO DEFINITIVO + VETO TNS + TIMEOUT ANTI-CUELGUE) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (24.4 - NÚCLEO DEFINITIVO + LSST) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     url_tap = "https://tap.alerce.online/tap"
@@ -455,6 +455,11 @@ def main():
             resultados = servicio_tap.search(consulta_adql)
             candidatos = resultados.to_table().to_pandas()
             
+            # --- PARCHE LSST: Blindar el ID como texto puro antes de iterar ---
+            if 'oid' in candidatos.columns:
+                candidatos['oid'] = candidatos['oid'].apply(lambda x: x.decode('utf-8') if isinstance(x, bytes) else "{:.0f}".format(x) if isinstance(x, (float, int)) else str(x))
+            # ------------------------------------------------------------------
+            
             if candidatos.empty:
                 print(f"   (0 candidatos encontrados desde MJD {limite_mjd})")
                 continue
@@ -467,7 +472,7 @@ def main():
                 print(f"   [Paquete {(i//tamano_paquete) + 1}/{(len(candidatos)//tamano_paquete) + 1}] Procesando lote de {len(paquete)} objetos...")
                 
                 for index, fila in paquete.iterrows():
-                    oid = fila['oid'].decode('utf-8') if isinstance(fila['oid'], bytes) else fila['oid']
+                    oid = str(fila['oid'])
                     
                     try:
                         # --- CANDADO DE TIEMPO ANTI-ZOMBI ---
@@ -563,15 +568,10 @@ def main():
 
                             latitud_b, en_plano, es_viejo = coordenadas.galactic.b.degree, abs(coordenadas.galactic.b.degree) <= 10.0, edad_dias > 150
 
-                            if (mjd_max - mjd_min_fotometria) > 30:
-                                recientes, antiguas = det[det['mjd'] >= mjd_max - 30], det[det['mjd'] < mjd_max - 30]
-                                if not recientes.empty and not antiguas.empty: 
-                                    pass # (Lógica absorbida en el nuevo bloque de bandas superior)
-
                             # =========================================================
                             # 🛡️ BLOQUE CORREGIDO: VETO QSO E INTELIGENCIA
                             # =========================================================
-                            veto_ia_cv = ("CV" in clase_ia_final.upper() or "NOVA" in clase_ia_final.upper()) and probabilidad > 0.90
+                            veto_ia_cv = ("CV" in clase_ia_final.upper() or "NOVA" in clase_ia_final.upper() or "VS" in clase_ia_final.upper()) and probabilidad > 0.90
                             veto_ia_qso = any(x in clase_ia_final.upper() for x in ["QSO", "AGN", "BLAZAR"]) and probabilidad > 0.60
                             analisis_magallanes, tipo_evento_final = "DESCONOCIDO", "descarte"
 
