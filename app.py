@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : app.py (Visor Web Institucional / Panel de Control)
-VERSIÓN    : 19.8 (FASE 7: INDICADORES VISUALES DE ESPECTROS)
+VERSIÓN    : 20.0 (INTEGRACIÓN TELEMETRÍA LSST INDEPENDIENTE)
 =============================================================================
 """
 
@@ -56,18 +56,20 @@ def obtener_estado_red(ruta_log):
         if "APUNTANDO TELESCOPIO" in linea: break
             
     texto_final = "\n".join(sesion_actual)
-    if "Error" in texto_final: return "Error API", "🔴"
+    if "Error" in texto_final or "Timeout" in texto_final: return "Error / Caída", "🔴"
     elif any(x in texto_final for x in ["Procesadas", "Conexión exitosa", "Patrullaje", "Procesando evento"]): return "Operativa", "🟢"
     return "En reposo", "🟡"
 
 # =====================================================================
 # BARRA LATERAL DE NAVEGACIÓN Y FILTRO DE FECHA
 # =====================================================================
-st.sidebar.image("logo.jpeg", width="stretch")
+try:
+    st.sidebar.image("logo.jpeg", width="stretch")
+except Exception: pass
 st.sidebar.markdown("[⬅️ Volver a la Estación Magallanes](https://www.estacionmagallanes.org)")
 st.sidebar.divider()
 
-if st.sidebar.button("🔄 Sincronizar Radar", width="stretch"):
+if st.sidebar.button("🔄 Sincronizar Radar", width="stretch"): # Cambiado de use_container_width por compatibilidad
     st.rerun()
 
 st.sidebar.title("Panel de Control")
@@ -103,28 +105,30 @@ for ev in catalogo_datos:
 if vista == "Dashboard Principal (Telemetría)":
     st.title("🛰️ Estación Magallanes - Telemetría")
     
+    # --- CORRECCIÓN CRÍTICA: LECTURA INDEPENDIENTE DE LOS 3 RADARES ---
     estado_ztf, icono_ztf = obtener_estado_red("bitacoras/bitacora_ZTF.log")
-    estado_lsst, icono_lsst = obtener_estado_red("bitacoras/bitacora_TNS_GLOBAL.log")
+    estado_lsst, icono_lsst = obtener_estado_red("bitacoras/bitacora_LSST.log")
+    estado_tns, icono_tns = obtener_estado_red("bitacoras/bitacora_TNS_GLOBAL.log")
     
-    col_red1, col_red2 = st.columns(2)
+    col_red1, col_red2, col_red3 = st.columns(3)
     col_red1.metric("ZTF (Norte)", estado_ztf, icono_ztf)
-    col_red2.metric("LSST / TNS (Sur)", estado_lsst, icono_lsst)
+    col_red2.metric("LSST / Rubin (Sur)", estado_lsst, icono_lsst)
+    col_red3.metric("TNS (IAU Global)", estado_tns, icono_tns)
+    # -------------------------------------------------------------------
     
     st.divider()
     
-    # --- CORRECCIÓN DE MÉTRICAS: SEPARACIÓN DE FÍSICA VS ORIGEN ---
     total_tns = sum(1 for e in catalogo_filtrado if e.get("survey") == "TNS_GLOBAL" and e.get("tipo") == "supernova")
     total_ztf_cand = sum(1 for e in catalogo_filtrado if e.get("survey") != "TNS_GLOBAL" and e.get("tipo") == "supernova")
     total_novas = sum(1 for e in catalogo_filtrado if e.get("tipo") == "nova")
     total_agn = sum(1 for e in catalogo_filtrado if e.get("tipo") in ["agn", "blazar"])
     total_tdes = sum(1 for e in catalogo_filtrado if e.get("tipo") == "tde")
     total_flares = sum(1 for e in catalogo_filtrado if e.get("tipo") == "flare" and e.get("vip", False))
-    # --------------------------------------------------------------
     
     st.subheader(f"📊 Resumen del Catálogo Activo ({fecha_seleccionada.strftime('%Y-%m-%d')})")
     col_det1, col_det2, col_det3, col_det4, col_det5, col_det6 = st.columns(6)
     col_det1.metric("✅ Supernovas (TNS)", str(total_tns), "Históricas", delta_color="normal")
-    col_det2.metric("🚨 Candidatas (ZTF)", str(total_ztf_cand), "Requiere ATel", delta_color="inverse")
+    col_det2.metric("🚨 Candidatas (ZTF/LSST)", str(total_ztf_cand), "Requiere ATel", delta_color="inverse")
     col_det3.metric("💥 Novas", str(total_novas), "Erupción", delta_color="normal")
     col_det4.metric("🕳️ AGN/Blazar", str(total_agn), "Extragaláctico", delta_color="normal")
     col_det5.metric("🌀 Agujeros Negros", str(total_tdes), "Disrupción TDE", delta_color="normal")
@@ -149,7 +153,7 @@ if vista == "Dashboard Principal (Telemetría)":
         cat_mapa = st.selectbox("Filtrar Mapa:", [
             "👁️ Ver Todo", 
             "✅ Supernovas Confirmadas (TNS)", 
-            "🚨 Supernovas Candidatas (ZTF)", 
+            "🚨 Supernovas Candidatas (ZTF/LSST)", 
             "💥 Novas", 
             "🕳️ AGN/Blazares", 
             "🌀 Agujeros Negros (TDE)",
@@ -159,7 +163,7 @@ if vista == "Dashboard Principal (Telemetría)":
     if catalogo_filtrado:
         datos_plotly = {
             "Confirmada TNS": {"ra": [], "dec": [], "text": [], "color": "#00FF00", "symbol": "star-diamond"},
-            "Candidata ZTF (Acción)": {"ra": [], "dec": [], "text": [], "color": "#FF0000", "symbol": "cross"},
+            "Candidata": {"ra": [], "dec": [], "text": [], "color": "#FF0000", "symbol": "cross"},
             "Blazar (Chorro)": {"ra": [], "dec": [], "text": [], "color": "#FF00FF", "symbol": "triangle-down"},
             "AGN (Cuásar)": {"ra": [], "dec": [], "text": [], "color": "#FF9900", "symbol": "triangle-up"},
             "Agujero Negro (TDE)": {"ra": [], "dec": [], "text": [], "color": "#FFD700", "symbol": "x"},
@@ -171,20 +175,18 @@ if vista == "Dashboard Principal (Telemetría)":
             t, survey, vip = ev.get("tipo", ""), ev.get("survey", ""), ev.get("vip", False)
             cat = None
             
-            # --- CORRECCIÓN DE MAPA: RESPETAR LA FÍSICA ---
             if t == "tde": cat = "Agujero Negro (TDE)"
             elif t == "nova": cat = "Nova / Cataclísmica"
             elif t == "blazar": cat = "Blazar (Chorro)"
             elif t == "agn": cat = "AGN (Cuásar)"
             elif t == "flare": cat = "Flare (Enana M VIP)" if vip else None
             elif t == "supernova" and survey == "TNS_GLOBAL": cat = "Confirmada TNS"
-            elif t == "supernova": cat = "Candidata ZTF (Acción)"
-            # ----------------------------------------------
+            elif t == "supernova": cat = "Candidata"
             
             if not cat: continue
             
             if cat_mapa == "✅ Supernovas Confirmadas (TNS)" and cat != "Confirmada TNS": continue
-            if cat_mapa == "🚨 Supernovas Candidatas (ZTF)" and cat != "Candidata ZTF (Acción)": continue
+            if cat_mapa == "🚨 Supernovas Candidatas (ZTF/LSST)" and cat != "Candidata": continue
             if cat_mapa == "💥 Novas" and cat != "Nova / Cataclísmica": continue
             if cat_mapa == "🕳️ AGN/Blazares" and cat not in ["Blazar (Chorro)", "AGN (Cuásar)"]: continue
             if cat_mapa == "🌀 Agujeros Negros (TDE)" and cat != "Agujero Negro (TDE)": continue
@@ -241,6 +243,7 @@ if vista == "Dashboard Principal (Telemetría)":
                     marker=dict(symbol=datos["symbol"], size=16 if "Candidata" in nombre_cat or "TDE" in nombre_cat else 12, color=datos["color"], opacity=0.8, line=dict(width=1, color='white'))
                 ))
 
+        # Reemplazado width="stretch" por parametrización en layout para evitar warning en plotly
         fig.update_layout(
             plot_bgcolor='#0e1117', paper_bgcolor='#0e1117', font=dict(color='lightgray'),
             xaxis=dict(title='Ascensión Recta (Grados)', range=[0, 360], gridcolor='rgba(255,255,255,0.1)'),
@@ -248,7 +251,7 @@ if vista == "Dashboard Principal (Telemetría)":
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
             margin=dict(l=40, r=40, t=40, b=40), hovermode='closest'
         )
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
     else:
         st.info(f"No hay eventos astronómicos registrados en el mapa para la fecha {fecha_seleccionada.strftime('%Y-%m-%d')}.")
 
@@ -269,7 +272,7 @@ elif vista == "Feed de Alertas y Circulares":
                 "Filtro por Clasificación Astrofísica:", 
                 [
                     "👁️ Todos los eventos", 
-                    "🚨 Supernovas Candidatas (ZTF)", 
+                    "🚨 Supernovas Candidatas (ZTF/LSST)", 
                     "✅ Supernovas Confirmadas (TNS)", 
                     "💥 Novas", 
                     "🚀 Blazares", 
@@ -286,15 +289,13 @@ elif vista == "Feed de Alertas y Circulares":
             vip = ev.get("vip", False)
             cat_evento = None
             
-            # --- CORRECCIÓN DE FILTRO: RESPETAR LA FÍSICA ---
             if t == "tde": cat_evento = "🌀 Agujeros Negros (TDE)"
             elif t == "nova": cat_evento = "💥 Novas"
             elif t == "blazar": cat_evento = "🚀 Blazares"
             elif t == "agn": cat_evento = "🕳️ AGN (Cuásar)"
             elif t == "flare" and vip: cat_evento = "🔥 Flares VIP"
             elif t == "supernova" and survey == "TNS_GLOBAL": cat_evento = "✅ Supernovas Confirmadas (TNS)"
-            elif t == "supernova": cat_evento = "🚨 Supernovas Candidatas (ZTF)"
-            # ------------------------------------------------
+            elif t == "supernova": cat_evento = "🚨 Supernovas Candidatas (ZTF/LSST)"
             
             if filtro_clase == "👁️ Todos los eventos" or filtro_clase == cat_evento:
                 eventos_a_mostrar.append(ev)
@@ -307,7 +308,6 @@ elif vista == "Feed de Alertas y Circulares":
                 survey_origen = e.get('survey', 'Desconocido')
                 mjd_val = e.get('mjd_deteccion', 0)
                 
-                # Limpiamos el ID temporalmente para buscar si tiene espectro
                 oid_para_check = str(e.get('oid')).replace(' ', '_').replace('/', '-')
                 
                 try:
@@ -322,7 +322,6 @@ elif vista == "Feed de Alertas y Circulares":
                 elif survey_origen == 'LSST': prefijo = "🚨 [LSST]"
                 else: prefijo = f"🚨 [{survey_origen}]"
                 
-                # --- NUEVO: INDICADOR VISUAL DE ESPECTRO ---
                 ruta_espectro_check = f"data/quimica_halfa_{oid_para_check}.png"
                 indicador_espectro = " 🌈 [Espectro]" if os.path.exists(ruta_espectro_check) else ""
                     
@@ -350,16 +349,12 @@ elif vista == "Feed de Alertas y Circulares":
                 if cont_circ_temp and "INTERVENCIÓN DEL ESCUDO TNS" in cont_circ_temp:
                     st.error("🛡️ **BLOQUEO ACTIVO:** El Escudo TNS detectó duplicidad astronómica y abortó automáticamente la emisión del Telegrama (ATel) para proteger la reputación de la Estación Magallanes.")
                 
-                # --- CORRECCIÓN DE PESTAÑAS: TNS_GLOBAL PUEDE SER NOVA O TDE ---
-                # Ahora evaluamos por el tipo de evento real, independientemente de si vino o fue interceptado por TNS
                 if evento_actual.get('tipo') == "flare":
                     tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "🚨 Alerta AAVSO (Solicitud)"])
                 elif survey == "TNS_GLOBAL" and evento_actual.get('tipo') == "supernova":
-                    # Solo las supernovas puras de TNS_GLOBAL llevan la etiqueta informativa de registro TNS
                     tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "✅ Registro TNS (Informativo)"])
                 else:
                     tab1, tab2 = st.tabs(["Circular Interna (Análisis)", "🚨 Borrador ATel (Urgente)"])
-                # ---------------------------------------------------------------
                 
                 with tab1:
                     cont_circ = leer_archivo_texto(ruta_circular)
@@ -388,10 +383,10 @@ elif vista == "Feed de Alertas y Circulares":
                     seleccion_evidencia = st.selectbox("Selecciona evidencia a visualizar:", opciones_evidencia, label_visibility="collapsed")
                     
                     if seleccion_evidencia == "Curva de Luz":
-                        st.image(ruta_grafico, width="stretch")
+                        st.image(ruta_grafico, use_column_width=True) # width="stretch" reemplazado por uso compatible 
                             
                     elif seleccion_evidencia == "Espectroscopía Taxonómica":
-                        st.image(ruta_halfa, width="stretch")
+                        st.image(ruta_halfa, use_column_width=True)
                         
         else:
             st.warning(f"No hay eventos registrados bajo la categoría **'{filtro_clase}'** para la fecha seleccionada.")
@@ -430,8 +425,11 @@ elif vista == "Bitácoras del Sistema":
             except Exception: pass
         return parsed
 
+    # --- CORRECCIÓN: LECTURA COMPLETA DE LAS 3 BITÁCORAS ---
     logs_ztf = parse_logs_con_timezone("bitacoras/bitacora_ZTF.log", "ZTF (Norte)")
-    logs_tns = parse_logs_con_timezone("bitacoras/bitacora_TNS_GLOBAL.log", "TNS Global (Sur)")
+    logs_lsst = parse_logs_con_timezone("bitacoras/bitacora_LSST.log", "LSST / Rubin (Sur)")
+    logs_tns = parse_logs_con_timezone("bitacoras/bitacora_TNS_GLOBAL.log", "TNS Global (Confirmaciones)")
+    # -------------------------------------------------------
     
     def agrupar_en_ciclos(logs):
         ciclos_agrupados = []
@@ -458,13 +456,14 @@ elif vista == "Bitácoras del Sistema":
             msg_low = log['msg'].lower()
             if "procesando evento de interés" in msg_low or "descargando ficha" in msg_low or "reclasificado" in msg_low:
                 ciclo_actual['candidatos'] += 1
-            if "error" in msg_low or "denegado" in msg_low:
+            if "error" in msg_low or "denegado" in msg_low or "timeout" in msg_low:
                 ciclo_actual['errores'] += 1
                 
         if ciclo_actual is not None: ciclos_agrupados.append(ciclo_actual)
         return ciclos_agrupados
 
-    todos_los_ciclos = agrupar_en_ciclos(logs_ztf) + agrupar_en_ciclos(logs_tns)
+    # SE CONCATENAN LOS 3 FLUJOS
+    todos_los_ciclos = agrupar_en_ciclos(logs_ztf) + agrupar_en_ciclos(logs_lsst) + agrupar_en_ciclos(logs_tns)
     todos_los_ciclos.sort(key=lambda x: x['timestamp_sort'], reverse=True)
     
     fecha_str_busqueda = fecha_seleccionada.strftime("%Y-%m-%d")
@@ -485,12 +484,16 @@ elif vista == "Bitácoras del Sistema":
     if ciclos_del_dia:
         for ciclo in ciclos_del_dia:
             with st.container():
-                color_red = "🔵" if "ZTF" in ciclo['red'] else "🟣"
+                # --- ASIGNACIÓN DE COLORES PARA IDENTIFICAR REDES RÁPIDAMENTE ---
+                if "ZTF" in ciclo['red']: color_red = "🔵"
+                elif "LSST" in ciclo['red']: color_red = "🟠"
+                else: color_red = "🟣" # TNS
+                
                 st.markdown(f"#### {color_red} [{ciclo['inicio_local']} Local | {ciclo['inicio_utc']} UTC] {ciclo['red']}")
                 
-                if ciclo['errores'] > 0: st.error(f"⚠️ **Atención:** Se detectaron {ciclo['errores']} errores de conexión. | ⚡ {ciclo['candidatos']} alertas evaluadas.")
-                elif ciclo['candidatos'] > 0: st.success(f"✅ Ciclo operativo y sin errores. | ⚡ **{ciclo['candidatos']} candidatas astrofísicas** aisladas.")
-                else: st.info(f"💤 Ciclo completado. No se detectaron eventos anómalos o de alta prioridad.")
+                if ciclo['errores'] > 0: st.error(f"⚠️ **Atención:** Se detectaron {ciclo['errores']} incidentes/errores de conexión. | ⚡ {ciclo['candidatos']} alertas evaluadas.")
+                elif ciclo['candidatos'] > 0: st.success(f"✅ Ciclo operativo y sin errores. | ⚡ **{ciclo['candidatos']} anomalías astrofísicas** procesadas.")
+                else: st.info(f"💤 Ciclo completado sin anomalías detectadas ni errores.")
                     
                 with st.expander("👨‍💻 Auditar Registro Técnico (Modo Terminal)"):
                     log_text = ""
@@ -546,6 +549,7 @@ elif vista == "Acerca del Observatorio":
         st.markdown("""
         * **Mdwarf-flare (Llamarada de Enana Roja):** Eventos de extrema inestabilidad magnética en estrellas de baja masa (Tipo M). Son el objetivo principal de la Estación Magallanes para estudiar el impacto de la radiación UV en posibles exoplanetas.
         * **CV / Nova (Variable Cataclísmica):** Un sistema estelar binario donde una enana blanca "roba" material de una estrella compañera, generando explosiones termonucleares periódicas **en su superficie sin destruir la estrella.**
+        * **VS (Variable Star):** Clasificación genérica para cualquier tipo de fluctuación lumínica de origen estelar (utilizado en sondeos iniciales).
         """)
     with col2:
         st.subheader("Eventos Extragalácticos")
@@ -558,7 +562,7 @@ elif vista == "Acerca del Observatorio":
     with col3:
         st.subheader("Núcleos Galácticos Activos")
         st.markdown("""
-        * **QSO (Cuásar):** Un núcleo galáctico extremadamente luminoso impulsado por un agujero negro supermasivo devorando materia.
+        * **AGN / QSO (Cuásar):** Un núcleo galáctico extremadamente luminoso impulsado por un agujero negro supermasivo devorando materia.
         * **Blazar:** Un tipo de cuásar cuyo chorro de radiación relativista apunta directamente hacia la Tierra.
         """)
         
@@ -569,5 +573,5 @@ elif vista == "Acerca del Observatorio":
         st.markdown("**Estación Magallanes | Punta Arenas, Chile** (53° 09' S, 70° 54' W)")
         st.markdown("Contacto: contacto@estacionmagallanes.org")
     with col_foot2:
-        st.link_button("💻 Ver Repositorio en GitHub", "https://github.com/Edgardo-Casanova/estacion-magallanes", width="stretch")
-        st.link_button("🌐 Visitar Sitio Web Oficial", "https://www.estacionmagallanes.org", width="stretch")
+        st.link_button("💻 Ver Repositorio en GitHub", "https://github.com/Edgardo-Casanova/estacion-magallanes", use_container_width=True)
+        st.link_button("🌐 Visitar Sitio Web Oficial", "https://www.estacionmagallanes.org", use_container_width=True)
