@@ -2,14 +2,15 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 24.4 (NÚCLEO DEFINITIVO + INTEGRACIÓN LSST/RUBIN BETA)
+VERSIÓN    : 25.0 (INTEGRACIÓN QUIRÚRGICA LSST/RUBIN BETA + ASTROPY NATIVO)
 =============================================================================
 """
 
 import os
 import io
 import time
-import signal # NUEVA IMPORTACIÓN: Herramienta de sistema para romper procesos pegados
+import math
+import signal
 import pandas as pd
 import numpy as np
 import requests
@@ -53,6 +54,128 @@ class TimeoutException(Exception):
 
 def manejador_timeout(signum, frame):
     raise TimeoutException("Timeout crítico: El servidor externo no respondió a tiempo.")
+
+# =====================================================================
+# 🛰️ ADAPTADORES QUIRÚRGICOS LSST (IA HTMX + FOTOMETRÍA TAP)
+# =====================================================================
+def infiltrar_ia_lsst(oid_puro):
+    """
+    Extrae la clasificación de IA del clúster beta de LSST leyendo el bloque
+    JSON embebido en el microservicio HTMX.
+    """
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+    url_htmx = f"https://api-lsst.alerce.online/probability_api/htmx/probabilities/{oid_puro}?survey=lsst"
+    
+    try:
+        resp = requests.get(url_htmx, headers=headers, timeout=6)
+        if resp.status_code == 200:
+            match = re.search(r'<script id="probabilities-data" type="application/json">(.*?)</script>', resp.text, re.DOTALL)
+            if match:
+                datos_crudos = json.loads(match.group(1).strip())
+                diccionarios = datos_crudos.get("group_prob_dict", {})
+                llave_rubin = next((k for k in diccionarios.keys() if "stamp_classifier_rubin" in k), None)
+                if llave_rubin and diccionarios[llave_rubin]:
+                    clases = diccionarios[llave_rubin]
+                    mejor = max(clases, key=lambda x: x.get('probability', 0))
+                    return mejor.get('class_name', None), float(mejor.get('probability', 0.0))
+    except Exception:
+        pass
+    return None, 0.0
+
+def determinar_fid_lsst(fila_obj):
+    """
+    Determina a qué grupo de banda pertenece la detección de LSST revisando
+    las bandas activas en lsst_dia_object:
+    fid = 1 -> Azul/Verde (u, g)
+    fid = 2 -> Rojo/Infrarrojo cercano (r, i, z, y)
+    """
+    for b_azul in ['g_psffluxmax', 'u_psffluxmax']:
+        if b_azul in fila_obj and pd.notna(fila_obj[b_azul]) and float(fila_obj[b_azul]) > 0:
+            return 1
+    return 2
+
+def obtener_detecciones_lsst(servicio_tap, oid_puro, fila_obj):
+    """
+    Descarga las detecciones de LSST vía TAP, convierte flujos (nJy) a
+    magnitudes AB (magpsf, sigmapsf) y, si es detección única (Stamp Classifier),
+    inyecta el límite base 3-sigma para preservar la cinemática y graficación.
+    """
+    consulta_det = f"""
+    SELECT psfflux, psffluxerr, timeprocessedmjdtai
+    FROM alerce_tap.lsst_detection
+    WHERE oid = {oid_puro}
+    ORDER BY timeprocessedmjdtai ASC
+    """
+    filas_validas = []
+    fid_asignado = determinar_fid_lsst(fila_obj)
+    mjd_obj_last = float(fila_obj['lastmjd']) if pd.notna(fila_obj['lastmjd']) else Time(datetime.now(timezone.utc)).mjd
+    mjd_obj_first = float(fila_obj['firstmjd']) if pd.notna(fila_obj['firstmjd']) else mjd_obj_last
+
+    try:
+        tabla_det = servicio_tap.search(consulta_det).to_table()
+        for r in tabla_det:
+            flujo = r['psfflux']
+            flujo_err = r['psffluxerr']
+            mjd_det = r['timeprocessedmjdtai']
+            
+            if np.ma.is_masked(flujo) or not np.isfinite(flujo) or float(flujo) <= 0:
+                continue
+            flujo_f = float(flujo)
+            err_f = float(flujo_err) if (not np.ma.is_masked(flujo_err) and np.isfinite(flujo_err) and float(flujo_err) > 0) else (flujo_f * 0.1)
+            mjd_f = float(mjd_det) if (not np.ma.is_masked(mjd_det) and np.isfinite(mjd_det)) else mjd_obj_last
+            
+            mag = -2.5 * math.log10(flujo_f) + 31.4
+            sigma = (2.5 / math.log(10.0)) * (err_f / flujo_f)
+            
+            filas_validas.append({
+                'mjd': mjd_f,
+                'magpsf': mag,
+                'sigmapsf': max(sigma, 0.01),
+                'fid': fid_asignado,
+                'flujo_err_raw': err_f
+            })
+    except Exception:
+        pass
+
+    # Respaldo desde lsst_dia_object si lsst_detection aún no sincronizó la fila
+    if not filas_validas:
+        for col_f in ['r_psffluxmax', 'g_psffluxmax', 'i_psffluxmax', 'z_psffluxmax', 'u_psffluxmax', 'y_psffluxmax']:
+            if col_f in fila_obj and pd.notna(fila_obj[col_f]) and float(fila_obj[col_f]) > 0:
+                flujo_f = float(fila_obj[col_f])
+                mag = -2.5 * math.log10(flujo_f) + 31.4
+                fid_b = 1 if col_f.startswith(('u_', 'g_')) else 2
+                filas_validas.append({
+                    'mjd': mjd_obj_last,
+                    'magpsf': mag,
+                    'sigmapsf': 0.05,
+                    'fid': fid_b,
+                    'flujo_err_raw': flujo_f / 15.0
+                })
+                break
+
+    if not filas_validas:
+        return pd.DataFrame()
+
+    # Si es una detección única del Stamp Classifier, sintetizamos el piso 3-sigma previo
+    if len(filas_validas) == 1:
+        p0 = filas_validas[0]
+        flujo_base_3sigma = max(3.0 * p0['flujo_err_raw'], 1.0)
+        mag_base = -2.5 * math.log10(flujo_base_3sigma) + 31.4
+        if mag_base <= p0['magpsf']:
+            mag_base = p0['magpsf'] + 1.2
+            
+        filas_validas.insert(0, {
+            'mjd': min(mjd_obj_first, p0['mjd']) - 0.5,
+            'magpsf': mag_base,
+            'sigmapsf': 0.20,
+            'fid': p0['fid'],
+            'flujo_err_raw': p0['flujo_err_raw']
+        })
+
+    df_out = pd.DataFrame(filas_validas)
+    return df_out[['mjd', 'magpsf', 'sigmapsf', 'fid']]
 
 # =====================================================================
 # 🛡️ ESCUDO TNS (PROTOTIPO LOCAL INTEGRADO)
@@ -217,8 +340,8 @@ def graficar_curva(det, id_evento, red_descubridora, ra_float, dec_float, tipo_e
     if det is not None and not det.empty:
         if 'fecha_humana' not in det.columns: det['fecha_humana'] = Time(det['mjd'].values, format='mjd').to_datetime()
         banda_g, banda_r = det[det['fid'] == 1], det[det['fid'] == 2]
-        if not banda_g.empty: ax1.errorbar(banda_g['fecha_humana'], banda_g['magpsf'], yerr=banda_g['sigmapsf'], fmt='o', color='#39ff14', alpha=0.6, markersize=5, label='Banda g')
-        if not banda_r.empty: ax1.errorbar(banda_r['fecha_humana'], banda_r['magpsf'], yerr=banda_r['sigmapsf'], fmt='o', color='#ff3333', alpha=0.6, markersize=5, label='Banda r')
+        if not banda_g.empty: ax1.errorbar(banda_g['fecha_humana'], banda_g['magpsf'], yerr=banda_g['sigmapsf'], fmt='o', color='#39ff14', alpha=0.6, markersize=5, label='Banda g / u')
+        if not banda_r.empty: ax1.errorbar(banda_r['fecha_humana'], banda_r['magpsf'], yerr=banda_r['sigmapsf'], fmt='o', color='#ff3333', alpha=0.6, markersize=5, label='Banda r / i / z / y')
         det_sorted = det.sort_values(by='mjd')
         ax1.scatter(det_sorted.iloc[-1]['fecha_humana'], det_sorted.iloc[-1]['magpsf'], color=color_destaque, marker='*', s=400, edgecolor='white', zorder=5, label='¡Última Detección!')
         ax1.invert_yaxis()
@@ -325,9 +448,8 @@ def consultar_tns_sur(client, catalogo_dict):
                     det = None
                     try:
                         if ra_float != 0.0 and dec_float != 0.0:
-                            # --- CANDADO DE TIEMPO ANTI-ZOMBI ---
                             signal.signal(signal.SIGALRM, manejador_timeout)
-                            signal.alarm(30) # 30 segundos máximo para responder
+                            signal.alarm(30)
                             
                             candidatos_alerce = client.query_objects(ra=ra_float, dec=dec_float, radius=10, format='pandas')
                             if candidatos_alerce is not None and not candidatos_alerce.empty:
@@ -338,8 +460,7 @@ def consultar_tns_sur(client, catalogo_dict):
                                 oid_tns = oid_tns.decode('utf-8') if isinstance(oid_tns, bytes) else str(oid_tns)
                                 det = client.query_detections(oid=oid_tns, format='pandas')
                                 
-                            signal.alarm(0) # Apaga la alarma si funcionó rápido
-                            # ------------------------------------
+                            signal.alarm(0)
                     except TimeoutException:
                         registrar_log(f"   [-] Timeout: ALeRCE no entregó fotometría para {id_evento} a tiempo. Omitiendo curva.", log_file)
                     except Exception as e: 
@@ -405,10 +526,10 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
 
     with open(ARCHIVO_BOLETIN, "w", encoding="utf-8") as f:
         f.write("Listado de confirmaciones oficiales TNS\n\n")
-    registrar_log("[+] Procesamiento TNS finalizado. Archivo de boletín purgado desde la línea 3.", log_file)
+    registrar_log("[+] Procesamiento TNS finalizado. Patrullaje completado.", log_file)
 
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (24.4 - NÚCLEO DEFINITIVO + LSST) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (25.0 - INTEGRACIÓN QUIRÚRGICA LSST) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
     url_tap = "https://tap.alerce.online/tap"
@@ -438,30 +559,47 @@ def main():
             ORDER BY lastmjd DESC
             """
         else: 
+            # Consulta LSST incluyendo las 6 bandas y filtrando tiempos nulos
             consulta_adql = f"""
             SELECT TOP 1500 
                 oid, 
                 ra AS meanra, 
                 dec AS meandec, 
                 firstdiasourcemjdtai AS firstmjd, 
-                lastdiasourcemjdtai AS lastmjd
+                lastdiasourcemjdtai AS lastmjd,
+                u_psffluxmax,
+                g_psffluxmax,
+                r_psffluxmax,
+                i_psffluxmax,
+                z_psffluxmax,
+                y_psffluxmax
             FROM alerce_tap.lsst_dia_object
             WHERE lastdiasourcemjdtai >= {limite_mjd}
+              AND lastdiasourcemjdtai IS NOT NULL
             ORDER BY lastdiasourcemjdtai DESC
             """
         
         try:
             print(f"   Extrayendo catálogo masivo de {current_survey} vía TAP ADQL...")
             resultados = servicio_tap.search(consulta_adql)
-            candidatos = resultados.to_table().to_pandas()
             
-            # --- PARCHE LSST: Blindar el ID como texto puro antes de iterar ---
-            if 'oid' in candidatos.columns:
-                candidatos['oid'] = candidatos['oid'].apply(lambda x: x.decode('utf-8') if isinstance(x, bytes) else "{:.0f}".format(x) if isinstance(x, (float, int)) else str(x))
-            # ------------------------------------------------------------------
+            # --- BLINDAJE ASTROPY NATIVO: Convertir OID a str ANTES de .to_pandas() ---
+            tabla_astropy = resultados.to_table()
+            if 'oid' in tabla_astropy.colnames:
+                tabla_astropy['oid'] = [
+                    x.decode('utf-8').strip() if isinstance(x, bytes) else str(x).strip()
+                    for x in tabla_astropy['oid']
+                ]
+            candidatos = tabla_astropy.to_pandas()
+            # --------------------------------------------------------------------------
+            
+            if 'lastmjd' in candidatos.columns:
+                candidatos['lastmjd'] = pd.to_numeric(candidatos['lastmjd'], errors='coerce')
+                candidatos = candidatos.dropna(subset=['lastmjd'])
             
             if candidatos.empty:
                 print(f"   (0 candidatos encontrados desde MJD {limite_mjd})")
+                registrar_log(f"[+] Patrullaje completado en {current_survey} (0 candidatos nuevos).", log_file)
                 continue
                 
             print(f"   ({len(candidatos)} objetos capturados. Iniciando análisis por paquetes de a 50 para proteger RAM...)")
@@ -472,68 +610,79 @@ def main():
                 print(f"   [Paquete {(i//tamano_paquete) + 1}/{(len(candidatos)//tamano_paquete) + 1}] Procesando lote de {len(paquete)} objetos...")
                 
                 for index, fila in paquete.iterrows():
-                    oid = str(fila['oid'])
+                    oid = str(fila['oid']).strip()
                     
                     try:
                         # --- CANDADO DE TIEMPO ANTI-ZOMBI ---
                         signal.signal(signal.SIGALRM, manejador_timeout)
-                        signal.alarm(35) # 35 segundos máximo para ALeRCE
+                        signal.alarm(35)
 
-                        probs = client.query_probabilities(oid=oid, format='pandas')
-                        
-                        if probs.empty: 
-                            signal.alarm(0)
-                            continue
-                            
-                        mejor_prediccion = probs.loc[probs['probability'].idxmax()]
-                        clase_ia_final, probabilidad = mejor_prediccion['class_name'], mejor_prediccion['probability']
+                        # 1. EXTRACCIÓN DE IA SEGÚN RED (ZTF vs LSST)
+                        if current_survey == "ZTF":
+                            probs = client.query_probabilities(oid=oid, format='pandas')
+                            if probs.empty: 
+                                signal.alarm(0)
+                                continue
+                            mejor_prediccion = probs.loc[probs['probability'].idxmax()]
+                            clase_ia_final, probabilidad = mejor_prediccion['class_name'], float(mejor_prediccion['probability'])
+                        else:
+                            clase_ia_final, probabilidad = infiltrar_ia_lsst(oid)
+                            if not clase_ia_final:
+                                signal.alarm(0)
+                                continue
                         
                         if clase_ia_final in target_classes and probabilidad > 0.60:
-                            print(f"      [!] ALERTA AISLADA: {oid} | IA: {clase_ia_final} ({probabilidad*100:.1f}%)")
+                            print(f"      [!] ALERTA AISLADA ({current_survey}): {oid} | IA: {clase_ia_final} ({probabilidad*100:.1f}%)")
                             
-                            det = client.query_detections(oid=oid, format='pandas')
-                            det = det.dropna(subset=['magpsf', 'mjd'])
-                            if det.empty or len(det) < 2: 
+                            # 2. EXTRACCIÓN DE FOTOMETRÍA SEGÚN RED (ZTF vs LSST)
+                            if current_survey == "ZTF":
+                                det = client.query_detections(oid=oid, format='pandas')
+                                det = det.dropna(subset=['magpsf', 'mjd'])
+                            else:
+                                det = obtener_detecciones_lsst(servicio_tap, oid, fila)
+                                
+                            if det is None or det.empty or len(det) < 2: 
                                 signal.alarm(0)
                                 continue 
                                 
-                            coordenadas = SkyCoord(ra=fila['meanra']*u.degree, dec=fila['meandec']*u.degree, frame='icrs')
-                            mjd_alerta_actual = det['mjd'].max()
+                            coordenadas = SkyCoord(ra=float(fila['meanra'])*u.degree, dec=float(fila['meandec'])*u.degree, frame='icrs')
+                            mjd_alerta_actual = float(det['mjd'].max())
                             
-                            signal.alarm(0) # Apaga la alarma si logró descargar todo
+                            signal.alarm(0)
                             # ------------------------------------
                             
                             nombre_real, distancia_real, tipo_real, metalicidad_real, es_cuasar_cat, es_estrella_cat, es_galaxia_cat, es_vip, redshift_cazado = obtener_datos_astronomicos(coordenadas, mjd_alerta_actual)
 
                             # =================================================================
-                            # --- 1. GUILLOTINA FOTOMÉTRICA (Corte Estricto 18.5 mag) ---
+                            # --- 1. GUILLOTINA FOTOMÉTRICA ADAPTATIVA (18.5 ZTF / 23.5 LSST) ---
                             # =================================================================
-                            mag_pico_absoluto = det['magpsf'].min()
-                            if mag_pico_absoluto > 18.5:
-                                print(f"      [-] Purgado: {oid} demasiado tenue (Pico mag {mag_pico_absoluto:.2f})")
+                            limite_mag = 18.5 if current_survey == "ZTF" else 23.5
+                            mag_pico_absoluto = float(det['magpsf'].min())
+                            if mag_pico_absoluto > limite_mag:
+                                print(f"      [-] Purgado: {oid} demasiado tenue para {current_survey} (Pico mag {mag_pico_absoluto:.2f} > {limite_mag})")
                                 continue
 
                             # =================================================================
                             # --- 2. CINEMÁTICA CON SEPARACIÓN DE BANDAS ---
                             # =================================================================
-                            mjd_min_fotometria = det['mjd'].min()
-                            mjd_max = det['mjd'].max()
-                            mjd_historico = float(fila['firstmjd'])
-                            edad_dias = mjd_max - mjd_historico
+                            mjd_min_fotometria = float(det['mjd'].min())
+                            mjd_max = float(det['mjd'].max())
+                            mjd_historico = float(fila['firstmjd']) if pd.notna(fila['firstmjd']) else mjd_min_fotometria
+                            edad_dias = max(0.0, mjd_max - mjd_historico)
 
                             mejor_salto = 0.0
                             mejor_tasa = 0.0
                             mejor_tasa_reciente = 0.0
                             bandas_procesadas = 0
 
-                            for fid in [1, 2]: # 1: g, 2: r
+                            for fid in [1, 2]: # 1: g/u, 2: r/i/z/y
                                 df_b = det[det['fid'] == fid]
                                 if len(df_b) < 2: continue
                                 
                                 bandas_procesadas += 1
-                                amp_b = df_b['magpsf'].max() - df_b['magpsf'].min()
-                                mjd_pico_b = df_b.loc[df_b['magpsf'].idxmin(), 'mjd']
-                                dias_al_pico_b = mjd_pico_b - df_b['mjd'].min()
+                                amp_b = float(df_b['magpsf'].max() - df_b['magpsf'].min())
+                                mjd_pico_b = float(df_b.loc[df_b['magpsf'].idxmin(), 'mjd'])
+                                dias_al_pico_b = mjd_pico_b - float(df_b['mjd'].min())
                                 if dias_al_pico_b <= 0: dias_al_pico_b = 1.0
                                 tasa_b = amp_b / dias_al_pico_b
                                 
@@ -542,9 +691,9 @@ def main():
                                     df_rec = df_b[df_b['mjd'] >= df_b['mjd'].max() - 30]
                                     df_ant = df_b[df_b['mjd'] < df_b['mjd'].max() - 30]
                                     if not df_rec.empty and not df_ant.empty:
-                                        salto_rec = df_ant['magpsf'].median() - df_rec['magpsf'].min()
-                                        mjd_p_rec = df_rec.loc[df_rec['magpsf'].idxmin(), 'mjd']
-                                        dias_p_rec = mjd_p_rec - df_rec['mjd'].min()
+                                        salto_rec = float(df_ant['magpsf'].median() - df_rec['magpsf'].min())
+                                        mjd_p_rec = float(df_rec.loc[df_rec['magpsf'].idxmin(), 'mjd'])
+                                        dias_p_rec = mjd_p_rec - float(df_rec['mjd'].min())
                                         if dias_p_rec <= 0: dias_p_rec = 1.0
                                         tasa_rec_b = (salto_rec / dias_p_rec) if salto_rec > 0 else 0.0
 
@@ -554,8 +703,8 @@ def main():
                                     mejor_tasa_reciente = tasa_rec_b
 
                             if bandas_procesadas == 0:
-                                mejor_salto = det['magpsf'].max() - det['magpsf'].min()
-                                dias_pico_tot = det.loc[det['magpsf'].idxmin(), 'mjd'] - mjd_min_fotometria
+                                mejor_salto = float(det['magpsf'].max() - det['magpsf'].min())
+                                dias_pico_tot = float(det.loc[det['magpsf'].idxmin(), 'mjd']) - mjd_min_fotometria
                                 if dias_pico_tot <= 0: dias_pico_tot = 1.0
                                 mejor_tasa = mejor_salto / dias_pico_tot
                                 mejor_tasa_reciente = mejor_tasa
@@ -605,7 +754,6 @@ def main():
                                 
                                 if prefijo_tns == "SN":
                                     survey_para_laboratorio = "TNS_GLOBAL"
-                                    # VETO MAGALLANES: Solo acepta "supernova" si la física no detectó una anomalía
                                     if tipo_evento_final in ["supernova", "descarte"]:
                                         tipo_evento_final = "supernova" 
                                         registrar_log("      -> [!] TNS Confirma: Magallanes acata la clasificación IAU.", log_file)
@@ -637,7 +785,8 @@ def main():
                                 "es_vip": es_vip,
                                 "edad_dias": edad_dias,
                                 "salto_luminosidad": salto_luminosidad_delta,
-                                "escudo_tns_hit": nombre_oficial_tns, # Pasa la etiqueta a la cascada
+                                "tasa_acel_reciente": tasa_acel_reciente,
+                                "escudo_tns_hit": nombre_oficial_tns,
                                 "redshift_cazado": redshift_cazado
                             }
 
@@ -672,6 +821,8 @@ def main():
                         registrar_log(f"Timeout: El objeto {oid} provocó un atasco de red y fue omitido.", log_file)
                     except Exception as e: 
                         print(f"      [!] Error interno al analizar {oid}: {e}")
+            
+            registrar_log(f"[+] Patrullaje completado exitosamente en {current_survey}.", log_file)
                         
         except Exception as e:
             print(f"   [!] Error en exploración TAP: {e}")
