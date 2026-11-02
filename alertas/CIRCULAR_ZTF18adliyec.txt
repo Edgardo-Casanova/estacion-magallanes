@@ -1,32 +1,27 @@
 =================================================================
- CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
+ CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-10-19 17:37:37 UTC
-OBJETO DETECTADO : ZTF18adliyec (NOVA)
+FECHA DE EMISIÓN : 2026-11-02 22:32:14 UTC
+EVENTO DETECTADO : ZTF18adliyec (BLAZAR)
 COORDENADAS ICRS : RA 114.64966 | Dec 30.32332
-DISTANCIA        : ~6219.6 Años Luz
 -----------------------------------------------------------------
 
-[1] ESTADO DEL SISTEMA PLANETARIO
-    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).
+[1] ENTORNO COSMOLÓGICO
+    OBJETO CENTRAL / ANFITRIONA : WISEA J073828.25+301910.8
+    REDSHIFT (z)                : Desconocido
+    DISTANCIA HUBBLE            : Desconocida N/A
 
-[2] EVALUACIÓN TERMODINÁMICA (SED QUIESCENTE)
-    FIRMA TÉRMICA: Datos insuficientes para evaluación térmica SED.
-
-[3] ACTIVIDAD CROMOSFÉRICA / QUÍMICA (Fuente: Ninguna)
-    ESTADO QUÍMICO: Carencia de datos públicos 1D. Radar ESO indica: Radar ESO Inaccesible
-
-[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
-    PRIORIDAD    : ALTA PRIORIDAD (Variable Cataclísmica)
-    INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).
+[2] EVALUACIÓN MAGALLANES
+    PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
+    INSTRUMENTO : Observatorios masivos (VLT / Gemini).
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
     CLASE IA (ALeRCE)    : CV/Nova (Confianza: 78.3%)
-    RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
-    EDAD HISTÓRICA       : 1645.4 días
+    RECLASIFICACIÓN      : Blazar (Chorro relativista - Alta aceleración)
+    EDAD HISTÓRICA       : 1659.4 días
     SALTO LUMINOSIDAD    : 2.09 magnitudes
     TASA ACEL. HISTÓRICA : 0.001 mag/día
     TASA ACEL. RECIENTE  : 0.094 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61332.5481
+    MJD ÚLTIMA DETEC.    : 61346.5230
 =================================================================
