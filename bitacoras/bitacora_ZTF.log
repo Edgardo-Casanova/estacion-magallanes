@@ -22671,3 +22671,51 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-11-03 14:47:11] -> Procesando evento de interés: ZTF17aaaseru (nova)
 [2026-11-03 15:11:54] -> Procesando evento de interés: ZTF18acuimyd (agn)
 [2026-11-03 15:18:40] [+] Patrullaje completado exitosamente en ZTF.
+[2026-11-03 15:30:19] ==================================================
+[2026-11-03 15:30:19] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-11-03 15:34:26] -> Procesando evento de interés: ZTF18adayhmh (nova)
+[2026-11-03 15:40:51] -> Procesando evento de interés: ZTF18acexxdo (nova)
+[2026-11-03 15:47:08] -> Procesando evento de interés: ZTF23abnznyf (nova)
+[2026-11-03 15:53:49] -> Procesando evento de interés: ZTF19aadmacb (agn)
+[2026-11-03 16:00:16] -> Procesando evento de interés: ZTF18acqxpha (nova)
+[2026-11-03 16:10:12] -> Procesando evento de interés: ZTF18acrxnze (nova)
+[2026-11-03 16:16:59]       [🛡️] ALERTA TNS: ZTF18acrxnfr interceptado. Ya es AT 2017hmd.
+[2026-11-03 16:16:59]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: nova.
+[2026-11-03 16:16:59] -> Procesando evento de interés: AT 2017hmd (nova)
+[2026-11-03 16:23:48] -> Procesando evento de interés: ZTF19adcaxvu (agn)
+[2026-11-03 16:30:02] -> Procesando evento de interés: ZTF19acbuyey (agn)
+[2026-11-03 16:37:18] -> Procesando evento de interés: ZTF18adbbsbx (blazar)
+[2026-11-03 16:43:31] -> Procesando evento de interés: ZTF18aalkwhy (nova)
+[2026-11-03 16:49:47] -> Procesando evento de interés: ZTF18aafqqxn (agn)
+[2026-11-03 16:56:21] -> Procesando evento de interés: ZTF18aafsbef (blazar)
+[2026-11-03 17:03:00] -> Procesando evento de interés: ZTF18aaffspa (blazar)
+[2026-11-03 17:09:15] -> Procesando evento de interés: ZTF18aaflagt (nova)
+[2026-11-03 17:15:36] -> Procesando evento de interés: ZTF17aabtdus (nova)
+[2026-11-03 17:27:16] -> Procesando evento de interés: ZTF18aabvojf (nova)
+[2026-11-03 17:33:29] -> Procesando evento de interés: ZTF17aaduowa (blazar)
+[2026-11-03 17:39:42] -> Procesando evento de interés: ZTF17aacbuuj (nova)
+[2026-11-03 17:49:15] -> Procesando evento de interés: ZTF18acbzslc (agn)
+[2026-11-03 17:54:51]       [🛡️] ALERTA TNS: ZTF24aakccfa interceptado. Ya es AT 2023aclf.
+[2026-11-03 17:54:51]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-11-03 17:54:51] -> Procesando evento de interés: AT 2023aclf (agn)
+[2026-11-03 18:04:12] -> Procesando evento de interés: ZTF18aaexaeh (agn)
+[2026-11-03 18:10:21]       [🛡️] ALERTA TNS: ZTF18aaapjfq interceptado. Ya es AT 2019qct.
+[2026-11-03 18:10:21]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: nova.
+[2026-11-03 18:10:21] -> Procesando evento de interés: AT 2019qct (nova)
+[2026-11-03 18:16:38] -> Procesando evento de interés: ZTF17aacejoh (agn)
+[2026-11-03 18:22:46] -> Procesando evento de interés: ZTF17aadglxg (nova)
+[2026-11-03 18:32:53] -> Procesando evento de interés: ZTF18aaxejis (agn)
+[2026-11-03 18:39:50] -> Procesando evento de interés: ZTF20acxtczt (blazar)
+[2026-11-03 18:46:31] -> Procesando evento de interés: ZTF17aabwngz (nova)
+[2026-11-03 18:53:23] -> Procesando evento de interés: ZTF22abstciz (agn)
+[2026-11-03 19:03:36] -> Procesando evento de interés: ZTF18aabedlz (blazar)
+[2026-11-03 19:10:05] -> Procesando evento de interés: ZTF19aahmjaw (blazar)
+[2026-11-03 19:20:01] -> Procesando evento de interés: ZTF18acquloe (agn)
+[2026-11-03 19:27:09] -> Procesando evento de interés: ZTF18acqsyle (agn)
+[2026-11-03 19:34:11] -> Procesando evento de interés: ZTF18acqtnph (agn)
+[2026-11-03 19:45:06] -> Procesando evento de interés: ZTF18aczepaf (blazar)
+[2026-11-03 19:50:43] -> Procesando evento de interés: ZTF17aabwrod (blazar)
+[2026-11-03 19:57:40] -> Procesando evento de interés: ZTF18acqsrbu (blazar)
+[2026-11-03 20:03:52] -> Procesando evento de interés: ZTF18aaqeewz (blazar)
+[2026-11-03 20:10:06] -> Procesando evento de interés: ZTF18acvgwas (blazar)
+[2026-11-03 20:13:24] [+] Patrullaje completado exitosamente en ZTF.
