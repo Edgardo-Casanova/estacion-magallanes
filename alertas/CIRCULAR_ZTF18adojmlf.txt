@@ -1,32 +1,27 @@
 =================================================================
- CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
+ CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-09-21 18:45:13 UTC
-OBJETO DETECTADO : ZTF18adojmlf (NOVA)
-COORDENADAS ICRS : RA 118.46191 | Dec 18.55534
-DISTANCIA        : ~2666.4 Años Luz
+FECHA DE EMISIÓN : 2026-11-04 17:02:53 UTC
+EVENTO DETECTADO : ZTF18adojmlf (AGN)
+COORDENADAS ICRS : RA 118.46192 | Dec 18.55534
 -----------------------------------------------------------------
 
-[1] ESTADO DEL SISTEMA PLANETARIO
-    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).
+[1] ENTORNO COSMOLÓGICO
+    OBJETO CENTRAL / ANFITRIONA : Desconocida (Intergaláctica / Muy lejana)
+    REDSHIFT (z)                : Desconocido
+    DISTANCIA HUBBLE            : Desconocida N/A
 
-[2] EVALUACIÓN TERMODINÁMICA (SED QUIESCENTE)
-    FIRMA TÉRMICA: Datos insuficientes para evaluación térmica SED.
-
-[3] ACTIVIDAD CROMOSFÉRICA / QUÍMICA (Fuente: Ninguna)
-    ESTADO QUÍMICO: Carencia de datos públicos 1D. Radar ESO indica: Radar ESO Inaccesible
-
-[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
-    PRIORIDAD    : ALTA PRIORIDAD (Variable Cataclísmica)
-    INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).
+[2] EVALUACIÓN MAGALLANES
+    PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
+    INSTRUMENTO : Observatorios masivos (VLT / Gemini).
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
     CLASE IA (ALeRCE)    : CV/Nova (Confianza: 87.1%)
-    RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
-    EDAD HISTÓRICA       : 1633.3 días
-    SALTO LUMINOSIDAD    : 1.83 magnitudes
+    RECLASIFICACIÓN      : AGN / Cuásar (Acreción térmica - Lenta)
+    EDAD HISTÓRICA       : 1677.3 días
+    SALTO LUMINOSIDAD    : 1.85 magnitudes
     TASA ACEL. HISTÓRICA : 0.001 mag/día
-    TASA ACEL. RECIENTE  : 0.031 mag/día
+    TASA ACEL. RECIENTE  : 0.027 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61304.5182
+    MJD ÚLTIMA DETEC.    : 61348.4843
 =================================================================
