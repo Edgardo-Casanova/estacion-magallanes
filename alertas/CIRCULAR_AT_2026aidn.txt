@@ -1,0 +1,41 @@
+=================================================================
+ CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
+=================================================================
+FECHA DE EMISIÓN : 2026-11-05 05:15:20 UTC
+OBJETO DETECTADO : AT_2026aidn (FLARE)
+COORDENADAS ICRS : RA 64.87012 | Dec -46.96441
+DISTANCIA        : Desconocida
+-----------------------------------------------------------------
+
+[1] ESTADO DEL SISTEMA PLANETARIO
+    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).
+
+[2] EVALUACIÓN TERMODINÁMICA (SED QUIESCENTE)
+    FIRMA TÉRMICA: Datos insuficientes para evaluación térmica SED.
+
+[3] ACTIVIDAD CROMOSFÉRICA / QUÍMICA (Fuente: Ninguna)
+    ESTADO QUÍMICO: Carencia de datos públicos 1D. Radar ESO indica: Radar ESO Inaccesible
+
+[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
+    PRIORIDAD    : PRIORIDAD ESTÁNDAR DE MONITOREO
+    INSTRUMENTO : Telescopios terrestres (Fotometría de seguimiento).
+=================================================================
+🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
+=================================================================
+ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
+Nombre Oficial Asignado : AT 2026aidn
+URL de Confirmación     : https://www.wis-tns.org/object/2026aidn
+-> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
+=================================================================
+
+
+[5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
+    CLASE IA (ALeRCE)    : SN (Confianza: 71.5%)
+    RECLASIFICACIÓN      : Flare (Enana M)
+    EDAD HISTÓRICA       : 0.1 días
+    SALTO LUMINOSIDAD    : 0.30 magnitudes
+    TASA ACEL. HISTÓRICA : 12.768 mag/día
+    TASA ACEL. RECIENTE  : 12.768 mag/día
+    RED DE ORIGEN        : LSST
+    MJD ÚLTIMA DETEC.    : 61349.1905
+=================================================================

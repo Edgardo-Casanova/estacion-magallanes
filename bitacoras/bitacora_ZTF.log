@@ -22843,3 +22843,14 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-11-05 01:30:18] ==================================================
 [2026-11-05 01:30:18] APUNTANDO TELESCOPIO A RED: ZTF
 [2026-11-05 01:30:20] [+] Patrullaje completado en ZTF (0 candidatos nuevos).
+[2026-11-05 02:30:17] ==================================================
+[2026-11-05 02:30:17] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-11-05 02:31:37] -> Procesando evento de interés: ZTF18abmfybu (nova)
+[2026-11-05 02:32:47] -> Procesando evento de interés: ZTF18abmgjwz (nova)
+[2026-11-05 02:35:32] -> Procesando evento de interés: ZTF18abznbji (blazar)
+[2026-11-05 02:36:26] -> Procesando evento de interés: ZTF21aawqdgx (agn)
+[2026-11-05 02:41:24] -> Procesando evento de interés: ZTF26abxwsuv (nova)
+[2026-11-05 02:42:39] -> Procesando evento de interés: ZTF18abtjkum (blazar)
+[2026-11-05 02:45:25] -> Procesando evento de interés: ZTF18abudsdj (agn)
+[2026-11-05 02:46:24] -> Procesando evento de interés: ZTF18abvcgpz (nova)
+[2026-11-05 02:47:52] [+] Patrullaje completado exitosamente en ZTF.
