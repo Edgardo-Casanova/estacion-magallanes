@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 25.0 (INTEGRACIÓN QUIRÚRGICA LSST/RUBIN BETA + ASTROPY NATIVO)
+VERSIÓN    : 25.1 (OPTIMIZACIÓN DE RED, GUILLOTINA TEMPRANA Y RELOJ EXACTO)
 =============================================================================
 """
 
@@ -189,7 +189,7 @@ def consultar_escudo_tns(nombre_interno):
     payload = {"api_key": TNS_API_KEY, "data": json.dumps({"internal_name": nombre_interno})}
     
     try:
-        respuesta = requests.post('https://www.wis-tns.org/api/get/search', headers=headers, data=payload, timeout=15)
+        respuesta = requests.post('https://www.wis-tns.org/api/get/search', headers=headers, data=payload, timeout=8)
         if respuesta.status_code == 200:
             datos = respuesta.json().get('data', {})
             resultados = datos.get('reply', []) if isinstance(datos, dict) else (datos if isinstance(datos, list) else [])
@@ -279,8 +279,10 @@ def obtener_datos_astronomicos(coordenadas, mjd_alerta):
     es_cuasar, es_estrella, es_galaxia, es_vip = False, False, False, False
     redshift_simbad = 0.0
     try:
+        signal.signal(signal.SIGALRM, manejador_timeout)
+        signal.alarm(10)
         custom_simbad = Simbad()
-        custom_simbad.TIMEOUT = 25 
+        custom_simbad.TIMEOUT = 8 
         custom_simbad.add_votable_fields('plx', 'sp', 'fe_h', 'otype', 'rvz_redshift')
         resultado = custom_simbad.query_region(coordenadas, radius=3*u.arcsec)
         
@@ -305,12 +307,17 @@ def obtener_datos_astronomicos(coordenadas, mjd_alerta):
             es_estrella = any(x in tipo_upper for x in ["STAR", "FLARE", "CV", "NOVA", "WHITE DWARF", "V*"])
             es_galaxia = any(x in tipo_upper for x in ["GALAXY", "GLS", "LSB"])
             if any(x in tipo_upper for x in ["M DWARF", "DM", "FLARE STAR", "UV CETI"]): es_vip = True
-    except Exception: pass
+    except Exception:
+        pass
+    finally:
+        signal.alarm(0)
 
     if not es_cuasar and not es_estrella and not es_galaxia:
         try:
+            signal.signal(signal.SIGALRM, manejador_timeout)
+            signal.alarm(12)
             v = Vizier(columns=['RA_ICRS', 'DE_ICRS', 'pmRA', 'pmDE', 'Plx', 'e_Plx'], catalog="I/355/gaiadr3")
-            v.TIMEOUT = 45 
+            v.TIMEOUT = 10 
             resultado_gaia = v.query_region(coordenadas, radius=15.0*u.arcsec)
             if len(resultado_gaia) > 0:
                 for fila in resultado_gaia[0]:
@@ -324,7 +331,10 @@ def obtener_datos_astronomicos(coordenadas, mjd_alerta):
                             tipo = "Estrella (Confirmada por Astrometría Gaia DR3 Proyectada)"
                             distancia = f"~{(1000.0 / plx_gaia) * 3.26156:.1f} Años Luz"
                             break
-        except Exception: pass
+        except Exception:
+            pass
+        finally:
+            signal.alarm(0)
         
     return nombre, distancia, tipo, metalicidad, es_cuasar, es_estrella, es_galaxia, es_vip, redshift_simbad
 
@@ -426,7 +436,7 @@ def consultar_tns_sur(client, catalogo_dict):
             print(f"    [+] Procesando orden oficial de IAU: {id_evento}")
             
             try:
-                resp_obj = requests.post('https://www.wis-tns.org/api/get/object', headers=headers, data={"api_key": TNS_API_KEY, "data": json.dumps({"objname": objname})}, timeout=25)
+                resp_obj = requests.post('https://www.wis-tns.org/api/get/object', headers=headers, data={"api_key": TNS_API_KEY, "data": json.dumps({"objname": objname})}, timeout=10)
                 
                 if resp_obj.status_code == 200:
                     datos_obj = resp_obj.json().get('data', {}).get('reply', {})
@@ -449,7 +459,7 @@ def consultar_tns_sur(client, catalogo_dict):
                     try:
                         if ra_float != 0.0 and dec_float != 0.0:
                             signal.signal(signal.SIGALRM, manejador_timeout)
-                            signal.alarm(30)
+                            signal.alarm(15)
                             
                             candidatos_alerce = client.query_objects(ra=ra_float, dec=dec_float, radius=10, format='pandas')
                             if candidatos_alerce is not None and not candidatos_alerce.empty:
@@ -465,6 +475,8 @@ def consultar_tns_sur(client, catalogo_dict):
                         registrar_log(f"   [-] Timeout: ALeRCE no entregó fotometría para {id_evento} a tiempo. Omitiendo curva.", log_file)
                     except Exception as e: 
                         registrar_log(f"   [-] Fallo menor en extracción fotométrica para {id_evento}: {e}", log_file)
+                    finally:
+                        signal.alarm(0)
                     
                     try:
                         graficar_curva(det, id_evento, descubridor, ra_float, dec_float)
@@ -529,9 +541,12 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
     registrar_log("[+] Procesamiento TNS finalizado. Patrullaje completado.", log_file)
 
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (25.0 - INTEGRACIÓN QUIRÚRGICA LSST) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (25.1 - OPTIMIZACIÓN DE RED Y GUILLOTINA TEMPRANA) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
+    # Capturamos el instante exacto de inicio del patrullaje para no generar puntos ciegos si el ciclo demora
+    mjd_inicio_patrullaje = Time(datetime.now(timezone.utc)).mjd
+    
     url_tap = "https://tap.alerce.online/tap"
     servicio_tap = vo.dal.TAPService(url_tap)
     
@@ -613,9 +628,9 @@ def main():
                     oid = str(fila['oid']).strip()
                     
                     try:
-                        # --- CANDADO DE TIEMPO ANTI-ZOMBI ---
+                        # --- CANDADO DE TIEMPO ÁGIL (15s PARA EXTRACCIÓN ALERCE) ---
                         signal.signal(signal.SIGALRM, manejador_timeout)
-                        signal.alarm(35)
+                        signal.alarm(15)
 
                         # 1. EXTRACCIÓN DE IA SEGÚN RED (ZTF vs LSST)
                         if current_survey == "ZTF":
@@ -641,20 +656,13 @@ def main():
                             else:
                                 det = obtener_detecciones_lsst(servicio_tap, oid, fila)
                                 
-                            if det is None or det.empty or len(det) < 2: 
-                                signal.alarm(0)
-                                continue 
-                                
-                            coordenadas = SkyCoord(ra=float(fila['meanra'])*u.degree, dec=float(fila['meandec'])*u.degree, frame='icrs')
-                            mjd_alerta_actual = float(det['mjd'].max())
-                            
                             signal.alarm(0)
-                            # ------------------------------------
                             
-                            nombre_real, distancia_real, tipo_real, metalicidad_real, es_cuasar_cat, es_estrella_cat, es_galaxia_cat, es_vip, redshift_cazado = obtener_datos_astronomicos(coordenadas, mjd_alerta_actual)
+                            if det is None or det.empty or len(det) < 2: 
+                                continue 
 
                             # =================================================================
-                            # --- 1. GUILLOTINA FOTOMÉTRICA ADAPTATIVA (18.5 ZTF / 23.5 LSST) ---
+                            # --- 1. GUILLOTINA FOTOMÉTRICA EN RAM (ANTES DE CONSULTAR SIMBAD/GAIA) ---
                             # =================================================================
                             limite_mag = 18.5 if current_survey == "ZTF" else 23.5
                             mag_pico_absoluto = float(det['magpsf'].min())
@@ -663,7 +671,7 @@ def main():
                                 continue
 
                             # =================================================================
-                            # --- 2. CINEMÁTICA CON SEPARACIÓN DE BANDAS ---
+                            # --- 2. CINEMÁTICA CON SEPARACIÓN DE BANDAS EN RAM ---
                             # =================================================================
                             mjd_min_fotometria = float(det['mjd'].min())
                             mjd_max = float(det['mjd'].max())
@@ -713,7 +721,17 @@ def main():
                             tasa_acel = mejor_tasa
                             tasa_acel_reciente = mejor_tasa_reciente
                             amplitud_mag = mejor_salto
+
+                            # Pre-filtro cinemático: si no tiene salto >= 0.5 ni es flare rápido, todas las ramas dan "descarte"
+                            if salto_luminosidad_delta < 0.5 and not (edad_dias < 3.0 and tasa_acel_reciente > 1.0):
+                                continue
+
                             # =================================================================
+                            # --- 3. CONSULTA A SIMBAD / GAIA SOLO PARA OBJETOS ACTIVOS Y BRILLANTES ---
+                            # =================================================================
+                            coordenadas = SkyCoord(ra=float(fila['meanra'])*u.degree, dec=float(fila['meandec'])*u.degree, frame='icrs')
+                            mjd_alerta_actual = mjd_max
+                            nombre_real, distancia_real, tipo_real, metalicidad_real, es_cuasar_cat, es_estrella_cat, es_galaxia_cat, es_vip, redshift_cazado = obtener_datos_astronomicos(coordenadas, mjd_alerta_actual)
 
                             latitud_b, en_plano, es_viejo = coordenadas.galactic.b.degree, abs(coordenadas.galactic.b.degree) <= 10.0, edad_dias > 150
 
@@ -815,11 +833,15 @@ def main():
                                 }
                             except Exception as e:
                                 registrar_log(f"[!] Error al inyectar {oid_para_laboratorio} al catálogo JSON: {e}", log_file)
+                        else:
+                            signal.alarm(0)
 
                     except TimeoutException:
+                        signal.alarm(0)
                         print(f"      [!] Timeout: Servidor no respondió para {oid}. Omitiendo objeto por seguridad.")
                         registrar_log(f"Timeout: El objeto {oid} provocó un atasco de red y fue omitido.", log_file)
                     except Exception as e: 
+                        signal.alarm(0)
                         print(f"      [!] Error interno al analizar {oid}: {e}")
             
             registrar_log(f"[+] Patrullaje completado exitosamente en {current_survey}.", log_file)
@@ -831,8 +853,7 @@ def main():
     guardar_catalogo_maestro(catalogo_dict)
     print("=== CATÁLOGO MAESTRO ACTUALIZADO Y GUARDADO ===")
 
-    nuevo_mjd = Time(datetime.utcnow()).mjd
-    guardar_mjd_rastreo(nuevo_mjd)
+    guardar_mjd_rastreo(mjd_inicio_patrullaje)
     print("=== PATRULLAJE COMPLETADO ===")
 
 if __name__ == "__main__":
