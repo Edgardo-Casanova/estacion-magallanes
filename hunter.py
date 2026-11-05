@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 25.1 (OPTIMIZACIÓN DE RED, GUILLOTINA TEMPRANA Y RELOJ EXACTO)
+VERSIÓN    : 25.2 (TAMIZ DE MEMORIA EN RAM, GUILLOTINA TEMPRANA Y RELOJ 4D)
 =============================================================================
 """
 
@@ -40,6 +40,7 @@ load_dotenv()
 ARCHIVO_MJD = "tracker_mjd.txt"
 ARCHIVO_BOLETIN = "boletin_tns.txt"
 CATALOGO_JSON = "catalogo_maestro.json"
+ARCHIVO_HISTORIAL = "historial_vistos.json"
 
 diccionario_categorias = {
     "ZTF": ["SNIa", "SNIbc", "SNII", "SLSN", "CV/Nova", "QSO", "Blazar", "TDE", "AGN"],
@@ -203,7 +204,7 @@ def consultar_escudo_tns(nombre_interno):
     return None, None
 
 # =====================================================================
-# FUNCIONES DE ALMACENAMIENTO LOCAL
+# FUNCIONES DE ALMACENAMIENTO LOCAL Y MEMORIA DE TAMIZ
 # =====================================================================
 def guardar_archivo_texto(ruta, contenido):
     os.makedirs(os.path.dirname(ruta) if os.path.dirname(ruta) else '.', exist_ok=True)
@@ -231,15 +232,58 @@ def guardar_catalogo_maestro(catalogo_dict):
     with open(CATALOGO_JSON, "w", encoding="utf-8") as f:
         json.dump(list(catalogo_dict.values()), f, indent=4, ensure_ascii=False)
 
+def cargar_historial_vistos(mjd_actual, catalogo_dict):
+    """
+    Carga el registro de objetos ya evaluados (descartados o validados),
+    limpia entradas con más de 60 horas (2.5 días) de antigüedad y sincroniza
+    con el catálogo maestro actual para evitar reprocesamientos.
+    """
+    historial = {}
+    limite_antiguedad = mjd_actual - 2.5
+    if os.path.exists(ARCHIVO_HISTORIAL):
+        try:
+            with open(ARCHIVO_HISTORIAL, "r", encoding="utf-8") as f:
+                datos = json.load(f)
+                if isinstance(datos, dict):
+                    for k, v in datos.items():
+                        try:
+                            mjd_val = float(v)
+                            if mjd_val >= limite_antiguedad:
+                                historial[str(k).strip()] = mjd_val
+                        except (ValueError, TypeError):
+                            pass
+        except Exception:
+            pass
+
+    # Sincronizar objetos ya presentes en el catálogo maestro
+    for oid_cat, info_cat in catalogo_dict.items():
+        try:
+            mjd_det = float(info_cat.get("mjd_deteccion", 0.0))
+            if mjd_det >= limite_antiguedad:
+                oid_str = str(oid_cat).strip()
+                if oid_str not in historial or mjd_det > historial[oid_str]:
+                    historial[oid_str] = mjd_det
+        except (ValueError, TypeError):
+            pass
+
+    return historial
+
+def guardar_historial_vistos(historial_dict):
+    try:
+        with open(ARCHIVO_HISTORIAL, "w", encoding="utf-8") as f:
+            json.dump(historial_dict, f, ensure_ascii=False)
+    except Exception:
+        pass
+
 def obtener_mjd_rastreo():
     if not os.path.exists(ARCHIVO_MJD):
-        return round(Time(datetime.now(timezone.utc) - timedelta(days=2)).mjd, 1)
+        return round(Time(datetime.now(timezone.utc) - timedelta(days=2)).mjd, 4)
     with open(ARCHIVO_MJD, 'r', encoding='utf-8') as f:
-        return round(float(f.read().strip()), 1)
+        return round(float(f.read().strip()), 4)
 
 def guardar_mjd_rastreo(mjd):
     with open(ARCHIVO_MJD, 'w', encoding='utf-8') as f:
-        f.write(str(round(float(mjd), 1)))
+        f.write(str(round(float(mjd), 4)))
 
 def registrar_log(mensaje, log_file):
     print(mensaje)
@@ -541,16 +585,17 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
     registrar_log("[+] Procesamiento TNS finalizado. Patrullaje completado.", log_file)
 
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (25.1 - OPTIMIZACIÓN DE RED Y GUILLOTINA TEMPRANA) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (25.2 - TAMIZ DE MEMORIA EN RAM Y RELOJ 4D) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
-    # Capturamos el instante exacto de inicio del patrullaje para no generar puntos ciegos si el ciclo demora
-    mjd_inicio_patrullaje = Time(datetime.now(timezone.utc)).mjd
+    # Capturamos el instante exacto de inicio del patrullaje con precisión de 4 decimales
+    mjd_inicio_patrullaje = round(Time(datetime.now(timezone.utc)).mjd, 4)
     
     url_tap = "https://tap.alerce.online/tap"
     servicio_tap = vo.dal.TAPService(url_tap)
     
     catalogo_dict = cargar_catalogo_maestro()
+    historial_vistos = cargar_historial_vistos(mjd_inicio_patrullaje, catalogo_dict)
     
     for current_survey in ["ZTF", "LSST", "TNS_GLOBAL"]:
         log_file = f"bitacoras/bitacora_{current_survey}.log"
@@ -564,7 +609,7 @@ def main():
             continue
             
         target_classes = diccionario_categorias.get(current_survey, [])
-        limite_mjd = mjd_reciente - 0.2
+        limite_mjd = round(mjd_reciente - 0.2, 4)
         
         if current_survey == "ZTF":
             consulta_adql = f"""
@@ -595,7 +640,7 @@ def main():
             """
         
         try:
-            print(f"   Extrayendo catálogo masivo de {current_survey} vía TAP ADQL...")
+            print(f"   Extrayendo catálogo masivo de {current_survey} vía TAP ADQL (desde MJD {limite_mjd})...")
             resultados = servicio_tap.search(consulta_adql)
             
             # --- BLINDAJE ASTROPY NATIVO: Convertir OID a str ANTES de .to_pandas() ---
@@ -616,8 +661,26 @@ def main():
                 print(f"   (0 candidatos encontrados desde MJD {limite_mjd})")
                 registrar_log(f"[+] Patrullaje completado en {current_survey} (0 candidatos nuevos).", log_file)
                 continue
+
+            # =====================================================================
+            # 🧠 TAMIZ DE MEMORIA EN RAM (FILTRO DE OBJETOS YA ANALIZADOS)
+            # =====================================================================
+            total_descargados = len(candidatos)
+            mascara_nuevos = [
+                (str(r_oid).strip() not in historial_vistos) or (float(r_mjd) > (historial_vistos[str(r_oid).strip()] + 1e-4))
+                for r_oid, r_mjd in zip(candidatos['oid'], candidatos['lastmjd'])
+            ]
+            candidatos = candidatos[mascara_nuevos].reset_index(drop=True)
+            ya_vistos_omitidos = total_descargados - len(candidatos)
+            
+            print(f"   [Tamiz RAM] {total_descargados} descargados | {ya_vistos_omitidos} omitidos (ya evaluados) | {len(candidatos)} NUEVOS a procesar.")
+            
+            if candidatos.empty:
+                registrar_log(f"[+] Patrullaje completado en {current_survey} (0 objetos nuevos tras tamiz RAM).", log_file)
+                continue
+            # =====================================================================
                 
-            print(f"   ({len(candidatos)} objetos capturados. Iniciando análisis por paquetes de a 50 para proteger RAM...)")
+            print(f"   ({len(candidatos)} objetos nuevos. Iniciando análisis por paquetes de a 50 para proteger RAM...)")
             
             tamano_paquete = 50
             for i in range(0, len(candidatos), tamano_paquete):
@@ -626,6 +689,7 @@ def main():
                 
                 for index, fila in paquete.iterrows():
                     oid = str(fila['oid']).strip()
+                    mjd_fila = float(fila['lastmjd'])
                     
                     try:
                         # --- CANDADO DE TIEMPO ÁGIL (15s PARA EXTRACCIÓN ALERCE) ---
@@ -637,6 +701,7 @@ def main():
                             probs = client.query_probabilities(oid=oid, format='pandas')
                             if probs.empty: 
                                 signal.alarm(0)
+                                historial_vistos[oid] = mjd_fila
                                 continue
                             mejor_prediccion = probs.loc[probs['probability'].idxmax()]
                             clase_ia_final, probabilidad = mejor_prediccion['class_name'], float(mejor_prediccion['probability'])
@@ -644,6 +709,7 @@ def main():
                             clase_ia_final, probabilidad = infiltrar_ia_lsst(oid)
                             if not clase_ia_final:
                                 signal.alarm(0)
+                                historial_vistos[oid] = mjd_fila
                                 continue
                         
                         if clase_ia_final in target_classes and probabilidad > 0.60:
@@ -657,6 +723,9 @@ def main():
                                 det = obtener_detecciones_lsst(servicio_tap, oid, fila)
                                 
                             signal.alarm(0)
+                            
+                            # El objeto ya fue descargado exitosamente de ALeRCE; lo registramos como visto en esta época
+                            historial_vistos[oid] = mjd_fila
                             
                             if det is None or det.empty or len(det) < 2: 
                                 continue 
@@ -835,6 +904,8 @@ def main():
                                 registrar_log(f"[!] Error al inyectar {oid_para_laboratorio} al catálogo JSON: {e}", log_file)
                         else:
                             signal.alarm(0)
+                            # Descartado por IA <= 60% o categoría no objetivo: se registra para no volver a consultarlo
+                            historial_vistos[oid] = mjd_fila
 
                     except TimeoutException:
                         signal.alarm(0)
@@ -843,6 +914,9 @@ def main():
                     except Exception as e: 
                         signal.alarm(0)
                         print(f"      [!] Error interno al analizar {oid}: {e}")
+                
+                # Guardado incremental del historial al cerrar cada paquete de 50
+                guardar_historial_vistos(historial_vistos)
             
             registrar_log(f"[+] Patrullaje completado exitosamente en {current_survey}.", log_file)
                         
@@ -851,7 +925,8 @@ def main():
             registrar_log(f"Error TAP ADQL: {e}", log_file)
 
     guardar_catalogo_maestro(catalogo_dict)
-    print("=== CATÁLOGO MAESTRO ACTUALIZADO Y GUARDADO ===")
+    guardar_historial_vistos(historial_vistos)
+    print("=== CATÁLOGO MAESTRO E HISTORIAL ACTUALIZADOS Y GUARDADOS ===")
 
     guardar_mjd_rastreo(mjd_inicio_patrullaje)
     print("=== PATRULLAJE COMPLETADO ===")
