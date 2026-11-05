@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : laboratorio.py (Centro de Análisis Científico Profundo)
-VERSIÓN    : 18.9 (FASE 8: CASCADA DE REDSHIFT, BLINDAJE ESPECTRAL Y RED ÁGIL)
+VERSIÓN    : 19.0 (FASE 9: DEPURACIÓN DE CONSULTAS REDUNDANTES Y RED ÁGIL)
 =============================================================================
 """
 
@@ -17,8 +17,6 @@ import astropy.units as u
 from astroquery.ipac.nexsci.nasa_exoplanet_archive import NasaExoplanetArchive
 from astroquery.sdss import SDSS
 from astroquery.simbad import Simbad
-from astroquery.vizier import Vizier
-from astroquery.eso import Eso
 from astroquery.ipac.ned import Ned
 from dotenv import load_dotenv
 
@@ -160,12 +158,12 @@ def buscar_exoplanetas(coordenadas, tipo_evento="desconocido", radio_arcsec=60):
     return tiene_planetas, planetas_info
 
 # =====================================================================
-# ESPECTROSCOPÍA DINÁMICA
+# ESPECTROSCOPÍA DINÁMICA (SDSS NORTE/ECUATORIAL SIN BLOQUEOS FALLIDOS)
 # =====================================================================
 def analizar_espectroscopia_activa(coordenadas, id_evento, tipo_evento="desconocido", redshift=0.0):
-    print(f"\n[3/4] 🔬 Iniciando Escudo Espectroscópico Bi-Hemisférico para {id_evento}...")
+    print(f"\n[3/4] 🔬 Iniciando Escudo Espectroscópico para {id_evento}...")
     dec = coordenadas.dec.degree
-    hay_emision, ew_halfa, fuente_espectro, estado_radar_eso = False, 0.0, "Ninguna", "Sin revisar"
+    hay_emision, ew_halfa, fuente_espectro, estado_radar_eso = False, 0.0, "Ninguna", "Sin datos públicos 1D"
 
     if dec > -20.0:
         print("   [+] Coordenada en Hemisferio Norte/Ecuatorial. Consultando SDSS...")
@@ -204,7 +202,7 @@ def analizar_espectroscopia_activa(coordenadas, id_evento, tipo_evento="desconoc
                 fuente_espectro = "SDSS"
                 print(f"   [!!!] FIRMA SDSS: Espectro obtenido (EW H-alfa local aprox: {ew_halfa:.2f} Å)")
 
-                # --- NUEVO PLOTEO TAXONÓMICO COMPLETO ---
+                # --- PLOTEO TAXONÓMICO COMPLETO ---
                 plt.style.use('dark_background')
                 fig = plt.figure(figsize=(12, 6))
                 
@@ -228,50 +226,19 @@ def analizar_espectroscopia_activa(coordenadas, id_evento, tipo_evento="desconoc
                 
                 guardar_grafico_memoria(fig, f"data/quimica_halfa_{id_evento}.png")
                 return hay_emision, ew_halfa, fuente_espectro, estado_radar_eso, redshift
-            else: print("   [-] SDSS no tiene espectro. Pasando a respaldo global...")
-        except Exception as e: print(f"   [-] Fallo en conexión SDSS: {e}. Pasando a respaldo...")
-        finally:
-            signal.alarm(0)
-
-    if fuente_espectro == "Ninguna":
-        print("   [+] Buscando abundancias químicas en cielos del sur (VizieR: GALAH)...")
-        try:
-            signal.signal(signal.SIGALRM, manejador_timeout_lab)
-            signal.alarm(10)
-            v = Vizier(columns=['*'], catalog="J/MNRAS/506/150")
-            v.TIMEOUT = 8 
-            res_galah = v.query_region(coordenadas, radius=5*u.arcsec)
-            if len(res_galah) > 0:
-                print("   [+] Objetivo encontrado en GALAH DR3.")
-                fuente_espectro = "GALAH (VizieR)"
-                hay_emision, ew_halfa = True, -2.5 
-        except Exception: print("   [-] Fallo en VizieR/GALAH.")
-        finally:
-            signal.alarm(0)
-
-    if fuente_espectro == "Ninguna":
-        print("   [+] Activando Radar ESO...")
-        try:
-            signal.signal(signal.SIGALRM, manejador_timeout_lab)
-            signal.alarm(10)
-            Eso.TIMEOUT = 8
-            res_eso = Eso.query_region(coordenadas, radius=5*u.arcsec)
-            if res_eso and len(res_eso) > 0:
-                print("   [!!!] ORO ASTRONÓMICO: Espectros en Archivo ESO.")
-                estado_radar_eso = "ESPECTRO ENCONTRADO EN ESO"
             else:
-                estado_radar_eso = "Sin datos en archivo ESO"
-                print("   [-] Sin datos en archivo público ESO.")
-        except Exception: 
-            estado_radar_eso = "Radar ESO Inaccesible"
-            print("   [-] Fallo en Radar ESO.")
+                print("   [-] SDSS no registra espectro previo para esta coordenada.")
+        except Exception as e:
+            print(f"   [-] Fallo en conexión SDSS: {e}.")
         finally:
             signal.alarm(0)
+    else:
+        print("   [-] Coordenada austral (Dec <= -20°): fuera de cobertura SDSS.")
 
     return hay_emision, ew_halfa, fuente_espectro, estado_radar_eso, redshift
 
 def buscar_espectro_y_fotometria(coordenadas, id_evento):
-    print(f"\n[2/X] 🌈 Iniciando análisis térmico SED Quiescente...")
+    print(f"\n[2/4] 🌈 Iniciando análisis térmico SED Quiescente...")
     magnitudes_finales, l_validas, e_validas = [], [] ,[]
     es_enana_roja = None 
 
@@ -297,7 +264,7 @@ def buscar_espectro_y_fotometria(coordenadas, id_evento):
                             if not np.isnan(mag_float):
                                 magnitudes_finales.append(mag_float); l_validas.append(long_onda_simbad[i]); e_validas.append(bandas_simbad[i])
                         except Exception: pass
-    except Exception: print("   [-] Fallo al obtener fotometría Simbad (Timeout).")
+    except Exception: print("   [-] Sin fotometría multibanda histórica en Simbad.")
     finally:
         signal.alarm(0)
 
@@ -356,7 +323,7 @@ DISTANCIA        : {distancia}
     contenido += f"\n[3] ACTIVIDAD CROMOSFÉRICA / QUÍMICA (Fuente: {fuente_espectro})\n"
     if emision_activa is True: contenido += f"    ESTADO QUÍMICO: Confirmación de emisión/actividad (EW aprox: {valor_ew:.2f}).\n"
     elif emision_activa is False and fuente_espectro != "Ninguna": contenido += f"    ESTADO QUÍMICO: Sin línea de emisión significativa detectada.\n"
-    else: contenido += f"    ESTADO QUÍMICO: Carencia de datos públicos 1D. Radar ESO indica: {estado_eso}\n"
+    else: contenido += f"    ESTADO QUÍMICO: {estado_eso}.\n"
 
     contenido += "\n[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)\n"
     
@@ -376,7 +343,7 @@ DISTANCIA        : {distancia}
     return guardar_archivo_texto(ruta_archivo, contenido)
 
 def buscar_galaxia_anfitriona(coordenadas):
-    print(f"\n[1/3] 🌌 Buscando Galaxia Anfitriona (NASA NED - 120 arcsec)...")
+    print(f"\n[1/2] 🌌 Buscando Galaxia Anfitriona (NASA NED - 120 arcsec)...")
     galaxia, redshift = "Desconocida (Intergaláctica / Muy lejana)", "Desconocido"
     try:
         signal.signal(signal.SIGALRM, manejador_timeout_lab)
@@ -499,9 +466,7 @@ URL de Confirmación     : https://www.wis-tns.org/object/{escudo_hit.split(' ')
                 z_float = 0.0
             # --------------------------------------------------
             
-            _ = buscar_espectro_y_fotometria(coordenadas, id_limpio)
-            
-            # --- NUEVA LLAMADA: Atrapando el z_final que podría rescatar SDSS ---
+            # --- LLAMADA DIRECTA A ESPECTROSCOPÍA (Omitiendo SED estelar redundante) ---
             emision_activa, valor_ew, fuente_espectro, estado_eso, z_final = analizar_espectroscopia_activa(coordenadas, id_limpio, tipo_evento, redshift=z_float)
             
             # --- PARADOJA DEL TIEMPO RESUELTA: Cálculo de distancia Post-SDSS ---
