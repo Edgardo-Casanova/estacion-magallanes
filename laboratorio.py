@@ -2,11 +2,12 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : laboratorio.py (Centro de Análisis Científico Profundo)
-VERSIÓN    : 18.8 (FASE 8: CASCADA DE REDSHIFT Y BLINDAJE ESPECTRAL)
+VERSIÓN    : 18.9 (FASE 8: CASCADA DE REDSHIFT, BLINDAJE ESPECTRAL Y RED ÁGIL)
 =============================================================================
 """
 
 import os
+import signal
 import numpy as np
 import warnings
 import matplotlib.pyplot as plt
@@ -25,6 +26,12 @@ from operaciones_too import generar_alerta_comunidad
 
 warnings.filterwarnings('ignore')
 load_dotenv()
+
+class TimeoutLaboratorio(Exception):
+    pass
+
+def manejador_timeout_lab(signum, frame):
+    raise TimeoutLaboratorio("Timeout de red en catálogo externo.")
 
 # =====================================================================
 # MOTOR TAXONÓMICO MAGALLANES
@@ -126,8 +133,10 @@ def calcular_distancia_hubble(z):
 def buscar_exoplanetas(coordenadas, tipo_evento="desconocido", radio_arcsec=60):
     print(f"\n[1/4] 📡 Consultando NASA Exoplanet Archive (Radio cinemático de {radio_arcsec}\")...")
     tiene_planetas, planetas_info = False, []
-    NasaExoplanetArchive.TIMEOUT = 25
+    NasaExoplanetArchive.TIMEOUT = 8
     try:
+        signal.signal(signal.SIGALRM, manejador_timeout_lab)
+        signal.alarm(10)
         resultado = NasaExoplanetArchive.query_region(table="ps", coordinates=coordenadas, radius=radio_arcsec*u.arcsec)
         if resultado and len(resultado) > 0:
             if 'default_flag' in resultado.colnames: resultado = resultado[resultado['default_flag'] == 1]
@@ -146,6 +155,8 @@ def buscar_exoplanetas(coordenadas, tipo_evento="desconocido", radio_arcsec=60):
     except Exception as e: 
         print(f"   [-] Error en catálogo NASA (Timeout o caída): {e}")
         tiene_planetas = None  
+    finally:
+        signal.alarm(0)
     return tiene_planetas, planetas_info
 
 # =====================================================================
@@ -158,8 +169,10 @@ def analizar_espectroscopia_activa(coordenadas, id_evento, tipo_evento="desconoc
 
     if dec > -20.0:
         print("   [+] Coordenada en Hemisferio Norte/Ecuatorial. Consultando SDSS...")
-        SDSS.TIMEOUT = 45
+        SDSS.TIMEOUT = 8
         try:
+            signal.signal(signal.SIGALRM, manejador_timeout_lab)
+            signal.alarm(12)
             xid = SDSS.query_region(coordenadas, radius=5*u.arcsec, spectro=True)
             if xid is not None and len(xid) > 0:
                 # --- RESCATE DE REDSHIFT ESPECTROSCÓPICO (El estándar de oro) ---
@@ -172,6 +185,7 @@ def analizar_espectroscopia_activa(coordenadas, id_evento, tipo_evento="desconoc
                 # -----------------------------------------------------------------
                 
                 espectros = SDSS.get_spectra(matches=xid)
+                signal.alarm(0)
                 datos = espectros[0][1].data
                 flujo, long_onda = datos['flux'], 10 ** datos['loglam']
                 
@@ -216,23 +230,31 @@ def analizar_espectroscopia_activa(coordenadas, id_evento, tipo_evento="desconoc
                 return hay_emision, ew_halfa, fuente_espectro, estado_radar_eso, redshift
             else: print("   [-] SDSS no tiene espectro. Pasando a respaldo global...")
         except Exception as e: print(f"   [-] Fallo en conexión SDSS: {e}. Pasando a respaldo...")
+        finally:
+            signal.alarm(0)
 
     if fuente_espectro == "Ninguna":
         print("   [+] Buscando abundancias químicas en cielos del sur (VizieR: GALAH)...")
         try:
+            signal.signal(signal.SIGALRM, manejador_timeout_lab)
+            signal.alarm(10)
             v = Vizier(columns=['*'], catalog="J/MNRAS/506/150")
-            v.TIMEOUT = 45 
+            v.TIMEOUT = 8 
             res_galah = v.query_region(coordenadas, radius=5*u.arcsec)
             if len(res_galah) > 0:
                 print("   [+] Objetivo encontrado en GALAH DR3.")
                 fuente_espectro = "GALAH (VizieR)"
                 hay_emision, ew_halfa = True, -2.5 
         except Exception: print("   [-] Fallo en VizieR/GALAH.")
+        finally:
+            signal.alarm(0)
 
     if fuente_espectro == "Ninguna":
         print("   [+] Activando Radar ESO...")
         try:
-            Eso.TIMEOUT = 45
+            signal.signal(signal.SIGALRM, manejador_timeout_lab)
+            signal.alarm(10)
+            Eso.TIMEOUT = 8
             res_eso = Eso.query_region(coordenadas, radius=5*u.arcsec)
             if res_eso and len(res_eso) > 0:
                 print("   [!!!] ORO ASTRONÓMICO: Espectros en Archivo ESO.")
@@ -243,6 +265,8 @@ def analizar_espectroscopia_activa(coordenadas, id_evento, tipo_evento="desconoc
         except Exception: 
             estado_radar_eso = "Radar ESO Inaccesible"
             print("   [-] Fallo en Radar ESO.")
+        finally:
+            signal.alarm(0)
 
     return hay_emision, ew_halfa, fuente_espectro, estado_radar_eso, redshift
 
@@ -252,8 +276,10 @@ def buscar_espectro_y_fotometria(coordenadas, id_evento):
     es_enana_roja = None 
 
     try:
+        signal.signal(signal.SIGALRM, manejador_timeout_lab)
+        signal.alarm(10)
         custom_simbad = Simbad()
-        custom_simbad.TIMEOUT = 25 
+        custom_simbad.TIMEOUT = 8 
         custom_simbad.add_votable_fields('flux(V)', 'flux(R)', 'flux(J)', 'flux(H)', 'flux(K)')
         resultado = custom_simbad.query_region(coordenadas, radius=5*u.arcsec)
 
@@ -272,6 +298,8 @@ def buscar_espectro_y_fotometria(coordenadas, id_evento):
                                 magnitudes_finales.append(mag_float); l_validas.append(long_onda_simbad[i]); e_validas.append(bandas_simbad[i])
                         except Exception: pass
     except Exception: print("   [-] Fallo al obtener fotometría Simbad (Timeout).")
+    finally:
+        signal.alarm(0)
 
     if len(magnitudes_finales) < 2: return None
 
@@ -351,7 +379,9 @@ def buscar_galaxia_anfitriona(coordenadas):
     print(f"\n[1/3] 🌌 Buscando Galaxia Anfitriona (NASA NED - 120 arcsec)...")
     galaxia, redshift = "Desconocida (Intergaláctica / Muy lejana)", "Desconocido"
     try:
-        Ned.TIMEOUT = 25 
+        signal.signal(signal.SIGALRM, manejador_timeout_lab)
+        signal.alarm(10)
+        Ned.TIMEOUT = 8 
         resultado = Ned.query_region(coordenadas, radius=120*u.arcsec)
         
         if resultado is not None and len(resultado) > 0:
@@ -373,6 +403,8 @@ def buscar_galaxia_anfitriona(coordenadas):
                         print(f"   [+] Entidad identificada (NED): {galaxia} (Tipo: {otype})")
                         break
     except Exception: print("   [-] Fallo al buscar galaxia en NASA NED (Timeout o error).")
+    finally:
+        signal.alarm(0)
     return galaxia, redshift
 
 def generar_circular_extragalactica(ra, dec, id_evento, galaxia, redshift, tipo_evento, reporte_matematico=""):
