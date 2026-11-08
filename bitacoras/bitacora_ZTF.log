@@ -23969,3 +23969,27 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-11-08 15:19:07] -> Procesando evento de interés: ZTF19aagrpic (agn)
 [2026-11-08 15:22:14] -> Procesando evento de interés: ZTF18aaesljl (blazar)
 [2026-11-08 15:22:59] [+] Patrullaje completado exitosamente en ZTF.
+[2026-11-08 15:30:10] ==================================================
+[2026-11-08 15:30:10] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-11-08 15:31:50] -> Procesando evento de interés: ZTF18acdvqrq (agn)
+[2026-11-08 15:33:00] -> Procesando evento de interés: ZTF18aabwbbc (blazar)
+[2026-11-08 15:33:59] -> Procesando evento de interés: ZTF20acnyzoo (blazar)
+[2026-11-08 15:34:35] -> Procesando evento de interés: ZTF18aafkuen (agn)
+[2026-11-08 15:38:41] -> Procesando evento de interés: ZTF18abcrzco (blazar)
+[2026-11-08 15:39:27] -> Procesando evento de interés: ZTF18aaznxwy (blazar)
+[2026-11-08 15:41:55] -> Procesando evento de interés: ZTF20aaudakk (agn)
+[2026-11-08 15:43:36] -> Procesando evento de interés: ZTF18aczumwp (blazar)
+[2026-11-08 15:44:09] -> Procesando evento de interés: ZTF22aabvyup (blazar)
+[2026-11-08 15:44:47] -> Procesando evento de interés: ZTF20acxzhkz (agn)
+[2026-11-08 15:46:45] -> Procesando evento de interés: ZTF17aaaplxn (nova)
+[2026-11-08 15:47:34] -> Procesando evento de interés: ZTF17aacnkbw (nova)
+[2026-11-08 15:48:25] -> Procesando evento de interés: ZTF17aacnfku (nova)
+[2026-11-08 15:49:15] -> Procesando evento de interés: ZTF17aaaplwv (nova)
+[2026-11-08 15:49:54] -> Procesando evento de interés: ZTF20acuahou (blazar)
+[2026-11-08 15:52:09] -> Procesando evento de interés: ZTF18adalcca (blazar)
+[2026-11-08 15:52:56] -> Procesando evento de interés: ZTF18adalcfl (nova)
+[2026-11-08 15:53:35] -> Procesando evento de interés: ZTF20acpimur (blazar)
+[2026-11-08 15:55:43]       [🛡️] ALERTA TNS: ZTF19aaaphbd interceptado. Ya es AT 2019kx.
+[2026-11-08 15:55:43]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-11-08 15:55:43] -> Procesando evento de interés: AT 2019kx (agn)
+[2026-11-08 16:00:26] [+] Patrullaje completado exitosamente en ZTF.
