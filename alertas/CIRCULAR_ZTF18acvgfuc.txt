@@ -1,32 +1,27 @@
 =================================================================
- CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
+ CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-10-02 17:44:47 UTC
-OBJETO DETECTADO : ZTF18acvgfuc (NOVA)
+FECHA DE EMISIÓN : 2026-11-08 14:44:24 UTC
+EVENTO DETECTADO : ZTF18acvgfuc (BLAZAR)
 COORDENADAS ICRS : RA 133.86249 | Dec 11.10464
-DISTANCIA        : ~1341.5 Años Luz
 -----------------------------------------------------------------
 
-[1] ESTADO DEL SISTEMA PLANETARIO
-    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).
+[1] ENTORNO COSMOLÓGICO
+    OBJETO CENTRAL / ANFITRIONA : SDSS J085519.74+110529.2
+    REDSHIFT (z)                : Desconocido
+    DISTANCIA HUBBLE            : Desconocida N/A
 
-[2] EVALUACIÓN TERMODINÁMICA (SED QUIESCENTE)
-    FIRMA TÉRMICA: Datos insuficientes para evaluación térmica SED.
-
-[3] ACTIVIDAD CROMOSFÉRICA / QUÍMICA (Fuente: Ninguna)
-    ESTADO QUÍMICO: Carencia de datos públicos 1D. Radar ESO indica: Radar ESO Inaccesible
-
-[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
-    PRIORIDAD    : ALTA PRIORIDAD (Variable Cataclísmica)
-    INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).
+[2] EVALUACIÓN MAGALLANES
+    PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
+    INSTRUMENTO : Observatorios masivos (VLT / Gemini).
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
     CLASE IA (ALeRCE)    : SNIa (Confianza: 88.4%)
-    RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
-    EDAD HISTÓRICA       : 2851.1 días
+    RECLASIFICACIÓN      : Blazar (Chorro relativista - Alta aceleración)
+    EDAD HISTÓRICA       : 2888.1 días
     SALTO LUMINOSIDAD    : 2.48 magnitudes
     TASA ACEL. HISTÓRICA : 0.030 mag/día
     TASA ACEL. RECIENTE  : 0.129 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61315.5252
+    MJD ÚLTIMA DETEC.    : 61352.5219
 =================================================================
