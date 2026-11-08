@@ -6533,3 +6533,24 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-11-08 13:08:02] -> Procesando evento de interés: 170046078540316737 (blazar)
 [2026-11-08 13:08:33] -> Procesando evento de interés: 313871013933744233 (blazar)
 [2026-11-08 13:08:42] [+] Patrullaje completado exitosamente en LSST.
+[2026-11-08 14:03:12] ==================================================
+[2026-11-08 14:03:12] APUNTANDO TELESCOPIO A RED: LSST
+[2026-11-08 14:03:44] -> Procesando evento de interés: 170028485695766597 (supernova)
+[2026-11-08 14:04:15] -> Procesando evento de interés: 170587117720174600 (blazar)
+[2026-11-08 14:04:49] -> Procesando evento de interés: 313761042374066302 (blazar)
+[2026-11-08 14:05:18] -> Procesando evento de interés: 313699506516918421 (blazar)
+[2026-11-08 14:05:48] -> Procesando evento de interés: 313761042229362780 (blazar)
+[2026-11-08 14:06:17] -> Procesando evento de interés: 313681913203654686 (blazar)
+[2026-11-08 14:06:46]       [🛡️] ALERTA TNS: 313756671695913113 interceptado. Ya es AT 2026els.
+[2026-11-08 14:06:46]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: blazar.
+[2026-11-08 14:06:46] -> Procesando evento de interés: AT 2026els (blazar)
+[2026-11-08 14:07:18] -> Procesando evento de interés: 170028485652250631 (supernova)
+[2026-11-08 14:07:49] -> Procesando evento de interés: 313761042350997517 (blazar)
+[2026-11-08 14:08:20] -> Procesando evento de interés: 313998539403296858 (blazar)
+[2026-11-08 14:08:49] -> Procesando evento de interés: 170028492396167325 (agn)
+[2026-11-08 14:09:20] -> Procesando evento de interés: 313756671839567878 (agn)
+[2026-11-08 14:09:54] -> Procesando evento de interés: 170028485716213891 (blazar)
+[2026-11-08 14:10:26] -> Procesando evento de interés: 313756671819120809 (blazar)
+[2026-11-08 14:11:00] -> Procesando evento de interés: 170028485682659502 (blazar)
+[2026-11-08 14:11:35] -> Procesando evento de interés: 313963359465111634 (supernova)
+[2026-11-08 14:11:41] [+] Patrullaje completado exitosamente en LSST.

@@ -23877,3 +23877,30 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-11-08 11:08:20] -> Procesando evento de interés: ZTF18abwbjzs (nova)
 [2026-11-08 11:09:02] -> Procesando evento de interés: ZTF18abvtcyi (agn)
 [2026-11-08 11:10:51] [+] Patrullaje completado exitosamente en ZTF.
+[2026-11-08 13:30:15] ==================================================
+[2026-11-08 13:30:15] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-11-08 13:30:49] -> Procesando evento de interés: ZTF19aajgoxo (agn)
+[2026-11-08 13:33:38] -> Procesando evento de interés: ZTF18acpdfyw (agn)
+[2026-11-08 13:34:21] -> Procesando evento de interés: ZTF18acvgglb (blazar)
+[2026-11-08 13:38:22] -> Procesando evento de interés: ZTF18aafdhoa (agn)
+[2026-11-08 13:38:56] -> Procesando evento de interés: ZTF18aafuksm (agn)
+[2026-11-08 13:44:15] -> Procesando evento de interés: ZTF18adbhpsf (agn)
+[2026-11-08 13:45:14] -> Procesando evento de interés: ZTF23abefjnf (blazar)
+[2026-11-08 13:45:50] -> Procesando evento de interés: ZTF22aaiyecp (agn)
+[2026-11-08 13:46:21] -> Procesando evento de interés: ZTF18adbhptr (nova)
+[2026-11-08 13:52:05] -> Procesando evento de interés: ZTF18abuqgyj (nova)
+[2026-11-08 13:53:19] Timeout: El objeto ZTF26acfzlwj provocó un atasco de red y fue omitido.
+[2026-11-08 13:53:34] Timeout: El objeto ZTF26acfzmja provocó un atasco de red y fue omitido.
+[2026-11-08 13:55:18] -> Procesando evento de interés: ZTF23abcoatn (agn)
+[2026-11-08 13:56:10] -> Procesando evento de interés: ZTF18aaglptg (nova)
+[2026-11-08 13:57:11] -> Procesando evento de interés: ZTF18aaicnwh (nova)
+[2026-11-08 13:58:02] -> Procesando evento de interés: ZTF18aaafzlz (nova)
+[2026-11-08 13:58:56] -> Procesando evento de interés: ZTF18aahnmac (agn)
+[2026-11-08 13:59:34] -> Procesando evento de interés: ZTF18aagmxvt (agn)
+[2026-11-08 14:00:23]       [🛡️] ALERTA TNS: ZTF18aaabltn interceptado. Ya es AT 2018gkr.
+[2026-11-08 14:00:23]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-11-08 14:00:23] -> Procesando evento de interés: AT 2018gkr (agn)
+[2026-11-08 14:01:03] -> Procesando evento de interés: ZTF18aculkol (blazar)
+[2026-11-08 14:01:55] -> Procesando evento de interés: ZTF18aaasgvl (nova)
+[2026-11-08 14:02:47] -> Procesando evento de interés: ZTF18aaashju (nova)
+[2026-11-08 14:03:12] [+] Patrullaje completado exitosamente en ZTF.
