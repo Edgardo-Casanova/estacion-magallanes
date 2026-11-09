@@ -609,7 +609,8 @@ def main():
             continue
             
         target_classes = diccionario_categorias.get(current_survey, [])
-        limite_mjd = round(mjd_reciente - 0.2, 4)
+        margen_dias = 0.2 if current_survey == "ZTF" else 1.0
+        limite_mjd = round(mjd_reciente - margen_dias, 4)
         
         if current_survey == "ZTF":
             consulta_adql = f"""
