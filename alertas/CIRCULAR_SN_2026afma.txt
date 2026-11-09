@@ -1,20 +1,36 @@
-======================================================================
-[REGISTRO OFICIAL TNS] - EVENTO CONFIRMADO
-======================================================================
-ID de Evento          : SN 2026afma
-Clasificación Oficial : SN Ia
-Red de Descubrimiento : YSE
-Coordenadas (ICRS)    : RA 52.08882 | Dec -27.38099
+=================================================================
+ CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
+=================================================================
+FECHA DE EMISIÓN : 2026-11-09 20:28:30 UTC
+EVENTO DETECTADO : SN_2026afma (BLAZAR)
+COORDENADAS ICRS : RA 52.08898 | Dec -27.38117
+-----------------------------------------------------------------
 
-[CÁLCULO DE DISTANCIA (Basado en z = 0.147)]
-Entre 603.69 y 653.85 Megaparsecs
-(Aprox. 1968.98 a 2132.57 M Años luz)
+[1] ENTORNO COSMOLÓGICO
+    OBJETO CENTRAL / ANFITRIONA : WISEA J032814.08-272224.0
+    REDSHIFT (z)                : 0.14327
+    DISTANCIA HUBBLE            : Entre 588.37 y 637.26 Megaparsecs (Aprox. 1919.02 a 2078.46 M Años luz)
 
-======================================================================
-🔗 ENLACE OFICIAL DEL TRANSIENT NAME SERVER:
-https://www.wis-tns.org/object/2026afma
-======================================================================
-* NOTA: Este evento ya está confirmado por la IAU. No se requiere 
-  emisión de telegramas ni seguimiento de validación por parte 
-  de la Estación Magallanes.
-======================================================================
+[2] EVALUACIÓN MAGALLANES
+    PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
+    INSTRUMENTO : Observatorios masivos (VLT / Gemini).
+=================================================================
+🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
+=================================================================
+ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
+Nombre Oficial Asignado : SN 2026afma
+URL de Confirmación     : https://www.wis-tns.org/object/2026afma
+-> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
+=================================================================
+
+
+[5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
+    CLASE IA (ALeRCE)    : AGN (Confianza: 73.2%)
+    RECLASIFICACIÓN      : Blazar (Chorro relativista - Alta aceleración)
+    EDAD HISTÓRICA       : 10.2 días
+    SALTO LUMINOSIDAD    : 1.44 magnitudes
+    TASA ACEL. HISTÓRICA : 0.236 mag/día
+    TASA ACEL. RECIENTE  : 0.236 mag/día
+    RED DE ORIGEN        : LSST
+    MJD ÚLTIMA DETEC.    : 61353.3273
+=================================================================
