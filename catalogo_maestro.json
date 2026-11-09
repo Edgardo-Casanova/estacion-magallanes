@@ -3301,13 +3301,13 @@
     },
     {
         "oid": "ZTF18acvbqtc",
-        "ra": 49.69023600895698,
-        "dec": 21.576888526023158,
-        "tipo": "agn",
+        "ra": 49.69023418717907,
+        "dec": 21.576891622503325,
+        "tipo": "blazar",
         "survey": "ZTF",
-        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
         "vip": false,
-        "mjd_deteccion": 61347.3384953998,
+        "mjd_deteccion": 61353.26196759986,
         "img_url": "data/curva_luz_ZTF18acvbqtc.png"
     },
     {
@@ -17480,13 +17480,13 @@
     },
     {
         "oid": "ZTF18abuwchx",
-        "ra": 42.710191312700765,
-        "dec": -14.474043851023877,
-        "tipo": "blazar",
+        "ra": 42.71018931958288,
+        "dec": -14.47404379910957,
+        "tipo": "agn",
         "survey": "ZTF",
-        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61340.25584489992,
+        "mjd_deteccion": 61353.26527780015,
         "img_url": "data/curva_luz_ZTF18abuwchx.png"
     },
     {
@@ -39216,13 +39216,13 @@
     },
     {
         "oid": "ZTF18adbmvvn",
-        "ra": 55.16445850286492,
-        "dec": 12.819535215334827,
+        "ra": 55.164459569499776,
+        "dec": 12.819547456939858,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61321.460833299905,
+        "mjd_deteccion": 61353.26244209986,
         "img_url": "data/curva_luz_ZTF18adbmvvn.png"
     },
     {
@@ -83202,5 +83202,16 @@
         "vip": false,
         "mjd_deteccion": 61353.21039350005,
         "img_url": "data/curva_luz_ZTF21absvnia.png"
+    },
+    {
+        "oid": "ZTF20achufdz",
+        "ra": 47.43017570689535,
+        "dec": -7.7409991034482735,
+        "tipo": "agn",
+        "survey": "ZTF",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61353.26480320003,
+        "img_url": "data/curva_luz_ZTF20achufdz.png"
     }
 ]
