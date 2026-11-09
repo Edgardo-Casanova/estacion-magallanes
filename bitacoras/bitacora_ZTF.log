@@ -24328,3 +24328,30 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-11-09 12:05:12] -> Procesando evento de interés: ZTF22abzygof (agn)
 [2026-11-09 12:06:01] -> Procesando evento de interés: ZTF19abyewff (nova)
 [2026-11-09 12:06:39] [+] Patrullaje completado exitosamente en ZTF.
+[2026-11-09 12:30:17] ==================================================
+[2026-11-09 12:30:17] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-11-09 12:37:19] -> Procesando evento de interés: ZTF18aafpdsp (agn)
+[2026-11-09 12:37:57] -> Procesando evento de interés: ZTF18aafuksm (agn)
+[2026-11-09 12:38:34] -> Procesando evento de interés: ZTF18abwloqn (agn)
+[2026-11-09 12:39:09] -> Procesando evento de interés: ZTF19acyhhzu (nova)
+[2026-11-09 12:46:36] -> Procesando evento de interés: ZTF17aaaguct (blazar)
+[2026-11-09 12:47:20] -> Procesando evento de interés: ZTF18accdhpi (agn)
+[2026-11-09 12:48:01] -> Procesando evento de interés: ZTF18adojmlf (agn)
+[2026-11-09 12:49:17] -> Procesando evento de interés: ZTF18acyxjac (agn)
+[2026-11-09 12:50:07] -> Procesando evento de interés: ZTF17aaabfay (nova)
+[2026-11-09 12:50:56] -> Procesando evento de interés: ZTF18aajwgru (nova)
+[2026-11-09 12:51:49] -> Procesando evento de interés: ZTF18adgdnjr (nova)
+[2026-11-09 12:52:29]       [🛡️] ALERTA TNS: ZTF18aagbzwr interceptado. Ya es AT 2019pya.
+[2026-11-09 12:52:29]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: blazar.
+[2026-11-09 12:52:29] -> Procesando evento de interés: AT 2019pya (blazar)
+[2026-11-09 12:53:03] -> Procesando evento de interés: ZTF19aacsqxq (blazar)
+[2026-11-09 12:53:50] -> Procesando evento de interés: ZTF17aaatjsh (blazar)
+[2026-11-09 12:54:22]       [🛡️] ALERTA TNS: ZTF19abxvjcc interceptado. Ya es AT 2019qph.
+[2026-11-09 12:54:22]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-11-09 12:54:22] -> Procesando evento de interés: AT 2019qph (agn)
+[2026-11-09 12:54:57]       [🛡️] ALERTA TNS: ZTF18aaeynun interceptado. Ya es AT 2022dpf.
+[2026-11-09 12:54:57]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-11-09 12:54:57] -> Procesando evento de interés: AT 2022dpf (agn)
+[2026-11-09 12:55:52] -> Procesando evento de interés: ZTF20acuafnq (nova)
+[2026-11-09 12:56:47] -> Procesando evento de interés: ZTF17aabrukj (nova)
+[2026-11-09 13:00:41] [+] Patrullaje completado exitosamente en ZTF.
