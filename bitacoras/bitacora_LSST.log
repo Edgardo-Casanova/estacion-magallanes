@@ -7396,3 +7396,12 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-11-10 20:30:18] ==================================================
 [2026-11-10 20:30:18] APUNTANDO TELESCOPIO A RED: LSST
 [2026-11-10 20:30:20] [+] Patrullaje completado en LSST (0 objetos nuevos tras tamiz RAM).
+[2026-11-10 21:30:15] ==================================================
+[2026-11-10 21:30:15] APUNTANDO TELESCOPIO A RED: LSST
+[2026-11-10 21:30:26] -> Procesando evento de interés: 170604726290219075 (blazar)
+[2026-11-10 21:30:34] -> Procesando evento de interés: 170604726312239292 (blazar)
+[2026-11-10 21:30:45] -> Procesando evento de interés: 171189570810413751 (blazar)
+[2026-11-10 21:30:59] -> Procesando evento de interés: 170587112205189326 (blazar)
+[2026-11-10 21:31:12] -> Procesando evento de interés: 171189570750119955 (blazar)
+[2026-11-10 21:31:21] -> Procesando evento de interés: 171189570744352788 (blazar)
+[2026-11-10 21:31:26] [+] Patrullaje completado exitosamente en LSST.
