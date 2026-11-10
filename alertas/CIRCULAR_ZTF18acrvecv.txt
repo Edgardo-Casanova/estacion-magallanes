@@ -1,20 +1,20 @@
 =================================================================
  CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-11-05 19:39:50 UTC
+FECHA DE EMISIÓN : 2026-11-10 13:38:23 UTC
 OBJETO DETECTADO : ZTF18acrvecv (NOVA)
 COORDENADAS ICRS : RA 109.59329 | Dec 4.38491
 DISTANCIA        : Desconocida
 -----------------------------------------------------------------
 
 [1] ESTADO DEL SISTEMA PLANETARIO
-    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).
+    ESTADO DESCONOCIDO: NASA Exoplanet Archive inaccesible (Timeout de red).
 
 [2] EVALUACIÓN TERMODINÁMICA (SED QUIESCENTE)
     FIRMA TÉRMICA: Datos insuficientes para evaluación térmica SED.
 
 [3] ACTIVIDAD CROMOSFÉRICA / QUÍMICA (Fuente: Ninguna)
-    ESTADO QUÍMICO: Carencia de datos públicos 1D. Radar ESO indica: Radar ESO Inaccesible
+    ESTADO QUÍMICO: Sin datos públicos 1D.
 
 [4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
     PRIORIDAD    : ALTA PRIORIDAD (Variable Cataclísmica)
@@ -23,10 +23,10 @@ DISTANCIA        : Desconocida
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
     CLASE IA (ALeRCE)    : CV/Nova (Confianza: 99.4%)
     RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
-    EDAD HISTÓRICA       : 2899.2 días
+    EDAD HISTÓRICA       : 2904.1 días
     SALTO LUMINOSIDAD    : 3.66 magnitudes
     TASA ACEL. HISTÓRICA : 0.001 mag/día
-    TASA ACEL. RECIENTE  : 0.145 mag/día
+    TASA ACEL. RECIENTE  : 1.006 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61349.5583
+    MJD ÚLTIMA DETEC.    : 61354.4810
 =================================================================
