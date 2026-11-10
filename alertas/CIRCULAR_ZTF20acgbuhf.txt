@@ -1,32 +1,27 @@
 =================================================================
- CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
+ CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-10-26 11:40:38 UTC
-OBJETO DETECTADO : ZTF20acgbuhf (NOVA)
+FECHA DE EMISIÓN : 2026-11-10 10:00:00 UTC
+EVENTO DETECTADO : ZTF20acgbuhf (AGN)
 COORDENADAS ICRS : RA 85.57898 | Dec 3.96452
-DISTANCIA        : ~2942.1 Años Luz
 -----------------------------------------------------------------
 
-[1] ESTADO DEL SISTEMA PLANETARIO
-    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).
+[1] ENTORNO COSMOLÓGICO
+    OBJETO CENTRAL / ANFITRIONA : WISEA J054218.55+035906.0
+    REDSHIFT (z)                : 0.06764
+    DISTANCIA HUBBLE            : Entre 277.80 y 300.88 Megaparsecs (Aprox. 906.05 a 981.33 M Años luz)
 
-[2] EVALUACIÓN TERMODINÁMICA (SED QUIESCENTE)
-    FIRMA TÉRMICA: Datos insuficientes para evaluación térmica SED.
-
-[3] ACTIVIDAD CROMOSFÉRICA / QUÍMICA (Fuente: Ninguna)
-    ESTADO QUÍMICO: Carencia de datos públicos 1D. Radar ESO indica: Radar ESO Inaccesible
-
-[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
-    PRIORIDAD    : ALTA PRIORIDAD (Variable Cataclísmica)
-    INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).
+[2] EVALUACIÓN MAGALLANES
+    PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
+    INSTRUMENTO : Observatorios masivos (VLT / Gemini).
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
     CLASE IA (ALeRCE)    : SNII (Confianza: 91.2%)
-    RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
-    EDAD HISTÓRICA       : 2216.9 días
+    RECLASIFICACIÓN      : AGN / Cuásar (Acreción térmica - Lenta)
+    EDAD HISTÓRICA       : 2231.8 días
     SALTO LUMINOSIDAD    : 1.08 magnitudes
     TASA ACEL. HISTÓRICA : 0.002 mag/día
-    TASA ACEL. RECIENTE  : 0.002 mag/día
+    TASA ACEL. RECIENTE  : 0.011 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61339.4438
+    MJD ÚLTIMA DETEC.    : 61354.3371
 =================================================================
