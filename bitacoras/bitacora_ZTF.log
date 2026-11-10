@@ -24670,3 +24670,37 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-11-10 08:03:51] -> Procesando evento de interés: AT 2020tni (agn)
 [2026-11-10 08:04:26] -> Procesando evento de interés: ZTF18absoqbx (nova)
 [2026-11-10 08:07:42] [+] Patrullaje completado exitosamente en ZTF.
+[2026-11-10 08:30:17] ==================================================
+[2026-11-10 08:30:17] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-11-10 08:35:21] -> Procesando evento de interés: ZTF18abuamgo (blazar)
+[2026-11-10 08:36:14] -> Procesando evento de interés: ZTF17aaclwce (blazar)
+[2026-11-10 08:37:09] -> Procesando evento de interés: ZTF18abtsltj (nova)
+[2026-11-10 08:37:52] -> Procesando evento de interés: ZTF17aaadiqp (nova)
+[2026-11-10 08:38:39] -> Procesando evento de interés: ZTF17aacmaee (nova)
+[2026-11-10 08:42:40]       [🛡️] ALERTA TNS: ZTF26acakche interceptado. Ya es SN 2026aeva.
+[2026-11-10 08:42:40]       -> [!] TNS Confirma: Magallanes acata la clasificación IAU.
+[2026-11-10 08:42:40] -> Procesando evento de interés: SN 2026aeva (supernova)
+[2026-11-10 08:43:14]       [🛡️] ALERTA TNS: ZTF19abkhmcv interceptado. Ya es AT 2019scc.
+[2026-11-10 08:43:14]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-11-10 08:43:14] -> Procesando evento de interés: AT 2019scc (agn)
+[2026-11-10 08:43:49]       [🛡️] ALERTA TNS: ZTF18abwjbix interceptado. Ya es SN 2018mwq.
+[2026-11-10 08:43:49]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone BLAZAR.
+[2026-11-10 08:43:49] -> Procesando evento de interés: SN 2018mwq (blazar)
+[2026-11-10 08:45:01] -> Procesando evento de interés: ZTF25abplywq (agn)
+[2026-11-10 08:45:31] -> Procesando evento de interés: ZTF18abtzuto (nova)
+[2026-11-10 08:46:55] -> Procesando evento de interés: ZTF18abtywsw (nova)
+[2026-11-10 08:47:48] -> Procesando evento de interés: ZTF21acmfmsj (agn)
+[2026-11-10 08:49:14] -> Procesando evento de interés: ZTF18absqwve (nova)
+[2026-11-10 08:50:30] -> Procesando evento de interés: ZTF20abxtdck (agn)
+[2026-11-10 08:51:18] -> Procesando evento de interés: ZTF19aaahsmi (agn)
+[2026-11-10 08:51:50] -> Procesando evento de interés: ZTF18abttett (agn)
+[2026-11-10 08:52:51] -> Procesando evento de interés: ZTF20aaiurjg (blazar)
+[2026-11-10 08:53:28] -> Procesando evento de interés: ZTF18abslpjy (agn)
+[2026-11-10 08:54:05] -> Procesando evento de interés: ZTF19abkhpag (agn)
+[2026-11-10 08:54:55] -> Procesando evento de interés: ZTF20abxtbwu (agn)
+[2026-11-10 08:59:22] -> Procesando evento de interés: ZTF18abqvkuc (agn)
+[2026-11-10 09:00:09] -> Procesando evento de interés: ZTF18abppdvg (agn)
+[2026-11-10 09:01:20] -> Procesando evento de interés: ZTF18abxtubr (nova)
+[2026-11-10 09:01:59] -> Procesando evento de interés: ZTF18acsyaxc (nova)
+[2026-11-10 09:04:23] -> Procesando evento de interés: ZTF18abrehds (agn)
+[2026-11-10 09:04:48] [+] Patrullaje completado exitosamente en ZTF.
