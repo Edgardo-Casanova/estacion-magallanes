@@ -8321,3 +8321,29 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-11-11 16:47:43] -> Procesando evento de interés: 170028487045283960 (supernova)
 [2026-11-11 16:47:54] -> Procesando evento de interés: 170028485958434951 (blazar)
 [2026-11-11 16:48:02] [+] Patrullaje completado exitosamente en LSST.
+[2026-11-11 17:30:22] ==================================================
+[2026-11-11 17:30:22] APUNTANDO TELESCOPIO A RED: LSST
+[2026-11-11 17:30:32] -> Procesando evento de interés: 170028485681610895 (blazar)
+[2026-11-11 17:30:43] -> Procesando evento de interés: 313893023138709597 (supernova)
+[2026-11-11 17:30:54] -> Procesando evento de interés: 313897383964966919 (blazar)
+[2026-11-11 17:31:04] -> Procesando evento de interés: 313972153401737393 (blazar)
+[2026-11-11 17:31:18] -> Procesando evento de interés: 313765480704770162 (blazar)
+[2026-11-11 17:31:29] -> Procesando evento de interés: 313756671848480892 (blazar)
+[2026-11-11 17:31:42] -> Procesando evento de interés: 171167616598540365 (blazar)
+[2026-11-11 17:31:50]       [🛡️] ALERTA TNS: 171167608059461669 interceptado. Ya es AT 2026aieu.
+[2026-11-11 17:31:50]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: supernova.
+[2026-11-11 17:31:50] -> Procesando evento de interés: AT 2026aieu (supernova)
+[2026-11-11 17:32:01] -> Procesando evento de interés: 313941448999829545 (agn)
+[2026-11-11 17:32:09] -> Procesando evento de interés: 170587117497352231 (blazar)
+[2026-11-11 17:32:19]       [🛡️] ALERTA TNS: 171145616726949988 interceptado. Ya es AT 2026ahop.
+[2026-11-11 17:32:19]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: supernova.
+[2026-11-11 17:32:19] -> Procesando evento de interés: AT 2026ahop (supernova)
+[2026-11-11 17:32:26] -> Procesando evento de interés: 170587117942997130 (blazar)
+[2026-11-11 17:32:34] -> Procesando evento de interés: 170028491363319988 (agn)
+[2026-11-11 17:32:44] -> Procesando evento de interés: 170050472526217414 (blazar)
+[2026-11-11 17:32:56] -> Procesando evento de interés: 313963359479267452 (blazar)
+[2026-11-11 17:33:07] -> Procesando evento de interés: 170028487784530134 (blazar)
+[2026-11-11 17:33:17] -> Procesando evento de interés: 171145616754212951 (blazar)
+[2026-11-11 17:33:32] -> Procesando evento de interés: 170028486000902150 (supernova)
+[2026-11-11 17:33:40] -> Procesando evento de interés: 170028486000902804 (flare)
+[2026-11-11 17:33:48] [+] Patrullaje completado exitosamente en LSST.
