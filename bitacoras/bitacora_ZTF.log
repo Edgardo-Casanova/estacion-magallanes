@@ -25114,3 +25114,14 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-11-12 04:51:45] -> Procesando evento de interés: ZTF18abosdwf (agn)
 [2026-11-12 04:52:01] -> Procesando evento de interés: ZTF18abtypdh (agn)
 [2026-11-12 04:52:06] [+] Patrullaje completado exitosamente en ZTF.
+[2026-11-12 06:30:17] ==================================================
+[2026-11-12 06:30:17] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-11-12 06:30:55] -> Procesando evento de interés: ZTF18adnlafo (agn)
+[2026-11-12 06:34:40]       [🛡️] ALERTA TNS: ZTF18acajwep interceptado. Ya es AT 2018iwn.
+[2026-11-12 06:34:40]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-11-12 06:34:40] -> Procesando evento de interés: AT 2018iwn (agn)
+[2026-11-12 06:47:16] -> Procesando evento de interés: ZTF20abrxvww (agn)
+[2026-11-12 06:48:06]       [🛡️] ALERTA TNS: ZTF26ablhgaq interceptado. Ya es SN 2026wta.
+[2026-11-12 06:48:06]       -> [!] TNS Confirma: Magallanes acata la clasificación IAU.
+[2026-11-12 06:48:06] -> Procesando evento de interés: SN 2026wta (supernova)
+[2026-11-12 06:50:51] [+] Patrullaje completado exitosamente en ZTF.
