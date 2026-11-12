@@ -25100,3 +25100,17 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-11-12 02:47:00] -> Procesando evento de interés: ZTF18abmmszc (agn)
 [2026-11-12 02:47:28] -> Procesando evento de interés: ZTF18abnvtyg (agn)
 [2026-11-12 02:47:38] [+] Patrullaje completado exitosamente en ZTF.
+[2026-11-12 04:30:15] ==================================================
+[2026-11-12 04:30:15] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-11-12 04:39:09] -> Procesando evento de interés: ZTF18abtmeie (nova)
+[2026-11-12 04:46:19]       [🛡️] ALERTA TNS: ZTF18abtrknw interceptado. Ya es SN 2018fsc.
+[2026-11-12 04:46:19]       -> [!] VETO ACTIVO: TNS dice SN, pero la física impone AGN.
+[2026-11-12 04:46:19] -> Procesando evento de interés: SN 2018fsc (agn)
+[2026-11-12 04:47:04] -> Procesando evento de interés: ZTF20abmlwoq (blazar)
+[2026-11-12 04:47:16] -> Procesando evento de interés: ZTF21absvlir (agn)
+[2026-11-12 04:47:35] -> Procesando evento de interés: ZTF17aaawnjx (agn)
+[2026-11-12 04:48:09] -> Procesando evento de interés: ZTF18abtrkrr (agn)
+[2026-11-12 04:51:27] -> Procesando evento de interés: ZTF19abouoqn (blazar)
+[2026-11-12 04:51:45] -> Procesando evento de interés: ZTF18abosdwf (agn)
+[2026-11-12 04:52:01] -> Procesando evento de interés: ZTF18abtypdh (agn)
+[2026-11-12 04:52:06] [+] Patrullaje completado exitosamente en ZTF.
