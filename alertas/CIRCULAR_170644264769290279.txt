@@ -1,0 +1,32 @@
+=================================================================
+ CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
+=================================================================
+FECHA DE EMISIÓN : 2026-11-12 00:42:25 UTC
+OBJETO DETECTADO : 170644264769290279 (NOVA)
+COORDENADAS ICRS : RA 347.64683 | Dec -9.12597
+DISTANCIA        : Desconocida
+-----------------------------------------------------------------
+
+[1] ESTADO DEL SISTEMA PLANETARIO
+    ESTADO DESCONOCIDO: NASA Exoplanet Archive inaccesible (Timeout de red).
+
+[2] EVALUACIÓN TERMODINÁMICA (SED QUIESCENTE)
+    FIRMA TÉRMICA: Datos insuficientes para evaluación térmica SED.
+
+[3] ACTIVIDAD CROMOSFÉRICA / QUÍMICA (Fuente: Ninguna)
+    ESTADO QUÍMICO: Sin datos públicos 1D.
+
+[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
+    PRIORIDAD    : ALTA PRIORIDAD (Variable Cataclísmica)
+    INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).
+
+[5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
+    CLASE IA (ALeRCE)    : VS (Confianza: 97.9%)
+    RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
+    EDAD HISTÓRICA       : 125.7 días
+    SALTO LUMINOSIDAD    : 1.05 magnitudes
+    TASA ACEL. HISTÓRICA : 0.008 mag/día
+    TASA ACEL. RECIENTE  : 0.041 mag/día
+    RED DE ORIGEN        : LSST
+    MJD ÚLTIMA DETEC.    : 61356.0228
+=================================================================
