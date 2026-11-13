@@ -114970,5 +114970,16 @@
         "vip": false,
         "mjd_deteccion": 61357.32830888106,
         "img_url": "data/curva_luz_313871014334300231.png"
+    },
+    {
+        "oid": "170028512375734309",
+        "ra": 149.08527122428134,
+        "dec": 2.5499649180534694,
+        "tipo": "nova",
+        "survey": "LSST",
+        "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
+        "vip": false,
+        "mjd_deteccion": 61204.98053747242,
+        "img_url": "data/curva_luz_170028512375734309.png"
     }
 ]
