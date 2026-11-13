@@ -1,20 +1,36 @@
-======================================================================
-[REGISTRO OFICIAL TNS] - EVENTO CONFIRMADO
-======================================================================
-ID de Evento          : SN 2026afjj
-Clasificación Oficial : SN Ia
-Red de Descubrimiento : GOTO
-Coordenadas (ICRS)    : RA 352.06122 | Dec -10.68984
+=================================================================
+ CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
+=================================================================
+FECHA DE EMISIÓN : 2026-11-13 01:49:34 UTC
+EVENTO DETECTADO : SN_2026afjj (SUPERNOVA)
+COORDENADAS ICRS : RA 352.06127 | Dec -10.68985
+-----------------------------------------------------------------
 
-[CÁLCULO DE DISTANCIA (Basado en z = 0.06)]
-Entre 246.40 y 266.88 Megaparsecs
-(Aprox. 803.66 a 870.44 M Años luz)
+[1] ENTORNO COSMOLÓGICO
+    OBJETO CENTRAL / ANFITRIONA : SDSS J232807.16-104059.1
+    REDSHIFT (z)                : Desconocido
+    DISTANCIA HUBBLE            : Desconocida N/A
 
-======================================================================
-🔗 ENLACE OFICIAL DEL TRANSIENT NAME SERVER:
-https://www.wis-tns.org/object/2026afjj
-======================================================================
-* NOTA: Este evento ya está confirmado por la IAU. No se requiere 
-  emisión de telegramas ni seguimiento de validación por parte 
-  de la Estación Magallanes.
-======================================================================
+[2] EVALUACIÓN MAGALLANES
+    PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
+    INSTRUMENTO : Observatorios masivos (VLT / Gemini).
+=================================================================
+🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
+=================================================================
+ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
+Nombre Oficial Asignado : SN 2026afjj
+URL de Confirmación     : https://www.wis-tns.org/object/2026afjj
+-> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
+=================================================================
+
+
+[5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
+    CLASE IA (ALeRCE)    : SN (Confianza: 95.6%)
+    RECLASIFICACIÓN      : Candidata (Esperando confirmación TNS)
+    EDAD HISTÓRICA       : 14.0 días
+    SALTO LUMINOSIDAD    : 0.77 magnitudes
+    TASA ACEL. HISTÓRICA : 0.769 mag/día
+    TASA ACEL. RECIENTE  : 0.769 mag/día
+    RED DE ORIGEN        : LSST
+    MJD ÚLTIMA DETEC.    : 61357.0322
+=================================================================
