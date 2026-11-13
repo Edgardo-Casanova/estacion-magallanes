@@ -1,32 +1,27 @@
 =================================================================
- CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
+ CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-11-11 14:45:11 UTC
-OBJETO DETECTADO : 171194030183415819 (FLARE)
-COORDENADAS ICRS : RA 151.51659 | Dec 2.43585
-DISTANCIA        : Desconocida
+FECHA DE EMISIÓN : 2026-11-13 08:47:59 UTC
+EVENTO DETECTADO : 171194030183415819 (SUPERNOVA)
+COORDENADAS ICRS : RA 151.51658 | Dec 2.43583
 -----------------------------------------------------------------
 
-[1] ESTADO DEL SISTEMA PLANETARIO
-    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).
+[1] ENTORNO COSMOLÓGICO
+    OBJETO CENTRAL / ANFITRIONA : Desconocida (Intergaláctica / Muy lejana)
+    REDSHIFT (z)                : Desconocido
+    DISTANCIA HUBBLE            : Desconocida N/A
 
-[2] EVALUACIÓN TERMODINÁMICA (SED QUIESCENTE)
-    FIRMA TÉRMICA: Datos insuficientes para evaluación térmica SED.
-
-[3] ACTIVIDAD CROMOSFÉRICA / QUÍMICA (Fuente: Ninguna)
-    ESTADO QUÍMICO: Sin datos públicos 1D.
-
-[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
-    PRIORIDAD    : PRIORIDAD ESTÁNDAR DE MONITOREO
-    INSTRUMENTO : Telescopios terrestres (Fotometría de seguimiento).
+[2] EVALUACIÓN MAGALLANES
+    PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
+    INSTRUMENTO : Observatorios masivos (VLT / Gemini).
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
     CLASE IA (ALeRCE)    : VS (Confianza: 67.6%)
-    RECLASIFICACIÓN      : Flare (Enana M)
-    EDAD HISTÓRICA       : 0.0 días
-    SALTO LUMINOSIDAD    : 0.64 magnitudes
-    TASA ACEL. HISTÓRICA : 106.356 mag/día
-    TASA ACEL. RECIENTE  : 106.356 mag/día
+    RECLASIFICACIÓN      : Candidata (Esperando confirmación TNS)
+    EDAD HISTÓRICA       : 2.0 días
+    SALTO LUMINOSIDAD    : 0.65 magnitudes
+    TASA ACEL. HISTÓRICA : 0.579 mag/día
+    TASA ACEL. RECIENTE  : 0.579 mag/día
     RED DE ORIGEN        : LSST
-    MJD ÚLTIMA DETEC.    : 61355.3376
+    MJD ÚLTIMA DETEC.    : 61357.3364
 =================================================================
