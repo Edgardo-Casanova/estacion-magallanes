@@ -60237,24 +60237,24 @@
     },
     {
         "oid": "313967752022851614",
-        "ra": 54.59490353627961,
-        "dec": -27.986346041689462,
+        "ra": 54.59490014078041,
+        "dec": -27.98634910618138,
         "tipo": "nova",
         "survey": "LSST",
         "analisis": "Variable Cataclísmica / Nova (Erupción activa)",
         "vip": false,
-        "mjd_deteccion": 61356.28851583786,
+        "mjd_deteccion": 61358.275303312344,
         "img_url": "data/curva_luz_313967752022851614.png"
     },
     {
         "oid": "171141216587481172",
-        "ra": 52.18061068278998,
-        "dec": -29.357372761649525,
+        "ra": 52.18062145230278,
+        "dec": -29.357378882439033,
         "tipo": "blazar",
         "survey": "LSST",
         "analisis": "Blazar (Chorro relativista - Alta aceleración)",
         "vip": false,
-        "mjd_deteccion": 61356.28843362215,
+        "mjd_deteccion": 61358.27518877686,
         "img_url": "data/curva_luz_171141216587481172.png"
     },
     {
@@ -62932,13 +62932,13 @@
     },
     {
         "oid": "171141216530333855",
-        "ra": 54.027563529097044,
-        "dec": -27.54874319336425,
-        "tipo": "blazar",
+        "ra": 54.027608387309115,
+        "dec": -27.548745234831028,
+        "tipo": "agn",
         "survey": "LSST",
-        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61356.28860278637,
+        "mjd_deteccion": 61358.27533875045,
         "img_url": "data/curva_luz_171141216530333855.png"
     },
     {
@@ -63240,13 +63240,13 @@
     },
     {
         "oid": "313695088830054484",
-        "ra": 53.016941915950504,
-        "dec": -27.62382239855719,
+        "ra": 53.01694170263253,
+        "dec": -27.623821172729357,
         "tipo": "blazar",
         "survey": "LSST",
         "analisis": "Blazar (Chorro relativista - Alta aceleración)",
         "vip": false,
-        "mjd_deteccion": 61357.26370114382,
+        "mjd_deteccion": 61358.275247430196,
         "img_url": "data/curva_luz_313695088830054484.png"
     },
     {
@@ -105876,13 +105876,13 @@
     },
     {
         "oid": "170068070154371113",
-        "ra": 54.7850255140458,
-        "dec": -27.93476311585896,
+        "ra": 54.78502519585814,
+        "dec": -27.93476304935138,
         "tipo": "agn",
         "survey": "LSST",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61357.264274416346,
+        "mjd_deteccion": 61358.275192033514,
         "img_url": "data/curva_luz_170068070154371113.png"
     },
     {
@@ -106195,13 +106195,13 @@
     },
     {
         "oid": "171141216541343852",
-        "ra": 51.58787588290261,
-        "dec": -27.98890998191803,
+        "ra": 51.5878743322097,
+        "dec": -27.98891017870647,
         "tipo": "blazar",
         "survey": "LSST",
         "analisis": "Blazar (Chorro relativista - Alta aceleración)",
         "vip": false,
-        "mjd_deteccion": 61357.263724959266,
+        "mjd_deteccion": 61358.2752449789,
         "img_url": "data/curva_luz_171141216541343852.png"
     },
     {
@@ -112630,13 +112630,13 @@
     },
     {
         "oid": "171141216526139472",
-        "ra": 53.46852781504967,
-        "dec": -27.417619569078166,
+        "ra": 53.468527582951346,
+        "dec": -27.41761880527244,
         "tipo": "blazar",
         "survey": "LSST",
         "analisis": "Blazar (Chorro relativista - Alta aceleración)",
         "vip": false,
-        "mjd_deteccion": 61357.26372233144,
+        "mjd_deteccion": 61358.27529412585,
         "img_url": "data/curva_luz_171141216526139472.png"
     },
     {
@@ -120635,5 +120635,16 @@
         "vip": false,
         "mjd_deteccion": 61358.2753040464,
         "img_url": "data/curva_luz_171207220684914797.png"
+    },
+    {
+        "oid": "171141216530858058",
+        "ra": 54.3722787018973,
+        "dec": -27.52983336684934,
+        "tipo": "blazar",
+        "survey": "LSST",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61358.275267638564,
+        "img_url": "data/curva_luz_171141216530858058.png"
     }
 ]
