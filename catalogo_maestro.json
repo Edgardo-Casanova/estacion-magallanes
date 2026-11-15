@@ -124298,5 +124298,181 @@
         "vip": false,
         "mjd_deteccion": 61359.03612466396,
         "img_url": "data/curva_luz_170604719257944139.png"
+    },
+    {
+        "oid": "171211574783508534",
+        "ra": 3.4279227409182242,
+        "dec": -7.408809777655387,
+        "tipo": "blazar",
+        "survey": "LSST",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61359.09061199659,
+        "img_url": "data/curva_luz_171211574783508534.png"
+    },
+    {
+        "oid": "170595939461365812",
+        "ra": 3.6183198071943607,
+        "dec": -7.086346315023738,
+        "tipo": "agn",
+        "survey": "LSST",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61359.09075764216,
+        "img_url": "data/curva_luz_170595939461365812.png"
+    },
+    {
+        "oid": "170595939444588828",
+        "ra": 3.6864322766957645,
+        "dec": -6.876165474124575,
+        "tipo": "blazar",
+        "survey": "LSST",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61359.09062438196,
+        "img_url": "data/curva_luz_170595939444588828.png"
+    },
+    {
+        "oid": "171211574786130014",
+        "ra": 3.4984343887601397,
+        "dec": -6.9038093250702754,
+        "tipo": "flare",
+        "survey": "LSST",
+        "analisis": "Flare (Enana M)",
+        "vip": false,
+        "mjd_deteccion": 61359.09065843251,
+        "img_url": "data/curva_luz_171211574786130014.png"
+    },
+    {
+        "oid": "171211574782459910",
+        "ra": 3.3405754227644615,
+        "dec": -6.950698078503993,
+        "tipo": "flare",
+        "survey": "LSST",
+        "analisis": "Flare (Enana M)",
+        "vip": false,
+        "mjd_deteccion": 61359.0905961214,
+        "img_url": "data/curva_luz_171211574782459910.png"
+    },
+    {
+        "oid": "171211574781935729",
+        "ra": 3.373744599993231,
+        "dec": -7.212791610443095,
+        "tipo": "flare",
+        "survey": "LSST",
+        "analisis": "Flare (Enana M)",
+        "vip": false,
+        "mjd_deteccion": 61359.090607465936,
+        "img_url": "data/curva_luz_171211574781935729.png"
+    },
+    {
+        "oid": "170657503641600036",
+        "ra": 3.496340071487734,
+        "dec": -4.828635825755266,
+        "tipo": "agn",
+        "survey": "LSST",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61359.08957269257,
+        "img_url": "data/curva_luz_170657503641600036.png"
+    },
+    {
+        "oid": "170595939417325597",
+        "ra": 3.6846709769688104,
+        "dec": -6.14572401329116,
+        "tipo": "blazar",
+        "survey": "LSST",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61359.0896091147,
+        "img_url": "data/curva_luz_170595939417325597.png"
+    },
+    {
+        "oid": "170595939623895092",
+        "ra": 3.5271274527196557,
+        "dec": -5.198333848689033,
+        "tipo": "agn",
+        "survey": "LSST",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61359.089588211515,
+        "img_url": "data/curva_luz_170595939623895092.png"
+    },
+    {
+        "oid": "170657503622202427",
+        "ra": 3.7329057271508224,
+        "dec": -4.417685170030507,
+        "tipo": "agn",
+        "survey": "LSST",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
+        "vip": false,
+        "mjd_deteccion": 61359.089534894076,
+        "img_url": "data/curva_luz_170657503622202427.png"
+    },
+    {
+        "oid": "170657503660998679",
+        "ra": 3.6771880050775962,
+        "dec": -5.626906587754953,
+        "tipo": "blazar",
+        "survey": "LSST",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61359.08955827895,
+        "img_url": "data/curva_luz_170657503660998679.png"
+    },
+    {
+        "oid": "171193977657622562",
+        "ra": 3.593828523514866,
+        "dec": -5.499634714425714,
+        "tipo": "blazar",
+        "survey": "LSST",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61359.08955827895,
+        "img_url": "data/curva_luz_171193977657622562.png"
+    },
+    {
+        "oid": "170657503641075721",
+        "ra": 3.6639772929771652,
+        "dec": -5.251723239083801,
+        "tipo": "blazar",
+        "survey": "LSST",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61359.089588211515,
+        "img_url": "data/curva_luz_170657503641075721.png"
+    },
+    {
+        "oid": "171211574522937391",
+        "ra": 3.5936735864990745,
+        "dec": -5.992757254691288,
+        "tipo": "blazar",
+        "survey": "LSST",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61359.0896091147,
+        "img_url": "data/curva_luz_171211574522937391.png"
+    },
+    {
+        "oid": "170595939625467939",
+        "ra": 3.608516147922985,
+        "dec": -5.429457630602965,
+        "tipo": "blazar",
+        "survey": "LSST",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61359.08955827895,
+        "img_url": "data/curva_luz_170595939625467939.png"
+    },
+    {
+        "oid": "171211574514549049",
+        "ra": 3.793686080766526,
+        "dec": -4.94462003982498,
+        "tipo": "blazar",
+        "survey": "LSST",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61359.08948165228,
+        "img_url": "data/curva_luz_171211574514549049.png"
     }
 ]
