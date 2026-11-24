@@ -13938,13 +13938,13 @@
     },
     {
         "oid": "ZTF19abegepd",
-        "ra": 330.29861026150985,
-        "dec": -21.41860291792282,
-        "tipo": "blazar",
+        "ra": 330.29861022068076,
+        "dec": -21.418602956150163,
+        "tipo": "agn",
         "survey": "ZTF",
-        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "analisis": "AGN / Cuásar (Acreción térmica - Lenta)",
         "vip": false,
-        "mjd_deteccion": 61366.1266319002,
+        "mjd_deteccion": 61368.08739579981,
         "img_url": "data/curva_luz_ZTF19abegepd.png"
     },
     {
@@ -46520,13 +46520,13 @@
     },
     {
         "oid": "AT 2018ldf",
-        "ra": 341.2424669118476,
-        "dec": -18.380403191015482,
+        "ra": 341.2424669193576,
+        "dec": -18.3804031981821,
         "tipo": "agn",
         "survey": "ZTF",
         "analisis": "AGN / Cuásar (Acreción térmica - Lenta) [Interceptado por TNS]",
         "vip": false,
-        "mjd_deteccion": 61366.196631900035,
+        "mjd_deteccion": 61368.08834489994,
         "img_url": "data/curva_luz_AT_2018ldf.png"
     },
     {
@@ -65671,13 +65671,13 @@
     },
     {
         "oid": "SN 2026agyd",
-        "ra": 329.4746274,
-        "dec": -22.9203344,
+        "ra": 329.4746175479048,
+        "dec": -22.9203705135604,
         "tipo": "supernova",
         "survey": "TNS_GLOBAL",
-        "analisis": "SN Ia",
+        "analisis": "Candidata (Esperando confirmación TNS) [Interceptado por TNS]",
         "vip": false,
-        "mjd_deteccion": 61347.195833299775,
+        "mjd_deteccion": 61368.08739579981,
         "img_url": "data/curva_luz_SN_2026agyd.png"
     },
     {
@@ -128467,5 +128467,27 @@
         "vip": false,
         "mjd_deteccion": 61367.187094899826,
         "img_url": "data/curva_luz_ZTF18abvfiwo.png"
+    },
+    {
+        "oid": "ZTF20abmljcr",
+        "ra": 334.16817327494533,
+        "dec": -23.011905963823903,
+        "tipo": "blazar",
+        "survey": "ZTF",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61368.08739579981,
+        "img_url": "data/curva_luz_ZTF20abmljcr.png"
+    },
+    {
+        "oid": "ZTF21abxqgsg",
+        "ra": 331.7988800104158,
+        "dec": -22.078776132729782,
+        "tipo": "blazar",
+        "survey": "ZTF",
+        "analisis": "Blazar (Chorro relativista - Alta aceleración)",
+        "vip": false,
+        "mjd_deteccion": 61368.08739579981,
+        "img_url": "data/curva_luz_ZTF21abxqgsg.png"
     }
 ]
