@@ -27474,3 +27474,25 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-11-24 14:03:08] -> Procesando evento de interés: ZTF17aaajmwn (nova)
 [2026-11-24 14:03:20] -> Procesando evento de interés: ZTF17aacnwvh (agn)
 [2026-11-24 14:04:33] [+] Patrullaje completado exitosamente en ZTF.
+[2026-11-24 14:30:18] ==================================================
+[2026-11-24 14:30:18] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-11-24 14:30:43] -> Procesando evento de interés: ZTF18acuevod (agn)
+[2026-11-24 14:32:15] -> Procesando evento de interés: ZTF19aailrys (agn)
+[2026-11-24 14:32:31] -> Procesando evento de interés: ZTF22aawhhna (agn)
+[2026-11-24 14:32:46] -> Procesando evento de interés: ZTF19aavhdog (blazar)
+[2026-11-24 14:33:38] -> Procesando evento de interés: ZTF18abcvlyn (blazar)
+[2026-11-24 14:34:13] -> Procesando evento de interés: ZTF24aasxsfs (agn)
+[2026-11-24 14:34:35] -> Procesando evento de interés: ZTF18abaelhm (nova)
+[2026-11-24 14:36:08]       [🛡️] ALERTA TNS: ZTF18acrygbu interceptado. Ya es AT 2019vp.
+[2026-11-24 14:36:08]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-11-24 14:36:08] -> Procesando evento de interés: AT 2019vp (agn)
+[2026-11-24 14:37:55] -> Procesando evento de interés: ZTF20aarvdaw (blazar)
+[2026-11-24 14:39:03] -> Procesando evento de interés: ZTF20aarvczb (blazar)
+[2026-11-24 14:43:33] -> Procesando evento de interés: ZTF19aaqqoad (blazar)
+[2026-11-24 14:49:06] -> Procesando evento de interés: ZTF18acryfxs (blazar)
+[2026-11-24 14:50:09] -> Procesando evento de interés: ZTF21abhasow (nova)
+[2026-11-24 14:50:38] -> Procesando evento de interés: ZTF19aarjojm (blazar)
+[2026-11-24 14:51:33] -> Procesando evento de interés: ZTF19aaapfwe (agn)
+[2026-11-24 14:52:13] -> Procesando evento de interés: ZTF19aaaqeko (blazar)
+[2026-11-24 14:52:37] -> Procesando evento de interés: ZTF23aabezwa (blazar)
+[2026-11-24 14:53:02] [+] Patrullaje completado exitosamente en ZTF.
