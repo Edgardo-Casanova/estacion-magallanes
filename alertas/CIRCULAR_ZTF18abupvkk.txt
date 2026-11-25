@@ -1,27 +1,32 @@
 =================================================================
- CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
+ CIRCULAR DE OBSERVACIÓN ESTELAR LOCAL - ESTACIÓN MAGALLANES
 =================================================================
-FECHA DE EMISIÓN : 2026-11-24 07:53:46 UTC
-EVENTO DETECTADO : ZTF18abupvkk (BLAZAR)
+FECHA DE EMISIÓN : 2026-11-25 06:55:12 UTC
+OBJETO DETECTADO : ZTF18abupvkk (NOVA)
 COORDENADAS ICRS : RA 66.19516 | Dec 0.60175
+DISTANCIA        : Desconocida
 -----------------------------------------------------------------
 
-[1] ENTORNO COSMOLÓGICO
-    OBJETO CENTRAL / ANFITRIONA : 3FGL J0424.7+0035
-    REDSHIFT (z)                : 0.26800
-    DISTANCIA HUBBLE            : Entre 1100.61 y 1192.05 Megaparsecs (Aprox. 3589.70 a 3887.95 M Años luz)
+[1] ESTADO DEL SISTEMA PLANETARIO
+    SISTEMA AISLADO: No se registran planetas confirmados (Radio revisado: 60 arcsec).
 
-[2] EVALUACIÓN MAGALLANES
-    PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
-    INSTRUMENTO : Observatorios masivos (VLT / Gemini).
+[2] EVALUACIÓN TERMODINÁMICA (SED QUIESCENTE)
+    FIRMA TÉRMICA: Datos insuficientes para evaluación térmica SED.
+
+[3] ACTIVIDAD CROMOSFÉRICA / QUÍMICA (Fuente: Ninguna)
+    ESTADO QUÍMICO: Sin datos públicos 1D.
+
+[4] EVALUACIÓN MAGALLANES (RECOMENDACIÓN)
+    PRIORIDAD    : ALTA PRIORIDAD (Variable Cataclísmica)
+    INSTRUMENTO : Espectroscopía Terrestre (VLT / Gemini South / Magallanes).
 
 [5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : Blazar (Confianza: 98.5%)
-    RECLASIFICACIÓN      : Blazar (Chorro relativista - Alta aceleración)
-    EDAD HISTÓRICA       : 2997.8 días
+    CLASE IA (ALeRCE)    : CV/Nova (Confianza: 98.2%)
+    RECLASIFICACIÓN      : Variable Cataclísmica / Nova (Erupción activa)
+    EDAD HISTÓRICA       : 2998.8 días
     SALTO LUMINOSIDAD    : 3.93 magnitudes
     TASA ACEL. HISTÓRICA : 0.012 mag/día
     TASA ACEL. RECIENTE  : 0.063 mag/día
     RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61368.2969
+    MJD ÚLTIMA DETEC.    : 61369.2584
 =================================================================
