@@ -1,36 +1,22 @@
-=================================================================
- CIRCULAR DE OBSERVACIÓN EXTRAGALÁCTICA - ESTACIÓN MAGALLANES
-=================================================================
-FECHA DE EMISIÓN : 2026-11-26 02:52:15 UTC
-EVENTO DETECTADO : SN_2026ailz (SUPERNOVA)
-COORDENADAS ICRS : RA 358.57325 | Dec -19.46227
------------------------------------------------------------------
+======================================================================
+[REGISTRO OFICIAL TNS] - EVENTO CONFIRMADO
+======================================================================
+ID de Evento          : SN 2026ailz
+Clasificación Oficial : SN Ia
+Red de Descubrimiento : ZTF
+Coordenadas (ICRS)    : RA 358.57325 | Dec -19.46230
+Fecha Descubrimiento  : 2026-11-07 03:31:08.002 UTC
+Actualización TNS     : 2026-11-12 16:14:30 UTC
 
-[1] ENTORNO COSMOLÓGICO
-    OBJETO CENTRAL / ANFITRIONA : WISEA J235415.13-192743.1
-    REDSHIFT (z)                : Desconocido
-    DISTANCIA HUBBLE            : Desconocida N/A
+[CÁLCULO DE DISTANCIA (Basado en z = 0.075)]
+Entre 308.01 y 333.60 Megaparsecs
+(Aprox. 1004.58 a 1088.05 M Años luz)
 
-[2] EVALUACIÓN MAGALLANES
-    PRIORIDAD    : ALTA PRIORIDAD ESPECTROSCÓPICA
-    INSTRUMENTO : Observatorios masivos (VLT / Gemini).
-=================================================================
-🛡️ INTERVENCIÓN DEL ESCUDO TNS (SISTEMA ANTI-DUPLICIDAD)
-=================================================================
-ALERTA ROJA: Este candidato ya posee una designación oficial IAU.
-Nombre Oficial Asignado : SN 2026ailz
-URL de Confirmación     : https://www.wis-tns.org/object/2026ailz
--> ACCIÓN: Se aborta automáticamente la publicación de telegramas.
-=================================================================
-
-
-[5] CINÉTICA DE CURVA DE LUZ (EVALUACIÓN MAGALLANES)
-    CLASE IA (ALeRCE)    : SNIa (Confianza: 99.1%)
-    RECLASIFICACIÓN      : Candidata (Esperando confirmación TNS)
-    EDAD HISTÓRICA       : 18.9 días
-    SALTO LUMINOSIDAD    : 0.82 magnitudes
-    TASA ACEL. HISTÓRICA : 0.054 mag/día
-    TASA ACEL. RECIENTE  : 0.054 mag/día
-    RED DE ORIGEN        : ZTF
-    MJD ÚLTIMA DETEC.    : 61370.0883
-=================================================================
+======================================================================
+🔗 ENLACE OFICIAL DEL TRANSIENT NAME SERVER:
+https://www.wis-tns.org/object/2026ailz
+======================================================================
+- NOTA: Este evento ya está confirmado por la IAU. No se requiere
+  emisión de telegramas ni seguimiento de validación por parte
+  de la Estación Magallanes.
+======================================================================
