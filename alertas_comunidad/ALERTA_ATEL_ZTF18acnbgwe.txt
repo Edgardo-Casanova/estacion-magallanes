@@ -5,16 +5,16 @@ TEMA: Análisis Estación Magallanes: Candidato a BLAZAR (ZTF18acnbgwe)
 OBSERVADORES: Estación Magallanes (Punta Arenas, Chile) - AAVSO: ECDA
 
 Reportamos la evaluación física y fotométrica de un candidato a BLAZAR
-ubicado en la entidad anfitriona Desconocida (Intergaláctica / Muy lejana).
+ubicado en la entidad anfitriona WISEA J121818.90+110552.2.
 
 [1] INFORMACIÓN DEL OBJETIVO Y TIEMPO
 * ID del Transitorio    : ZTF18acnbgwe
 * Coordenadas (ICRS)    : RA 184.60863 | Dec 11.08477
-* Momento de Detección  : 2026-11-02 13:10:47 UTC (MJD: 61346.5492)
-* Entidad Anfitriona    : Desconocida (Intergaláctica / Muy lejana)
-* Redshift (z)        : Pendiente de seguimiento espectroscópico
-* Distancia Hubble    : Desconocida
-* Archivo Espectral (1D): Ninguna (Ancho equivalente local: 0.00)
+* Momento de Detección  : 2026-11-26 13:11:22 UTC (MJD: 61370.5496)
+* Entidad Anfitriona    : WISEA J121818.90+110552.2
+* Redshift (z)        : 1.40271
+* Distancia Hubble    : Entre 5760.58 y 6239.21 Megaparsecs (Aprox. 18788.48 a 20349.54 M Años luz)
+* Archivo Espectral (1D): SDSS (Ancho equivalente local: 0.00)
 
 [2] SOLICITUD DE OBSERVACIÓN
 * Acción Requerida      : SEGUIMIENTO ESPECTROSCÓPICO URGENTE
@@ -29,16 +29,16 @@ SUBJECT: Magallanes Station Analysis: BLAZAR candidate ZTF18acnbgwe
 OBSERVERS: Magallanes Station (Punta Arenas, Chile) - AAVSO: ECDA
 
 We report the physical and photometric evaluation of a highly probable BLAZAR candidate 
-located in the host entity Desconocida (Intergaláctica / Muy lejana). 
+located in the host entity WISEA J121818.90+110552.2. 
 
 [1] TARGET INFORMATION & TIMING
 * Transient ID          : ZTF18acnbgwe
 * Coordinates (ICRS)    : RA 184.60863 | Dec 11.08477
-* Detection Time (Peak) : 2026-11-02 13:10:47 UTC (MJD: 61346.5492)
-* Host Entity           : Desconocida (Intergaláctica / Muy lejana)
-* Redshift (z)        : Pending spectroscopic follow-up
-* Hubble Distance     : Desconocida
-* Spectral Archive (1D) : Ninguna (Local Equivalent Width: 0.00)
+* Detection Time (Peak) : 2026-11-26 13:11:22 UTC (MJD: 61370.5496)
+* Host Entity           : WISEA J121818.90+110552.2
+* Redshift (z)        : 1.40271
+* Hubble Distance     : Entre 5760.58 y 6239.21 Megaparsecs (Aprox. 18788.48 a 20349.54 M Años luz)
+* Spectral Archive (1D) : SDSS (Local Equivalent Width: 0.00)
 
 [2] OBSERVATIONAL REQUEST
 * Requested Action      : URGENT SPECTROSCOPIC FOLLOW-UP
