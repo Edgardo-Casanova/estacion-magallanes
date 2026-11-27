@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : app.py (Visor Web Institucional / Panel de Control)
-VERSIÓN    : 22.0 (ALADIN LITE V3, OBSERVABILIDAD PUNTA ARENAS Y BÚSQUEDA GLOBAL)
+VERSIÓN    : 23.0 (UNIVERSO TODO-CIELO ALADIN, PLANO GALÁCTICO Y HORIZONTE PA)
 =============================================================================
 """
 
@@ -41,6 +41,7 @@ st.markdown(
 EPOCA_MJD = datetime(1858, 11, 17, tzinfo=timezone.utc)
 LAT_PUNTA_ARENAS = -53.1500   # 53° 09' S
 LON_PUNTA_ARENAS = -70.9000   # 70° 54' W
+DEC_LIMITE_NORTE_PA = 90.0 + LAT_PUNTA_ARENAS  # +36.85°
 
 OPCIONES_TIPO = [
     "👁️ Todos los tipos",
@@ -60,14 +61,60 @@ OPCIONES_RED = [
     "ZTF",
 ]
 
+CONFIG_CATEGORIAS_MAPA = {
+    "Confirmada TNS": {"color": "#00FF00", "symbol": "star-diamond", "aladin_shape": "rhomb", "aladin_size": 13},
+    "Candidata": {"color": "#FF3333", "symbol": "cross", "aladin_shape": "plus", "aladin_size": 15},
+    "Blazar (Chorro)": {"color": "#FF00FF", "symbol": "triangle-down", "aladin_shape": "triangle", "aladin_size": 12},
+    "AGN (Cuásar)": {"color": "#FF9900", "symbol": "triangle-up", "aladin_shape": "square", "aladin_size": 10},
+    "Agujero Negro (TDE)": {"color": "#FFD700", "symbol": "x", "aladin_shape": "cross", "aladin_size": 15},
+    "Nova / Cataclísmica": {"color": "#00BFFF", "symbol": "star", "aladin_shape": "circle", "aladin_size": 10},
+    "Flare (Enana M VIP)": {"color": "#FF0055", "symbol": "hexagon", "aladin_shape": "rhomb", "aladin_size": 14},
+}
+
 
 # =====================================================================
-# GEOMETRÍA ASTRONÓMICA LOCAL (PUNTA ARENAS) Y VISOR ALADIN LITE V3
+# GEOMETRÍA ASTRONÓMICA LOCAL (PUNTA ARENAS) Y VISORES ALADIN LITE V3
 # =====================================================================
 def azimut_a_cardinal(az_deg):
     direcciones = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"]
     idx = int((az_deg + 22.5) // 45) % 8
     return direcciones[idx]
+
+
+@st.cache_data
+def calcular_curva_galactica(b_deg, paso=2):
+    """
+    Proyecta una línea de latitud galáctica constante b (en grados) a coordenadas
+    ecuatoriales J2000 (RA, Dec) usando trigonometría esférica pura (sin dependencias).
+    Inserta None al cruzar RA 0°/360° para evitar trazos horizontales en Plotly.
+    """
+    ra_ngp = math.radians(192.85948)
+    dec_ngp = math.radians(27.12825)
+    l_ncp = math.radians(122.93192)
+    b = math.radians(b_deg)
+
+    ras, decs = [], []
+    prev_ra = None
+    for l_deg in range(0, 361, paso):
+        l_rad = math.radians(l_deg)
+        dl = l_ncp - l_rad
+        sin_dec = math.sin(b) * math.sin(dec_ngp) + math.cos(b) * math.cos(dec_ngp) * math.cos(dl)
+        sin_dec = max(-1.0, min(1.0, sin_dec))
+        dec_deg = math.degrees(math.asin(sin_dec))
+
+        y = math.cos(b) * math.sin(dl)
+        x = math.sin(b) * math.cos(dec_ngp) - math.cos(b) * math.sin(dec_ngp) * math.cos(dl)
+        ra_deg = (math.degrees(ra_ngp + math.atan2(y, x))) % 360.0
+
+        if prev_ra is not None and abs(ra_deg - prev_ra) > 180.0:
+            ras.append(None)
+            decs.append(None)
+
+        ras.append(round(ra_deg, 3))
+        decs.append(round(dec_deg, 3))
+        prev_ra = ra_deg
+
+    return ras, decs
 
 
 def calcular_observabilidad_magallanes(ra_deg, dec_deg):
@@ -79,24 +126,20 @@ def calcular_observabilidad_magallanes(ra_deg, dec_deg):
     ahora_local = (ahora_utc - timedelta(hours=3)).replace(tzinfo=None)
     mjd_ahora = (ahora_utc - EPOCA_MJD).total_seconds() / 86400.0
 
-    # Tiempo Sidéreo Local (LST)
     dias_j2000 = mjd_ahora - 51544.5
     gmst_deg = (280.46061837 + 360.98564736629 * dias_j2000) % 360.0
     lst_deg = (gmst_deg + LON_PUNTA_ARENAS) % 360.0
 
-    # Ángulo horario H en [-180, +180]
     ha_deg = ((lst_deg - ra_deg + 180.0) % 360.0) - 180.0
 
     phi = math.radians(LAT_PUNTA_ARENAS)
     dec = math.radians(dec_deg)
     ha = math.radians(ha_deg)
 
-    # Altura instantánea h
     sin_h = math.sin(phi) * math.sin(dec) + math.cos(phi) * math.cos(dec) * math.cos(ha)
     sin_h = max(-1.0, min(1.0, sin_h))
     alt_deg = math.degrees(math.asin(sin_h))
 
-    # Azimut instantáneo A (0°=N, 90°=E, 180°=S, 270°=O)
     cos_h = math.cos(math.radians(alt_deg))
     if cos_h > 1e-6:
         cos_az = (math.sin(dec) - sin_h * math.sin(phi)) / (cos_h * math.cos(phi))
@@ -110,7 +153,6 @@ def calcular_observabilidad_magallanes(ra_deg, dec_deg):
     cardinal = azimut_a_cardinal(az_deg)
     estado_alt = "Sobre horiz." if alt_deg > 0.0 else "Bajo horiz."
 
-    # Altura máxima (culminación superior) y mínima (culminación inferior)
     alt_max = 90.0 - abs(LAT_PUNTA_ARENAS - dec_deg)
     alt_min = math.degrees(math.asin(max(-1.0, min(1.0, -math.cos(phi + dec)))))
 
@@ -158,11 +200,277 @@ def calcular_observabilidad_magallanes(ra_deg, dec_deg):
     }
 
 
+def renderizar_mapa_universo_aladin(capas_aladin, altura_px=640):
+    """
+    Mapa interactivo de todo el cielo en Aladin Lite v3 con fondo real del universo
+    (Mellinger Color, DSS2 Color, 2MASS IR), proyecciones Aitoff / Esfera 3D,
+    cambio Ecuatorial/Galáctico y zoom directo al objeto clickeado.
+    """
+    capas_json = json.dumps(capas_aladin, ensure_ascii=False).replace("</", "<\\/")
+    altura_mapa = altura_px - 92
+
+    plantilla_html = """
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="utf-8" />
+      <style>
+        html, body {
+          margin: 0;
+          padding: 0;
+          background-color: #0e1117;
+          color: #c9d1d9;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+          overflow: hidden;
+        }
+        .toolbar {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+          align-items: center;
+          padding: 8px 10px;
+          background: #161b22;
+          border: 1px solid #30363d;
+          border-bottom: none;
+          border-radius: 8px 8px 0 0;
+        }
+        .sep {
+          width: 1px;
+          height: 18px;
+          background: #30363d;
+          margin: 0 3px;
+        }
+        .btn {
+          background: #21262d;
+          color: #c9d1d9;
+          border: 1px solid #30363d;
+          border-radius: 5px;
+          padding: 4px 9px;
+          font-size: 12px;
+          cursor: pointer;
+          transition: all 0.15s ease;
+        }
+        .btn:hover:not(:disabled) {
+          background: #30363d;
+          color: #ffffff;
+        }
+        .btn.active {
+          background: #0d419d;
+          border-color: #58a6ff;
+          color: #ffffff;
+          font-weight: 600;
+        }
+        .btn:disabled {
+          opacity: 0.45;
+          cursor: not-allowed;
+        }
+        .btn-zoom {
+          margin-left: auto;
+          background: #143625;
+          border-color: #2ea043;
+          color: #d2fedb;
+        }
+        .legend-bar {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+          align-items: center;
+          padding: 6px 12px;
+          background: #12161d;
+          border-left: 1px solid #30363d;
+          border-right: 1px solid #30363d;
+          font-size: 12px;
+          color: #c9d1d9;
+        }
+        .legend-item {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          display: inline-block;
+          border: 1px solid rgba(255,255,255,0.65);
+        }
+        #aladin-allsky {
+          width: 100%;
+          height: __ALTURA_DIV__px;
+          border: 1px solid #30363d;
+          border-radius: 0 0 8px 8px;
+          background: #000000;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="toolbar">
+        <button class="btn btn-survey active" id="btn-mel" title="Panorama óptico real de toda la Vía Láctea" onclick="cambiarSurvey('CDS/P/Mellinger/color', 'btn-mel')">Vía Láctea (Mellinger)</button>
+        <button class="btn btn-survey" id="btn-dss2" title="Cielo profundo óptico (ideal al acercar zoom)" onclick="cambiarSurvey('CDS/P/DSS2/color', 'btn-dss2')">DSS2 Color</button>
+        <button class="btn btn-survey" id="btn-2mass" title="Estructura infrarroja del disco galáctico" onclick="cambiarSurvey('CDS/P/2MASS/color', 'btn-2mass')">2MASS IR</button>
+        <span class="sep"></span>
+        <button class="btn btn-proj active" id="btn-ait" title="Proyección elíptica de cielo completo" onclick="cambiarProyeccion('AIT', 360, 'btn-ait')">🌌 Aitoff</button>
+        <button class="btn btn-proj" id="btn-sin" title="Globo celeste 3D interactivo" onclick="cambiarProyeccion('SIN', 180, 'btn-sin')">🌐 Esfera 3D</button>
+        <span class="sep"></span>
+        <button class="btn btn-frame active" id="btn-icrs" title="Coordenadas Ecuatoriales (RA/Dec)" onclick="cambiarMarco('ICRS', 'btn-icrs')">Ecuatorial</button>
+        <button class="btn btn-frame" id="btn-gal" title="Coordenadas Galácticas (Vía Láctea horizontal)" onclick="cambiarMarco('galactic', 'btn-gal')">Galáctico</button>
+        <button class="btn" title="Restaurar vista de cielo completo" onclick="vistaCompleta()">🔄 Reset</button>
+        <button class="btn btn-zoom" id="btn-zoom-sel" disabled onclick="acercarSeleccionado()">🎯 Haz clic en un evento para acercar</button>
+      </div>
+      <div class="legend-bar" id="legend-bar"></div>
+      <div id="aladin-allsky"></div>
+
+      <script src="https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js" charset="utf-8"></script>
+      <script>
+        const capasData = __CAPAS_JSON__;
+        let aladinAllSky = null;
+        let ultimoObjeto = null;
+
+        // Poblar leyenda compacta con las categorías presentes
+        const legendBar = document.getElementById('legend-bar');
+        capasData.forEach(capa => {
+          if (!capa.eventos || capa.eventos.length === 0) return;
+          const item = document.createElement('span');
+          item.className = 'legend-item';
+          item.innerHTML = '<span class="dot" style="background:' + capa.color + ';"></span>' +
+            capa.nombre + ' (' + capa.eventos.length + ')';
+          legendBar.appendChild(item);
+        });
+
+        function marcarActivo(selector, btnId) {
+          document.querySelectorAll(selector).forEach(b => b.classList.remove('active'));
+          const el = document.getElementById(btnId);
+          if (el) el.classList.add('active');
+        }
+
+        if (typeof A !== 'undefined' && A.init) {
+          A.init.then(() => {
+            aladinAllSky = A.aladin('#aladin-allsky', {
+              survey: 'CDS/P/Mellinger/color',
+              projection: 'AIT',
+              fov: 360,
+              cooFrame: 'ICRS',
+              showCooGrid: true,
+              showCooGridControl: true,
+              showProjectionControl: true,
+              showLayersControl: true,
+              showFullscreenControl: true,
+              showZoomControl: true,
+              showReticle: false,
+              showGotoControl: false,
+              showShareControl: false
+            });
+
+            capasData.forEach(capa => {
+              if (!capa.eventos || capa.eventos.length === 0) return;
+              const cat = A.catalog({
+                name: capa.nombre + ' (' + capa.eventos.length + ')',
+                color: capa.color,
+                sourceSize: capa.size,
+                shape: capa.shape,
+                onClick: 'showPopup'
+              });
+              aladinAllSky.addCatalog(cat);
+
+              const fuentes = capa.eventos.map(ev => {
+                const props = {
+                  Objeto: ev.oid,
+                  Red: ev.survey,
+                  Clasificacion: ev.analisis,
+                  Fecha: ev.fecha,
+                  Coordenadas: ev.coords
+                };
+                if (ev.escudo) props.Escudo_TNS = ev.escudo;
+                if (ev.z) props.Redshift_z = ev.z;
+                if (ev.dist) props.Distancia = ev.dist;
+                return A.source(ev.ra, ev.dec, props);
+              });
+              cat.addSources(fuentes);
+            });
+
+            aladinAllSky.on('objectClicked', function(obj) {
+              if (obj && obj.ra !== undefined && obj.dec !== undefined) {
+                ultimoObjeto = {
+                  ra: obj.ra,
+                  dec: obj.dec,
+                  nombre: (obj.data && obj.data.Objeto) ? obj.data.Objeto : 'Evento'
+                };
+                const btn = document.getElementById('btn-zoom-sel');
+                if (btn) {
+                  btn.disabled = false;
+                  btn.textContent = '🎯 Acercar a ' + ultimoObjeto.nombre + ' (DSS2)';
+                }
+              }
+            });
+          });
+        } else {
+          document.getElementById('aladin-allsky').innerHTML =
+            '<div style="padding:24px;color:#8b949e;text-align:center;">No se pudo cargar el mapa del universo desde el CDS. Usa la vista "Grilla Analítica".</div>';
+        }
+
+        function cambiarSurvey(hipsId, btnId) {
+          if (!aladinAllSky) return;
+          try { aladinAllSky.setImageSurvey(hipsId); } catch (e) {}
+          marcarActivo('.btn-survey', btnId);
+        }
+
+        function cambiarProyeccion(proj, fovDeg, btnId) {
+          if (!aladinAllSky) return;
+          try {
+            aladinAllSky.setProjection(proj);
+            aladinAllSky.setFoV(fovDeg);
+          } catch (e) {}
+          marcarActivo('.btn-proj', btnId);
+        }
+
+        function cambiarMarco(frame, btnId) {
+          if (!aladinAllSky) return;
+          try { aladinAllSky.setFrame(frame); } catch (e) {}
+          marcarActivo('.btn-frame', btnId);
+        }
+
+        function vistaCompleta() {
+          if (!aladinAllSky) return;
+          try {
+            aladinAllSky.setProjection('AIT');
+            aladinAllSky.setFrame('ICRS');
+            aladinAllSky.setImageSurvey('CDS/P/Mellinger/color');
+            aladinAllSky.gotoRaDec(180, 0);
+            aladinAllSky.setFoV(360);
+          } catch (e) {}
+          marcarActivo('.btn-survey', 'btn-mel');
+          marcarActivo('.btn-proj', 'btn-ait');
+          marcarActivo('.btn-frame', 'btn-icrs');
+        }
+
+        function acercarSeleccionado() {
+          if (!aladinAllSky || !ultimoObjeto) return;
+          try {
+            aladinAllSky.setProjection('SIN');
+            aladinAllSky.setImageSurvey('CDS/P/DSS2/color');
+            aladinAllSky.gotoRaDec(ultimoObjeto.ra, ultimoObjeto.dec);
+            aladinAllSky.setFoV(0.12);
+          } catch (e) {}
+          marcarActivo('.btn-survey', 'btn-dss2');
+          marcarActivo('.btn-proj', 'btn-sin');
+        }
+      </script>
+    </body>
+    </html>
+    """
+
+    html_final = (
+        plantilla_html
+        .replace("__CAPAS_JSON__", capas_json)
+        .replace("__ALTURA_DIV__", str(altura_mapa))
+    )
+    components.html(html_final, height=altura_px)
+
+
 def renderizar_visor_aladin(ra_deg, dec_deg, oid_str, altura_px=470):
     """
-    Incrustación interactiva de Aladin Lite v3 (CDS Estrasburgo) con retícula,
-    círculo hueco de 15" (sin tapar el transitorio central) y cambio rápido
-    entre DSS2 Color, DESI Legacy DR10, Pan-STARRS y 2MASS Infrarrojo.
+    Incrustación interactiva de Aladin Lite v3 (CDS Estrasburgo) para un objeto
+    individual, con retícula, círculo hueco de 15" y cambio rápido de sondeos.
     """
     oid_js = json.dumps(str(oid_str))
     html_aladin = f"""
@@ -262,7 +570,6 @@ def renderizar_visor_aladin(ra_deg, dec_deg, oid_str, altura_px=470):
               showShareControl: false
             }});
 
-            // Círculo hueco de 15" de radio para enmarcar el evento sin tapar el centro
             const overlay = A.graphicOverlay({{
               name: objName,
               color: '#00ffff',
@@ -331,6 +638,28 @@ def clasificar_categoria_ui(ev):
     return None
 
 
+def clasificar_categoria_mapa(ev):
+    t = str(ev.get("tipo", "")).lower().strip()
+    survey = str(ev.get("survey", "")).strip()
+    vip = bool(ev.get("vip", False))
+
+    if t == "tde":
+        return "Agujero Negro (TDE)"
+    if t == "nova":
+        return "Nova / Cataclísmica"
+    if t == "blazar":
+        return "Blazar (Chorro)"
+    if t == "agn":
+        return "AGN (Cuásar)"
+    if t == "flare":
+        return "Flare (Enana M VIP)" if vip else None
+    if t == "supernova" and survey == "TNS_GLOBAL":
+        return "Confirmada TNS"
+    if t == "supernova":
+        return "Candidata"
+    return None
+
+
 @st.cache_data(ttl=300)
 def leer_catalogo_maestro():
     if os.path.exists("catalogo_maestro.json"):
@@ -372,6 +701,34 @@ def leer_archivo_texto(ruta):
         except Exception:
             pass
     return None
+
+
+def extraer_metadatos_circular(oid):
+    oid_limpio = str(oid).replace(" ", "_").replace("/", "-")
+    cont_circ = leer_archivo_texto(f"alertas/CIRCULAR_{oid_limpio}.txt")
+    escudo, z_val, dist_val = "", "", ""
+    if not cont_circ:
+        return escudo, z_val, dist_val
+
+    match_escudo = re.search(r"Nombre Oficial Asignado\s*:\s*(.*)", cont_circ)
+    if match_escudo:
+        escudo = match_escudo.group(1).strip()
+
+    match_z_lab = re.search(r"REDSHIFT \(z\)\s*:\s*(.*)", cont_circ)
+    match_z_tns = re.search(r"z = (.*?)\)", cont_circ)
+    if match_z_lab and "Desconocido" not in match_z_lab.group(1):
+        z_val = match_z_lab.group(1).strip()
+    elif match_z_tns and "None" not in str(match_z_tns.group(1)) and "Desconocido" not in str(match_z_tns.group(1)):
+        z_val = match_z_tns.group(1).strip()
+
+    match_mpc = re.search(r"(Entre \d+\.\d+ y \d+\.\d+ Megaparsecs)", cont_circ)
+    match_dist_local = re.search(r"^DISTANCIA\s*:\s*(.*)", cont_circ, re.MULTILINE)
+    if match_mpc:
+        dist_val = match_mpc.group(1).replace("Megaparsecs", "Mpc")
+    elif match_dist_local and "Desconocida" not in match_dist_local.group(1):
+        dist_val = match_dist_local.group(1).strip()
+
+    return escudo, z_val, dist_val
 
 
 def obtener_estado_red(ruta_log):
@@ -522,7 +879,7 @@ sufijo_filtros = f" | {' · '.join(filtros_extra)}" if filtros_extra else ""
 
 
 # =====================================================================
-# VISTA 1: DASHBOARD PRINCIPAL Y MAPA ESTELAR
+# VISTA 1: DASHBOARD PRINCIPAL Y MAPA ESTELAR DUAL
 # =====================================================================
 if vista == "Dashboard Principal (Telemetría)":
     st.title("🛰️ Estación Magallanes - Telemetría")
@@ -572,130 +929,199 @@ if vista == "Dashboard Principal (Telemetría)":
     st.subheader(f"🌌 Mapa Celeste de Detecciones ({len(catalogo_filtrado)} eventos en vista)")
 
     if catalogo_filtrado:
-        datos_plotly = {
-            "Confirmada TNS": {"ra": [], "dec": [], "text": [], "color": "#00FF00", "symbol": "star-diamond"},
-            "Candidata": {"ra": [], "dec": [], "text": [], "color": "#FF0000", "symbol": "cross"},
-            "Blazar (Chorro)": {"ra": [], "dec": [], "text": [], "color": "#FF00FF", "symbol": "triangle-down"},
-            "AGN (Cuásar)": {"ra": [], "dec": [], "text": [], "color": "#FF9900", "symbol": "triangle-up"},
-            "Agujero Negro (TDE)": {"ra": [], "dec": [], "text": [], "color": "#FFD700", "symbol": "x"},
-            "Nova / Cataclísmica": {"ra": [], "dec": [], "text": [], "color": "#00BFFF", "symbol": "star"},
-            "Flare (Enana M VIP)": {"ra": [], "dec": [], "text": [], "color": "#FF0055", "symbol": "hexagon"},
-        }
+        modo_mapa = st.radio(
+            "Modo de visualización:",
+            [
+                "🌌 Universo Interactivo (Aladin Todo-Cielo)",
+                "📈 Grilla Analítica (Plano Galáctico y Horizonte)",
+            ],
+            horizontal=True,
+            label_visibility="collapsed",
+        )
 
-        enriquecer_con_circulares = len(catalogo_filtrado) <= 600
+        if modo_mapa.startswith("🌌"):
+            limite_aladin = 1500
+            eventos_para_aladin = catalogo_filtrado[:limite_aladin]
+            if len(catalogo_filtrado) > limite_aladin:
+                st.caption(
+                    f"Mostrando los {limite_aladin} eventos más recientes en el mapa interactivo del universo para preservar fluidez. "
+                    "Cambia a **📈 Grilla Analítica** para inspeccionar el historial completo con WebGL."
+                )
 
-        for ev in catalogo_filtrado:
-            t, survey, vip = ev.get("tipo", ""), ev.get("survey", ""), ev.get("vip", False)
-            cat = None
+            enriquecer = len(eventos_para_aladin) <= 600
+            agrupados_aladin = {nombre: [] for nombre in CONFIG_CATEGORIAS_MAPA}
 
-            if t == "tde":
-                cat = "Agujero Negro (TDE)"
-            elif t == "nova":
-                cat = "Nova / Cataclísmica"
-            elif t == "blazar":
-                cat = "Blazar (Chorro)"
-            elif t == "agn":
-                cat = "AGN (Cuásar)"
-            elif t == "flare":
-                cat = "Flare (Enana M VIP)" if vip else None
-            elif t == "supernova" and survey == "TNS_GLOBAL":
-                cat = "Confirmada TNS"
-            elif t == "supernova":
-                cat = "Candidata"
+            for ev in eventos_para_aladin:
+                cat = clasificar_categoria_mapa(ev)
+                ra_v, dec_v = ev.get("ra"), ev.get("dec")
+                if not cat or ra_v is None or dec_v is None:
+                    continue
 
-            if not cat:
-                continue
+                dt_local = ev.get("_dt_local")
+                fecha_txt = dt_local.strftime("%Y-%m-%d %H:%M Local") if dt_local else "Fecha no disp."
+                escudo, z_val, dist_val = extraer_metadatos_circular(ev.get("oid")) if enriquecer else ("", "", "")
 
-            ra_v = ev.get("ra")
-            dec_v = ev.get("dec")
-            if ra_v is None or dec_v is None:
-                continue
+                agrupados_aladin[cat].append(
+                    {
+                        "ra": round(float(ra_v), 5),
+                        "dec": round(float(dec_v), 5),
+                        "oid": str(ev.get("oid", "")),
+                        "survey": str(ev.get("survey", "")),
+                        "analisis": str(ev.get("analisis", "")),
+                        "fecha": fecha_txt,
+                        "coords": f"RA {float(ra_v):.4f}° | Dec {float(dec_v):.4f}°",
+                        "escudo": escudo,
+                        "z": z_val,
+                        "dist": dist_val,
+                    }
+                )
 
-            dt_local = ev.get("_dt_local")
-            fecha_txt = dt_local.strftime("%Y-%m-%d %H:%M Local") if dt_local else "Fecha no disp."
-            mjd_val = ev.get("mjd_deteccion")
-            mjd_str = f"MJD: {float(mjd_val):.4f}" if mjd_val else "MJD: No disp."
+            capas_aladin = []
+            for nombre_cat, cfg in CONFIG_CATEGORIAS_MAPA.items():
+                if agrupados_aladin[nombre_cat]:
+                    capas_aladin.append(
+                        {
+                            "nombre": nombre_cat,
+                            "color": cfg["color"],
+                            "shape": cfg["aladin_shape"],
+                            "size": cfg["aladin_size"],
+                            "eventos": agrupados_aladin[nombre_cat],
+                        }
+                    )
 
-            extra_info = ""
-            if enriquecer_con_circulares:
-                oid_limpio = str(ev.get("oid")).replace(" ", "_").replace("/", "-")
-                ruta_circular = f"alertas/CIRCULAR_{oid_limpio}.txt"
-                cont_circ = leer_archivo_texto(ruta_circular)
+            renderizar_mapa_universo_aladin(capas_aladin, altura_px=640)
 
-                if cont_circ:
-                    match_escudo = re.search(r"Nombre Oficial Asignado\s*:\s*(.*)", cont_circ)
-                    if match_escudo:
-                        nombre_oficial = match_escudo.group(1).strip()
-                        extra_info += f"<br><b style='color:#ff3333;'>🛡️ Escudo TNS: {nombre_oficial}</b>"
+        else:
+            datos_plotly = {
+                nombre_cat: {
+                    "ra": [],
+                    "dec": [],
+                    "text": [],
+                    "color": cfg["color"],
+                    "symbol": cfg["symbol"],
+                }
+                for nombre_cat, cfg in CONFIG_CATEGORIAS_MAPA.items()
+            }
 
-                    match_z_lab = re.search(r"REDSHIFT \(z\)\s*:\s*(.*)", cont_circ)
-                    match_z_tns = re.search(r"z = (.*?)\)", cont_circ)
+            enriquecer_con_circulares = len(catalogo_filtrado) <= 600
 
-                    z_val = None
-                    if match_z_lab and "Desconocido" not in match_z_lab.group(1):
-                        z_val = match_z_lab.group(1).strip()
-                    elif match_z_tns and "None" not in str(match_z_tns.group(1)) and "Desconocido" not in str(match_z_tns.group(1)):
-                        z_val = match_z_tns.group(1).strip()
+            for ev in catalogo_filtrado:
+                cat = clasificar_categoria_mapa(ev)
+                ra_v, dec_v = ev.get("ra"), ev.get("dec")
+                if not cat or ra_v is None or dec_v is None:
+                    continue
 
+                survey = ev.get("survey", "")
+                dt_local = ev.get("_dt_local")
+                fecha_txt = dt_local.strftime("%Y-%m-%d %H:%M Local") if dt_local else "Fecha no disp."
+                mjd_val = ev.get("mjd_deteccion")
+                mjd_str = f"MJD: {float(mjd_val):.4f}" if mjd_val else "MJD: No disp."
+
+                extra_info = ""
+                if enriquecer_con_circulares:
+                    escudo, z_val, dist_val = extraer_metadatos_circular(ev.get("oid"))
+                    if escudo:
+                        extra_info += f"<br><b style='color:#ff3333;'>🛡️ Escudo TNS: {escudo}</b>"
                     if z_val:
                         extra_info += f"<br><b>z:</b> {z_val}"
+                    if dist_val:
+                        extra_info += f"<br><b>D:</b> {dist_val}"
 
-                    match_mpc = re.search(r"(Entre \d+\.\d+ y \d+\.\d+ Megaparsecs)", cont_circ)
-                    match_dist_local = re.search(r"^DISTANCIA\s*:\s*(.*)", cont_circ, re.MULTILINE)
+                hover_txt = (
+                    f"<b>{ev.get('oid')}</b> [{survey}]<br>"
+                    f"{ev.get('analisis')}<br>"
+                    f"Fecha: {fecha_txt} | {mjd_str}<br>"
+                    f"RA: {float(ra_v):.4f}° | Dec: {float(dec_v):.4f}°{extra_info}"
+                )
 
-                    if match_mpc:
-                        dist_limpia = match_mpc.group(1).replace("Megaparsecs", "Mpc")
-                        extra_info += f"<br><b>D:</b> {dist_limpia}"
-                    elif match_dist_local and "Desconocida" not in match_dist_local.group(1):
-                        extra_info += f"<br><b>D:</b> {match_dist_local.group(1).strip()}"
+                datos_plotly[cat]["ra"].append(float(ra_v))
+                datos_plotly[cat]["dec"].append(float(dec_v))
+                datos_plotly[cat]["text"].append(hover_txt)
 
-            hover_txt = (
-                f"<b>{ev.get('oid')}</b> [{survey}]<br>"
-                f"{ev.get('analisis')}<br>"
-                f"Fecha: {fecha_txt} | {mjd_str}<br>"
-                f"RA: {float(ra_v):.4f}° | Dec: {float(dec_v):.4f}°{extra_info}"
+            total_puntos_mapa = sum(len(d["ra"]) for d in datos_plotly.values())
+            usar_webgl = total_puntos_mapa > 1000
+            clase_traza = go.Scattergl if usar_webgl else go.Scatter
+
+            fig = go.Figure()
+
+            # Referencia 1: Plano Galáctico (b = 0°) y franja |b| = 10°
+            ra_g0, dec_g0 = calcular_curva_galactica(0.0)
+            ra_gp, dec_gp = calcular_curva_galactica(10.0)
+            ra_gm, dec_gm = calcular_curva_galactica(-10.0)
+
+            fig.add_trace(
+                go.Scatter(
+                    x=ra_g0,
+                    y=dec_g0,
+                    mode="lines",
+                    name="Plano Galáctico (b=0°, ±10°)",
+                    legendgroup="plano_galactico",
+                    hoverinfo="skip",
+                    line=dict(color="rgba(140, 195, 255, 0.55)", width=1.6, dash="dash"),
+                )
             )
-
-            datos_plotly[cat]["ra"].append(float(ra_v))
-            datos_plotly[cat]["dec"].append(float(dec_v))
-            datos_plotly[cat]["text"].append(hover_txt)
-
-        total_puntos_mapa = sum(len(d["ra"]) for d in datos_plotly.values())
-        usar_webgl = total_puntos_mapa > 1000
-        clase_traza = go.Scattergl if usar_webgl else go.Scatter
-
-        fig = go.Figure()
-        for nombre_cat, datos in datos_plotly.items():
-            if len(datos["ra"]) > 0:
+            for rx, dy in [(ra_gp, dec_gp), (ra_gm, dec_gm)]:
                 fig.add_trace(
-                    clase_traza(
-                        x=datos["ra"],
-                        y=datos["dec"],
-                        mode="markers",
-                        name=f"{nombre_cat} ({len(datos['ra'])})",
-                        text=datos["text"],
-                        hoverinfo="text",
-                        marker=dict(
-                            symbol=datos["symbol"],
-                            size=14 if ("Candidata" in nombre_cat or "TDE" in nombre_cat) else 11,
-                            color=datos["color"],
-                            opacity=0.82,
-                            line=dict(width=1, color="white"),
-                        ),
+                    go.Scatter(
+                        x=rx,
+                        y=dy,
+                        mode="lines",
+                        legendgroup="plano_galactico",
+                        showlegend=False,
+                        hoverinfo="skip",
+                        line=dict(color="rgba(140, 195, 255, 0.25)", width=1.0, dash="dot"),
                     )
                 )
 
-        fig.update_layout(
-            plot_bgcolor="#0e1117",
-            paper_bgcolor="#0e1117",
-            font=dict(color="lightgray", size=13),
-            xaxis=dict(title="Ascensión Recta (Grados)", range=[0, 360], gridcolor="rgba(255,255,255,0.1)"),
-            yaxis=dict(title="Declinación (Grados)", range=[-90, 90], gridcolor="rgba(255,255,255,0.1)"),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            margin=dict(l=40, r=40, t=40, b=40),
-            hovermode="closest",
-        )
-        st.plotly_chart(fig, use_container_width=True)
+            # Referencia 2: Límite Norte observable desde Punta Arenas (Dec = +36.85°)
+            fig.add_hrect(
+                y0=DEC_LIMITE_NORTE_PA,
+                y1=90,
+                fillcolor="rgba(255, 190, 0, 0.05)",
+                line_width=0,
+            )
+            fig.add_hline(
+                y=DEC_LIMITE_NORTE_PA,
+                line_dash="dot",
+                line_color="rgba(255, 204, 0, 0.65)",
+                annotation_text="Horizonte Norte Punta Arenas (+36.85°) · Superior no visible desde Magallanes",
+                annotation_position="top left",
+                annotation_font_color="rgba(255, 214, 102, 0.85)",
+                annotation_font_size=11,
+            )
+
+            for nombre_cat, datos in datos_plotly.items():
+                if len(datos["ra"]) > 0:
+                    fig.add_trace(
+                        clase_traza(
+                            x=datos["ra"],
+                            y=datos["dec"],
+                            mode="markers",
+                            name=f"{nombre_cat} ({len(datos['ra'])})",
+                            text=datos["text"],
+                            hoverinfo="text",
+                            marker=dict(
+                                symbol=datos["symbol"],
+                                size=14 if ("Candidata" in nombre_cat or "TDE" in nombre_cat) else 11,
+                                color=datos["color"],
+                                opacity=0.82,
+                                line=dict(width=1, color="white"),
+                            ),
+                        )
+                    )
+
+            fig.update_layout(
+                plot_bgcolor="#0e1117",
+                paper_bgcolor="#0e1117",
+                font=dict(color="lightgray", size=13),
+                height=600,
+                xaxis=dict(title="Ascensión Recta (Grados)", range=[0, 360], gridcolor="rgba(255,255,255,0.1)"),
+                yaxis=dict(title="Declinación (Grados)", range=[-90, 90], gridcolor="rgba(255,255,255,0.1)"),
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+                margin=dict(l=40, r=40, t=45, b=40),
+                hovermode="closest",
+            )
+            st.plotly_chart(fig, use_container_width=True)
     else:
         st.info(f"No hay eventos astronómicos registrados para la selección actual ({etiqueta_alcance}{sufijo_filtros}).")
 
@@ -807,7 +1233,6 @@ elif vista == "Feed de Alertas y Circulares":
         with col2:
             st.subheader("📊 Evidencia y Contexto Celeste")
 
-            # 1. Ficha instantánea de observabilidad desde Punta Arenas
             if ra_obj is not None and dec_obj is not None:
                 obs_pa = calcular_observabilidad_magallanes(float(ra_obj), float(dec_obj))
                 m1, m2, m3, m4 = st.columns(4)
@@ -816,7 +1241,6 @@ elif vista == "Feed de Alertas y Circulares":
                 m3.metric("Culminación", obs_pa["transito_str"], obs_pa["transito_detalle"])
                 m4.metric("Altura Máx.", obs_pa["alt_max_str"], obs_pa["masa_aire"])
 
-            # 2. Fotometría / Espectroscopía
             ruta_grafico = f"data/curva_luz_{oid_limpio}.png"
             ruta_halfa = f"data/quimica_halfa_{oid_limpio}.png"
 
@@ -845,7 +1269,6 @@ elif vista == "Feed de Alertas y Circulares":
                 else:
                     st.image(ruta_halfa, use_container_width=True)
 
-            # 3. Visor Celeste Interactivo (Aladin Lite v3) para todo el catálogo
             if ra_obj is not None and dec_obj is not None:
                 st.markdown("##### 🌌 Visor Celeste Interactivo (Aladin Lite)")
                 renderizar_visor_aladin(
