@@ -2,13 +2,15 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : app.py (Visor Web Institucional / Panel de Control)
-VERSIÓN    : 21.0 (BÚSQUEDA GLOBAL, RANGO TEMPORAL Y FILTROS UNIFICADOS)
+VERSIÓN    : 22.0 (ALADIN LITE V3, OBSERVABILIDAD PUNTA ARENAS Y BÚSQUEDA GLOBAL)
 =============================================================================
 """
 
 import streamlit as st
+import streamlit.components.v1 as components
 import os
 import json
+import math
 import re
 from datetime import datetime, timedelta, timezone
 import plotly.graph_objects as go
@@ -29,7 +31,7 @@ st.markdown(
         font-size: 1.02rem;
     }
     div[data-testid="stMetricValue"] {
-        font-size: 1.9rem;
+        font-size: 1.8rem;
     }
     </style>
     """,
@@ -37,6 +39,8 @@ st.markdown(
 )
 
 EPOCA_MJD = datetime(1858, 11, 17, tzinfo=timezone.utc)
+LAT_PUNTA_ARENAS = -53.1500   # 53° 09' S
+LON_PUNTA_ARENAS = -70.9000   # 70° 54' W
 
 OPCIONES_TIPO = [
     "👁️ Todos los tipos",
@@ -55,6 +59,241 @@ OPCIONES_RED = [
     "LSST",
     "ZTF",
 ]
+
+
+# =====================================================================
+# GEOMETRÍA ASTRONÓMICA LOCAL (PUNTA ARENAS) Y VISOR ALADIN LITE V3
+# =====================================================================
+def azimut_a_cardinal(az_deg):
+    direcciones = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"]
+    idx = int((az_deg + 22.5) // 45) % 8
+    return direcciones[idx]
+
+
+def calcular_observabilidad_magallanes(ra_deg, dec_deg):
+    """
+    Calcula en tiempo real la geometría de observación desde Punta Arenas
+    (53° 09' S, 70° 54' W, UTC-3) sin llamadas externas.
+    """
+    ahora_utc = datetime.now(timezone.utc)
+    ahora_local = (ahora_utc - timedelta(hours=3)).replace(tzinfo=None)
+    mjd_ahora = (ahora_utc - EPOCA_MJD).total_seconds() / 86400.0
+
+    # Tiempo Sidéreo Local (LST)
+    dias_j2000 = mjd_ahora - 51544.5
+    gmst_deg = (280.46061837 + 360.98564736629 * dias_j2000) % 360.0
+    lst_deg = (gmst_deg + LON_PUNTA_ARENAS) % 360.0
+
+    # Ángulo horario H en [-180, +180]
+    ha_deg = ((lst_deg - ra_deg + 180.0) % 360.0) - 180.0
+
+    phi = math.radians(LAT_PUNTA_ARENAS)
+    dec = math.radians(dec_deg)
+    ha = math.radians(ha_deg)
+
+    # Altura instantánea h
+    sin_h = math.sin(phi) * math.sin(dec) + math.cos(phi) * math.cos(dec) * math.cos(ha)
+    sin_h = max(-1.0, min(1.0, sin_h))
+    alt_deg = math.degrees(math.asin(sin_h))
+
+    # Azimut instantáneo A (0°=N, 90°=E, 180°=S, 270°=O)
+    cos_h = math.cos(math.radians(alt_deg))
+    if cos_h > 1e-6:
+        cos_az = (math.sin(dec) - sin_h * math.sin(phi)) / (cos_h * math.cos(phi))
+        cos_az = max(-1.0, min(1.0, cos_az))
+        az_deg = math.degrees(math.acos(cos_az))
+        if math.sin(ha) > 0:
+            az_deg = 360.0 - az_deg
+    else:
+        az_deg = 0.0
+
+    cardinal = azimut_a_cardinal(az_deg)
+    estado_alt = "Sobre horiz." if alt_deg > 0.0 else "Bajo horiz."
+
+    # Altura máxima (culminación superior) y mínima (culminación inferior)
+    alt_max = 90.0 - abs(LAT_PUNTA_ARENAS - dec_deg)
+    alt_min = math.degrees(math.asin(max(-1.0, min(1.0, -math.cos(phi + dec)))))
+
+    if alt_max <= 0.0:
+        condicion = "⛔ Inobservable"
+        detalle_cond = "Solo hemisferio Norte"
+        transito_str = "No visible"
+        transito_detalle = "Bajo horizonte local"
+        alt_max_str = f"{alt_max:.1f}°"
+        masa_aire = "No culmina"
+    else:
+        if alt_min > 0.0:
+            condicion = "♾️ Circumpolar"
+            detalle_cond = "Visible todo el año"
+        else:
+            condicion = "🌓 Estacional"
+            detalle_cond = "Sale y se pone"
+
+        delta_ha_deg = (-ha_deg) % 360.0
+        horas_solares = (delta_ha_deg / 15.0) / 1.00273790935
+        dt_transito = ahora_local + timedelta(hours=horas_solares)
+        prefijo_dia = "Hoy" if dt_transito.date() == ahora_local.date() else "Mañana"
+        transito_str = f"{prefijo_dia} {dt_transito.strftime('%H:%M')}"
+
+        if abs(dec_deg - LAT_PUNTA_ARENAS) < 0.5:
+            dir_culm = "Cenit"
+        elif dec_deg > LAT_PUNTA_ARENAS:
+            dir_culm = "Norte"
+        else:
+            dir_culm = "Sur"
+
+        transito_detalle = f"Local · Hacia el {dir_culm}"
+        alt_max_str = f"{alt_max:.1f}°"
+        masa_aire = f"X = {1.0 / math.sin(math.radians(alt_max)):.2f}" if alt_max > 5.0 else "Muy baja (<5°)"
+
+    return {
+        "condicion": condicion,
+        "detalle_cond": detalle_cond,
+        "alt_actual_str": f"{alt_deg:+.1f}°",
+        "alt_actual_detalle": f"{estado_alt} · Az {az_deg:.0f}° ({cardinal})",
+        "transito_str": transito_str,
+        "transito_detalle": transito_detalle,
+        "alt_max_str": alt_max_str,
+        "masa_aire": masa_aire,
+    }
+
+
+def renderizar_visor_aladin(ra_deg, dec_deg, oid_str, altura_px=470):
+    """
+    Incrustación interactiva de Aladin Lite v3 (CDS Estrasburgo) con retícula,
+    círculo hueco de 15" (sin tapar el transitorio central) y cambio rápido
+    entre DSS2 Color, DESI Legacy DR10, Pan-STARRS y 2MASS Infrarrojo.
+    """
+    oid_js = json.dumps(str(oid_str))
+    html_aladin = f"""
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="utf-8" />
+      <style>
+        html, body {{
+          margin: 0;
+          padding: 0;
+          background-color: #0e1117;
+          color: #c9d1d9;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+          overflow: hidden;
+        }}
+        .toolbar {{
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+          align-items: center;
+          padding: 8px 10px;
+          background: #161b22;
+          border: 1px solid #30363d;
+          border-bottom: none;
+          border-radius: 8px 8px 0 0;
+        }}
+        .btn-survey {{
+          background: #21262d;
+          color: #c9d1d9;
+          border: 1px solid #30363d;
+          border-radius: 5px;
+          padding: 4px 9px;
+          font-size: 12px;
+          cursor: pointer;
+          transition: all 0.15s ease;
+        }}
+        .btn-survey:hover {{
+          background: #30363d;
+          color: #ffffff;
+        }}
+        .btn-survey.active {{
+          background: #0d419d;
+          border-color: #58a6ff;
+          color: #ffffff;
+          font-weight: 600;
+        }}
+        .coords-badge {{
+          margin-left: auto;
+          font-size: 11.5px;
+          color: #8b949e;
+          font-family: monospace;
+        }}
+        #aladin-lite-div {{
+          width: 100%;
+          height: {altura_px - 46}px;
+          border: 1px solid #30363d;
+          border-radius: 0 0 8px 8px;
+          background: #000000;
+        }}
+      </style>
+    </head>
+    <body>
+      <div class="toolbar">
+        <button class="btn-survey active" id="btn-dss2" title="Cobertura completa Norte y Sur" onclick="setSurvey('CDS/P/DSS2/color', 'btn-dss2')">DSS2 Color</button>
+        <button class="btn-survey" id="btn-legacy" title="Óptico profundo DECam/BASS (Norte y Sur extragaláctico)" onclick="setSurvey('CDS/P/DESI-Legacy-Surveys/DR10/color', 'btn-legacy')">Legacy DR10</button>
+        <button class="btn-survey" id="btn-ps1" title="Óptico profundo (cobertura Dec > -30°)" onclick="setSurvey('CDS/P/PanSTARRS/DR1/color-z-zg-g', 'btn-ps1')">Pan-STARRS</button>
+        <button class="btn-survey" id="btn-2mass" title="Infrarrojo cercano todo el cielo" onclick="setSurvey('CDS/P/2MASS/color', 'btn-2mass')">2MASS IR</button>
+        <button class="btn-survey" title="Centrar en campo de 5 arcmin" onclick="setZoom(0.08333)">🎯 5'</button>
+        <button class="btn-survey" title="Acercar a galaxia anfitriona (1.5 arcmin)" onclick="setZoom(0.025)">🔍 1.5'</button>
+        <span class="coords-badge">RA {float(ra_deg):.5f}° | Dec {float(dec_deg):.5f}°</span>
+      </div>
+      <div id="aladin-lite-div"></div>
+
+      <script src="https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js" charset="utf-8"></script>
+      <script>
+        let aladinInstance = null;
+        const targetRa = {float(ra_deg)};
+        const targetDec = {float(dec_deg)};
+        const objName = {oid_js};
+
+        if (typeof A !== 'undefined' && A.init) {{
+          A.init.then(() => {{
+            aladinInstance = A.aladin('#aladin-lite-div', {{
+              survey: 'CDS/P/DSS2/color',
+              fov: 0.08333,
+              target: targetRa + ' ' + targetDec,
+              cooFrame: 'ICRS',
+              showReticle: true,
+              reticleColor: '#00ffff',
+              reticleSize: 26,
+              showCooGridControl: true,
+              showFullscreenControl: true,
+              showLayersControl: true,
+              showZoomControl: true,
+              showGotoControl: false,
+              showShareControl: false
+            }});
+
+            // Círculo hueco de 15" de radio para enmarcar el evento sin tapar el centro
+            const overlay = A.graphicOverlay({{
+              name: objName,
+              color: '#00ffff',
+              lineWidth: 2
+            }});
+            aladinInstance.addOverlay(overlay);
+            overlay.add(A.circle(targetRa, targetDec, 0.00417));
+          }});
+        }} else {{
+          document.getElementById('aladin-lite-div').innerHTML =
+            '<div style="padding:20px;color:#8b949e;text-align:center;">No se pudo cargar Aladin Lite desde el servidor del CDS.</div>';
+        }}
+
+        function setSurvey(hipsId, btnId) {{
+          if (!aladinInstance) return;
+          aladinInstance.setImageSurvey(hipsId);
+          document.querySelectorAll('.btn-survey').forEach(b => b.classList.remove('active'));
+          const activeBtn = document.getElementById(btnId);
+          if (activeBtn) activeBtn.classList.add('active');
+        }}
+
+        function setZoom(fovDeg) {{
+          if (!aladinInstance) return;
+          aladinInstance.gotoRaDec(targetRa, targetDec);
+          aladinInstance.setFoV(fovDeg);
+        }}
+      </script>
+    </body>
+    </html>
+    """
+    components.html(html_aladin, height=altura_px)
 
 
 # =====================================================================
@@ -239,7 +478,6 @@ tokens_busqueda = [tok for tok in busqueda_global.lower().split() if tok]
 catalogo_filtrado = []
 
 for ev in catalogo_datos:
-    # 1. Filtro temporal (se omite automáticamente cuando hay búsqueda global escrita)
     if not tokens_busqueda:
         fecha_ev = ev.get("_fecha_local")
         if modo_temporal == "Día específico":
@@ -249,18 +487,15 @@ for ev in catalogo_datos:
             if not fecha_ev or not (fecha_inicio <= fecha_ev <= fecha_fin):
                 continue
 
-    # 2. Filtro por texto (todos los términos ingresados deben coincidir)
     if tokens_busqueda:
         blob = ev.get("_search_blob", "")
         if not all(tok in blob for tok in tokens_busqueda):
             continue
 
-    # 3. Filtro por clasificación astrofísica
     if filtro_tipo_global != "👁️ Todos los tipos":
         if ev.get("_cat_ui") != filtro_tipo_global:
             continue
 
-    # 4. Filtro por red de origen
     if filtro_red_global != "🌐 Todas las redes":
         if ev.get("survey") != filtro_red_global:
             continue
@@ -269,7 +504,6 @@ for ev in catalogo_datos:
 
 catalogo_filtrado.sort(key=lambda x: float(x.get("mjd_deteccion") or 0.0), reverse=True)
 
-# Etiqueta descriptiva del alcance activo
 if busqueda_global:
     etiqueta_alcance = f'Búsqueda global: "{busqueda_global}"'
 elif modo_temporal == "Día específico":
@@ -521,6 +755,8 @@ elif vista == "Feed de Alertas y Circulares":
 
         oid_limpio = str(evento_actual.get("oid")).replace(" ", "_").replace("/", "-")
         survey = evento_actual.get("survey")
+        ra_obj = evento_actual.get("ra")
+        dec_obj = evento_actual.get("dec")
 
         st.info(
             "💡 **Nota sobre sincronización temporal:** La fecha y hora mostradas en el catálogo corresponden al instante "
@@ -569,28 +805,55 @@ elif vista == "Feed de Alertas y Circulares":
                     st.info("El borrador comunitario no aplica o no ha sido generado debido a bloqueos del Escudo.")
 
         with col2:
-            st.subheader("📊 Evidencia Fotométrica / Espectroscópica")
+            st.subheader("📊 Evidencia y Contexto Celeste")
 
+            # 1. Ficha instantánea de observabilidad desde Punta Arenas
+            if ra_obj is not None and dec_obj is not None:
+                obs_pa = calcular_observabilidad_magallanes(float(ra_obj), float(dec_obj))
+                m1, m2, m3, m4 = st.columns(4)
+                m1.metric("Punta Arenas", obs_pa["condicion"], obs_pa["detalle_cond"])
+                m2.metric("Altura Actual", obs_pa["alt_actual_str"], obs_pa["alt_actual_detalle"])
+                m3.metric("Culminación", obs_pa["transito_str"], obs_pa["transito_detalle"])
+                m4.metric("Altura Máx.", obs_pa["alt_max_str"], obs_pa["masa_aire"])
+
+            # 2. Fotometría / Espectroscopía
             ruta_grafico = f"data/curva_luz_{oid_limpio}.png"
             ruta_halfa = f"data/quimica_halfa_{oid_limpio}.png"
 
             opciones_evidencia = []
             if os.path.exists(ruta_grafico):
-                opciones_evidencia.append("Curva de Luz")
+                opciones_evidencia.append("Curva de Luz y Carta")
             if os.path.exists(ruta_halfa):
                 opciones_evidencia.append("Espectroscopía Taxonómica")
 
             if not opciones_evidencia:
                 st.warning("Gráfica fotométrica reservada o no disponible en la red de origen.")
-            else:
-                seleccion_evidencia = st.selectbox(
-                    "Selecciona evidencia a visualizar:", opciones_evidencia, label_visibility="collapsed"
+            elif len(opciones_evidencia) == 1:
+                st.image(
+                    ruta_grafico if opciones_evidencia[0].startswith("Curva") else ruta_halfa,
+                    use_container_width=True,
                 )
-
-                if seleccion_evidencia == "Curva de Luz":
+            else:
+                seleccion_evidencia = st.radio(
+                    "Evidencia gráfica:",
+                    opciones_evidencia,
+                    horizontal=True,
+                    label_visibility="collapsed",
+                )
+                if seleccion_evidencia == "Curva de Luz y Carta":
                     st.image(ruta_grafico, use_container_width=True)
-                elif seleccion_evidencia == "Espectroscopía Taxonómica":
+                else:
                     st.image(ruta_halfa, use_container_width=True)
+
+            # 3. Visor Celeste Interactivo (Aladin Lite v3) para todo el catálogo
+            if ra_obj is not None and dec_obj is not None:
+                st.markdown("##### 🌌 Visor Celeste Interactivo (Aladin Lite)")
+                renderizar_visor_aladin(
+                    float(ra_obj),
+                    float(dec_obj),
+                    evento_actual.get("oid", ""),
+                    altura_px=470,
+                )
     else:
         st.info(f"No hay alertas registradas para la selección actual ({etiqueta_alcance}{sufijo_filtros}).")
 
