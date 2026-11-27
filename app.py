@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : app.py (Visor Web Institucional / Panel de Control)
-VERSIÓN    : 23.1 (LEYENDA SVG SINCRONIZADA Y FICHA FLOTANTE EN ALADIN)
+VERSIÓN    : 23.2 (URLS HIPS DIRECTAS ANTI-CAÍDA MOCSERVER + FICHA OSCURA)
 =============================================================================
 """
 
@@ -42,6 +42,12 @@ EPOCA_MJD = datetime(1858, 11, 17, tzinfo=timezone.utc)
 LAT_PUNTA_ARENAS = -53.1500   # 53° 09' S
 LON_PUNTA_ARENAS = -70.9000   # 70° 54' W
 DEC_LIMITE_NORTE_PA = 90.0 + LAT_PUNTA_ARENAS  # +36.85°
+
+HIPS_MELLINGER = "https://alasky.cds.unistra.fr/MellingerRGB"
+HIPS_DSS2 = "https://alasky.cds.unistra.fr/DSS/DSSColor"
+HIPS_2MASS = "https://alasky.cds.unistra.fr/2MASS/Color"
+HIPS_LEGACY = "https://alasky.cds.unistra.fr/DESI-legacy-surveys/DR10/CDS_P_DESI-Legacy-Surveys_DR10_color"
+HIPS_PANSTARRS = "https://alasky.cds.unistra.fr/Pan-STARRS/DR1/color-z-zg-g"
 
 OPCIONES_TIPO = [
     "👁️ Todos los tipos",
@@ -202,7 +208,7 @@ def calcular_observabilidad_magallanes(ra_deg, dec_deg):
 def renderizar_mapa_universo_aladin(capas_aladin, altura_px=650):
     """
     Mapa interactivo de todo el cielo en Aladin Lite v3 con:
-    - Fondo real del universo (Mellinger Color, DSS2 Color, 2MASS IR).
+    - URLs HiPS directas (sin dependencia de MocServer).
     - Leyenda con iconos SVG idénticos a la simbología del mapa y activación por clic.
     - Ficha técnica flotante en modo oscuro (reemplaza el popup blanco nativo).
     """
@@ -436,9 +442,9 @@ def renderizar_mapa_universo_aladin(capas_aladin, altura_px=650):
     </head>
     <body>
       <div class="toolbar">
-        <button class="btn btn-survey active" id="btn-mel" title="Panorama óptico real de toda la Vía Láctea" onclick="cambiarSurvey('CDS/P/Mellinger/color', 'btn-mel')">Vía Láctea (Mellinger)</button>
-        <button class="btn btn-survey" id="btn-dss2" title="Cielo profundo óptico (ideal al acercar zoom)" onclick="cambiarSurvey('CDS/P/DSS2/color', 'btn-dss2')">DSS2 Color</button>
-        <button class="btn btn-survey" id="btn-2mass" title="Estructura infrarroja del disco galáctico" onclick="cambiarSurvey('CDS/P/2MASS/color', 'btn-2mass')">2MASS IR</button>
+        <button class="btn btn-survey active" id="btn-mel" title="Panorama óptico real de toda la Vía Láctea" onclick="cambiarSurvey('__HIPS_MELLINGER__', 'btn-mel')">Vía Láctea (Mellinger)</button>
+        <button class="btn btn-survey" id="btn-dss2" title="Cielo profundo óptico (ideal al acercar zoom)" onclick="cambiarSurvey('__HIPS_DSS2__', 'btn-dss2')">DSS2 Color</button>
+        <button class="btn btn-survey" id="btn-2mass" title="Estructura infrarroja del disco galáctico" onclick="cambiarSurvey('__HIPS_2MASS__', 'btn-2mass')">2MASS IR</button>
         <span class="sep"></span>
         <button class="btn btn-proj active" id="btn-ait" title="Proyección elíptica de cielo completo" onclick="cambiarProyeccion('AIT', 360, 'btn-ait')">🌌 Aitoff</button>
         <button class="btn btn-proj" id="btn-sin" title="Globo celeste 3D interactivo" onclick="cambiarProyeccion('SIN', 180, 'btn-sin')">🌐 Esfera 3D</button>
@@ -469,6 +475,8 @@ def renderizar_mapa_universo_aladin(capas_aladin, altura_px=650):
       <script src="https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js" charset="utf-8"></script>
       <script>
         const capasData = __CAPAS_JSON__;
+        const URL_MELLINGER = '__HIPS_MELLINGER__';
+        const URL_DSS2 = '__HIPS_DSS2__';
         let aladinAllSky = null;
         let ultimoObjeto = null;
         const catalogosPorNombre = {};
@@ -570,7 +578,7 @@ def renderizar_mapa_universo_aladin(capas_aladin, altura_px=650):
         if (typeof A !== 'undefined' && A.init) {
           A.init.then(() => {
             aladinAllSky = A.aladin('#aladin-allsky', {
-              survey: 'CDS/P/Mellinger/color',
+              survey: URL_MELLINGER,
               projection: 'AIT',
               fov: 360,
               cooFrame: 'ICRS',
@@ -628,9 +636,9 @@ def renderizar_mapa_universo_aladin(capas_aladin, altura_px=650):
             '<div style="padding:24px;color:#8b949e;text-align:center;">No se pudo cargar el mapa del universo desde el CDS. Usa la vista "Grilla Analítica".</div>';
         }
 
-        function cambiarSurvey(hipsId, btnId) {
+        function cambiarSurvey(hipsUrl, btnId) {
           if (!aladinAllSky) return;
-          try { aladinAllSky.setImageSurvey(hipsId); } catch (e) {}
+          try { aladinAllSky.setImageSurvey(hipsUrl); } catch (e) {}
           marcarActivo('.btn-survey', btnId);
         }
 
@@ -654,7 +662,7 @@ def renderizar_mapa_universo_aladin(capas_aladin, altura_px=650):
           try {
             aladinAllSky.setProjection('AIT');
             aladinAllSky.setFrame('ICRS');
-            aladinAllSky.setImageSurvey('CDS/P/Mellinger/color');
+            aladinAllSky.setImageSurvey(URL_MELLINGER);
             aladinAllSky.gotoRaDec(180, 0);
             aladinAllSky.setFoV(360);
           } catch (e) {}
@@ -667,7 +675,7 @@ def renderizar_mapa_universo_aladin(capas_aladin, altura_px=650):
           if (!aladinAllSky || !ultimoObjeto) return;
           try {
             aladinAllSky.setProjection('SIN');
-            aladinAllSky.setImageSurvey('CDS/P/DSS2/color');
+            aladinAllSky.setImageSurvey(URL_DSS2);
             aladinAllSky.gotoRaDec(ultimoObjeto.ra, ultimoObjeto.dec);
             aladinAllSky.setFoV(0.1167);
           } catch (e) {}
@@ -683,6 +691,9 @@ def renderizar_mapa_universo_aladin(capas_aladin, altura_px=650):
         plantilla_html
         .replace("__CAPAS_JSON__", capas_json)
         .replace("__ALTURA_DIV__", str(altura_mapa))
+        .replace("__HIPS_MELLINGER__", HIPS_MELLINGER)
+        .replace("__HIPS_DSS2__", HIPS_DSS2)
+        .replace("__HIPS_2MASS__", HIPS_2MASS)
     )
     components.html(html_final, height=altura_px)
 
@@ -690,7 +701,8 @@ def renderizar_mapa_universo_aladin(capas_aladin, altura_px=650):
 def renderizar_visor_aladin(ra_deg, dec_deg, oid_str, altura_px=470):
     """
     Incrustación interactiva de Aladin Lite v3 (CDS Estrasburgo) para un objeto
-    individual, con retícula, círculo hueco de 15" y cambio rápido de sondeos.
+    individual con URLs HiPS directas (sin dependencia de MocServer), retícula
+    y círculo hueco de 15".
     """
     oid_js = json.dumps(str(oid_str))
     html_aladin = f"""
@@ -755,10 +767,10 @@ def renderizar_visor_aladin(ra_deg, dec_deg, oid_str, altura_px=470):
     </head>
     <body>
       <div class="toolbar">
-        <button class="btn-survey active" id="btn-dss2" title="Cobertura completa Norte y Sur" onclick="setSurvey('CDS/P/DSS2/color', 'btn-dss2')">DSS2 Color</button>
-        <button class="btn-survey" id="btn-legacy" title="Óptico profundo DECam/BASS (Norte y Sur extragaláctico)" onclick="setSurvey('CDS/P/DESI-Legacy-Surveys/DR10/color', 'btn-legacy')">Legacy DR10</button>
-        <button class="btn-survey" id="btn-ps1" title="Óptico profundo (cobertura Dec > -30°)" onclick="setSurvey('CDS/P/PanSTARRS/DR1/color-z-zg-g', 'btn-ps1')">Pan-STARRS</button>
-        <button class="btn-survey" id="btn-2mass" title="Infrarrojo cercano todo el cielo" onclick="setSurvey('CDS/P/2MASS/color', 'btn-2mass')">2MASS IR</button>
+        <button class="btn-survey active" id="btn-dss2" title="Cobertura completa Norte y Sur" onclick="setSurvey('{HIPS_DSS2}', 'btn-dss2')">DSS2 Color</button>
+        <button class="btn-survey" id="btn-legacy" title="Óptico profundo DECam/BASS (Norte y Sur extragaláctico)" onclick="setSurvey('{HIPS_LEGACY}', 'btn-legacy')">Legacy DR10</button>
+        <button class="btn-survey" id="btn-ps1" title="Óptico profundo (cobertura Dec > -30°)" onclick="setSurvey('{HIPS_PANSTARRS}', 'btn-ps1')">Pan-STARRS</button>
+        <button class="btn-survey" id="btn-2mass" title="Infrarrojo cercano todo el cielo" onclick="setSurvey('{HIPS_2MASS}', 'btn-2mass')">2MASS IR</button>
         <button class="btn-survey" title="Centrar en campo de 5 arcmin" onclick="setZoom(0.08333)">🎯 5'</button>
         <button class="btn-survey" title="Acercar a galaxia anfitriona (1.5 arcmin)" onclick="setZoom(0.025)">🔍 1.5'</button>
         <span class="coords-badge">RA {float(ra_deg):.5f}° | Dec {float(dec_deg):.5f}°</span>
@@ -775,7 +787,7 @@ def renderizar_visor_aladin(ra_deg, dec_deg, oid_str, altura_px=470):
         if (typeof A !== 'undefined' && A.init) {{
           A.init.then(() => {{
             aladinInstance = A.aladin('#aladin-lite-div', {{
-              survey: 'CDS/P/DSS2/color',
+              survey: '{HIPS_DSS2}',
               fov: 0.08333,
               target: targetRa + ' ' + targetDec,
               cooFrame: 'ICRS',
@@ -803,9 +815,9 @@ def renderizar_visor_aladin(ra_deg, dec_deg, oid_str, altura_px=470):
             '<div style="padding:20px;color:#8b949e;text-align:center;">No se pudo cargar Aladin Lite desde el servidor del CDS.</div>';
         }}
 
-        function setSurvey(hipsId, btnId) {{
+        function setSurvey(hipsUrl, btnId) {{
           if (!aladinInstance) return;
-          aladinInstance.setImageSurvey(hipsId);
+          aladinInstance.setImageSurvey(hipsUrl);
           document.querySelectorAll('.btn-survey').forEach(b => b.classList.remove('active'));
           const activeBtn = document.getElementById(btnId);
           if (activeBtn) activeBtn.classList.add('active');
