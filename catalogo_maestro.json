@@ -133604,5 +133604,16 @@
         "vip": false,
         "mjd_deteccion": 61371.08534719981,
         "img_url": "data/curva_luz_ZTF19acasmng.png"
+    },
+    {
+        "oid": "SN 2026akoj",
+        "ra": 5.8014403656562,
+        "dec": -7.1480759366787,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 61370.2699190001,
+        "img_url": "data/curva_luz_SN_2026akoj.png"
     }
 ]
