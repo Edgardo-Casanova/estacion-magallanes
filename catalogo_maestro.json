@@ -137388,5 +137388,49 @@
         "vip": false,
         "mjd_deteccion": 61371.7009837963,
         "img_url": "data/curva_luz_SN_2026pjf.png"
+    },
+    {
+        "oid": "SN 2026ajfh",
+        "ra": 56.0808614286,
+        "dec": -46.6709071429,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN II",
+        "vip": false,
+        "mjd_deteccion": 61371.80262731481,
+        "img_url": "data/curva_luz_SN_2026ajfh.png"
+    },
+    {
+        "oid": "SN 2026afvu",
+        "ra": 67.7666351,
+        "dec": -8.7747286,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN",
+        "vip": false,
+        "mjd_deteccion": 61371.456180599984,
+        "img_url": "data/curva_luz_SN_2026afvu.png"
+    },
+    {
+        "oid": "SN 2026akmi",
+        "ra": 73.818568133032,
+        "dec": -22.727594764797,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN II",
+        "vip": false,
+        "mjd_deteccion": 61371.4189352002,
+        "img_url": "data/curva_luz_SN_2026akmi.png"
+    },
+    {
+        "oid": "SN 2026akcc",
+        "ra": 87.3781541,
+        "dec": -19.54558,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN II",
+        "vip": false,
+        "mjd_deteccion": 61371.41987269977,
+        "img_url": "data/curva_luz_SN_2026akcc.png"
     }
 ]
