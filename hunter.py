@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : hunter.py (El Cazador Multipropósito)
-VERSIÓN    : 26.0 (SINCRONIZACIÓN TNS EN RAM, TAMIZ DE MEMORIA Y RELOJ 4D)
+VERSIÓN    : 26.1 (CARTA DSS2 EN RAM, DELTAS TNS ANTI-429 Y RELOJ 4D)
 =============================================================================
 """
 
@@ -21,6 +21,8 @@ import json
 import re
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.image as mpimg
+import matplotlib.patheffects as path_effects
 from alerce.core import Alerce
 from datetime import datetime, timedelta, timezone
 from astropy.time import Time
@@ -31,6 +33,11 @@ from astroquery.vizier import Vizier
 import pyvo as vo
 import warnings
 from dotenv import load_dotenv
+
+try:
+    from PIL import Image
+except ImportError:
+    Image = None
 
 from laboratorio import ejecutar_pipeline_magallanes
 
@@ -67,6 +74,9 @@ class TimeoutException(Exception):
 
 def manejador_timeout(signum, frame):
     raise TimeoutException("Timeout crítico: El servidor externo no respondió a tiempo.")
+
+def sanitizar_oid(oid):
+    return str(oid).strip().replace(' ', '_').replace('/', '-')
 
 # =====================================================================
 # 🛰️ ADAPTADORES QUIRÚRGICOS LSST (IA HTMX + FOTOMETRÍA TAP)
@@ -152,7 +162,6 @@ def obtener_detecciones_lsst(servicio_tap, oid_puro, fila_obj):
     except Exception:
         pass
 
-    # Respaldo desde lsst_dia_object si lsst_detection aún no sincronizó la fila
     if not filas_validas:
         for col_f in ['r_psffluxmax', 'g_psffluxmax', 'i_psffluxmax', 'z_psffluxmax', 'u_psffluxmax', 'y_psffluxmax']:
             if col_f in fila_obj and pd.notna(fila_obj[col_f]) and float(fila_obj[col_f]) > 0:
@@ -171,7 +180,6 @@ def obtener_detecciones_lsst(servicio_tap, oid_puro, fila_obj):
     if not filas_validas:
         return pd.DataFrame()
 
-    # Si es una detección única del Stamp Classifier, sintetizamos el piso 3-sigma previo
     if len(filas_validas) == 1:
         p0 = filas_validas[0]
         flujo_base_3sigma = max(3.0 * p0['flujo_err_raw'], 1.0)
@@ -267,7 +275,6 @@ def cargar_historial_vistos(mjd_actual, catalogo_dict):
         except Exception:
             pass
 
-    # Sincronizar objetos ya presentes en el catálogo maestro
     for oid_cat, info_cat in catalogo_dict.items():
         try:
             mjd_det = float(info_cat.get("mjd_deteccion", 0.0))
@@ -413,9 +420,41 @@ def obtener_datos_astronomicos(coordenadas, mjd_alerta):
 
     return nombre, distancia, tipo, metalicidad, es_cuasar, es_estrella, es_galaxia, es_vip, redshift_simbad
 
+def obtener_carta_dss2_ram(ra_float, dec_float, fov_arcmin=5.0):
+    """
+    Descarga directamente en RAM un recorte óptico real en DSS2 Color desde
+    CDS HiPS2FITS (Norte arriba, Este a la izquierda) para la carta de búsqueda.
+    """
+    if ra_float == 0.0 and dec_float == 0.0:
+        return None
+    url = "https://alasky.cds.unistra.fr/hips-image-services/hips2fits"
+    params = {
+        "hips": "CDS/P/DSS2/color",
+        "width": 500,
+        "height": 500,
+        "fov": round(fov_arcmin / 60.0, 6),
+        "projection": "TAN",
+        "coordsys": "icrs",
+        "ra": f"{float(ra_float):.6f}",
+        "dec": f"{float(dec_float):.6f}",
+        "format": "jpg",
+    }
+    try:
+        resp = requests.get(url, params=params, timeout=6)
+        if resp.status_code == 200 and len(resp.content) > 2000:
+            if Image is not None:
+                with Image.open(io.BytesIO(resp.content)) as im:
+                    return np.asarray(im.convert("RGB"))
+            return mpimg.imread(io.BytesIO(resp.content), format="jpeg")
+    except Exception:
+        pass
+    return None
+
 def graficar_curva(det, id_evento, red_descubridora, ra_float, dec_float, tipo_evento_final="supernova", es_vip=False):
     plt.style.use('dark_background')
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 7))
+    fig, (ax1, ax2) = plt.subplots(
+        1, 2, figsize=(16, 6.8), gridspec_kw={'width_ratios': [1.2, 1.0]}
+    )
     fig.patch.set_facecolor('#0f0f0f')
     ax1.set_facecolor('#1a1a1a')
     ax2.set_facecolor('#1a1a1a')
@@ -423,15 +462,19 @@ def graficar_curva(det, id_evento, red_descubridora, ra_float, dec_float, tipo_e
     color_destaque = '#ff00ff' if es_vip else ('cyan' if tipo_evento_final in ["supernova", "agn", "blazar", "tde"] else 'yellow')
 
     if det is not None and not det.empty:
-        if 'fecha_humana' not in det.columns: det['fecha_humana'] = Time(det['mjd'].values, format='mjd').to_datetime()
-        banda_g, banda_r = det[det['fid'] == 1], det[det['fid'] == 2]
-        if not banda_g.empty: ax1.errorbar(banda_g['fecha_humana'], banda_g['magpsf'], yerr=banda_g['sigmapsf'], fmt='o', color='#39ff14', alpha=0.6, markersize=5, label='Banda g / u')
-        if not banda_r.empty: ax1.errorbar(banda_r['fecha_humana'], banda_r['magpsf'], yerr=banda_r['sigmapsf'], fmt='o', color='#ff3333', alpha=0.6, markersize=5, label='Banda r / i / z / y')
-        det_sorted = det.sort_values(by='mjd')
+        det_plot = det.copy()
+        if 'fecha_humana' not in det_plot.columns:
+            det_plot['fecha_humana'] = Time(det_plot['mjd'].values, format='mjd').to_datetime()
+        banda_g, banda_r = det_plot[det_plot['fid'] == 1], det_plot[det_plot['fid'] == 2]
+        if not banda_g.empty:
+            ax1.errorbar(banda_g['fecha_humana'], banda_g['magpsf'], yerr=banda_g['sigmapsf'], fmt='o', color='#39ff14', alpha=0.6, markersize=5, label='Banda g / u')
+        if not banda_r.empty:
+            ax1.errorbar(banda_r['fecha_humana'], banda_r['magpsf'], yerr=banda_r['sigmapsf'], fmt='o', color='#ff3333', alpha=0.6, markersize=5, label='Banda r / i / z / y')
+        det_sorted = det_plot.sort_values(by='mjd')
         ax1.scatter(det_sorted.iloc[-1]['fecha_humana'], det_sorted.iloc[-1]['magpsf'], color=color_destaque, marker='*', s=400, edgecolor='white', zorder=5, label='¡Última Detección!')
         ax1.invert_yaxis()
         ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
-        fig.autofmt_xdate(rotation=45)
+        ax1.tick_params(axis='x', rotation=45)
         ax1.set_xlabel("Fecha de Observación (UTC)", color='lightgray')
         ax1.set_ylabel("Magnitud Aparente (Brillo)", color='lightgray')
         ax1.legend(facecolor='#0f0f0f', edgecolor='gray')
@@ -440,28 +483,77 @@ def graficar_curva(det, id_evento, red_descubridora, ra_float, dec_float, tipo_e
         ax1.text(0.5, 0.45, "Matriz alojada en el Transient Name Server.", color='lightgray', fontsize=12, ha='center', va='center')
         ax1.set_xticks([]); ax1.set_yticks([])
 
-    ax1.set_title(f"Telemetría Fotométrica: {id_evento}", color='white', pad=15)
+    ax1.set_title(f"Telemetría Fotométrica: {id_evento}", color='white', pad=14)
     ax1.grid(True, linestyle='-', color='#333333', alpha=0.7)
 
     try:
         coordenadas = SkyCoord(ra=ra_float*u.degree, dec=dec_float*u.degree, frame='icrs')
         constelacion = get_constellation(coordenadas)
-    except Exception: constelacion = "Desconocida"
+    except Exception:
+        constelacion = "Desconocida"
 
-    ax2.scatter(ra_float, dec_float, color=color_destaque, marker='*', s=400, label=f'Posición {red_descubridora}')
-    ax2.set_xlim(ra_float + 1, ra_float - 1)
-    ax2.set_ylim(dec_float - 1, dec_float + 1)
-    ax2.set_title(f"Coordenadas en {constelacion}", color='white', pad=15)
-    ax2.set_xlabel("Ascensión Recta (RA)", color='lightgray')
-    ax2.set_ylabel("Declinación (Dec)", color='lightgray')
-    ax2.legend(facecolor='#0f0f0f', edgecolor='gray', loc='upper right')
-    ax2.grid(True, linestyle=':', color='#444444')
+    fov_arcmin = 5.0
+    mitad_fov = fov_arcmin / 2.0
+    imagen_dss2 = obtener_carta_dss2_ram(ra_float, dec_float, fov_arcmin=fov_arcmin)
+    sombra_texto = [path_effects.withStroke(linewidth=2.5, foreground='black')]
+
+    if imagen_dss2 is not None:
+        ax2.imshow(imagen_dss2, extent=[-mitad_fov, mitad_fov, -mitad_fov, mitad_fov], origin='upper')
+        ax2.set_xlim(-mitad_fov, mitad_fov)
+        ax2.set_ylim(-mitad_fov, mitad_fov)
+        ax2.set_aspect('equal', adjustable='box')
+
+        # Retícula abierta para no tapar el transitorio ni el núcleo de la galaxia anfitriona
+        gap, largo = 0.20, 0.68
+        for x0, x1, y0, y1 in [(-largo, -gap, 0, 0), (gap, largo, 0, 0), (0, 0, -largo, -gap), (0, 0, gap, largo)]:
+            ax2.plot([x0, x1], [y0, y1], color='black', linewidth=3.2, zorder=6)
+            ax2.plot([x0, x1], [y0, y1], color=color_destaque, linewidth=1.8, zorder=7)
+
+        # Barra de escala angular de 1 arcmin (60") en esquina inferior izquierda
+        ax2.plot([-2.25, -1.25], [-2.18, -2.18], color='black', linewidth=4.0, zorder=6)
+        ax2.plot([-2.25, -1.25], [-2.18, -2.18], color='white', linewidth=2.2, zorder=7)
+        t_esc = ax2.text(-1.75, -1.98, "1' (60\")", color='white', fontsize=9, fontweight='bold', ha='center', zorder=8)
+        t_esc.set_path_effects(sombra_texto)
+
+        # Brújula astronómica estándar (Norte arriba +y, Este izquierda -x) en esquina inferior derecha
+        cx, cy = 2.15, -2.18
+        ax2.annotate("", xy=(cx, cy + 0.56), xytext=(cx, cy), arrowprops=dict(arrowstyle="->", color='white', lw=1.8), zorder=8)
+        ax2.annotate("", xy=(cx - 0.56, cy), xytext=(cx, cy), arrowprops=dict(arrowstyle="->", color='white', lw=1.8), zorder=8)
+        tn = ax2.text(cx, cy + 0.64, "N", color='white', fontsize=9, fontweight='bold', ha='center', va='bottom', zorder=8)
+        te = ax2.text(cx - 0.65, cy, "E", color='white', fontsize=9, fontweight='bold', va='center', ha='right', zorder=8)
+        tn.set_path_effects(sombra_texto)
+        te.set_path_effects(sombra_texto)
+
+        # Etiqueta de fuente en esquina superior derecha
+        ax2.text(
+            2.34, 2.30, f"DSS2 Color · {red_descubridora}",
+            color='#f0f0f0', fontsize=8.5, ha='right', va='top', zorder=8,
+            bbox=dict(boxstyle='round,pad=0.25', facecolor='#000000', alpha=0.68, edgecolor='#555555')
+        )
+        ax2.set_xticks([-2, -1, 0, 1, 2])
+        ax2.set_yticks([-2, -1, 0, 1, 2])
+        ax2.set_xticklabels(["+2'", "+1'", "0'", "-1'", "-2'"])
+        ax2.set_yticklabels(["-2'", "-1'", "0'", "+1'", "+2'"])
+        ax2.set_title(f"Carta de Búsqueda en {constelacion} (5' × 5')", color='white', pad=14)
+        ax2.set_xlabel(f"RA {ra_float:.5f}° | Dec {dec_float:.5f}° (N↑ E←)", color='lightgray')
+        ax2.set_ylabel("Desplazamiento Angular (arcmin)", color='lightgray')
+        ax2.grid(True, linestyle=':', color='white', alpha=0.22)
+    else:
+        ax2.scatter(ra_float, dec_float, color=color_destaque, marker='+', s=450, linewidths=2.5, label=f'Posición {red_descubridora}')
+        ax2.set_xlim(ra_float + 0.15, ra_float - 0.15)
+        ax2.set_ylim(dec_float - 0.15, dec_float + 0.15)
+        ax2.set_aspect('equal', adjustable='box')
+        ax2.set_title(f"Coordenadas en {constelacion}", color='white', pad=14)
+        ax2.set_xlabel("Ascensión Recta (RA)", color='lightgray')
+        ax2.set_ylabel("Declinación (Dec)", color='lightgray')
+        ax2.legend(facecolor='#0f0f0f', edgecolor='gray', loc='upper right')
+        ax2.grid(True, linestyle=':', color='#444444')
 
     titulo_vip = "[OBJETIVO VIP ESTACIÓN MAGALLANES]" if es_vip else f"Reporte Astronómico: {tipo_evento_final.upper()}"
-    plt.tight_layout(rect=[0, 0.05, 0.82, 0.92])
-    plt.suptitle(titulo_vip, fontsize=20, color=color_destaque, fontweight='bold', y=0.98)
+    plt.tight_layout(rect=[0, 0.02, 1.0, 0.92])
+    plt.suptitle(titulo_vip, fontsize=19, color=color_destaque, fontweight='bold', y=0.98)
 
-    ruta_grafico = f"data/curva_luz_{id_evento.replace(' ', '_')}.png"
+    ruta_grafico = f"data/curva_luz_{sanitizar_oid(id_evento)}.png"
     guardar_grafico_memoria(fig, ruta_grafico)
 
 # =====================================================================
@@ -522,6 +614,32 @@ def iterar_zip_tns_en_ram(contenido_bytes):
     except Exception:
         return
 
+def descargar_bloque_tns_con_reintento(sesion, url, timeout=12, max_reintentos=3):
+    """
+    Descarga un archivo público de TNS tolerando límites de ráfaga (HTTP 429)
+    y fallos transitorios de servidor (HTTP 5xx).
+    """
+    ultimo_codigo = None
+    for intento in range(max_reintentos):
+        try:
+            resp = sesion.get(url, timeout=timeout)
+            ultimo_codigo = resp.status_code
+            if resp.status_code == 200:
+                return resp.content, 200
+            if resp.status_code == 429 or resp.status_code >= 500:
+                espera_hdr = resp.headers.get("Retry-After")
+                try:
+                    espera = float(espera_hdr) if espera_hdr else (2.5 * (intento + 1))
+                except (ValueError, TypeError):
+                    espera = 2.5 * (intento + 1)
+                time.sleep(min(max(espera, 1.5), 15.0))
+                continue
+            return None, resp.status_code
+        except Exception:
+            ultimo_codigo = "EXC"
+            time.sleep(2.0 * (intento + 1))
+    return None, ultimo_codigo
+
 def registrar_evento_tns_en_catalogo(
     client, catalogo_dict, indice_por_codigo, log_file,
     prefijo, objname, ra_float, dec_float, redshift,
@@ -543,6 +661,7 @@ def registrar_evento_tns_en_catalogo(
             prefijo_limpio = "AT"
 
     id_evento = f"{prefijo_limpio} {objname}".strip()
+    oid_archivo = sanitizar_oid(id_evento)
     codigo_lower = str(objname).strip().lower()
 
     clave_previa = indice_por_codigo.get(codigo_lower)
@@ -571,10 +690,12 @@ def registrar_evento_tns_en_catalogo(
                 oid_tns = candidatos_alerce.iloc[0]['oid']
                 oid_tns = oid_tns.decode('utf-8') if isinstance(oid_tns, bytes) else str(oid_tns)
                 det = client.query_detections(oid=oid_tns, format='pandas')
+                if det is not None and not det.empty:
+                    det = det.dropna(subset=['magpsf', 'mjd'])
 
             signal.alarm(0)
     except TimeoutException:
-        registrar_log(f"   [-] Timeout: ALeRCE no entregó fotometría para {id_evento} a tiempo. Omitiendo curva.", log_file)
+        registrar_log(f"   [-] Aviso: ALeRCE no entregó fotometría para {id_evento} a tiempo. Omitiendo curva.", log_file)
     except Exception as e:
         registrar_log(f"   [-] Fallo menor en extracción fotométrica para {id_evento}: {e}", log_file)
     finally:
@@ -615,7 +736,7 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
   de la Estación Magallanes.
 ======================================================================"""
 
-    ruta_txt = f"alertas/CIRCULAR_{id_evento.replace(' ', '_')}.txt"
+    ruta_txt = f"alertas/CIRCULAR_{oid_archivo}.txt"
     guardar_archivo_texto(ruta_txt, texto_tns)
 
     if det is not None and not det.empty and 'mjd' in det.columns:
@@ -628,11 +749,9 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
         )
 
     try:
-        # Eliminar entrada previa con distinto prefijo (ej. AT -> SN/TDE)
         if clave_previa and clave_previa != id_evento:
             catalogo_dict.pop(clave_previa, None)
 
-        # Eliminar candidatas previas de ZTF/LSST que coincidan por nombre interno
         if nombres_internos_str:
             for nom_int in str(nombres_internos_str).split(","):
                 nom_limpio = nom_int.strip()
@@ -640,7 +759,7 @@ Coordenadas (ICRS)    : RA {ra_float:.5f} | Dec {dec_float:.5f}
                     if catalogo_dict[nom_limpio].get("survey") != "TNS_GLOBAL":
                         catalogo_dict.pop(nom_limpio, None)
 
-        ruta_img = f"data/curva_luz_{id_evento.replace(' ', '_')}.png"
+        ruta_img = f"data/curva_luz_{oid_archivo}.png"
         catalogo_dict[id_evento] = {
             "oid": id_evento,
             "ra": float(ra_float),
@@ -663,12 +782,10 @@ def consultar_tns_sur(client, catalogo_dict):
     ahora_utc = datetime.now(timezone.utc)
     ahora_utc_str = ahora_utc.strftime("%Y-%m-%d %H:%M:%S")
 
-    # Índice en RAM por código base sin prefijo (ej. "2026aetp") para evitar duplicados entre AT/SN/TDE
     indice_por_codigo = {}
     for k_oid in list(catalogo_dict.keys()):
         codigo_base = str(k_oid).strip().split()[-1].lower()
         if codigo_base:
-            # Priorizar claves ya confirmadas en TNS_GLOBAL si existiera más de una
             if codigo_base not in indice_por_codigo or catalogo_dict[k_oid].get("survey") == "TNS_GLOBAL":
                 indice_por_codigo[codigo_base] = k_oid
 
@@ -681,9 +798,6 @@ def consultar_tns_sur(client, catalogo_dict):
             return False
         return str(info.get("analisis", "")).strip().upper() == str(clasificacion).strip().upper()
 
-    # -----------------------------------------------------------------
-    # 1. DETERMINAR MODO DE SINCRONIZACIÓN AUTOMÁTICA EN RAM
-    # -----------------------------------------------------------------
     ultimo_tracker = obtener_tracker_tns()
     requiere_volcado_completo = False
     corte_tde = CORTE_INICIAL_TDE
@@ -714,7 +828,7 @@ def consultar_tns_sur(client, catalogo_dict):
     candidatos_csv = {}
     sesion = requests.Session()
     sesion.headers.update(TNS_GUEST_HEADERS)
-    descarga_exitosa = False
+    volcado_completo_ok = not requiere_volcado_completo
 
     def evaluar_y_acumular_fila(fila, aplicar_cortes_temporales=False):
         clasificacion = (fila.get("type") or "").strip()
@@ -729,7 +843,6 @@ def consultar_tns_sur(client, catalogo_dict):
         fecha_mod = (fila.get("lastmodified") or "").strip()
         fecha_desc = (fila.get("discoverydate") or "").strip()
 
-        # Filtrar ediciones bibliográficas antiguas de supernovas previas a 2025
         if tipo_evento == "supernova" and fecha_desc and fecha_desc < CORTE_DESCUBRIMIENTO_SN:
             return
 
@@ -752,37 +865,40 @@ def consultar_tns_sur(client, catalogo_dict):
     # 1A. Volcado diario completo (solo en rescate inicial o tras > 20 h sin sincronizar)
     if requiere_volcado_completo:
         url_completo = f"{TNS_PUBLIC_BASE_URL}/tns_public_objects.csv.zip"
-        try:
-            print("    Descargando volcado completo TNS en RAM...")
-            resp = sesion.get(url_completo, timeout=45)
-            if resp.status_code == 200:
-                descarga_exitosa = True
-                for fila in iterar_zip_tns_en_ram(resp.content):
-                    evaluar_y_acumular_fila(fila, aplicar_cortes_temporales=True)
-                print(f"    [TNS Completo] {len(candidatos_csv)} eventos nuevos o reclasificados detectados.")
-            else:
-                registrar_log(f"[!] No se pudo descargar volcado completo TNS: HTTP {resp.status_code}", log_file)
-        except Exception as e:
-            registrar_log(f"[!] Error al descargar volcado completo TNS: {e}", log_file)
+        print("    Descargando volcado completo TNS en RAM...")
+        contenido_full, codigo_full = descargar_bloque_tns_con_reintento(sesion, url_completo, timeout=45, max_reintentos=3)
+        if contenido_full is not None:
+            volcado_completo_ok = True
+            for fila in iterar_zip_tns_en_ram(contenido_full):
+                evaluar_y_acumular_fila(fila, aplicar_cortes_temporales=True)
+            print(f"    [TNS Completo] {len(candidatos_csv)} eventos nuevos o reclasificados detectados.")
+        else:
+            registrar_log(f"[!] Error al descargar volcado completo TNS (HTTP {codigo_full}).", log_file)
 
-    # 1B. Barrido del anillo de 24 deltas horarios (_00 a _23) en RAM
+    # 1B. Barrido del anillo de 24 deltas horarios (desde la hora UTC actual hacia atrás)
     bloques_ok = 0
-    for hora in range(24):
+    bloques_fallidos = []
+    horas_ordenadas = [(ahora_utc.hour - k) % 24 for k in range(24)]
+
+    for idx_h, hora in enumerate(horas_ordenadas):
         url_delta = f"{TNS_PUBLIC_BASE_URL}/tns_public_objects_{hora:02d}.csv.zip"
-        try:
-            resp_h = sesion.get(url_delta, timeout=12)
-            if resp_h.status_code == 200:
-                bloques_ok += 1
-                descarga_exitosa = True
-                for fila in iterar_zip_tns_en_ram(resp_h.content):
-                    evaluar_y_acumular_fila(fila, aplicar_cortes_temporales=False)
-        except Exception:
-            continue
+        contenido_h, codigo_h = descargar_bloque_tns_con_reintento(sesion, url_delta, timeout=12, max_reintentos=3)
+        if contenido_h is not None:
+            bloques_ok += 1
+            for fila in iterar_zip_tns_en_ram(contenido_h):
+                evaluar_y_acumular_fila(fila, aplicar_cortes_temporales=False)
+        else:
+            bloques_fallidos.append(f"_{hora:02d}({codigo_h})")
+        if idx_h < 23:
+            time.sleep(0.35)
 
     sesion.close()
     print(f"    [TNS Deltas RAM] {bloques_ok}/24 bloques horarios leídos | {len(candidatos_csv)} eventos por incorporar.")
+    if bloques_ok == 0:
+        registrar_log(f"[!] Error de conexión: 0/24 bloques horarios de TNS leídos ({', '.join(bloques_fallidos[:6])}).", log_file)
+    elif bloques_fallidos:
+        registrar_log(f"[*] Aviso TNS: {bloques_ok}/24 bloques leídos; omitidos: {', '.join(bloques_fallidos)}.", log_file)
 
-    # Ordenar cronológicamente para registro limpio y reanudable
     lista_eventos_csv = sorted(
         candidatos_csv.values(),
         key=lambda x: (x.get("lastmodified") or x.get("discoverydate") or "")
@@ -821,12 +937,10 @@ def consultar_tns_sur(client, catalogo_dict):
 
         guardar_catalogo_maestro(catalogo_dict)
 
-    if descarga_exitosa and (not requiere_volcado_completo or bloques_ok > 0):
+    if volcado_completo_ok and bloques_ok > 0:
         guardar_tracker_tns(ahora_utc_str)
 
-    # -----------------------------------------------------------------
-    # 2. RESPALDO MANUAL OPCIONAL (boletin_tns.txt si contiene códigos)
-    # -----------------------------------------------------------------
+    # 2. Respaldo manual opcional (boletin_tns.txt si contiene códigos desde línea 3)
     if os.path.exists(ARCHIVO_BOLETIN):
         try:
             with open(ARCHIVO_BOLETIN, 'r', encoding='utf-8') as f:
@@ -893,10 +1007,9 @@ def consultar_tns_sur(client, catalogo_dict):
         registrar_log(f"[+] Procesamiento TNS finalizado ({procesados_csv} confirmaciones integradas). Patrullaje completado.", log_file)
 
 def main():
-    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (26.0 - TNS EN RAM, TAMIZ RAM Y RELOJ 4D) ===")
+    print("=== INICIANDO CAZADOR MULTIPROPÓSITO (26.1 - CARTA DSS2 EN RAM, DELTAS TNS ANTI-429 Y RELOJ 4D) ===")
     client = Alerce()
     mjd_reciente = obtener_mjd_rastreo()
-    # Capturamos el instante exacto de inicio del patrullaje con precisión de 4 decimales
     mjd_inicio_patrullaje = round(Time(datetime.now(timezone.utc)).mjd, 4)
 
     url_tap = "https://tap.alerce.online/tap"
@@ -928,7 +1041,6 @@ def main():
             ORDER BY lastmjd DESC
             """
         else:
-            # Consulta LSST incluyendo las 6 bandas y filtrando tiempos nulos
             consulta_adql = f"""
             SELECT TOP 1500
                 oid,
@@ -952,7 +1064,6 @@ def main():
             print(f"   Extrayendo catálogo masivo de {current_survey} vía TAP ADQL (desde MJD {limite_mjd})...")
             resultados = servicio_tap.search(consulta_adql)
 
-            # --- BLINDAJE ASTROPY NATIVO: Convertir OID a str ANTES de .to_pandas() ---
             tabla_astropy = resultados.to_table()
             if 'oid' in tabla_astropy.colnames:
                 tabla_astropy['oid'] = [
@@ -960,7 +1071,6 @@ def main():
                     for x in tabla_astropy['oid']
                 ]
             candidatos = tabla_astropy.to_pandas()
-            # --------------------------------------------------------------------------
 
             if 'lastmjd' in candidatos.columns:
                 candidatos['lastmjd'] = pd.to_numeric(candidatos['lastmjd'], errors='coerce')
@@ -971,9 +1081,6 @@ def main():
                 registrar_log(f"[+] Patrullaje completado en {current_survey} (0 candidatos nuevos).", log_file)
                 continue
 
-            # =====================================================================
-            # 🧠 TAMIZ DE MEMORIA EN RAM (FILTRO DE OBJETOS YA ANALIZADOS)
-            # =====================================================================
             total_descargados = len(candidatos)
             mascara_nuevos = [
                 (str(r_oid).strip() not in historial_vistos) or (float(r_mjd) > (historial_vistos[str(r_oid).strip()] + 1e-4))
@@ -987,7 +1094,6 @@ def main():
             if candidatos.empty:
                 registrar_log(f"[+] Patrullaje completado en {current_survey} (0 objetos nuevos tras tamiz RAM).", log_file)
                 continue
-            # =====================================================================
 
             print(f"   ({len(candidatos)} objetos nuevos. Iniciando análisis por paquetes de a 50 para proteger RAM...)")
 
@@ -1001,11 +1107,9 @@ def main():
                     mjd_fila = float(fila['lastmjd'])
 
                     try:
-                        # --- CANDADO DE TIEMPO ÁGIL (15s PARA EXTRACCIÓN ALERCE) ---
                         signal.signal(signal.SIGALRM, manejador_timeout)
                         signal.alarm(15)
 
-                        # 1. EXTRACCIÓN DE IA SEGÚN RED (ZTF vs LSST)
                         if current_survey == "ZTF":
                             probs = client.query_probabilities(oid=oid, format='pandas')
                             if probs.empty:
@@ -1024,7 +1128,6 @@ def main():
                         if clase_ia_final in target_classes and probabilidad > 0.60:
                             print(f"      [!] ALERTA AISLADA ({current_survey}): {oid} | IA: {clase_ia_final} ({probabilidad*100:.1f}%)")
 
-                            # 2. EXTRACCIÓN DE FOTOMETRÍA SEGÚN RED (ZTF vs LSST)
                             if current_survey == "ZTF":
                                 det = client.query_detections(oid=oid, format='pandas')
                                 det = det.dropna(subset=['magpsf', 'mjd'])
@@ -1032,25 +1135,17 @@ def main():
                                 det = obtener_detecciones_lsst(servicio_tap, oid, fila)
 
                             signal.alarm(0)
-
-                            # El objeto ya fue descargado exitosamente de ALeRCE; lo registramos como visto en esta época
                             historial_vistos[oid] = mjd_fila
 
                             if det is None or det.empty or len(det) < 2:
                                 continue
 
-                            # =================================================================
-                            # --- 1. GUILLOTINA FOTOMÉTRICA EN RAM (ANTES DE CONSULTAR SIMBAD/GAIA) ---
-                            # =================================================================
                             limite_mag = 18.5 if current_survey == "ZTF" else 23.5
                             mag_pico_absoluto = float(det['magpsf'].min())
                             if mag_pico_absoluto > limite_mag:
                                 print(f"      [-] Purgado: {oid} demasiado tenue para {current_survey} (Pico mag {mag_pico_absoluto:.2f} > {limite_mag})")
                                 continue
 
-                            # =================================================================
-                            # --- 2. CINEMÁTICA CON SEPARACIÓN DE BANDAS EN RAM ---
-                            # =================================================================
                             mjd_min_fotometria = float(det['mjd'].min())
                             mjd_max = float(det['mjd'].max())
                             mjd_historico = float(fila['firstmjd']) if pd.notna(fila['firstmjd']) else mjd_min_fotometria
@@ -1061,7 +1156,7 @@ def main():
                             mejor_tasa_reciente = 0.0
                             bandas_procesadas = 0
 
-                            for fid in [1, 2]: # 1: g/u, 2: r/i/z/y
+                            for fid in [1, 2]:
                                 df_b = det[det['fid'] == fid]
                                 if len(df_b) < 2: continue
 
@@ -1098,24 +1193,16 @@ def main():
                             salto_luminosidad_delta = mejor_salto
                             tasa_acel = mejor_tasa
                             tasa_acel_reciente = mejor_tasa_reciente
-                            amplitud_mag = mejor_salto
 
-                            # Pre-filtro cinemático: si no tiene salto >= 0.5 ni es flare rápido, todas las ramas dan "descarte"
                             if salto_luminosidad_delta < 0.5 and not (edad_dias < 3.0 and tasa_acel_reciente > 1.0):
                                 continue
 
-                            # =================================================================
-                            # --- 3. CONSULTA A SIMBAD / GAIA SOLO PARA OBJETOS ACTIVOS Y BRILLANTES ---
-                            # =================================================================
                             coordenadas = SkyCoord(ra=float(fila['meanra'])*u.degree, dec=float(fila['meandec'])*u.degree, frame='icrs')
                             mjd_alerta_actual = mjd_max
                             nombre_real, distancia_real, tipo_real, metalicidad_real, es_cuasar_cat, es_estrella_cat, es_galaxia_cat, es_vip, redshift_cazado = obtener_datos_astronomicos(coordenadas, mjd_alerta_actual)
 
                             latitud_b, en_plano, es_viejo = coordenadas.galactic.b.degree, abs(coordenadas.galactic.b.degree) <= 10.0, edad_dias > 150
 
-                            # =========================================================
-                            # 🛡️ BLOQUE CORREGIDO: VETO QSO E INTELIGENCIA
-                            # =========================================================
                             veto_ia_cv = ("CV" in clase_ia_final.upper() or "NOVA" in clase_ia_final.upper() or "VS" in clase_ia_final.upper()) and probabilidad > 0.90
                             veto_ia_qso = any(x in clase_ia_final.upper() for x in ["QSO", "AGN", "BLAZAR"]) and probabilidad > 0.60
                             analisis_magallanes, tipo_evento_final = "DESCONOCIDO", "descarte"
@@ -1139,9 +1226,6 @@ def main():
 
                             if tipo_evento_final == "descarte": continue
 
-                            # =========================================================
-                            # 🛡️ INTERCEPCIÓN DEL ESCUDO TNS (INTELIGENTE)
-                            # =========================================================
                             prefijo_tns, nombre_oficial_tns = consultar_escudo_tns(str(oid))
 
                             if nombre_oficial_tns:
@@ -1165,7 +1249,6 @@ def main():
                             else:
                                 oid_para_laboratorio = str(oid)
                                 survey_para_laboratorio = current_survey
-                            # =========================================================
 
                             registrar_log(f"-> Procesando evento de interés: {oid_para_laboratorio} ({tipo_evento_final})", log_file)
                             graficar_curva(det, oid_para_laboratorio, survey_para_laboratorio, coordenadas.ra.deg, coordenadas.dec.deg, tipo_evento_final, es_vip)
@@ -1202,6 +1285,7 @@ def main():
                             )
 
                             try:
+                                ruta_img_cand = f"data/curva_luz_{sanitizar_oid(oid_para_laboratorio)}.png"
                                 catalogo_dict[str(oid_para_laboratorio)] = {
                                     "oid": str(oid_para_laboratorio),
                                     "ra": float(coordenadas.ra.deg),
@@ -1211,13 +1295,12 @@ def main():
                                     "analisis": analisis_magallanes + (" [Interceptado por TNS]" if nombre_oficial_tns else ""),
                                     "vip": es_vip,
                                     "mjd_deteccion": float(mjd_alerta_actual),
-                                    "img_url": f"data/curva_luz_{oid_para_laboratorio.replace(' ', '_')}.png" if os.path.exists(f"data/curva_luz_{oid_para_laboratorio.replace(' ', '_')}.png") else None
+                                    "img_url": ruta_img_cand if os.path.exists(ruta_img_cand) else None
                                 }
                             except Exception as e:
                                 registrar_log(f"[!] Error al inyectar {oid_para_laboratorio} al catálogo JSON: {e}", log_file)
                         else:
                             signal.alarm(0)
-                            # Descartado por IA <= 60% o categoría no objetivo: se registra para no volver a consultarlo
                             historial_vistos[oid] = mjd_fila
 
                     except TimeoutException:
@@ -1228,7 +1311,6 @@ def main():
                         signal.alarm(0)
                         print(f"      [!] Error interno al analizar {oid}: {e}")
 
-                # Guardado incremental del historial al cerrar cada paquete de 50
                 guardar_historial_vistos(historial_vistos)
 
             registrar_log(f"[+] Patrullaje completado exitosamente en {current_survey}.", log_file)
