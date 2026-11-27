@@ -2,7 +2,7 @@
 =============================================================================
 PROYECTO   : Observatorio Automatizado Estación Magallanes
 MÓDULO     : app.py (Visor Web Institucional / Panel de Control)
-VERSIÓN    : 23.0 (UNIVERSO TODO-CIELO ALADIN, PLANO GALÁCTICO Y HORIZONTE PA)
+VERSIÓN    : 23.1 (LEYENDA SVG SINCRONIZADA Y FICHA FLOTANTE EN ALADIN)
 =============================================================================
 """
 
@@ -85,8 +85,7 @@ def azimut_a_cardinal(az_deg):
 def calcular_curva_galactica(b_deg, paso=2):
     """
     Proyecta una línea de latitud galáctica constante b (en grados) a coordenadas
-    ecuatoriales J2000 (RA, Dec) usando trigonometría esférica pura (sin dependencias).
-    Inserta None al cruzar RA 0°/360° para evitar trazos horizontales en Plotly.
+    ecuatoriales J2000 (RA, Dec) usando trigonometría esférica pura.
     """
     ra_ngp = math.radians(192.85948)
     dec_ngp = math.radians(27.12825)
@@ -200,14 +199,15 @@ def calcular_observabilidad_magallanes(ra_deg, dec_deg):
     }
 
 
-def renderizar_mapa_universo_aladin(capas_aladin, altura_px=640):
+def renderizar_mapa_universo_aladin(capas_aladin, altura_px=650):
     """
-    Mapa interactivo de todo el cielo en Aladin Lite v3 con fondo real del universo
-    (Mellinger Color, DSS2 Color, 2MASS IR), proyecciones Aitoff / Esfera 3D,
-    cambio Ecuatorial/Galáctico y zoom directo al objeto clickeado.
+    Mapa interactivo de todo el cielo en Aladin Lite v3 con:
+    - Fondo real del universo (Mellinger Color, DSS2 Color, 2MASS IR).
+    - Leyenda con iconos SVG idénticos a la simbología del mapa y activación por clic.
+    - Ficha técnica flotante en modo oscuro (reemplaza el popup blanco nativo).
     """
     capas_json = json.dumps(capas_aladin, ensure_ascii=False).replace("</", "<\\/")
-    altura_mapa = altura_px - 92
+    altura_mapa = altura_px - 96
 
     plantilla_html = """
     <!DOCTYPE html>
@@ -215,6 +215,7 @@ def renderizar_mapa_universo_aladin(capas_aladin, altura_px=640):
     <head>
       <meta charset="utf-8" />
       <style>
+        * { box-sizing: border-box; }
         html, body {
           margin: 0;
           padding: 0;
@@ -222,6 +223,10 @@ def renderizar_mapa_universo_aladin(capas_aladin, altura_px=640):
           color: #c9d1d9;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           overflow: hidden;
+        }
+        /* Bloquea el popup blanco nativo de Aladin */
+        .aladin-popup-container {
+          display: none !important;
         }
         .toolbar {
           display: flex;
@@ -260,46 +265,172 @@ def renderizar_mapa_universo_aladin(capas_aladin, altura_px=640):
           color: #ffffff;
           font-weight: 600;
         }
-        .btn:disabled {
-          opacity: 0.45;
-          cursor: not-allowed;
-        }
-        .btn-zoom {
+        .hint-toolbar {
           margin-left: auto;
-          background: #143625;
-          border-color: #2ea043;
-          color: #d2fedb;
+          font-size: 11.5px;
+          color: #8b949e;
         }
         .legend-bar {
           display: flex;
           flex-wrap: wrap;
-          gap: 12px;
+          gap: 8px 14px;
           align-items: center;
-          padding: 6px 12px;
+          padding: 7px 12px;
           background: #12161d;
           border-left: 1px solid #30363d;
           border-right: 1px solid #30363d;
-          font-size: 12px;
+          font-size: 12.5px;
           color: #c9d1d9;
         }
         .legend-item {
           display: inline-flex;
           align-items: center;
           gap: 6px;
+          cursor: pointer;
+          user-select: none;
+          padding: 2px 6px;
+          border-radius: 5px;
+          border: 1px solid transparent;
+          transition: opacity 0.15s ease, background 0.15s ease;
         }
-        .dot {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
+        .legend-item:hover {
+          background: #1f2630;
+          border-color: #30363d;
+        }
+        .legend-item.hidden-layer {
+          opacity: 0.35;
+          text-decoration: line-through;
+        }
+        .legend-svg {
           display: inline-block;
-          border: 1px solid rgba(255,255,255,0.65);
+          vertical-align: middle;
+          flex-shrink: 0;
+        }
+        .map-wrapper {
+          position: relative;
+          width: 100%;
+          height: __ALTURA_DIV__px;
         }
         #aladin-allsky {
           width: 100%;
-          height: __ALTURA_DIV__px;
+          height: 100%;
           border: 1px solid #30363d;
           border-radius: 0 0 8px 8px;
           background: #000000;
+        }
+        /* Ficha técnica flotante en modo oscuro */
+        .info-card {
+          display: none;
+          position: absolute;
+          bottom: 40px;
+          left: 14px;
+          z-index: 30;
+          width: 365px;
+          max-width: calc(100% - 28px);
+          background: rgba(18, 22, 29, 0.96);
+          border: 1px solid #30363d;
+          border-left: 4px solid #58a6ff;
+          border-radius: 8px;
+          box-shadow: 0 8px 26px rgba(0, 0, 0, 0.72);
+          padding: 12px 14px;
+          color: #e6edf3;
+          backdrop-filter: blur(6px);
+        }
+        .info-card.visible {
+          display: block;
+        }
+        .card-header {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding-bottom: 8px;
+          margin-bottom: 8px;
+          border-bottom: 1px solid #2a313c;
+        }
+        .card-title {
+          font-size: 14.5px;
+          font-weight: 700;
+          color: #ffffff;
+          word-break: break-word;
+        }
+        .card-badge {
+          font-size: 11px;
+          font-weight: 600;
+          padding: 2px 7px;
+          border-radius: 999px;
+          background: #21262d;
+          border: 1px solid #3d444d;
+          color: #c9d1d9;
+          white-space: nowrap;
+        }
+        .card-close {
+          margin-left: auto;
+          background: transparent;
+          border: none;
+          color: #8b949e;
+          font-size: 16px;
+          line-height: 1;
+          cursor: pointer;
+          padding: 2px 6px;
+          border-radius: 4px;
+        }
+        .card-close:hover {
+          background: #21262d;
+          color: #ffffff;
+        }
+        .card-grid {
+          display: grid;
+          grid-template-columns: 96px 1fr;
+          gap: 5px 10px;
+          font-size: 12.5px;
+          line-height: 1.38;
+        }
+        .card-label {
+          color: #8b949e;
+          font-weight: 600;
+        }
+        .card-val {
+          color: #e6edf3;
+          overflow-wrap: anywhere;
+        }
+        .card-val.escudo {
+          color: #ff6b6b;
+          font-weight: 600;
+        }
+        .card-actions {
+          display: flex;
+          gap: 8px;
+          margin-top: 11px;
+          padding-top: 9px;
+          border-top: 1px solid #2a313c;
+        }
+        .btn-card-primary {
+          flex: 1;
+          background: #143625;
+          border: 1px solid #2ea043;
+          color: #d2fedb;
+          border-radius: 5px;
+          padding: 6px 10px;
+          font-size: 12px;
+          font-weight: 600;
+          cursor: pointer;
+        }
+        .btn-card-primary:hover {
+          background: #1c4d34;
+          color: #ffffff;
+        }
+        .btn-card-sec {
+          background: #21262d;
+          border: 1px solid #30363d;
+          color: #c9d1d9;
+          border-radius: 5px;
+          padding: 6px 10px;
+          font-size: 12px;
+          cursor: pointer;
+        }
+        .btn-card-sec:hover {
+          background: #30363d;
+          color: #ffffff;
         }
       </style>
     </head>
@@ -314,26 +445,80 @@ def renderizar_mapa_universo_aladin(capas_aladin, altura_px=640):
         <span class="sep"></span>
         <button class="btn btn-frame active" id="btn-icrs" title="Coordenadas Ecuatoriales (RA/Dec)" onclick="cambiarMarco('ICRS', 'btn-icrs')">Ecuatorial</button>
         <button class="btn btn-frame" id="btn-gal" title="Coordenadas Galácticas (Vía Láctea horizontal)" onclick="cambiarMarco('galactic', 'btn-gal')">Galáctico</button>
-        <button class="btn" title="Restaurar vista de cielo completo" onclick="vistaCompleta()">🔄 Reset</button>
-        <button class="btn btn-zoom" id="btn-zoom-sel" disabled onclick="acercarSeleccionado()">🎯 Haz clic en un evento para acercar</button>
+        <button class="btn" title="Restaurar vista de cielo completo" onclick="vistaCompleta()">🔄 Cielo Completo</button>
+        <span class="hint-toolbar">Haz clic en un marcador para ver su ficha · clic en la leyenda para filtrar</span>
       </div>
       <div class="legend-bar" id="legend-bar"></div>
-      <div id="aladin-allsky"></div>
+      <div class="map-wrapper">
+        <div id="aladin-allsky"></div>
+        <div class="info-card" id="info-card">
+          <div class="card-header">
+            <span id="card-icon"></span>
+            <span class="card-title" id="card-title"></span>
+            <span class="card-badge" id="card-survey"></span>
+            <button class="card-close" title="Cerrar ficha" onclick="cerrarFicha()">✕</button>
+          </div>
+          <div class="card-grid" id="card-grid"></div>
+          <div class="card-actions">
+            <button class="btn-card-primary" onclick="acercarSeleccionado()">🎯 Acercar en DSS2 (7')</button>
+            <button class="btn-card-sec" onclick="vistaCompleta()">🌌 Volver</button>
+          </div>
+        </div>
+      </div>
 
       <script src="https://aladin.cds.unistra.fr/AladinLite/api/v3/latest/aladin.js" charset="utf-8"></script>
       <script>
         const capasData = __CAPAS_JSON__;
         let aladinAllSky = null;
         let ultimoObjeto = null;
+        const catalogosPorNombre = {};
 
-        // Poblar leyenda compacta con las categorías presentes
+        function escapeHtml(txt) {
+          return String(txt || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+        }
+
+        function crearIconoSvg(shape, color, sizePx) {
+          const s = sizePx || 14;
+          let figura = '';
+          if (shape === 'rhomb') {
+            figura = '<polygon points="8,1.5 14.5,8 8,14.5 1.5,8" fill="none" stroke="' + color + '" stroke-width="2"/>';
+          } else if (shape === 'plus') {
+            figura = '<line x1="8" y1="2" x2="8" y2="14" stroke="' + color + '" stroke-width="2.2"/>' +
+                     '<line x1="2" y1="8" x2="14" y2="8" stroke="' + color + '" stroke-width="2.2"/>';
+          } else if (shape === 'triangle') {
+            figura = '<polygon points="8,2 14.5,13.5 1.5,13.5" fill="none" stroke="' + color + '" stroke-width="2"/>';
+          } else if (shape === 'square') {
+            figura = '<rect x="2.5" y="2.5" width="11" height="11" fill="none" stroke="' + color + '" stroke-width="2"/>';
+          } else if (shape === 'cross') {
+            figura = '<line x1="3" y1="3" x2="13" y2="13" stroke="' + color + '" stroke-width="2.2"/>' +
+                     '<line x1="13" y1="3" x2="3" y2="13" stroke="' + color + '" stroke-width="2.2"/>';
+          } else {
+            figura = '<circle cx="8" cy="8" r="5.5" fill="none" stroke="' + color + '" stroke-width="2"/>';
+          }
+          return '<svg class="legend-svg" width="' + s + '" height="' + s + '" viewBox="0 0 16 16">' + figura + '</svg>';
+        }
+
+        // Construir leyenda con simbología exacta y filtro interactivo por clic
         const legendBar = document.getElementById('legend-bar');
         capasData.forEach(capa => {
           if (!capa.eventos || capa.eventos.length === 0) return;
           const item = document.createElement('span');
           item.className = 'legend-item';
-          item.innerHTML = '<span class="dot" style="background:' + capa.color + ';"></span>' +
-            capa.nombre + ' (' + capa.eventos.length + ')';
+          item.title = 'Clic para ocultar/mostrar esta categoría';
+          item.innerHTML = crearIconoSvg(capa.shape, capa.color, 15) +
+            '<span>' + escapeHtml(capa.nombre) + ' (' + capa.eventos.length + ')</span>';
+          item.onclick = function() {
+            const catObj = catalogosPorNombre[capa.nombre];
+            if (!catObj) return;
+            const oculto = item.classList.toggle('hidden-layer');
+            try {
+              if (oculto) { catObj.hide(); } else { catObj.show(); }
+            } catch (e) {}
+          };
           legendBar.appendChild(item);
         });
 
@@ -341,6 +526,45 @@ def renderizar_mapa_universo_aladin(capas_aladin, altura_px=640):
           document.querySelectorAll(selector).forEach(b => b.classList.remove('active'));
           const el = document.getElementById(btnId);
           if (el) el.classList.add('active');
+        }
+
+        function cerrarFicha() {
+          const card = document.getElementById('info-card');
+          if (card) card.classList.remove('visible');
+        }
+
+        function mostrarFicha(obj) {
+          if (!obj || !obj.data) return;
+          const d = obj.data;
+          ultimoObjeto = {
+            ra: obj.ra,
+            dec: obj.dec,
+            nombre: d.oid || 'Evento'
+          };
+
+          const card = document.getElementById('info-card');
+          card.style.borderLeftColor = d.color || '#58a6ff';
+          document.getElementById('card-icon').innerHTML = crearIconoSvg(d.shape || 'circle', d.color || '#58a6ff', 17);
+          document.getElementById('card-title').textContent = d.oid || 'Evento';
+          document.getElementById('card-survey').textContent = d.survey || '';
+
+          const filas = [
+            ['Categoría', d.categoria, ''],
+            ['Análisis', d.analisis, ''],
+            ['Fecha', d.fecha, ''],
+            ['Coordenadas', d.coords, '']
+          ];
+          if (d.escudo) filas.push(['Escudo TNS', d.escudo, 'escudo']);
+          if (d.z) filas.push(['Redshift (z)', d.z, '']);
+          if (d.dist) filas.push(['Distancia', d.dist, '']);
+
+          const grid = document.getElementById('card-grid');
+          grid.innerHTML = filas.map(f =>
+            '<div class="card-label">' + escapeHtml(f[0]) + '</div>' +
+            '<div class="card-val ' + f[2] + '">' + escapeHtml(f[1]) + '</div>'
+          ).join('');
+
+          card.classList.add('visible');
         }
 
         if (typeof A !== 'undefined' && A.init) {
@@ -368,38 +592,34 @@ def renderizar_mapa_universo_aladin(capas_aladin, altura_px=640):
                 color: capa.color,
                 sourceSize: capa.size,
                 shape: capa.shape,
-                onClick: 'showPopup'
+                onClick: function(source) {
+                  if (source) mostrarFicha(source);
+                }
               });
               aladinAllSky.addCatalog(cat);
+              catalogosPorNombre[capa.nombre] = cat;
 
-              const fuentes = capa.eventos.map(ev => {
-                const props = {
-                  Objeto: ev.oid,
-                  Red: ev.survey,
-                  Clasificacion: ev.analisis,
-                  Fecha: ev.fecha,
-                  Coordenadas: ev.coords
-                };
-                if (ev.escudo) props.Escudo_TNS = ev.escudo;
-                if (ev.z) props.Redshift_z = ev.z;
-                if (ev.dist) props.Distancia = ev.dist;
-                return A.source(ev.ra, ev.dec, props);
-              });
+              const fuentes = capa.eventos.map(ev => A.source(ev.ra, ev.dec, {
+                oid: ev.oid,
+                survey: ev.survey,
+                categoria: capa.nombre,
+                color: capa.color,
+                shape: capa.shape,
+                analisis: ev.analisis,
+                fecha: ev.fecha,
+                coords: ev.coords,
+                escudo: ev.escudo || '',
+                z: ev.z || '',
+                dist: ev.dist || ''
+              }));
               cat.addSources(fuentes);
             });
 
             aladinAllSky.on('objectClicked', function(obj) {
-              if (obj && obj.ra !== undefined && obj.dec !== undefined) {
-                ultimoObjeto = {
-                  ra: obj.ra,
-                  dec: obj.dec,
-                  nombre: (obj.data && obj.data.Objeto) ? obj.data.Objeto : 'Evento'
-                };
-                const btn = document.getElementById('btn-zoom-sel');
-                if (btn) {
-                  btn.disabled = false;
-                  btn.textContent = '🎯 Acercar a ' + ultimoObjeto.nombre + ' (DSS2)';
-                }
+              if (obj && obj.data && obj.data.oid) {
+                mostrarFicha(obj);
+              } else {
+                cerrarFicha();
               }
             });
           });
@@ -449,7 +669,7 @@ def renderizar_mapa_universo_aladin(capas_aladin, altura_px=640):
             aladinAllSky.setProjection('SIN');
             aladinAllSky.setImageSurvey('CDS/P/DSS2/color');
             aladinAllSky.gotoRaDec(ultimoObjeto.ra, ultimoObjeto.dec);
-            aladinAllSky.setFoV(0.12);
+            aladinAllSky.setFoV(0.1167);
           } catch (e) {}
           marcarActivo('.btn-survey', 'btn-dss2');
           marcarActivo('.btn-proj', 'btn-sin');
@@ -989,7 +1209,7 @@ if vista == "Dashboard Principal (Telemetría)":
                         }
                     )
 
-            renderizar_mapa_universo_aladin(capas_aladin, altura_px=640)
+            renderizar_mapa_universo_aladin(capas_aladin, altura_px=650)
 
         else:
             datos_plotly = {
@@ -1044,7 +1264,6 @@ if vista == "Dashboard Principal (Telemetría)":
 
             fig = go.Figure()
 
-            # Referencia 1: Plano Galáctico (b = 0°) y franja |b| = 10°
             ra_g0, dec_g0 = calcular_curva_galactica(0.0)
             ra_gp, dec_gp = calcular_curva_galactica(10.0)
             ra_gm, dec_gm = calcular_curva_galactica(-10.0)
@@ -1073,7 +1292,6 @@ if vista == "Dashboard Principal (Telemetría)":
                     )
                 )
 
-            # Referencia 2: Límite Norte observable desde Punta Arenas (Dec = +36.85°)
             fig.add_hrect(
                 y0=DEC_LIMITE_NORTE_PA,
                 y1=90,
@@ -1117,8 +1335,8 @@ if vista == "Dashboard Principal (Telemetría)":
                 height=600,
                 xaxis=dict(title="Ascensión Recta (Grados)", range=[0, 360], gridcolor="rgba(255,255,255,0.1)"),
                 yaxis=dict(title="Declinación (Grados)", range=[-90, 90], gridcolor="rgba(255,255,255,0.1)"),
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-                margin=dict(l=40, r=40, t=45, b=40),
+                legend=dict(orientation="h", yanchor="bottom", y=1.04, xanchor="left", x=0),
+                margin=dict(l=40, r=40, t=58, b=40),
                 hovermode="closest",
             )
             st.plotly_chart(fig, use_container_width=True)
