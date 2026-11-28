@@ -29144,3 +29144,21 @@ DETAIL:  connection to server at "192.168.50.107", port 5432 failed: Connection 
 [2026-11-28 10:47:16] -> Procesando evento de interés: ZTF18aczuxoz (blazar)
 [2026-11-28 10:49:42] -> Procesando evento de interés: ZTF18acrkeoj (nova)
 [2026-11-28 10:49:59] [+] Patrullaje completado exitosamente en ZTF.
+[2026-11-28 11:30:12] ==================================================
+[2026-11-28 11:30:12] APUNTANDO TELESCOPIO A RED: ZTF
+[2026-11-28 11:30:31] -> Procesando evento de interés: ZTF17aabwmsc (nova)
+[2026-11-28 11:32:53] -> Procesando evento de interés: ZTF18actcsxr (nova)
+[2026-11-28 11:33:14] -> Procesando evento de interés: ZTF18actevgb (nova)
+[2026-11-28 11:33:34] -> Procesando evento de interés: ZTF18actbrbg (nova)
+[2026-11-28 11:34:01] -> Procesando evento de interés: ZTF23abiduiq (nova)
+[2026-11-28 11:34:14] -> Procesando evento de interés: ZTF18actehsp (nova)
+[2026-11-28 11:36:50] -> Procesando evento de interés: ZTF18actdunu (nova)
+[2026-11-28 11:40:15] -> Procesando evento de interés: ZTF19acdtyyg (agn)
+[2026-11-28 11:40:58] -> Procesando evento de interés: ZTF18aczedep (nova)
+[2026-11-28 11:41:36] -> Procesando evento de interés: ZTF20aablcwi (agn)
+[2026-11-28 11:42:04] -> Procesando evento de interés: ZTF18acrxnze (nova)
+[2026-11-28 11:45:43] -> Procesando evento de interés: ZTF18adiutsf (agn)
+[2026-11-28 11:45:58]       [🛡️] ALERTA TNS: ZTF18aaheszr interceptado. Ya es AT 2018ifz.
+[2026-11-28 11:45:58]       -> [i] TNS Huérfano: Sin espectroscopía. Magallanes preserva su predicción: agn.
+[2026-11-28 11:45:58] -> Procesando evento de interés: AT 2018ifz (agn)
+[2026-11-28 11:50:47] [+] Patrullaje completado exitosamente en ZTF.
