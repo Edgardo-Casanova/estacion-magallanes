@@ -138301,5 +138301,16 @@
         "vip": false,
         "mjd_deteccion": 61372.11481030557,
         "img_url": "data/curva_luz_170666303741755437.png"
+    },
+    {
+        "oid": "SN 2026akmx",
+        "ra": 1.0677432,
+        "dec": 50.7208371,
+        "tipo": "supernova",
+        "survey": "TNS_GLOBAL",
+        "analisis": "SN Ia",
+        "vip": false,
+        "mjd_deteccion": 59713.47241900023,
+        "img_url": "data/curva_luz_SN_2026akmx.png"
     }
 ]
